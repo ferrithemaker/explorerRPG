@@ -20,30 +20,15 @@ public class Consumable_inventory {
 	private Consumable inventory[];
 	
 	public Consumable_inventory() {
-		inventory= new Consumable[GameEngine.INVENTORY_SIZE];
-		for (int i=0;i<10;i++) {
-			inventory[i]=null;
-		}
+		inventory= new Consumable[10];
 	}
 	
-	public void set_consumable(int pos, Consumable obj) {
+	public int set_consumable(int pos, Consumable obj) {
 		inventory[pos]=obj;
+		return 0;
 	}
 	
 	public Consumable get_consumable(int pos) {
 		return inventory[pos];
-	}
-
-	public void delete_consumable(int pos) {
-		inventory[pos]=null;
-	}
-	public int getfreeslot() { // if firstfreeposition=-1 theres no free slots
-		int firstfreeposition=-1;
-		for (int i=9;i>=0;i--) {
-			if (inventory[i]==null) {
-				firstfreeposition=i;
-			}
-		}
-		return firstfreeposition;
 	}
 }

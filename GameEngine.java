@@ -39,7 +39,6 @@ public class GameEngine {
 	public static int WINDOWWITH=TILE_X_SIZE*ON_SCREEN_TILES_X+OPTION_MENU_X_SIZE;
 	public static int WINDOWHEIGHT=TILE_Y_SIZE*ON_SCREEN_TILES_Y;
 	public static int FPS=10;
-	public static int INVENTORY_SIZE=10;
 	
 	// variables
 	private static Tile[][] tilelayout;
@@ -155,7 +154,7 @@ public class GameEngine {
         
 	}
 	
-	// TILE CLASS WRAPPER
+	// TILE CLASS WRAPPER (ALMOST ALL TILE METHODS ARE IMPLEMENTED AND HANDLED BY MAP CLASS, INCLUDING TILE SPRITES)
 	public Tile[][] getmap() {
 		return GameEngine.tilelayout;
 	}

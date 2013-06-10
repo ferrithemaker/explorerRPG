@@ -53,16 +53,9 @@ public class Explorer extends JFrame
     ArrayList<Object> availableobjects;
     ArrayList<Consumable> availableconsumables;
     
-    Object_inventory objinv;
-    Consumable_inventory consinv;
-    
     
     int x = 0;
     int y= 0;
-    
-    // inventory status
-    int object_inv_mode=0;
-    int consumable_inv_mode=0;
 	
 	public static void main(String[] args)	{ 
         	Explorer explorertest = new Explorer(); 
@@ -125,12 +118,10 @@ public class Explorer extends JFrame
                             insets.top + GameEngine.WINDOWHEIGHT + insets.bottom); 
             
             backBuffer = new BufferedImage(GameEngine.WINDOWWITH, GameEngine.WINDOWHEIGHT, BufferedImage.TYPE_INT_RGB); 
-            // empty enemy that hold enemy, object and consumable
+            // empty enemy that held enemy, object and consumable
             actualenemy= new Enemy();
             actualobject= new Object();
             actualconsumable= new Consumable();
-            
-            
             
             
             // key handler
@@ -161,8 +152,6 @@ public class Explorer extends JFrame
         	// key events control
         	if (input.isKeyDown(KeyEvent.VK_RIGHT)) 
             { 
-        		object_inv_mode=0;
-        		consumable_inv_mode=0;
         		actualenemy=null;
         		actualconsumable=null;
         		actualobject=null;
@@ -171,8 +160,6 @@ public class Explorer extends JFrame
             } 
             if (input.isKeyDown(KeyEvent.VK_LEFT)) 
             { 
-            	object_inv_mode=0;
-        		consumable_inv_mode=0;
             	actualenemy=null;
             	actualconsumable=null;
             	actualobject=null;
@@ -182,8 +169,6 @@ public class Explorer extends JFrame
             }
             if (input.isKeyDown(KeyEvent.VK_UP)) 
             { 
-            	object_inv_mode=0;
-        		consumable_inv_mode=0;
             	actualenemy=null;
             	actualconsumable=null;
             	actualobject=null;
@@ -193,8 +178,6 @@ public class Explorer extends JFrame
             } 
             if (input.isKeyDown(KeyEvent.VK_DOWN)) 
             { 
-            	object_inv_mode=0;
-        		consumable_inv_mode=0;
             	actualenemy=null;
             	actualconsumable=null;
             	actualobject=null;
@@ -204,13 +187,11 @@ public class Explorer extends JFrame
             }
             if (input.isKeyDown(KeyEvent.VK_D)) 
             { 
-            	object_inv_mode=0;
-        		consumable_inv_mode=0;
             	actualenemy=GameEngine.overenemy(); // get the enemy (if exist)
             	actualconsumable=GameEngine.overconsumable(); // get the consumable (if exist)
             	actualobject=GameEngine.overobject(); // get the object (if exist)
             }
-            /*if (input.isKeyDown(KeyEvent.VK_C)) 
+            if (input.isKeyDown(KeyEvent.VK_C)) 
             { 
             	// TEST KEY TO CREATE ELEMENTS
             	try {
@@ -220,124 +201,22 @@ public class Explorer extends JFrame
         			e.printStackTrace();
         		}
             	
-            } */
-            if (input.isKeyDown(KeyEvent.VK_O)) 
-            { 
-            	// ENABLE OBJECT INVENTORY MODE
-            	object_inv_mode=1;
-        		consumable_inv_mode=0;
-            }
-            if (input.isKeyDown(KeyEvent.VK_C)) 
-            { 
-            	// ENABLE CONSUMABLE INVENTORY MODE
-            	object_inv_mode=0;
-        		consumable_inv_mode=1;
-            }
-            // OBJECT INVENTORY ACTIONS
-            if (input.isKeyDown(KeyEvent.VK_1) && object_inv_mode==1) {
-            	getobject(objinv.get_object(1));
-            	objinv.delete_object(1);
-            }
-            if (input.isKeyDown(KeyEvent.VK_2) && object_inv_mode==1) {
-            	getobject(objinv.get_object(2));
-            	objinv.delete_object(2);
-            }
-            if (input.isKeyDown(KeyEvent.VK_3) && object_inv_mode==1) {
-            	getobject(objinv.get_object(3));
-            	objinv.delete_object(3);
-            }
-            if (input.isKeyDown(KeyEvent.VK_4) && object_inv_mode==1) {
-            	getobject(objinv.get_object(4));
-            	objinv.delete_object(4);
-            }
-            if (input.isKeyDown(KeyEvent.VK_5) && object_inv_mode==1) {
-            	getobject(objinv.get_object(5));
-            	objinv.delete_object(5);
-            }
-            if (input.isKeyDown(KeyEvent.VK_6) && object_inv_mode==1) {
-            	getobject(objinv.get_object(6));
-            	objinv.delete_object(6);
-            }
-            if (input.isKeyDown(KeyEvent.VK_7) && object_inv_mode==1) {
-            	getobject(objinv.get_object(7));
-            	objinv.delete_object(7);
-            }
-            if (input.isKeyDown(KeyEvent.VK_8) && object_inv_mode==1) {
-            	getobject(objinv.get_object(8));
-            	objinv.delete_object(8);
-            }
-            if (input.isKeyDown(KeyEvent.VK_9) && object_inv_mode==1) {
-            	getobject(objinv.get_object(9));
-            	objinv.delete_object(9);
-            }
-            if (input.isKeyDown(KeyEvent.VK_0) && object_inv_mode==1) {
-            	getobject(objinv.get_object(0));
-            	objinv.delete_object(0);
-            }
-            // CONSUMABLE INVENTORY ACTIONS
-            if (input.isKeyDown(KeyEvent.VK_1) && consumable_inv_mode==1) {
-            	getconsumable(consinv.get_consumable(1));
-            	consinv.delete_consumable(1);
-            }
-            if (input.isKeyDown(KeyEvent.VK_2) && consumable_inv_mode==1) {
-            	getconsumable(consinv.get_consumable(2));
-            	consinv.delete_consumable(2);
-            }
-            if (input.isKeyDown(KeyEvent.VK_3) && consumable_inv_mode==1) {
-            	getconsumable(consinv.get_consumable(3));
-            	consinv.delete_consumable(3);
-            }
-            if (input.isKeyDown(KeyEvent.VK_4) && consumable_inv_mode==1) {
-            	getconsumable(consinv.get_consumable(4));
-            	consinv.delete_consumable(4);
-            }
-            if (input.isKeyDown(KeyEvent.VK_5) && consumable_inv_mode==1) {
-            	getconsumable(consinv.get_consumable(5));
-            	consinv.delete_consumable(5);
-            }
-            if (input.isKeyDown(KeyEvent.VK_6) && consumable_inv_mode==1) {
-            	getconsumable(consinv.get_consumable(6));
-            	consinv.delete_consumable(6);
-            }
-            if (input.isKeyDown(KeyEvent.VK_7) && consumable_inv_mode==1) {
-            	getconsumable(consinv.get_consumable(7));
-            	consinv.delete_consumable(7);
-            }
-            if (input.isKeyDown(KeyEvent.VK_8) && consumable_inv_mode==1) {
-            	getconsumable(consinv.get_consumable(8));
-            	consinv.delete_consumable(8);
-            }
-            if (input.isKeyDown(KeyEvent.VK_9) && consumable_inv_mode==1) {
-            	getconsumable(consinv.get_consumable(9));
-            	consinv.delete_consumable(9);
-            }
-            if (input.isKeyDown(KeyEvent.VK_0) && consumable_inv_mode==1) {
-            	getconsumable(consinv.get_consumable(0));
-            	consinv.delete_consumable(0);
             }
             if (input.isKeyDown(KeyEvent.VK_G)) 
             { 	
-            	object_inv_mode=0;
-        		consumable_inv_mode=0;
-            	// get consumable
+        		// get consumable
         		actualconsumable=GameEngine.overconsumable(); // get the consumable (if exist)
         		if (actualconsumable.getname()!=null) {
         			// if consumable exists
-        			//prota.updateagility(actualconsumable.getpowerupagility());
-        			//prota.updatelp(actualconsumable.getpoweruplife());
-        			//GameEngine.removeconsumable(actualconsumable);
-        			if (consinv.getfreeslot()!=-1) {
-        				consinv.set_consumable(consinv.getfreeslot(), actualconsumable);	
-        				GameEngine.removeconsumable(actualconsumable);
-        			}
-        			
-        			
+        			prota.updateagility(actualconsumable.getpowerupagility());
+        			prota.updatelp(actualconsumable.getpoweruplife());
+        			GameEngine.removeconsumable(actualconsumable);
         		}
         		// get object
         		actualobject=GameEngine.overobject(); // get the consumable (if exist)
         		if (actualobject.getname()!=null) {
         			// if object exists
-        			/*if (actualobject.getposition()=="head") {
+        			if (actualobject.getposition()=="head") {
         				prota.sethead(actualobject);
         			}
         			if (actualobject.getposition()=="righthand") {
@@ -352,19 +231,13 @@ public class Explorer extends JFrame
         			if (actualobject.getposition()=="foot") {
         				prota.setfoot(actualobject);
         			}
-        			GameEngine.removeobject(actualobject); */
-        			if (objinv.getfreeslot()!=-1) {
-        				objinv.set_object(objinv.getfreeslot(), actualobject);
-        				GameEngine.removeobject(actualobject);
-        			}
+        			GameEngine.removeobject(actualobject);
         		}
         		
         		
             }
             if (input.isKeyDown(KeyEvent.VK_F)) 
             { 
-            	object_inv_mode=0;
-        		consumable_inv_mode=0;
             	boolean resultoffight=false;
             	actualenemy=GameEngine.overenemy(); // get the enemy (if exist)
         		if (actualenemy.getname()!=null) {
@@ -387,33 +260,7 @@ public class Explorer extends JFrame
         		}
             }
         }    
-        void getobject(Object obj) {
-        	if (obj.getname()!=null) {
-    			// if object exists
-    			if (obj.getposition()=="head") {
-    				prota.sethead(obj);
-    			}
-    			if (obj.getposition()=="righthand") {
-    				prota.setrighthand(obj);
-    			}
-    			if (obj.getposition()=="lefthand") {
-    				prota.setlefthand(obj);
-    			}
-    			if (obj.getposition()=="body") {
-    				prota.setbody(obj);
-    			}
-    			if (obj.getposition()=="foot") {
-    				prota.setfoot(obj);
-    			}
-        	}
-        }
-        void getconsumable(Consumable obj) {
-        	if (obj.getname()!=null) {
-    			// if consumable exists
-    			prota.updateagility(obj.getpowerupagility());
-    			prota.updatelp(obj.getpoweruplife());
-        	}
-        }
+        
         /** 
          * This method will draw everything 
          */ 
@@ -497,18 +344,6 @@ public class Explorer extends JFrame
             		bbg.drawString("+ defense: "+actualobject.getdefense(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,420);
             		bbg.drawString("+ offense: "+actualobject.getattack(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,440);
             	}
-            }
-            
-            // draw object inventory
-            
-            for (int i=0;i<10;i++) {
-            	bbg.drawString("Obj slot "+i+":"+objinv.get_object(i).getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 400);
-            }
-            
-            // draw consumable inventory
-            
-            for (int i=0;i<10;i++) {
-            	bbg.drawString("Obj slot "+i+":"+consinv.get_consumable(i).getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 400);
             }
             
             // draw background tiles 

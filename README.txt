@@ -17,7 +17,7 @@ All images are taken from http://opengameart.org/ and are copyrighted by their o
 
 ------------------
 
-This is an under development (very first stages) 2D RPG Engine (only classes) with rogue style.
+This is an under development (very first stages) 2D RPG Engine (only classes) with mixed nethack / Zelda styles.
 
 To test the engine, there are also a simple game called Explorer.
 
