@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2013  Ferran Fàbregas (ferri.fc@gmail.com)
+    Copyright (C) 2013  Ferran Fï¿½bregas (ferri.fc@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -387,7 +387,7 @@ public class GameEngine {
 	public static void createenemy() {
 		Random randomGenerator = new Random();
 		// generates random position
-		int x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
+		int x = randomGenerator.nextInt(GameEngine.ON_SCREEN_TILES_X);
 		int y = randomGenerator.nextInt(GameEngine.ON_SCREEN_TILES_Y);
 		int enemytype = randomGenerator.nextInt(3);
 		if (!tilelayout[x][y].isbloqued()) { // if there is empty space
@@ -416,7 +416,7 @@ public class GameEngine {
 	public static void createobject() {
 		Random randomGenerator = new Random();
 		// generates random position
-		int x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
+		int x = randomGenerator.nextInt(GameEngine.ON_SCREEN_TILES_X);
 		int y = randomGenerator.nextInt(GameEngine.ON_SCREEN_TILES_Y);
 		int chances = randomGenerator.nextInt(100);
 		int objecttype = randomGenerator.nextInt(11);
@@ -497,7 +497,7 @@ public class GameEngine {
 	public static void createconsumable() {
 		Random randomGenerator = new Random();
 		// generates random position
-		int x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
+		int x = randomGenerator.nextInt(GameEngine.ON_SCREEN_TILES_X);
 		int y = randomGenerator.nextInt(GameEngine.ON_SCREEN_TILES_Y);
         availableconsumables.add_consumable(new Consumable("potion",1,1,x,y,potion_img));
 	}

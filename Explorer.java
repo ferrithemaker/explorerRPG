@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2013  Ferran Fàbregas (ferri.fc@gmail.com)
+    Copyright (C) 2013  Ferran Fï¿½bregas (ferri.fc@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -130,7 +130,8 @@ public class Explorer extends JFrame
             actualobject= new Object();
             actualconsumable= new Consumable();
             
-            
+            objinv= new Object_inventory();
+            consinv= new Consumable_inventory();
             
             
             // key handler
@@ -235,45 +236,37 @@ public class Explorer extends JFrame
             }
             // OBJECT INVENTORY ACTIONS
             if (input.isKeyDown(KeyEvent.VK_1) && object_inv_mode==1) {
-            	getobject(objinv.get_object(1));
-            	objinv.delete_object(1);
+            	getobject(objinv.get_object(1),1);
             }
             if (input.isKeyDown(KeyEvent.VK_2) && object_inv_mode==1) {
-            	getobject(objinv.get_object(2));
-            	objinv.delete_object(2);
+            	getobject(objinv.get_object(2),2);
             }
             if (input.isKeyDown(KeyEvent.VK_3) && object_inv_mode==1) {
-            	getobject(objinv.get_object(3));
-            	objinv.delete_object(3);
+            	getobject(objinv.get_object(3),3);
             }
             if (input.isKeyDown(KeyEvent.VK_4) && object_inv_mode==1) {
-            	getobject(objinv.get_object(4));
-            	objinv.delete_object(4);
+            	getobject(objinv.get_object(4),4);
             }
             if (input.isKeyDown(KeyEvent.VK_5) && object_inv_mode==1) {
-            	getobject(objinv.get_object(5));
-            	objinv.delete_object(5);
+            	getobject(objinv.get_object(5),5);
             }
             if (input.isKeyDown(KeyEvent.VK_6) && object_inv_mode==1) {
-            	getobject(objinv.get_object(6));
-            	objinv.delete_object(6);
+            	getobject(objinv.get_object(6),6);
             }
             if (input.isKeyDown(KeyEvent.VK_7) && object_inv_mode==1) {
-            	getobject(objinv.get_object(7));
-            	objinv.delete_object(7);
+            	getobject(objinv.get_object(7),7);
             }
             if (input.isKeyDown(KeyEvent.VK_8) && object_inv_mode==1) {
-            	getobject(objinv.get_object(8));
-            	objinv.delete_object(8);
+            	getobject(objinv.get_object(8),8);
             }
             if (input.isKeyDown(KeyEvent.VK_9) && object_inv_mode==1) {
-            	getobject(objinv.get_object(9));
-            	objinv.delete_object(9);
+            	getobject(objinv.get_object(9),9);
             }
             if (input.isKeyDown(KeyEvent.VK_0) && object_inv_mode==1) {
-            	getobject(objinv.get_object(0));
-            	objinv.delete_object(0);
+            	getobject(objinv.get_object(0),0);
             }
+            // L (DROP) INVENTORY OBJECT
+            // ...
             // CONSUMABLE INVENTORY ACTIONS
             if (input.isKeyDown(KeyEvent.VK_1) && consumable_inv_mode==1) {
             	getconsumable(consinv.get_consumable(1));
@@ -336,23 +329,6 @@ public class Explorer extends JFrame
         		// get object
         		actualobject=GameEngine.overobject(); // get the consumable (if exist)
         		if (actualobject.getname()!=null) {
-        			// if object exists
-        			/*if (actualobject.getposition()=="head") {
-        				prota.sethead(actualobject);
-        			}
-        			if (actualobject.getposition()=="righthand") {
-        				prota.setrighthand(actualobject);
-        			}
-        			if (actualobject.getposition()=="lefthand") {
-        				prota.setlefthand(actualobject);
-        			}
-        			if (actualobject.getposition()=="body") {
-        				prota.setbody(actualobject);
-        			}
-        			if (actualobject.getposition()=="foot") {
-        				prota.setfoot(actualobject);
-        			}
-        			GameEngine.removeobject(actualobject); */
         			if (objinv.getfreeslot()!=-1) {
         				objinv.set_object(objinv.getfreeslot(), actualobject);
         				GameEngine.removeobject(actualobject);
@@ -387,28 +363,58 @@ public class Explorer extends JFrame
         		}
             }
         }    
-        void getobject(Object obj) {
-        	if (obj.getname()!=null) {
+        void getobject(Object obj,int pos) {
+        	if (obj!=null) {
     			// if object exists
     			if (obj.getposition()=="head") {
-    				prota.sethead(obj);
+    				if (prota.gethead().getname()==null) {
+    					prota.sethead(obj);
+    					objinv.delete_object(pos);
+    				} else {
+    					objinv.set_object(pos,prota.gethead());
+    					prota.sethead(obj);
+    				}
     			}
     			if (obj.getposition()=="righthand") {
-    				prota.setrighthand(obj);
+    				if (prota.getrighthand().getname()==null) {
+    					prota.setrighthand(obj);
+    					objinv.delete_object(pos);
+    				} else {
+    					objinv.set_object(pos,prota.getrighthand());
+    					prota.setrighthand(obj);
+    				}
     			}
     			if (obj.getposition()=="lefthand") {
-    				prota.setlefthand(obj);
+    				if (prota.getlefthand().getname()==null) {
+    					prota.setlefthand(obj);
+    					objinv.delete_object(pos);
+    				} else {
+    					objinv.set_object(pos,prota.getlefthand());
+    					prota.setlefthand(obj);
+    				}	
     			}
     			if (obj.getposition()=="body") {
-    				prota.setbody(obj);
+    				if (prota.getbody().getname()==null) {
+    					prota.setbody(obj);
+    					objinv.delete_object(pos);
+    				} else {
+    					objinv.set_object(pos,prota.getbody());
+    					prota.setbody(obj);
+    				}
     			}
     			if (obj.getposition()=="foot") {
-    				prota.setfoot(obj);
+    				if (prota.getfoot().getname()==null) {
+    					prota.setfoot(obj);
+    					objinv.delete_object(pos);
+    				} else {
+    					objinv.set_object(pos,prota.getfoot());
+    					prota.setfoot(obj);
+    				}
     			}
         	}
         }
         void getconsumable(Consumable obj) {
-        	if (obj.getname()!=null) {
+        	if (obj!=null) {
     			// if consumable exists
     			prota.updateagility(obj.getpowerupagility());
     			prota.updatelp(obj.getpoweruplife());
@@ -500,15 +506,27 @@ public class Explorer extends JFrame
             }
             
             // draw object inventory
-            
+    		bbg.drawString("Object inventory", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+230, 270);
+
             for (int i=0;i<10;i++) {
-            	bbg.drawString("Obj slot "+i+":"+objinv.get_object(i).getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 400);
+            	if (objinv.get_object(i)!=null) {
+            		bbg.drawString("Obj slot "+i+":"+objinv.get_object(i).getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+230, 290+(i*20));
+            	} else {
+            		bbg.drawString("Obj slot "+i+": available", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+230, 290+(i*20));
+
+            	}
             }
             
             // draw consumable inventory
-            
+    		bbg.drawString("Consumable inventory", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+230, 30);
+
             for (int i=0;i<10;i++) {
-            	bbg.drawString("Obj slot "+i+":"+consinv.get_consumable(i).getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 400);
+            	if (consinv.get_consumable(i)!=null) {
+            		bbg.drawString("Cons slot "+i+":"+consinv.get_consumable(i).getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+230, 50+(i*20));
+            	} else {
+            		bbg.drawString("Cons slot "+i+": available", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+230, 50+(i*20));
+
+            	}
             }
             
             // draw background tiles 
