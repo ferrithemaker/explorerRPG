@@ -19,15 +19,29 @@ public class Object_inventory {
 	private Object inventory[];
 	
 	public Object_inventory() {
-		inventory= new Object[10];
+		inventory= new Object[GameEngine.INVENTORY_SIZE];
+		for (int i=0;i<10;i++) {
+			inventory[i]=null;
+		}
 	}
 	
-	public int set_object(int pos, Object obj) {
+	public void set_object(int pos, Object obj) {
 		inventory[pos]=obj;
-		return 0;
 	}
 	
 	public Object get_object(int pos) {
 		return inventory[pos];
+	}
+	public void delete_object(int pos) {
+		inventory[pos]=null;
+	}
+	public int getfreeslot() { // if firstfreeposition=-1 theres no free slots
+		int firstfreeposition=-1;
+		for (int i=9;i>=0;i--) {
+			if (inventory[i]==null) {
+				firstfreeposition=i;
+			}
+		}
+		return firstfreeposition;
 	}
 }
