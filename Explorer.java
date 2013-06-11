@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2013  Ferran F�bregas (ferri.fc@gmail.com)
+    Copyright (C) 2013  Ferran Fabregas (ferri.fc@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -62,6 +62,7 @@ public class Explorer extends JFrame
     
     // inventory status
     int object_inv_mode=0;
+    int object_drop_mode=0;
     int consumable_inv_mode=0;
 	
 	public static void main(String[] args)	{ 
@@ -163,6 +164,7 @@ public class Explorer extends JFrame
         	if (input.isKeyDown(KeyEvent.VK_RIGHT)) 
             { 
         		object_inv_mode=0;
+        		object_drop_mode=0;
         		consumable_inv_mode=0;
         		actualenemy=null;
         		actualconsumable=null;
@@ -173,6 +175,7 @@ public class Explorer extends JFrame
             if (input.isKeyDown(KeyEvent.VK_LEFT)) 
             { 
             	object_inv_mode=0;
+            	object_drop_mode=0;
         		consumable_inv_mode=0;
             	actualenemy=null;
             	actualconsumable=null;
@@ -184,6 +187,7 @@ public class Explorer extends JFrame
             if (input.isKeyDown(KeyEvent.VK_UP)) 
             { 
             	object_inv_mode=0;
+            	object_drop_mode=0;
         		consumable_inv_mode=0;
             	actualenemy=null;
             	actualconsumable=null;
@@ -195,6 +199,7 @@ public class Explorer extends JFrame
             if (input.isKeyDown(KeyEvent.VK_DOWN)) 
             { 
             	object_inv_mode=0;
+            	object_drop_mode=0;
         		consumable_inv_mode=0;
             	actualenemy=null;
             	actualconsumable=null;
@@ -206,33 +211,26 @@ public class Explorer extends JFrame
             if (input.isKeyDown(KeyEvent.VK_D)) 
             { 
             	object_inv_mode=0;
+            	object_drop_mode=0;
         		consumable_inv_mode=0;
             	actualenemy=GameEngine.overenemy(); // get the enemy (if exist)
             	actualconsumable=GameEngine.overconsumable(); // get the consumable (if exist)
             	actualobject=GameEngine.overobject(); // get the object (if exist)
             }
-            /*if (input.isKeyDown(KeyEvent.VK_C)) 
-            { 
-            	// TEST KEY TO CREATE ELEMENTS
-            	try {
-            		GameEngine.addconsumable(new Consumable("potion",1,1,28,14,ImageIO.read(new File("potion.gif"))));
-            	} catch (IOException e) {
-        			// TODO Auto-generated catch block
-        			e.printStackTrace();
-        		}
-            	
-            } */
+            
             if (input.isKeyDown(KeyEvent.VK_O)) 
             { 
             	// ENABLE OBJECT INVENTORY MODE
             	object_inv_mode=1;
         		consumable_inv_mode=0;
+        		object_drop_mode=0;
             }
             if (input.isKeyDown(KeyEvent.VK_C)) 
             { 
             	// ENABLE CONSUMABLE INVENTORY MODE
             	object_inv_mode=0;
         		consumable_inv_mode=1;
+        		object_drop_mode=0;
             }
             // OBJECT INVENTORY ACTIONS
             if (input.isKeyDown(KeyEvent.VK_1) && object_inv_mode==1) {
@@ -265,8 +263,45 @@ public class Explorer extends JFrame
             if (input.isKeyDown(KeyEvent.VK_0) && object_inv_mode==1) {
             	getobject(objinv.get_object(0),0);
             }
-            // L (DROP) INVENTORY OBJECT
-            // ...
+            // Q (DROP) INVENTORY OBJECT
+            if (input.isKeyDown(KeyEvent.VK_Q)) 
+            { 
+            	// ENABLE CONSUMABLE INVENTORY MODE
+            	object_inv_mode=0;
+        		consumable_inv_mode=0;
+        		object_drop_mode=1;
+            }
+            // OBJECT DROP INVENTORY ACTIONS
+            if (input.isKeyDown(KeyEvent.VK_1) && object_drop_mode==1) {
+            	objinv.delete_object(1);
+            }
+            if (input.isKeyDown(KeyEvent.VK_2) && object_drop_mode==1) {
+            	objinv.delete_object(2);
+            }
+            if (input.isKeyDown(KeyEvent.VK_3) && object_drop_mode==1) {
+            	objinv.delete_object(3);
+            }
+            if (input.isKeyDown(KeyEvent.VK_4) && object_drop_mode==1) {
+            	objinv.delete_object(4);
+            }
+            if (input.isKeyDown(KeyEvent.VK_5) && object_drop_mode==1) {
+            	objinv.delete_object(5);
+            }
+            if (input.isKeyDown(KeyEvent.VK_6) && object_drop_mode==1) {
+            	objinv.delete_object(6);
+            }
+            if (input.isKeyDown(KeyEvent.VK_7) && object_drop_mode==1) {
+            	objinv.delete_object(7);
+            }
+            if (input.isKeyDown(KeyEvent.VK_8) && object_drop_mode==1) {
+            	objinv.delete_object(8);
+            }
+            if (input.isKeyDown(KeyEvent.VK_9) && object_drop_mode==1) {
+            	objinv.delete_object(9);
+            }
+            if (input.isKeyDown(KeyEvent.VK_0) && object_drop_mode==1) {
+            	objinv.delete_object(0);
+            }
             // CONSUMABLE INVENTORY ACTIONS
             if (input.isKeyDown(KeyEvent.VK_1) && consumable_inv_mode==1) {
             	getconsumable(consinv.get_consumable(1));
@@ -312,13 +347,11 @@ public class Explorer extends JFrame
             { 	
             	object_inv_mode=0;
         		consumable_inv_mode=0;
-            	// get consumable
+        		object_drop_mode=0;
+            	// get consumable into inventory
         		actualconsumable=GameEngine.overconsumable(); // get the consumable (if exist)
         		if (actualconsumable.getname()!=null) {
         			// if consumable exists
-        			//prota.updateagility(actualconsumable.getpowerupagility());
-        			//prota.updatelp(actualconsumable.getpoweruplife());
-        			//GameEngine.removeconsumable(actualconsumable);
         			if (consinv.getfreeslot()!=-1) {
         				consinv.set_consumable(consinv.getfreeslot(), actualconsumable);	
         				GameEngine.removeconsumable(actualconsumable);
@@ -326,7 +359,7 @@ public class Explorer extends JFrame
         			
         			
         		}
-        		// get object
+        		// get object into inventory
         		actualobject=GameEngine.overobject(); // get the consumable (if exist)
         		if (actualobject.getname()!=null) {
         			if (objinv.getfreeslot()!=-1) {
@@ -341,6 +374,7 @@ public class Explorer extends JFrame
             { 
             	object_inv_mode=0;
         		consumable_inv_mode=0;
+        		object_drop_mode=0;
             	boolean resultoffight=false;
             	actualenemy=GameEngine.overenemy(); // get the enemy (if exist)
         		if (actualenemy.getname()!=null) {
