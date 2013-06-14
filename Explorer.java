@@ -59,6 +59,9 @@ public class Explorer extends JFrame
     int object_inv_mode=0;
     int object_drop_mode=0;
     int consumable_inv_mode=0;
+    
+    // fight status
+    int just_fight=0;
 	
 	public static void main(String[] args)	{ 
         	Explorer explorertest = new Explorer(); 
@@ -158,6 +161,7 @@ public class Explorer extends JFrame
         	// key events control
         	if (input.isKeyDown(KeyEvent.VK_RIGHT)) 
             { 
+        		just_fight=0;
         		object_inv_mode=0;
         		object_drop_mode=0;
         		consumable_inv_mode=0;
@@ -172,6 +176,7 @@ public class Explorer extends JFrame
             	object_inv_mode=0;
             	object_drop_mode=0;
         		consumable_inv_mode=0;
+        		just_fight=0;
             	actualenemy=null;
             	actualconsumable=null;
             	actualobject=null;
@@ -184,6 +189,7 @@ public class Explorer extends JFrame
             	object_inv_mode=0;
             	object_drop_mode=0;
         		consumable_inv_mode=0;
+        		just_fight=0;
             	actualenemy=null;
             	actualconsumable=null;
             	actualobject=null;
@@ -196,6 +202,7 @@ public class Explorer extends JFrame
             	object_inv_mode=0;
             	object_drop_mode=0;
         		consumable_inv_mode=0;
+        		just_fight=0;
             	actualenemy=null;
             	actualconsumable=null;
             	actualobject=null;
@@ -208,6 +215,7 @@ public class Explorer extends JFrame
             	object_inv_mode=0;
             	object_drop_mode=0;
         		consumable_inv_mode=0;
+        		just_fight=0;
             	actualenemy=GameEngine.overenemy(); // get the enemy (if exist)
             	actualconsumable=GameEngine.overconsumable(); // get the consumable (if exist)
             	actualobject=GameEngine.overobject(); // get the object (if exist)
@@ -219,6 +227,7 @@ public class Explorer extends JFrame
             	object_inv_mode=1;
         		consumable_inv_mode=0;
         		object_drop_mode=0;
+        		just_fight=0;
             }
             if (input.isKeyDown(KeyEvent.VK_C)) 
             { 
@@ -226,6 +235,7 @@ public class Explorer extends JFrame
             	object_inv_mode=0;
         		consumable_inv_mode=1;
         		object_drop_mode=0;
+        		just_fight=0;
             }
             // OBJECT INVENTORY ACTIONS
             if (input.isKeyDown(KeyEvent.VK_1) && object_inv_mode==1) {
@@ -265,6 +275,7 @@ public class Explorer extends JFrame
             	object_inv_mode=0;
         		consumable_inv_mode=0;
         		object_drop_mode=1;
+        		just_fight=0;
             }
             // OBJECT DROP INVENTORY ACTIONS
             if (input.isKeyDown(KeyEvent.VK_1) && object_drop_mode==1) {
@@ -343,6 +354,7 @@ public class Explorer extends JFrame
             	object_inv_mode=0;
         		consumable_inv_mode=0;
         		object_drop_mode=0;
+        		just_fight=0;
             	// get consumable into inventory
         		actualconsumable=GameEngine.overconsumable(); // get the consumable (if exist)
         		if (actualconsumable.getname()!=null) {
@@ -380,15 +392,13 @@ public class Explorer extends JFrame
         				// if you win
         				GameEngine.removeenemy(actualenemy);
         				//System.out.println("YOU WIN!");
-        				fightstate="You Win the Battle!!";
+        				fightstate="Great! You Win the Battle!!";
         			} else {
         				// if you lose
         				GameEngine.herodies();
-        				fightstate="You lose the battle!!";
-        				
-        				
+        				fightstate="You lose the battle, you are at the graveyard!";
         			}
-        			
+        		just_fight=1;
         		}
             }
         }    
@@ -458,13 +468,14 @@ public class Explorer extends JFrame
             
             Graphics bbg = backBuffer.getGraphics(); 
             
-            bbg.setColor(Color.WHITE); 
+            bbg.setColor(Color.WHITE);
+            bbg.setFont(new Font("Serif", Font.BOLD, 12));
             bbg.fillRect(0, 0, GameEngine.WINDOWWITH, GameEngine.WINDOWHEIGHT); 
             
             bbg.setColor(Color.BLACK); 
             bbg.fillRect(GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X, 0, 5, GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y);
             // draw hero information
-            bbg.drawString("Explorer Menu", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 30);
+            bbg.drawString("** "+GameEngine.APP_NAME+" **", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 30);
             bbg.drawString("Hi "+prota.getname()+"!", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 50);
             bbg.drawString("Experience: "+prota.getexperience(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 70);
             bbg.drawString("Life Points: "+prota.gethp(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 90);
@@ -500,7 +511,6 @@ public class Explorer extends JFrame
             	bbg.drawString("Foot: "+prota.getfoot().getname()+" At:+"+prota.getfoot().getattack()+" Df:+"+prota.getfoot().getdefense()+" Dur:"+prota.getfoot().getdurability(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,270);
             } else {
             	bbg.drawString("Foot: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,270);
-
             }
             // overenemy description
             
@@ -535,25 +545,25 @@ public class Explorer extends JFrame
             }
             
             // draw object inventory
-    		bbg.drawString("Object inventory", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+230, 270);
+    		bbg.drawString("Object inventory", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+330, 270);
 
             for (int i=0;i<10;i++) {
             	if (objinv.get_object(i)!=null) {
-            		bbg.drawString("Obj slot "+i+":"+objinv.get_object(i).getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+230, 290+(i*20));
+            		bbg.drawString("Obj slot "+i+":"+objinv.get_object(i).getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+330, 290+(i*20));
             	} else {
-            		bbg.drawString("Obj slot "+i+": available", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+230, 290+(i*20));
+            		bbg.drawString("Obj slot "+i+": available", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+330, 290+(i*20));
 
             	}
             }
             
             // draw consumable inventory
-    		bbg.drawString("Consumable inventory", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+230, 30);
+    		bbg.drawString("Consumable inventory", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+330, 30);
 
             for (int i=0;i<10;i++) {
             	if (consinv.get_consumable(i)!=null) {
-            		bbg.drawString("Cons slot "+i+":"+consinv.get_consumable(i).getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+230, 50+(i*20));
+            		bbg.drawString("Cons slot "+i+":"+consinv.get_consumable(i).getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+330, 50+(i*20));
             	} else {
-            		bbg.drawString("Cons slot "+i+": available", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+230, 50+(i*20));
+            		bbg.drawString("Cons slot "+i+": available", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+330, 50+(i*20));
 
             	}
             }
@@ -604,14 +614,24 @@ public class Explorer extends JFrame
             	Consumable consumable=consumableiterator.next();
             	//System.out.println(bguy.getabsolutex());
             	if (consumable.consumableonscreen(GameEngine.getfirstxtile(), GameEngine.getfirstytile())==true) {
-            		// draw enemy image
-            		
+            		// draw enemy image		
         			bbg.drawImage(consumable.getsprite(),(consumable.getabsolutex()-GameEngine.getfirstxtile())*GameEngine.TILE_X_SIZE,(consumable.getabsolutey()-GameEngine.getfirstytile())*GameEngine.TILE_Y_SIZE,null);       		
             	}
             }
             
             // draw hero
             bbg.drawImage(prota.getimage(),prota.getrelativextile()*GameEngine.TILE_X_SIZE,prota.getrelativeytile()*GameEngine.TILE_Y_SIZE,null);
-            g.drawImage(backBuffer, insets.left, insets.top, this);   
+            
+            // draw fight result
+            if (just_fight==1) {
+            	bbg.setColor(Color.YELLOW);
+                bbg.setFont(new Font("Serif", Font.BOLD, 30));
+        		bbg.drawString(fightstate, 100, 100);
+            }
+            
+            // draw on the backbuffer
+            g.drawImage(backBuffer, insets.left, insets.top, this);
+            
+            
         } 
 } 

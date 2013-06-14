@@ -24,23 +24,26 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 
 // Map class is a wrapper class for all other basic classes
-// every Map has 1000x1000 tile matrix
+
 public class GameEngine {
 	// constants
-	public static int TOTAL_X_TILES=1000;
-	public static int TOTAL_Y_TILES=1000;
-	public static int ON_SCREEN_TILES_X=20;
-	public static int ON_SCREEN_TILES_Y=15;
+	public static int TOTAL_X_TILES=200; // TOTAL TILES MUST BE MULTIPLE OF SCREEN TILES!!!!!!!!!
+	public static int TOTAL_Y_TILES=300; // TOTAL TILES MUST BE MULTIPLE OF SCREEN TILES!!!!!!!!!
+	public static int ON_SCREEN_TILES_X=20; // TOTAL TILES MUST BE MULTIPLE OF SCREEN TILES!!!!!!!!!
+	public static int ON_SCREEN_TILES_Y=15; // TOTAL TILES MUST BE MULTIPLE OF SCREEN TILES!!!!!!!!!
 	public static int TILE_X_SIZE=40;
 	public static int TILE_Y_SIZE=40;
-	public static int MAX_WALL_LENGTH=30;
-	public static int MAX_LAKE_SIZE=35;
-	public static int OPTION_MENU_X_SIZE=400;
+	public static int MAX_WALL_LENGTH=15;
+	public static int MAX_LAKE_SIZE=15;
+	public static int OPTION_MENU_X_SIZE=500;
 	public static int WINDOWWITH=TILE_X_SIZE*ON_SCREEN_TILES_X+OPTION_MENU_X_SIZE;
 	public static int WINDOWHEIGHT=TILE_Y_SIZE*ON_SCREEN_TILES_Y;
 	public static int FPS=10;
 	public static int INVENTORY_SIZE=10;
-	public static String APP_NAME="explorer";
+	public static String APP_NAME="Rogue explorer";
+	public static int NUMBER_OF_WALLS=100;
+	public static int NUMBER_OF_LAKES=50;
+	public static int NUMBER_OF_BLOCKING_OBJECTS=1000;
 	
 	// variables
 	private static Tile[][] tilelayout;
@@ -52,7 +55,9 @@ public class GameEngine {
     private static BufferedImage cetharg_img;
     private static BufferedImage assassin_img;
     private static BufferedImage longsword_img;
-    private static BufferedImage potion_img;
+    private static BufferedImage potionred_img;
+    private static BufferedImage potionblue_img;
+    private static BufferedImage potionyellow_img;
     private static BufferedImage water_img;
     private static BufferedImage rocks_img;
     private static BufferedImage boulder_img;
@@ -116,7 +121,9 @@ public class GameEngine {
 			cross_img= ImageIO.read(new File("cross.jpg"));
 
 			// consumables
-			potion_img=ImageIO.read(new File("potion.gif"));
+			potionblue_img=ImageIO.read(new File("potionblue.gif"));
+			potionred_img=ImageIO.read(new File("potionred.gif"));
+			potionyellow_img=ImageIO.read(new File("potionyellow.gif"));
 			
 			// objects
 			longsword_img=ImageIO.read(new File("longSword.gif"));
@@ -175,23 +182,23 @@ public class GameEngine {
 	// **** BEGIN MAP CREATION
 	public static void createrandommap() {
 		// fill with freetiles
-		 for (int xpos=0;xpos<1000;xpos++) {
-	        	for (int ypos=0;ypos<1000;ypos++) {
+		 for (int xpos=0;xpos<GameEngine.TOTAL_X_TILES;xpos++) {
+	        	for (int ypos=0;ypos<GameEngine.TOTAL_Y_TILES;ypos++) {
 	        		tilelayout[xpos][ypos]= new Tile(false,freetile);
 	        	}
 	        }
-		// create 2000x2 random walls
-		for (int num=0; num<2000;num++) {
+		// create random walls
+		for (int num=0; num<(int)(GameEngine.NUMBER_OF_WALLS/2);num++) {
 			createrandomvwall();
 			createrandomhwall();
 		}
-		// create 10000 individual elements
-		for (int num=0; num<15000;num++) {
+		// create individual elements
+		for (int num=0; num<GameEngine.NUMBER_OF_BLOCKING_OBJECTS;num++) {
 			createblockingelement();
 		}
 		
-		// create 200 lakes
-		for (int num=0; num<200;num++) {
+		// create lakes
+		for (int num=0; num<GameEngine.NUMBER_OF_LAKES;num++) {
 			createrandomlake();
 		}
 		createcementery();
@@ -220,8 +227,8 @@ public class GameEngine {
 	public static void createrandomlake() {
 		Random randomGenerator = new Random();
 		int lenght = randomGenerator.nextInt(GameEngine.MAX_LAKE_SIZE);
-		int start_x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES-GameEngine.MAX_WALL_LENGTH);
-		int start_y = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES-GameEngine.MAX_WALL_LENGTH);
+		int start_x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES-GameEngine.MAX_LAKE_SIZE);
+		int start_y = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES-GameEngine.MAX_LAKE_SIZE);
 		int width = randomGenerator.nextInt(GameEngine.MAX_LAKE_SIZE);
 		for (int xpos=start_x;xpos<start_x+lenght;xpos++) {
 			for (int ypos=start_y;ypos<start_y+width;ypos++) {
@@ -340,9 +347,9 @@ public class GameEngine {
 	}
 		
 	public static void herodown() {
-		if (GameEngine.firstYtile+prota.getrelativeytile()<999) {
+		if (GameEngine.firstYtile+prota.getrelativeytile()<GameEngine.TOTAL_Y_TILES-1) {
 			if (prota.getrelativeytile()==GameEngine.ON_SCREEN_TILES_Y-1 && tilelayout[GameEngine.firstXtile+prota.getrelativextile()][1+GameEngine.firstYtile+prota.getrelativeytile()].isbloqued()==false) {		
-				if (firstYtile<1000-GameEngine.ON_SCREEN_TILES_Y) { prota.scrolldown(); firstYtile += GameEngine.ON_SCREEN_TILES_Y; }
+				if (firstYtile<GameEngine.TOTAL_Y_TILES-GameEngine.ON_SCREEN_TILES_Y) { prota.scrolldown(); firstYtile += GameEngine.ON_SCREEN_TILES_Y; }
 			} else {
 				if (tilelayout[GameEngine.firstXtile+prota.getrelativextile()][1+GameEngine.firstYtile+prota.getrelativeytile()].isbloqued()==false) {
 					prota.down();
@@ -352,9 +359,9 @@ public class GameEngine {
 	}
 		
 	public static void heroright() {
-		if (GameEngine.firstXtile+prota.getrelativextile()<999) {
+		if (GameEngine.firstXtile+prota.getrelativextile()<GameEngine.TOTAL_X_TILES-1) {
 			if (prota.getrelativextile()==GameEngine.ON_SCREEN_TILES_X-1 && tilelayout[1+GameEngine.firstXtile+prota.getrelativextile()][GameEngine.firstYtile+prota.getrelativeytile()].isbloqued()==false) {
-				if (firstXtile<1000-GameEngine.ON_SCREEN_TILES_X) { prota.scrollrigth(); firstXtile += GameEngine.ON_SCREEN_TILES_X; }
+				if (firstXtile<GameEngine.TOTAL_X_TILES-GameEngine.ON_SCREEN_TILES_X) { prota.scrollrigth(); firstXtile += GameEngine.ON_SCREEN_TILES_X; }
 			} else {
 				if (tilelayout[1+GameEngine.firstXtile+prota.getrelativextile()][GameEngine.firstYtile+prota.getrelativeytile()].isbloqued()==false) {
 					prota.right();
@@ -506,8 +513,17 @@ public class GameEngine {
 		// generates random position
 		int x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
 		int y = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES);
-        availableconsumables.add_consumable(new Consumable("potion",1,1,x,y,potion_img));
-	}
+		int potiontype = randomGenerator.nextInt(3);
+        if (potiontype==0) {
+        	availableconsumables.add_consumable(new Consumable("Blue potion",1,1,x,y,potionblue_img));
+        }
+        if (potiontype==1) {
+        	availableconsumables.add_consumable(new Consumable("Red potion",1,1,x,y,potionred_img));
+        }
+        if (potiontype==2) {
+        	availableconsumables.add_consumable(new Consumable("Yellow potion",1,1,x,y,potionyellow_img));
+        }
+    }
 	public static void createconsumable(String name, int p_agility, int p_life,int x,int y,BufferedImage sprite) {
         availableconsumables.add_consumable(new Consumable(name,p_agility,p_life,x,y,sprite));
 	}
