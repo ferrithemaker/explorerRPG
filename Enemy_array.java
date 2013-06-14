@@ -19,9 +19,7 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 
 public class Enemy_array {
-	/**
-	 * 
-	 */
+	
 	private ArrayList<Enemy> Enemylist;
 	
 	public Enemy_array() {
@@ -53,9 +51,4 @@ public class Enemy_array {
         }
         return rightbguy;
 	}
-	
-	//public int size() {
-	//	return Enemylist.size();
-	//}
-
 }

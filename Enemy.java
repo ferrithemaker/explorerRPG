@@ -45,18 +45,7 @@ public class Enemy {
 		// void constructor
 	}
 	
-	public boolean enemyonscreen(int xinitpos,int yinitpos) {
-		for (int x=xinitpos;x<xinitpos+GameEngine.ON_SCREEN_TILES_X;x++) {
-			for (int y=yinitpos;y<yinitpos+GameEngine.ON_SCREEN_TILES_Y;y++) {
-				if (absolute_x==x && absolute_y==y) { return true; }
-			}
-		}
-		return false;
-	}
-	
-	public boolean overenemy(int x,int y) {
-		if (this.absolute_x==x && this.absolute_y==y) { return true; } else { return false; }
-	}
+	// gets	
 	public int getabsolutex() {
 		return this.absolute_x;
 	}
@@ -72,8 +61,8 @@ public class Enemy {
 	public int getlp() {
 		return this.life;
 	}
-	public void updatelp(int value) {
-		this.life=this.life+value;
+	public BufferedImage getsprite() {
+		return this.enemyimg;
 	}
 	public String getname() {
 		return this.name;
@@ -81,7 +70,23 @@ public class Enemy {
 	public int getagility() {
 		return this.agility;
 	}
-	public BufferedImage getsprite() {
-		return this.enemyimg;
+	// sets / updates
+	public void updatehp(int value) {
+		this.life=this.life+value;
 	}
+
+	// control methods
+	public boolean enemyonscreen(int xinitpos,int yinitpos) {
+		for (int x=xinitpos;x<xinitpos+GameEngine.ON_SCREEN_TILES_X;x++) {
+			for (int y=yinitpos;y<yinitpos+GameEngine.ON_SCREEN_TILES_Y;y++) {
+				if (absolute_x==x && absolute_y==y) { return true; }
+			}
+		}
+		return false;
+	}
+	
+	public boolean overenemy(int x,int y) {
+		if (this.absolute_x==x && this.absolute_y==y) { return true; } else { return false; }
+	}
+	
 }

@@ -18,13 +18,8 @@
 import java.awt.*; 
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Random;
 
@@ -107,7 +102,7 @@ public class Explorer extends JFrame
          */ 
         void initialize() 
         { 
-        	setTitle("Explorer"); 
+        	setTitle(GameEngine.APP_NAME); 
             setSize(GameEngine.WINDOWWITH, GameEngine.WINDOWHEIGHT); 
             setResizable(false); 
             setDefaultCloseOperation(EXIT_ON_CLOSE); 
@@ -148,16 +143,16 @@ public class Explorer extends JFrame
         { 
         	// random elements generator
         	Random randomGenerator = new Random();
-        	int number=randomGenerator.nextInt(6);
-        	if (number==1) { // create enemy
-        		GameEngine.createenemy();
+        	int number=randomGenerator.nextInt(3);
+        	if (number==0) { // create enemy
+        		GameEngine.createrandomenemy();
         	}
-        	if (number==2) { // create consumable
-        		GameEngine.createconsumable();
+        	if (number==1) { // create consumable
+        		GameEngine.createrandomconsumable();
         		
         	}
-        	if (number==3) { // create object
-        		GameEngine.createobject();
+        	if (number==2) { // create object
+        		GameEngine.createrandomobject();
         	}
         	
         	// key events control
@@ -451,7 +446,7 @@ public class Explorer extends JFrame
         	if (obj!=null) {
     			// if consumable exists
     			prota.updateagility(obj.getpowerupagility());
-    			prota.updatelp(obj.getpoweruplife());
+    			prota.updatehp(obj.getpoweruplife());
         	}
         }
         /** 
@@ -472,7 +467,7 @@ public class Explorer extends JFrame
             bbg.drawString("Explorer Menu", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 30);
             bbg.drawString("Hi "+prota.getname()+"!", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 50);
             bbg.drawString("Experience: "+prota.getexperience(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 70);
-            bbg.drawString("Life Points: "+prota.getlp(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 90);
+            bbg.drawString("Life Points: "+prota.gethp(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 90);
             bbg.drawString("Resistance: "+prota.getresist(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,110);
             bbg.drawString("Agility: "+prota.getagility(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,130);
             bbg.drawString("Force: "+prota.getforce(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,150);

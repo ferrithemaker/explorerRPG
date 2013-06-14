@@ -26,14 +26,12 @@ public class Consumable_array {
 			Consumablelist = new ArrayList<Consumable>();
 		}
 		
-		public int add_consumable(Consumable consumable) {
+		public void add_consumable(Consumable consumable) {
 			Consumablelist.add(consumable);
-			return 0;
 		}
 		
-		public int remove_consumable(Consumable consumable) {
+		public void remove_consumable(Consumable consumable) {
 			Consumablelist.remove(consumable);
-			return 0;
 		}
 		public ArrayList<Consumable> getlist() {
 			return Consumablelist;

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2013  Ferran Fàbregas (ferri.fc@gmail.com)
+    Copyright (C) 2013  Ferran Fabregas (ferri.fc@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ public class Object_inventory {
 	public void delete_object(int pos) {
 		inventory[pos]=null;
 	}
-	public int getfreeslot() { // if firstfreeposition=-1 theres no free slots
+	public int getfreeslot() { // return first avialable slot on inventory, if return firstfreeposition=-1 there is no free slots.
 		int firstfreeposition=-1;
 		for (int i=9;i>=0;i--) {
 			if (inventory[i]==null) {

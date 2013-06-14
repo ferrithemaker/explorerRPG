@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2013  Ferran Fàbregas (ferri.fc@gmail.com)
+    Copyright (C) 2013  Ferran Fabregas (ferri.fc@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,19 +26,19 @@ public class Object_array {
 		Objectlist = new ArrayList<Object>();
 	}
 	
-	public int add_object(Object obj) {
+	public void add_object(Object obj) {
 		Objectlist.add(obj);
-		return 0;
 	}
 	
-	public int remove_object(Object obj) {
+	public void remove_object(Object obj) {
 		Objectlist.remove(obj);
-		return 0;
 	}
+	
 	public ArrayList<Object> getlist() {
 		return Objectlist;
 	}
-	public Object overobject(int x, int y) {
+	
+	public Object overobject(int x, int y) { // return the object on the x,y position. null if none.
 		Object rightobject = new Object(); // null object
 		ListIterator<Object> iterator = Objectlist.listIterator();
         while (iterator.hasNext()) {

@@ -33,13 +33,14 @@ public class GameEngine {
 	public static int ON_SCREEN_TILES_Y=15;
 	public static int TILE_X_SIZE=40;
 	public static int TILE_Y_SIZE=40;
-	public static int MAX_WALL_LENGTH=70;
-	//public static int MAX_LAKE_WIDTH=70;
+	public static int MAX_WALL_LENGTH=30;
+	public static int MAX_LAKE_SIZE=35;
 	public static int OPTION_MENU_X_SIZE=400;
 	public static int WINDOWWITH=TILE_X_SIZE*ON_SCREEN_TILES_X+OPTION_MENU_X_SIZE;
 	public static int WINDOWHEIGHT=TILE_Y_SIZE*ON_SCREEN_TILES_Y;
 	public static int FPS=10;
 	public static int INVENTORY_SIZE=10;
+	public static String APP_NAME="explorer";
 	
 	// variables
 	private static Tile[][] tilelayout;
@@ -74,7 +75,8 @@ public class GameEngine {
     private static BufferedImage skullcap_img;
     private static BufferedImage riotshield_img;
     private static BufferedImage warlock_img;
-
+    
+    private static BufferedImage hero_img;
 
     private static Enemy_array badguys;
     private static Object_array availableobjects;
@@ -90,6 +92,8 @@ public class GameEngine {
 		// load all images
 		try {
 			
+			// hero
+			hero_img=ImageIO.read(new File("human.gif"));
 		    
 			// enemies
 			vortex_img=ImageIO.read(new File("vortex.gif"));
@@ -131,31 +135,26 @@ public class GameEngine {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		// create hero
-        prota=new Hero();
-		// create tile layout
+        prota=new Hero("ferriman",hero_img);
+		
+        // create tile layout
         tilelayout = new Tile[GameEngine.TOTAL_X_TILES][GameEngine.TOTAL_Y_TILES];
         createrandommap();
-       
-        
-        
-        // create initial enemy array
+             
+        // create initial empty enemy array
         badguys= new Enemy_array();
 		
-        //System.out.println(badguys.size());
-        
-        // create initial object array
-        
+        // create initial empty object array
         availableobjects=new Object_array();
         
-        // create initial consumable array
-        
+        // create initial empty consumable array
         availableconsumables=new Consumable_array();
-
-        
 	}
 	
 	// TILE CLASS WRAPPER
+	// gets
 	public Tile[][] getmap() {
 		return GameEngine.tilelayout;
 	}
@@ -165,12 +164,15 @@ public class GameEngine {
 	public static int getfirstytile() {
 		return GameEngine.firstYtile;
 	}
+	
+	// sets / updates
 	public void setfirstxtile(int value) {
 		GameEngine.firstXtile=value;
 	}
 	public void setfirstytile(int value) {
 		GameEngine.firstYtile=value;
 	}
+	// **** BEGIN MAP CREATION
 	public static void createrandommap() {
 		// fill with freetiles
 		 for (int xpos=0;xpos<1000;xpos++) {
@@ -183,8 +185,8 @@ public class GameEngine {
 			createrandomvwall();
 			createrandomhwall();
 		}
-		// create 2000 individual elements
-		for (int num=0; num<2000;num++) {
+		// create 10000 individual elements
+		for (int num=0; num<15000;num++) {
 			createblockingelement();
 		}
 		
@@ -217,10 +219,10 @@ public class GameEngine {
 	}
 	public static void createrandomlake() {
 		Random randomGenerator = new Random();
-		int lenght = randomGenerator.nextInt(GameEngine.MAX_WALL_LENGTH);
+		int lenght = randomGenerator.nextInt(GameEngine.MAX_LAKE_SIZE);
 		int start_x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES-GameEngine.MAX_WALL_LENGTH);
 		int start_y = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES-GameEngine.MAX_WALL_LENGTH);
-		int width = randomGenerator.nextInt(GameEngine.MAX_WALL_LENGTH);
+		int width = randomGenerator.nextInt(GameEngine.MAX_LAKE_SIZE);
 		for (int xpos=start_x;xpos<start_x+lenght;xpos++) {
 			for (int ypos=start_y;ypos<start_y+width;ypos++) {
 				tilelayout[xpos][ypos].block();
@@ -256,6 +258,7 @@ public class GameEngine {
 			}
 		}
 	}
+	// **** END MAP CREATION
 	
 	// HERO CLASS WRAPPER
 	public Hero gethero() {
@@ -274,7 +277,7 @@ public class GameEngine {
 		// decide who hits first
 		if (enemy.getagility()>prota.getagility()) { heroturn=false; } else { heroturn=true; }
 		// begin fight loop
-		while (enemy.getlp()>0 && prota.getlp()>0) { // while somebody live
+		while (enemy.getlp()>0 && prota.gethp()>0) { // while somebody live
 			enemydicevalue = randomGenerator.nextInt(5);
 			herodicevalue = randomGenerator.nextInt(5);
 			enemyattackpower=enemy.getforce()+enemydicevalue;
@@ -282,7 +285,7 @@ public class GameEngine {
 			if (heroturn==true) {
 				// hero attack
 				if (heroattackpower-enemy.getresist()>0) { // if do damage
-					enemy.updatelp(0-(heroattackpower-enemy.getresist()));
+					enemy.updatehp(0-(heroattackpower-enemy.getresist()));
 					System.out.println("Hero turn:"+(heroattackpower-enemy.getresist()));
 					System.out.println("Enemy LP:"+enemy.getlp());
 					heroturn=false;
@@ -294,9 +297,9 @@ public class GameEngine {
 			} else {
 				// enemy attack
 				if (enemyattackpower-prota.getresist()>0) { // if do damage
-					prota.updatelp(0-(enemyattackpower-prota.getresist()));
+					prota.updatehp(0-(enemyattackpower-prota.getresist()));
 					System.out.println("Enemy turn:"+(enemyattackpower-prota.getresist()));
-					System.out.println("prota LP:"+prota.getlp());
+					System.out.println("prota LP:"+prota.gethp());
 					heroturn=true;
 				} else {
 					// if not
@@ -384,12 +387,12 @@ public class GameEngine {
 	public static void removeenemy(Enemy obj) {
 		badguys.remove_enemy(obj);
 	}
-	public static void createenemy() {
+	public static void createrandomenemy() { // create a random enemy
 		Random randomGenerator = new Random();
 		// generates random position
-		int x = randomGenerator.nextInt(GameEngine.ON_SCREEN_TILES_X);
-		int y = randomGenerator.nextInt(GameEngine.ON_SCREEN_TILES_Y);
-		int enemytype = randomGenerator.nextInt(3);
+		int x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
+		int y = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES);
+		int enemytype = randomGenerator.nextInt(3); // random choose of enemy
 		if (!tilelayout[x][y].isbloqued()) { // if there is empty space
 			if (enemytype==0) {
 				badguys.add_enemy(new Enemy("vortex",5,5,5,5,x,y,vortex_img));
@@ -402,6 +405,9 @@ public class GameEngine {
 			}
 		}
 	}
+	public static void createenemy(String name,int ag,int str, int res, int lf, int x,int y,BufferedImage sprite) {
+		badguys.add_enemy(new Enemy(name,ag,str,res,lf,x,y,sprite));
+	}
 	
 	// OBJECT CLASSES WRAPPER
 	public ArrayList<Object> getobjects() {
@@ -413,11 +419,11 @@ public class GameEngine {
 	public static void removeobject(Object obj) {
 		availableobjects.remove_object(obj);
 	}
-	public static void createobject() {
+	public static void createrandomobject() {
 		Random randomGenerator = new Random();
 		// generates random position
-		int x = randomGenerator.nextInt(GameEngine.ON_SCREEN_TILES_X);
-		int y = randomGenerator.nextInt(GameEngine.ON_SCREEN_TILES_Y);
+		int x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
+		int y = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES);
 		int chances = randomGenerator.nextInt(100);
 		int objecttype = randomGenerator.nextInt(11);
 		if (!tilelayout[x][y].isbloqued()) { // if there is empty space
@@ -477,8 +483,9 @@ public class GameEngine {
 				}
 			}
 		}
-       
-
+	}
+	public static void createobject(String name,String position,int attack, int defense, int durability,int x,int y,BufferedImage sprite) {
+		availableobjects.add_object(new Object(name,position,attack,defense,durability,x,y,sprite));
 	}
 	
 	// CONSUMABLE CLASSES WRAPPER
@@ -494,12 +501,15 @@ public class GameEngine {
 	public static void addconsumable(Consumable c) {
 		availableconsumables.add_consumable(c);
 	}
-	public static void createconsumable() {
+	public static void createrandomconsumable() {
 		Random randomGenerator = new Random();
 		// generates random position
-		int x = randomGenerator.nextInt(GameEngine.ON_SCREEN_TILES_X);
-		int y = randomGenerator.nextInt(GameEngine.ON_SCREEN_TILES_Y);
+		int x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
+		int y = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES);
         availableconsumables.add_consumable(new Consumable("potion",1,1,x,y,potion_img));
+	}
+	public static void createconsumable(String name, int p_agility, int p_life,int x,int y,BufferedImage sprite) {
+        availableconsumables.add_consumable(new Consumable(name,p_agility,p_life,x,y,sprite));
 	}
 	
 }

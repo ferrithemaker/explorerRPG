@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2013  Ferran Fàbregas (ferri.fc@gmail.com)
+    Copyright (C) 2013  Ferran Fabregas (ferri.fc@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -38,10 +38,10 @@ public class Consumable {
 		// void constructor
 	}
 	
-	public boolean overconsumable(int x,int y) {
-		if (this.absolute_x==x && this.absolute_y==y) { return true; } else { return false; }
+	// gets
+	public BufferedImage getsprite() {
+		return this.img;
 	}
-	
 	public int getabsolutex() {
 		return this.absolute_x;
 	}
@@ -57,6 +57,7 @@ public class Consumable {
 	public int getabsolutey() {
 		return this.absolute_y;
 	}
+	// control methods
 	public boolean consumableonscreen(int xinitpos,int yinitpos) {
 		for (int x=xinitpos;x<xinitpos+GameEngine.ON_SCREEN_TILES_X;x++) {
 			for (int y=yinitpos;y<yinitpos+GameEngine.ON_SCREEN_TILES_Y;y++) {
@@ -65,7 +66,7 @@ public class Consumable {
 		}
 		return false;
 	}
-	public BufferedImage getsprite() {
-		return this.img;
+	public boolean overconsumable(int x,int y) {
+		if (this.absolute_x==x && this.absolute_y==y) { return true; } else { return false; }
 	}
 }

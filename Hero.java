@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2013  Ferran Fàbregas (ferri.fc@gmail.com)
+    Copyright (C) 2013  Ferran Fabregas (ferri.fc@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,10 +16,7 @@
 */
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 
 
 public class Hero {
@@ -29,38 +26,32 @@ public class Hero {
 	private int relative_y_tile;
 	private String name;
 	private int life;
+	private int level;
 	private int exp;
 	private int resist;
 	private BufferedImage sprite;
-	private int sprite_status;
 	private Object head;
 	private Object lefthand;
 	private Object righthand;
 	private Object body;
 	private Object foot;
 	
-	public Hero() {
+	public Hero(String name,BufferedImage sprite) {
 		// initial set-up
-		this.agility=1;
-		this.force=100;
-		this.resist=1;
-		this.life=100;
-		this.exp=1;
+		this.agility=1; 
+		this.force=100; // offense
+		this.resist=1; // defense
+		this.life=100; // hp
+		this.exp=1; // experience
 		this.relative_y_tile=1;
 		this.relative_x_tile=1;
-		this.name="Ferri";
+		this.name=name;
 		this.head = new Object(); // null object
 		this.body = new Object(); // null object
 		this.lefthand = new Object(); // null object
 		this.righthand = new Object(); // null object
 		this.foot = new Object(); // null object
-		try {
-			sprite = ImageIO.read(new File("human.gif"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		this.sprite=sprite;
 	}
 	
 	// hero gets
@@ -80,8 +71,11 @@ public class Hero {
 	public int getagility() {
 		return this.agility;
 	}
-	public int getlp() {
+	public int gethp() {
 		return this.life;
+	}
+	public int getlevel() {
+		return this.level;
 	}
 	public int getrelativextile() {
 		return this.relative_x_tile;
@@ -108,7 +102,7 @@ public class Hero {
 		return this.sprite;
 	}
 	
-	// hero sets
+	// hero sets / updates
 	public void sethead(Object obj) {
 		this.head=obj;
 	}
@@ -130,16 +124,23 @@ public class Hero {
 	public void setrelativeytile(int value) {
 		this.relative_y_tile=value;
 	}
-	
-	// hero updates
 	public void updateagility(int value) {
 		this.agility=this.agility+value;
 	}
 	public void updateexperience(int value) {
 		this.exp=this.exp+value;
 	}
-	public void updatelp(int value) {
+	public void updatehp(int value) {
 		this.life=this.life+value;
+	}
+	public void updatelevel() {
+		this.level++;
+	}
+	public void updateforce(int value) {
+		this.force=this.force+value;
+	}
+	public void updateresist(int value) {
+		this.resist=this.resist+value;
 	}
 	
 	// hero position updates

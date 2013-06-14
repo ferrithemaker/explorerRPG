@@ -41,10 +41,8 @@ public class Object {
 	public Object() {
 		// void constructor
 	}
-	public boolean overobject(int x,int y) {
-		if (this.absolute_x==x && this.absolute_y==y) { return true; } else { return false; }
-	}
 	
+	// gets
 	public int getabsolutex() {
 		return this.absolute_x;
 	}
@@ -63,13 +61,18 @@ public class Object {
 	public int getdurability() {
 		return this.durability;
 	}
-	public void reducedurability() {
-		this.durability--;
-	}
 	public int getabsolutey() {
 		return this.absolute_y;
 	}
-	public boolean objectonscreen(int xinitpos,int yinitpos) {
+	public BufferedImage getsprite() {
+		return this.img;
+	}
+	// sets / updates
+	public void updatedurability(int value) {
+		this.durability=this.durability+value;
+	}
+	// control methods
+	public boolean objectonscreen(int xinitpos,int yinitpos) { // return true of object is on current player screen
 		for (int x=xinitpos;x<xinitpos+GameEngine.ON_SCREEN_TILES_X;x++) {
 			for (int y=yinitpos;y<yinitpos+GameEngine.ON_SCREEN_TILES_Y;y++) {
 				if (absolute_x==x && absolute_y==y) { return true; }
@@ -77,7 +80,7 @@ public class Object {
 		}
 		return false;
 	}
-	public BufferedImage getsprite() {
-		return this.img;
+	public boolean overobject(int x,int y) {
+		if (this.absolute_x==x && this.absolute_y==y) { return true; } else { return false; }
 	}
 }
