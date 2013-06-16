@@ -16,6 +16,10 @@
 */
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 
 public class Consumable {
@@ -26,13 +30,18 @@ public class Consumable {
 	private int absolute_y;
 	private BufferedImage img;
 	
-	public Consumable(String name, int p_agility, int p_life,int x,int y,BufferedImage sprite) {
+	public Consumable(String name, int p_agility, int p_life,int x,int y,String file) {
 		this.name=name;
 		this.powerup_agility=p_agility;
 		this.powerup_life=p_life;
 		this.absolute_x=x;
 		this.absolute_y=y;
-		this.img=sprite;
+		try {
+			this.img=ImageIO.read(new File(file));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public Consumable() {
 		// void constructor

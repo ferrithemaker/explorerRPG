@@ -140,7 +140,7 @@ public class Map {
 			}
 		}
 		// **** END MAP CREATION
-		public Tile[][] getmap() {
+		public Tile[][] gettiles() {
 			return tilelayout;
 		}
 }

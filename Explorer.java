@@ -38,8 +38,9 @@ public class Explorer extends JFrame
     Insets insets; 
     Inputhandler input;
     Tile[][] tilelayout;
-    GameEngine map;
+    GameEngine game;
     Hero prota;
+    Map mapa;
     Enemy actualenemy; // enemy that i'm over
     Object actualobject; 
     Consumable actualconsumable;
@@ -112,13 +113,14 @@ public class Explorer extends JFrame
             setVisible(true);
             
             // create tile layout
-            map = new GameEngine();
-            map.start();
-            tilelayout = map.getmap();
-            prota = map.gethero();
-            badguys= map.getenemies();
-            availableobjects=map.getobjects();
-            availableconsumables=map.getconsumables();
+            game = new GameEngine();
+            game.start();
+            mapa=game.getmap();
+            tilelayout = mapa.gettiles();
+            prota = game.gethero();
+            badguys= game.getenemies();
+            availableobjects=game.getobjects();
+            availableconsumables=game.getconsumables();
             insets = getInsets(); 
             setSize(insets.left + GameEngine.WINDOWWITH + insets.right, 
                             insets.top + GameEngine.WINDOWHEIGHT + insets.bottom); 

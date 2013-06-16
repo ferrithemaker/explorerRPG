@@ -16,6 +16,10 @@
 */
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 
 
@@ -36,7 +40,7 @@ public class Hero {
 	private Object body;
 	private Object foot;
 	
-	public Hero(String name,BufferedImage sprite) {
+	public Hero(String name,String file) {
 		// initial set-up
 		this.agility=1; 
 		this.force=100; // offense
@@ -51,11 +55,16 @@ public class Hero {
 		this.lefthand = new Object(); // null object
 		this.righthand = new Object(); // null object
 		this.foot = new Object(); // null object
-		this.sprite=sprite;
+		try {
+			// hero
+			this.sprite=ImageIO.read(new File(file));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	// hero gets
-	
 	public String getname() {
 		return this.name;
 	}

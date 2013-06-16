@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2013  Ferran Fàbregas (ferri.fc@gmail.com)
+    Copyright (C) 2013  Ferran Fï¿½bregas (ferri.fc@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,10 @@
 */
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 
 public class Object {
@@ -28,7 +32,7 @@ public class Object {
 	private String position;
 	private BufferedImage img;
 	
-	public Object(String name,String position,int attack, int defense, int durability,int x,int y,BufferedImage sprite) {
+	public Object(String name,String position,int attack, int defense, int durability,int x,int y,String file) {
 		this.name=name;
 		this.attack=attack;
 		this.defense=defense;
@@ -36,7 +40,12 @@ public class Object {
 		this.absolute_x=x;
 		this.absolute_y=y;
 		this.position=position;
-		this.img=sprite;
+		try {
+			this.img=ImageIO.read(new File(file));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public Object() {
 		// void constructor

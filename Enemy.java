@@ -16,6 +16,10 @@
 */
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 
 public class Enemy {
@@ -28,7 +32,7 @@ public class Enemy {
 	private String name;
 	private BufferedImage enemyimg;
 	
-	public Enemy(String name,int ag,int str, int res, int lf, int x,int y,BufferedImage sprite) {
+	public Enemy(String name,int ag,int str, int res, int lf, int x,int y,String file) {
 		// initial set-up
 		this.agility=ag;
 		this.force=str;
@@ -37,7 +41,12 @@ public class Enemy {
 		this.resist=res;
 		this.absolute_x=x;
 		this.absolute_y=y;
-		this.enemyimg=sprite;
+		try {
+			this.enemyimg=ImageIO.read(new File(file));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	

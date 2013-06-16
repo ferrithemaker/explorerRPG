@@ -15,13 +15,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Random;
 
-import javax.imageio.ImageIO;
 
 // Map class is a wrapper class for all other basic classes
 
@@ -47,35 +44,10 @@ public class GameEngine {
 	
 	// variables
 	private static Tile[][] tilelayout;
-	private static int firstXtile;
-	private static int firstYtile;
+	private static int firstXtile; // defines current section of the map that is shown on screen
+	private static int firstYtile; // defines current section of the map that is shown on screen
     
-    private static BufferedImage vortex_img;
-    private static BufferedImage cetharg_img;
-    private static BufferedImage assassin_img;
-    private static BufferedImage longsword_img;
-    private static BufferedImage potionred_img;
-    private static BufferedImage potionblue_img;
-    private static BufferedImage potionyellow_img;
     
-    private static BufferedImage boots_img;
-    
-    private static BufferedImage dagger_img;
-    private static BufferedImage rat_img;
-    private static BufferedImage greatshield_img;
-    private static BufferedImage heavyarmor_img;
-    private static BufferedImage helm_img;
-    private static BufferedImage mace_img;
-    private static BufferedImage maniac_img;
-    private static BufferedImage medusa_img;
-    private static BufferedImage orc_img;
-    private static BufferedImage midarmor_img;
-    private static BufferedImage shield_img;
-    private static BufferedImage skullcap_img;
-    private static BufferedImage riotshield_img;
-    private static BufferedImage warlock_img;
-    
-    private static BufferedImage hero_img;
 
     private static Enemy_array badguys;
     private static Object_array availableobjects;
@@ -89,53 +61,15 @@ public class GameEngine {
 		// first tile position must be multiple of tile_size
 		firstXtile=0;
 		firstYtile=0;
-		// load all images
-		try {
-			
-			// hero
-			hero_img=ImageIO.read(new File("human.gif"));
-		    
-			// enemies
-			vortex_img=ImageIO.read(new File("vortex.gif"));
-			cetharg_img=ImageIO.read(new File("cetharg.gif"));
-	        assassin_img=ImageIO.read(new File("assassin.gif"));
-	        warlock_img=ImageIO.read(new File("warlock.gif"));
-	        rat_img=ImageIO.read(new File("giantRat.gif"));
-	        maniac_img=ImageIO.read(new File("maniac.gif"));
-	        medusa_img=ImageIO.read(new File("medusa.gif"));
-	        orc_img=ImageIO.read(new File("orc.gif"));
-	        
-
-			// consumables
-			potionblue_img=ImageIO.read(new File("potionblue.gif"));
-			potionred_img=ImageIO.read(new File("potionred.gif"));
-			potionyellow_img=ImageIO.read(new File("potionyellow.gif"));
-			
-			// objects
-			longsword_img=ImageIO.read(new File("longSword.gif"));
-			boots_img=ImageIO.read(new File("boots.gif"));
-			dagger_img=ImageIO.read(new File("dagger.gif"));
-			greatshield_img=ImageIO.read(new File("greatShield.gif"));
-			heavyarmor_img=ImageIO.read(new File("heavyKevlarArmor.gif"));
-			helm_img=ImageIO.read(new File("helm.gif"));
-			mace_img=ImageIO.read(new File("mace.gif"));
-			midarmor_img=ImageIO.read(new File("riotShield.gif"));
-			shield_img=ImageIO.read(new File("shield.gif"));
-			skullcap_img=ImageIO.read(new File("skullcap.gif"));
-			riotshield_img=ImageIO.read(new File("reflecArmor.gif"));
-		    
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		
 		// create hero
-        prota=new Hero("ferriman",hero_img);
+        prota=new Hero("ferriman","human.gif");
 		
         // create Map
         mapa=new Map();
         mapa.createrandommap();
-        tilelayout=mapa.getmap();
+        tilelayout=mapa.gettiles();
              
         // create initial empty enemy array
         badguys= new Enemy_array();
@@ -149,8 +83,8 @@ public class GameEngine {
 	
 	// TILE / MAP CLASS WRAPPER
 	// gets
-	public Tile[][] getmap() {
-		return GameEngine.tilelayout;
+	public Map getmap() {
+		return mapa;
 	}
 	public static int getfirstxtile() {
 		return GameEngine.firstXtile;
@@ -170,7 +104,7 @@ public class GameEngine {
 	
 	// HERO CLASS WRAPPER
 	public Hero gethero() {
-		return GameEngine.prota;
+		return prota;
 	}
 	// hero fight monster
 	public static boolean fight(Enemy enemy) {
@@ -301,18 +235,18 @@ public class GameEngine {
 		int enemytype = randomGenerator.nextInt(3); // random choose of enemy
 		if (!tilelayout[x][y].isbloqued()) { // if there is empty space
 			if (enemytype==0) {
-				badguys.add_enemy(new Enemy("vortex",5,5,5,5,x,y,vortex_img));
+				badguys.add_enemy(new Enemy("vortex",5,5,5,5,x,y,"vortex.gif"));
 			}
 			if (enemytype==1) {
-				badguys.add_enemy(new Enemy("catharg",6,6,6,6,x,y,cetharg_img));
+				badguys.add_enemy(new Enemy("catharg",6,6,6,6,x,y,"cetharg.gif"));
 			}
 			if (enemytype==2) {
-				badguys.add_enemy(new Enemy("assassin",7,8,7,7,x,y,assassin_img));
+				badguys.add_enemy(new Enemy("assassin",7,8,7,7,x,y,"assassin.gif"));
 			}
 		}
 	}
-	public static void createenemy(String name,int ag,int str, int res, int lf, int x,int y,BufferedImage sprite) {
-		badguys.add_enemy(new Enemy(name,ag,str,res,lf,x,y,sprite));
+	public static void createenemy(String name,int ag,int str, int res, int lf, int x,int y,String file) {
+		badguys.add_enemy(new Enemy(name,ag,str,res,lf,x,y,file));
 	}
 	
 	// OBJECT CLASSES WRAPPER
@@ -335,63 +269,63 @@ public class GameEngine {
 		if (!tilelayout[x][y].isbloqued()) { // if there is empty space
 			if (objecttype==0) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("long sword","righthand",10,0,1,x,y,longsword_img));
+					availableobjects.add_object(new Object("long sword","righthand",10,0,1,x,y,"longSword.gif"));
 				}
 			}
 			if (objecttype==1) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("dagger","righthand",6,0,1,x,y,dagger_img));
+					availableobjects.add_object(new Object("dagger","righthand",6,0,1,x,y,"dagger.gif"));
 				}
 			}
 			if (objecttype==2) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("boots","foot",0,6,1,x,y,boots_img));
+					availableobjects.add_object(new Object("boots","foot",0,6,1,x,y,"boots.gif"));
 				}
 			}
 			if (objecttype==3) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("heavy armor","body",0,15,1,x,y,heavyarmor_img));
+					availableobjects.add_object(new Object("heavy armor","body",0,15,1,x,y,"heavyKevlarArmor.gif"));
 				}
 			}
 			if (objecttype==4) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("helm","head",0,4,1,x,y,helm_img));
+					availableobjects.add_object(new Object("helm","head",0,4,1,x,y,"helm.gif"));
 				}
 			}
 			if (objecttype==5) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("mace","lefthand",7,0,1,x,y,mace_img));
+					availableobjects.add_object(new Object("mace","lefthand",7,0,1,x,y,"mace.gif"));
 				}
 			}
 			if (objecttype==6) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("riot shield","lefthand",0,9,1,x,y,riotshield_img));
+					availableobjects.add_object(new Object("riot shield","lefthand",0,9,1,x,y,"riotShield.gif"));
 				}
 			}
 			if (objecttype==7) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("armor","body",0,11,1,x,y,midarmor_img));
+					availableobjects.add_object(new Object("armor","body",0,11,1,x,y,"reflecArmor.gif"));
 				}
 			}
 			if (objecttype==8) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("shield","lefthand",0,7,1,x,y,shield_img));
+					availableobjects.add_object(new Object("shield","lefthand",0,7,1,x,y,"shield.gif"));
 				}
 			}
 			if (objecttype==9) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("skull cap","head",0,5,1,x,y,skullcap_img));
+					availableobjects.add_object(new Object("skull cap","head",0,5,1,x,y,"skullcap.gif"));
 				}
 			}
 			if (objecttype==10) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("great shield","lefthand",0,12,1,x,y,greatshield_img));
+					availableobjects.add_object(new Object("great shield","lefthand",0,12,1,x,y,"greatShield.gif"));
 				}
 			}
 		}
 	}
-	public static void createobject(String name,String position,int attack, int defense, int durability,int x,int y,BufferedImage sprite) {
-		availableobjects.add_object(new Object(name,position,attack,defense,durability,x,y,sprite));
+	public static void createobject(String name,String position,int attack, int defense, int durability,int x,int y,String file) {
+		availableobjects.add_object(new Object(name,position,attack,defense,durability,x,y,file));
 	}
 	
 	// CONSUMABLE CLASSES WRAPPER
@@ -414,17 +348,17 @@ public class GameEngine {
 		int y = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES);
 		int potiontype = randomGenerator.nextInt(3);
         if (potiontype==0) {
-        	availableconsumables.add_consumable(new Consumable("Blue potion",1,1,x,y,potionblue_img));
+        	availableconsumables.add_consumable(new Consumable("Blue potion",1,1,x,y,"potionblue.gif"));
         }
         if (potiontype==1) {
-        	availableconsumables.add_consumable(new Consumable("Red potion",1,1,x,y,potionred_img));
+        	availableconsumables.add_consumable(new Consumable("Red potion",1,1,x,y,"potionred.gif"));
         }
         if (potiontype==2) {
-        	availableconsumables.add_consumable(new Consumable("Yellow potion",1,1,x,y,potionyellow_img));
+        	availableconsumables.add_consumable(new Consumable("Yellow potion",1,1,x,y,"potionyellow.gif"));
         }
     }
-	public static void createconsumable(String name, int p_agility, int p_life,int x,int y,BufferedImage sprite) {
-        availableconsumables.add_consumable(new Consumable(name,p_agility,p_life,x,y,sprite));
+	public static void createconsumable(String name, int p_agility, int p_life,int x,int y,String file) {
+        availableconsumables.add_consumable(new Consumable(name,p_agility,p_life,x,y,file));
 	}
 	
 }
