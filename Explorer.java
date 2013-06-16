@@ -517,7 +517,7 @@ public class Explorer extends JFrame
             if (actualenemy!=null) {
             	if (actualenemy.getname()!=null) {
             		bbg.drawString("Enemy: "+actualenemy.getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 400);
-            		bbg.drawString("Life Points: "+actualenemy.getlp(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,420);
+            		bbg.drawString("Life Points: "+actualenemy.gethp(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,420);
             		bbg.drawString("Resistance: "+actualenemy.getresist(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,440);
             		bbg.drawString("Agility: "+actualenemy.getagility(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,460);
             		bbg.drawString("Force: "+actualenemy.getforce(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,480);

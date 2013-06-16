@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2013  Ferran Fàbregas (ferri.fc@gmail.com)
+    Copyright (C) 2013  Ferran Fï¿½bregas (ferri.fc@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ public class Enemy {
 	public int getresist() {
 		return this.resist;
 	}
-	public int getlp() {
+	public int gethp() {
 		return this.life;
 	}
 	public BufferedImage getsprite() {

@@ -49,8 +49,7 @@ public class GameEngine {
 	private static Tile[][] tilelayout;
 	private static int firstXtile;
 	private static int firstYtile;
-    private static BufferedImage freetile;
-    private static BufferedImage blockedtile;
+    
     private static BufferedImage vortex_img;
     private static BufferedImage cetharg_img;
     private static BufferedImage assassin_img;
@@ -58,12 +57,7 @@ public class GameEngine {
     private static BufferedImage potionred_img;
     private static BufferedImage potionblue_img;
     private static BufferedImage potionyellow_img;
-    private static BufferedImage water_img;
-    private static BufferedImage rocks_img;
-    private static BufferedImage boulder_img;
-    private static BufferedImage bones_img;
-    private static BufferedImage fire_img;
-    private static BufferedImage cross_img;
+    
     private static BufferedImage boots_img;
     
     private static BufferedImage dagger_img;
@@ -87,6 +81,7 @@ public class GameEngine {
     private static Object_array availableobjects;
     private static Consumable_array availableconsumables;
     private static Hero prota;
+    private static Map mapa;
 
     
 	// START METHOD INITIALIZES ALL CLASSES OF THE GAME
@@ -110,15 +105,6 @@ public class GameEngine {
 	        medusa_img=ImageIO.read(new File("medusa.gif"));
 	        orc_img=ImageIO.read(new File("orc.gif"));
 	        
-	        // tiles
-	        blockedtile = ImageIO.read(new File("roomWall33.gif"));
-			freetile = ImageIO.read(new File("herba.jpg"));
-			water_img = ImageIO.read(new File("water.gif"));
-			rocks_img = ImageIO.read(new File("rocks.jpg"));
-			bones_img = ImageIO.read(new File("bones.jpg"));
-			boulder_img= ImageIO.read(new File("boulder.jpg"));
-			fire_img= ImageIO.read(new File("fire.jpg"));
-			cross_img= ImageIO.read(new File("cross.jpg"));
 
 			// consumables
 			potionblue_img=ImageIO.read(new File("potionblue.gif"));
@@ -146,9 +132,10 @@ public class GameEngine {
 		// create hero
         prota=new Hero("ferriman",hero_img);
 		
-        // create tile layout
-        tilelayout = new Tile[GameEngine.TOTAL_X_TILES][GameEngine.TOTAL_Y_TILES];
-        createrandommap();
+        // create Map
+        mapa=new Map();
+        mapa.createrandommap();
+        tilelayout=mapa.getmap();
              
         // create initial empty enemy array
         badguys= new Enemy_array();
@@ -160,7 +147,7 @@ public class GameEngine {
         availableconsumables=new Consumable_array();
 	}
 	
-	// TILE CLASS WRAPPER
+	// TILE / MAP CLASS WRAPPER
 	// gets
 	public Tile[][] getmap() {
 		return GameEngine.tilelayout;
@@ -179,93 +166,7 @@ public class GameEngine {
 	public void setfirstytile(int value) {
 		GameEngine.firstYtile=value;
 	}
-	// **** BEGIN MAP CREATION
-	public static void createrandommap() {
-		// fill with freetiles
-		 for (int xpos=0;xpos<GameEngine.TOTAL_X_TILES;xpos++) {
-	        	for (int ypos=0;ypos<GameEngine.TOTAL_Y_TILES;ypos++) {
-	        		tilelayout[xpos][ypos]= new Tile(false,freetile);
-	        	}
-	        }
-		// create random walls
-		for (int num=0; num<(int)(GameEngine.NUMBER_OF_WALLS/2);num++) {
-			createrandomvwall();
-			createrandomhwall();
-		}
-		// create individual elements
-		for (int num=0; num<GameEngine.NUMBER_OF_BLOCKING_OBJECTS;num++) {
-			createblockingelement();
-		}
-		
-		// create lakes
-		for (int num=0; num<GameEngine.NUMBER_OF_LAKES;num++) {
-			createrandomlake();
-		}
-		createcementery();
-	}
-	public static void createrandomhwall() {
-		Random randomGenerator = new Random();
-		int lenght = randomGenerator.nextInt(GameEngine.MAX_WALL_LENGTH);
-		int start = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES-GameEngine.MAX_WALL_LENGTH);
-		int height = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES);
-		for (int xpos=start;xpos<start+lenght;xpos++) {
-        	tilelayout[xpos][height].block();
-        	tilelayout[xpos][height].updatetileimage(blockedtile);	
-        }
-	}
-	public static void createrandomvwall() {
-		Random randomGenerator = new Random();
-		int lenght = randomGenerator.nextInt(GameEngine.MAX_WALL_LENGTH);
-		int start = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES-GameEngine.MAX_WALL_LENGTH);
-		int width = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
-		for (int ypos=start;ypos<start+lenght;ypos++) {
-        	tilelayout[width][ypos].block();
-        	tilelayout[width][ypos].updatetileimage(blockedtile);	
-        }
-		
-	}
-	public static void createrandomlake() {
-		Random randomGenerator = new Random();
-		int lenght = randomGenerator.nextInt(GameEngine.MAX_LAKE_SIZE);
-		int start_x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES-GameEngine.MAX_LAKE_SIZE);
-		int start_y = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES-GameEngine.MAX_LAKE_SIZE);
-		int width = randomGenerator.nextInt(GameEngine.MAX_LAKE_SIZE);
-		for (int xpos=start_x;xpos<start_x+lenght;xpos++) {
-			for (int ypos=start_y;ypos<start_y+width;ypos++) {
-				tilelayout[xpos][ypos].block();
-				tilelayout[xpos][ypos].updatetileimage(water_img);
-			}
-        }
-		
-	}
-	public static void createblockingelement() {
-		Random randomGenerator = new Random();
-		int x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
-		int y = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES);
-		int element= randomGenerator.nextInt(4);
-		tilelayout[x][y].block();
-		if (element==0) {
-			tilelayout[x][y].updatetileimage(rocks_img);
-		}
-		if (element==1) {
-			tilelayout[x][y].updatetileimage(boulder_img);
-		}
-		if (element==2) {
-			tilelayout[x][y].updatetileimage(bones_img);
-		}
-		if (element==3) {
-			tilelayout[x][y].updatetileimage(fire_img);
-		}
-	}
-	public static void createcementery() {
-		for (int x=0;x<11;x=x+2) {
-			for (int y=0;y<11;y=y+2) {
-				tilelayout[x][y].block();
-				tilelayout[x][y].updatetileimage(cross_img);
-			}
-		}
-	}
-	// **** END MAP CREATION
+	
 	
 	// HERO CLASS WRAPPER
 	public Hero gethero() {
@@ -273,8 +174,6 @@ public class GameEngine {
 	}
 	// hero fight monster
 	public static boolean fight(Enemy enemy) {
-		// test fighting
-		//prota.updateexperience(100);
 		boolean heroturn;
 		int enemydicevalue;
 		int herodicevalue;
@@ -284,7 +183,7 @@ public class GameEngine {
 		// decide who hits first
 		if (enemy.getagility()>prota.getagility()) { heroturn=false; } else { heroturn=true; }
 		// begin fight loop
-		while (enemy.getlp()>0 && prota.gethp()>0) { // while somebody live
+		while (enemy.gethp()>0 && prota.gethp()>0) { // while somebody is alive
 			enemydicevalue = randomGenerator.nextInt(5);
 			herodicevalue = randomGenerator.nextInt(5);
 			enemyattackpower=enemy.getforce()+enemydicevalue;
@@ -294,7 +193,7 @@ public class GameEngine {
 				if (heroattackpower-enemy.getresist()>0) { // if do damage
 					enemy.updatehp(0-(heroattackpower-enemy.getresist()));
 					System.out.println("Hero turn:"+(heroattackpower-enemy.getresist()));
-					System.out.println("Enemy LP:"+enemy.getlp());
+					System.out.println("Enemy HP:"+enemy.gethp());
 					heroturn=false;
 				} else {
 					// if not
@@ -306,7 +205,7 @@ public class GameEngine {
 				if (enemyattackpower-prota.getresist()>0) { // if do damage
 					prota.updatehp(0-(enemyattackpower-prota.getresist()));
 					System.out.println("Enemy turn:"+(enemyattackpower-prota.getresist()));
-					System.out.println("prota LP:"+prota.gethp());
+					System.out.println("prota HP:"+prota.gethp());
 					heroturn=true;
 				} else {
 					// if not
@@ -317,7 +216,7 @@ public class GameEngine {
 			}
 		}
 		// who win?
-		if (enemy.getlp()<=0) { 
+		if (enemy.gethp()<=0) { 
 			prota.updateexperience(100);
 			System.out.println("YOU WIN!");
 			return true;
