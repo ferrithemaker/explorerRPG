@@ -24,45 +24,36 @@ import java.util.Random;
 
 public class GameEngine {
 	// constants
-	public static int TOTAL_X_TILES=200; // TOTAL TILES MUST BE MULTIPLE OF SCREEN TILES!!!!!!!!!
-	public static int TOTAL_Y_TILES=300; // TOTAL TILES MUST BE MULTIPLE OF SCREEN TILES!!!!!!!!!
-	public static int ON_SCREEN_TILES_X=20; // TOTAL TILES MUST BE MULTIPLE OF SCREEN TILES!!!!!!!!!
-	public static int ON_SCREEN_TILES_Y=15; // TOTAL TILES MUST BE MULTIPLE OF SCREEN TILES!!!!!!!!!
-	public static int TILE_X_SIZE=40;
-	public static int TILE_Y_SIZE=40;
-	public static int MAX_WALL_LENGTH=15;
-	public static int MAX_LAKE_SIZE=15;
-	public static int OPTION_MENU_X_SIZE=500;
-	public static int WINDOWWITH=TILE_X_SIZE*ON_SCREEN_TILES_X+OPTION_MENU_X_SIZE;
-	public static int WINDOWHEIGHT=TILE_Y_SIZE*ON_SCREEN_TILES_Y;
-	public static int FPS=10;
-	public static int INVENTORY_SIZE=10;
-	public static String APP_NAME="Rogue explorer";
-	public static int NUMBER_OF_WALLS=100;
-	public static int NUMBER_OF_LAKES=50;
-	public static int NUMBER_OF_BLOCKING_OBJECTS=1000;
+	public final static int TOTAL_X_TILES=200; // TOTAL TILES MUST BE MULTIPLE OF SCREEN TILES!!!!!!!!!
+	public final static int TOTAL_Y_TILES=300; // TOTAL TILES MUST BE MULTIPLE OF SCREEN TILES!!!!!!!!!
+	public final static int ON_SCREEN_TILES_X=20; // TOTAL TILES MUST BE MULTIPLE OF SCREEN TILES!!!!!!!!!
+	public final static int ON_SCREEN_TILES_Y=15; // TOTAL TILES MUST BE MULTIPLE OF SCREEN TILES!!!!!!!!!
+	public final static int TILE_X_SIZE=40;
+	public final static int TILE_Y_SIZE=40;
+	public final static int MAX_WALL_LENGTH=15;
+	public final static int MAX_LAKE_SIZE=15;
+	public final static int OPTION_MENU_X_SIZE=500;
+	public final static int WINDOWWITH=TILE_X_SIZE*ON_SCREEN_TILES_X+OPTION_MENU_X_SIZE;
+	public final static int WINDOWHEIGHT=TILE_Y_SIZE*ON_SCREEN_TILES_Y;
+	public final static int FPS=10;
+	public final static int INVENTORY_SIZE=10;
+	public final static String APP_NAME="Rogue explorer";
+	public final static int NUMBER_OF_WALLS=100;
+	public final static int NUMBER_OF_LAKES=50;
+	public final static int NUMBER_OF_BLOCKING_OBJECTS=1000;
 	
 	// variables
-	private static Tile[][] tilelayout;
-	private static int firstXtile; // defines current section of the map that is shown on screen
-	private static int firstYtile; // defines current section of the map that is shown on screen
-    
-    
-
-    private static Enemy_array badguys;
-    private static Object_array availableobjects;
-    private static Consumable_array availableconsumables;
-    private static Hero prota;
-    private static Map mapa;
+	private Tile[][] tilelayout;
+    private Enemy_array badguys;
+    private Object_array availableobjects;
+    private Consumable_array availableconsumables;
+    private Hero prota;
+    private Map mapa;
 
     
 	// START METHOD INITIALIZES ALL CLASSES OF THE GAME
-	public  void start () {  
-		// first tile position must be multiple of tile_size
-		firstXtile=0;
-		firstYtile=0;
-		
-		
+	public GameEngine () {  
+			
 		// create hero
         prota=new Hero("ferriman","human.gif");
 		
@@ -81,134 +72,66 @@ public class GameEngine {
         availableconsumables=new Consumable_array();
 	}
 	
-	// TILE / MAP CLASS WRAPPER
-	// gets
+	// MAP CLASS WRAPPER
 	public Map getmap() {
 		return mapa;
 	}
-	public static int getfirstxtile() {
-		return GameEngine.firstXtile;
-	}
-	public static int getfirstytile() {
-		return GameEngine.firstYtile;
-	}
-	
-	// sets / updates
-	public void setfirstxtile(int value) {
-		GameEngine.firstXtile=value;
-	}
-	public void setfirstytile(int value) {
-		GameEngine.firstYtile=value;
-	}
-	
-	
+		
 	// HERO CLASS WRAPPER
 	public Hero gethero() {
 		return prota;
 	}
-	// hero fight monster
-	public static boolean fight(Enemy enemy) {
-		boolean heroturn;
-		int enemydicevalue;
-		int herodicevalue;
-		int enemyattackpower;
-		int heroattackpower;
-		Random randomGenerator = new Random();
-		// decide who hits first
-		if (enemy.getagility()>prota.getagility()) { heroturn=false; } else { heroturn=true; }
-		// begin fight loop
-		while (enemy.gethp()>0 && prota.gethp()>0) { // while somebody is alive
-			enemydicevalue = randomGenerator.nextInt(5);
-			herodicevalue = randomGenerator.nextInt(5);
-			enemyattackpower=enemy.getforce()+enemydicevalue;
-			heroattackpower=prota.getforce()+herodicevalue;
-			if (heroturn==true) {
-				// hero attack
-				if (heroattackpower-enemy.getresist()>0) { // if do damage
-					enemy.updatehp(0-(heroattackpower-enemy.getresist()));
-					System.out.println("Hero turn:"+(heroattackpower-enemy.getresist()));
-					System.out.println("Enemy HP:"+enemy.gethp());
-					heroturn=false;
-				} else {
-					// if not
-					System.out.println("Hero turn: no damage");
-					heroturn=false;
-				}
-			} else {
-				// enemy attack
-				if (enemyattackpower-prota.getresist()>0) { // if do damage
-					prota.updatehp(0-(enemyattackpower-prota.getresist()));
-					System.out.println("Enemy turn:"+(enemyattackpower-prota.getresist()));
-					System.out.println("prota HP:"+prota.gethp());
-					heroturn=true;
-				} else {
-					// if not
-					System.out.println("Enemy turn: no damage");
-					heroturn=true;
-				}
-				
-			}
-		}
-		// who win?
-		if (enemy.gethp()<=0) { 
-			prota.updateexperience(100);
-			System.out.println("YOU WIN!");
-			return true;
-		} else { 
-			System.out.println("YOU LOSE!");
-			return false;
-		}
-	}
-	public static void herodies() {
-		firstXtile=0;
-		firstYtile=0;
+	
+	public void herodies() {
+		mapa.setfirstxtile(0);
+		mapa.setfirstytile(0);
 		prota.setrelativextile(1);
 		prota.setrelativeytile(1);
 	}
 	
 	// hero updates
-	public static void heroup() {
-		if (GameEngine.firstYtile+prota.getrelativeytile()>0) {
-			if (prota.getrelativeytile()==0 && tilelayout[GameEngine.firstXtile+prota.getrelativextile()][GameEngine.firstYtile+prota.getrelativeytile()-1].isbloqued()==false) {		
-				if (firstYtile>0) { prota.scrollup(); firstYtile -= GameEngine.ON_SCREEN_TILES_Y; }
+	public void heroup() {
+		if (mapa.getfirstytile()+prota.getrelativeytile()>0) {
+			if (prota.getrelativeytile()==0 && tilelayout[mapa.getfirstxtile()+prota.getrelativextile()][mapa.getfirstytile()+prota.getrelativeytile()-1].isbloqued()==false) {		
+				if (mapa.getfirstytile()>0) { prota.scrollup(); mapa.setfirstytile(mapa.getfirstytile() - GameEngine.ON_SCREEN_TILES_Y); }
 			} else {
-				if (tilelayout[GameEngine.firstXtile+prota.getrelativextile()][GameEngine.firstYtile+prota.getrelativeytile()-1].isbloqued()==false) {
+				if (tilelayout[mapa.getfirstxtile()+prota.getrelativextile()][mapa.getfirstytile()+prota.getrelativeytile()-1].isbloqued()==false) {
 					prota.up();
 				}	
 			}
 		}
 	}
 		
-	public static void herodown() {
-		if (GameEngine.firstYtile+prota.getrelativeytile()<GameEngine.TOTAL_Y_TILES-1) {
-			if (prota.getrelativeytile()==GameEngine.ON_SCREEN_TILES_Y-1 && tilelayout[GameEngine.firstXtile+prota.getrelativextile()][1+GameEngine.firstYtile+prota.getrelativeytile()].isbloqued()==false) {		
-				if (firstYtile<GameEngine.TOTAL_Y_TILES-GameEngine.ON_SCREEN_TILES_Y) { prota.scrolldown(); firstYtile += GameEngine.ON_SCREEN_TILES_Y; }
+	public void herodown() {
+		if (mapa.getfirstytile()+prota.getrelativeytile()<GameEngine.TOTAL_Y_TILES-1) {
+			if (prota.getrelativeytile()==GameEngine.ON_SCREEN_TILES_Y-1 && tilelayout[mapa.getfirstxtile()+prota.getrelativextile()][1+mapa.getfirstytile()+prota.getrelativeytile()].isbloqued()==false) {		
+				if (mapa.getfirstytile()<GameEngine.TOTAL_Y_TILES-GameEngine.ON_SCREEN_TILES_Y) { prota.scrolldown();  mapa.setfirstytile(mapa.getfirstytile() + GameEngine.ON_SCREEN_TILES_Y); }
 			} else {
-				if (tilelayout[GameEngine.firstXtile+prota.getrelativextile()][1+GameEngine.firstYtile+prota.getrelativeytile()].isbloqued()==false) {
+				if (tilelayout[mapa.getfirstxtile()+prota.getrelativextile()][1+mapa.getfirstytile()+prota.getrelativeytile()].isbloqued()==false) {
 					prota.down();
 				}
 			}
 		}
 	}
 		
-	public static void heroright() {
-		if (GameEngine.firstXtile+prota.getrelativextile()<GameEngine.TOTAL_X_TILES-1) {
-			if (prota.getrelativextile()==GameEngine.ON_SCREEN_TILES_X-1 && tilelayout[1+GameEngine.firstXtile+prota.getrelativextile()][GameEngine.firstYtile+prota.getrelativeytile()].isbloqued()==false) {
-				if (firstXtile<GameEngine.TOTAL_X_TILES-GameEngine.ON_SCREEN_TILES_X) { prota.scrollrigth(); firstXtile += GameEngine.ON_SCREEN_TILES_X; }
+	public void heroright() {
+		if (mapa.getfirstxtile()+prota.getrelativextile()<GameEngine.TOTAL_X_TILES-1) {
+			if (prota.getrelativextile()==GameEngine.ON_SCREEN_TILES_X-1 && tilelayout[1+mapa.getfirstxtile()+prota.getrelativextile()][mapa.getfirstytile()+prota.getrelativeytile()].isbloqued()==false) {
+				if (mapa.getfirstxtile()<GameEngine.TOTAL_X_TILES-GameEngine.ON_SCREEN_TILES_X) { prota.scrollrigth(); mapa.setfirstxtile(mapa.getfirstxtile() + GameEngine.ON_SCREEN_TILES_X); }
 			} else {
-				if (tilelayout[1+GameEngine.firstXtile+prota.getrelativextile()][GameEngine.firstYtile+prota.getrelativeytile()].isbloqued()==false) {
+				if (tilelayout[1+mapa.getfirstxtile()+prota.getrelativextile()][mapa.getfirstytile()+prota.getrelativeytile()].isbloqued()==false) {
 					prota.right();
 				}
 			}
 		}
 	}
 		
-	public static void heroleft() {
-		if (GameEngine.firstXtile+prota.getrelativextile()>0) {
-			if (prota.getrelativextile()==0 && tilelayout[GameEngine.firstXtile+prota.getrelativextile()-1][GameEngine.firstYtile+prota.getrelativeytile()].isbloqued()==false) {
-				if (firstXtile>0) { prota.scrollleft(); firstXtile -= GameEngine.ON_SCREEN_TILES_X; }
+	public void heroleft() {
+		if (mapa.getfirstxtile()+prota.getrelativextile()>0) {
+			if (prota.getrelativextile()==0 && tilelayout[mapa.getfirstxtile()+prota.getrelativextile()-1][mapa.getfirstytile()+prota.getrelativeytile()].isbloqued()==false) {
+				if (mapa.getfirstxtile()>0) { prota.scrollleft(); mapa.setfirstxtile(mapa.getfirstxtile() - GameEngine.ON_SCREEN_TILES_X); }
 			} else {
-				if (tilelayout[GameEngine.firstXtile+prota.getrelativextile()-1][GameEngine.firstYtile+prota.getrelativeytile()].isbloqued()==false) {
+				if (tilelayout[mapa.getfirstxtile()+prota.getrelativextile()-1][mapa.getfirstytile()+prota.getrelativeytile()].isbloqued()==false) {
 					prota.left();
 				}
 			}
@@ -216,18 +139,17 @@ public class GameEngine {
 	}
 	
 	
-	
 	// ENEMY / ENEMY_ARRAY CLASS WRAPPER
 	public ArrayList<Enemy> getenemies() {
 		return badguys.getlist();
 	}
-	public static Enemy overenemy() {
-		 return badguys.overenemy(prota.getrelativextile()+GameEngine.getfirstxtile(),prota.getrelativeytile()+GameEngine.getfirstytile());
+	public Enemy overenemy() {
+		 return badguys.overenemy(prota.getrelativextile()+mapa.getfirstxtile(),prota.getrelativeytile()+mapa.getfirstytile());
 	}
-	public static void removeenemy(Enemy obj) {
+	public void removeenemy(Enemy obj) {
 		badguys.remove_enemy(obj);
 	}
-	public static void createrandomenemy() { // create a random enemy
+	public void createrandomenemy() { // create a random enemy
 		Random randomGenerator = new Random();
 		// generates random position
 		int x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
@@ -245,7 +167,7 @@ public class GameEngine {
 			}
 		}
 	}
-	public static void createenemy(String name,int ag,int str, int res, int lf, int x,int y,String file) {
+	public void createenemy(String name,int ag,int str, int res, int lf, int x,int y,String file) {
 		badguys.add_enemy(new Enemy(name,ag,str,res,lf,x,y,file));
 	}
 	
@@ -253,13 +175,13 @@ public class GameEngine {
 	public ArrayList<Object> getobjects() {
 		return availableobjects.getlist();
 	}
-	public static Object overobject() {
-		 return availableobjects.overobject(prota.getrelativextile()+GameEngine.getfirstxtile(),prota.getrelativeytile()+GameEngine.getfirstytile());
+	public Object overobject() {
+		 return availableobjects.overobject(prota.getrelativextile()+mapa.getfirstxtile(),prota.getrelativeytile()+mapa.getfirstytile());
 	}
-	public static void removeobject(Object obj) {
+	public void removeobject(Object obj) {
 		availableobjects.remove_object(obj);
 	}
-	public static void createrandomobject() {
+	public void createrandomobject() {
 		Random randomGenerator = new Random();
 		// generates random position
 		int x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
@@ -324,7 +246,7 @@ public class GameEngine {
 			}
 		}
 	}
-	public static void createobject(String name,String position,int attack, int defense, int durability,int x,int y,String file) {
+	public void createobject(String name,String position,int attack, int defense, int durability,int x,int y,String file) {
 		availableobjects.add_object(new Object(name,position,attack,defense,durability,x,y,file));
 	}
 	
@@ -332,16 +254,16 @@ public class GameEngine {
 	public ArrayList<Consumable> getconsumables() {
 		return availableconsumables.getlist();
 	}
-	public static Consumable overconsumable() {
-		 return availableconsumables.overconsumable(prota.getrelativextile()+GameEngine.getfirstxtile(),prota.getrelativeytile()+GameEngine.getfirstytile());
+	public Consumable overconsumable() {
+		 return availableconsumables.overconsumable(prota.getrelativextile()+mapa.getfirstxtile(),prota.getrelativeytile()+mapa.getfirstytile());
 	}
-	public static void removeconsumable(Consumable c) {
+	public void removeconsumable(Consumable c) {
 		availableconsumables.remove_consumable(c);
 	}
-	public static void addconsumable(Consumable c) {
+	public void addconsumable(Consumable c) {
 		availableconsumables.add_consumable(c);
 	}
-	public static void createrandomconsumable() {
+	public void createrandomconsumable() {
 		Random randomGenerator = new Random();
 		// generates random position
 		int x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
@@ -357,7 +279,7 @@ public class GameEngine {
         	availableconsumables.add_consumable(new Consumable("Yellow potion",1,1,x,y,"potionyellow.gif"));
         }
     }
-	public static void createconsumable(String name, int p_agility, int p_life,int x,int y,String file) {
+	public void createconsumable(String name, int p_agility, int p_life,int x,int y,String file) {
         availableconsumables.add_consumable(new Consumable(name,p_agility,p_life,x,y,file));
 	}
 	

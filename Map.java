@@ -27,12 +27,14 @@ public class Map {
 	private Tile tilelayout[][];
 	private BufferedImage freetile;
     private BufferedImage blockedtile;
-    private static BufferedImage water_img;
-    private static BufferedImage rocks_img;
-    private static BufferedImage boulder_img;
-    private static BufferedImage bones_img;
-    private static BufferedImage fire_img;
-    private static BufferedImage cross_img;
+    private BufferedImage water_img;
+    private BufferedImage rocks_img;
+    private BufferedImage boulder_img;
+    private BufferedImage bones_img;
+    private BufferedImage fire_img;
+    private BufferedImage cross_img;
+    private int firstXtile; // defines current section of the map that is shown on screen
+	private int firstYtile; // defines current section of the map that is shown on screen
 	
 	public Map() {
 		// load all tile images
@@ -50,6 +52,9 @@ public class Map {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		// first tile position must be multiple of tile_size
+		firstXtile=0;
+		firstYtile=0;
 		// create tile layout
         tilelayout = new Tile[GameEngine.TOTAL_X_TILES][GameEngine.TOTAL_Y_TILES];
 	}
@@ -140,7 +145,22 @@ public class Map {
 			}
 		}
 		// **** END MAP CREATION
+		// gets
 		public Tile[][] gettiles() {
 			return tilelayout;
+		}
+		public int getfirstxtile() {
+			return firstXtile;
+		}
+		public int getfirstytile() {
+			return firstYtile;
+		}
+		
+		// sets / updates
+		public void setfirstxtile(int value) {
+			firstXtile=value;
+		}
+		public void setfirstytile(int value) {
+			firstYtile=value;
 		}
 }

@@ -114,7 +114,6 @@ public class Explorer extends JFrame
             
             // create tile layout
             game = new GameEngine();
-            game.start();
             mapa=game.getmap();
             tilelayout = mapa.gettiles();
             prota = game.gethero();
@@ -150,14 +149,14 @@ public class Explorer extends JFrame
         	Random randomGenerator = new Random();
         	int number=randomGenerator.nextInt(3);
         	if (number==0) { // create enemy
-        		GameEngine.createrandomenemy();
+        		game.createrandomenemy();
         	}
         	if (number==1) { // create consumable
-        		GameEngine.createrandomconsumable();
+        		game.createrandomconsumable();
         		
         	}
         	if (number==2) { // create object
-        		GameEngine.createrandomobject();
+        		game.createrandomobject();
         	}
         	
         	// key events control
@@ -170,8 +169,8 @@ public class Explorer extends JFrame
         		actualenemy=null;
         		actualconsumable=null;
         		actualobject=null;
-        		GameEngine.heroright();
-        		System.out.println(GameEngine.getfirstxtile()+"|"+GameEngine.getfirstytile());
+        		game.heroright();
+        		System.out.println(mapa.getfirstxtile()+"|"+mapa.getfirstytile());
             } 
             if (input.isKeyDown(KeyEvent.VK_LEFT)) 
             { 
@@ -182,8 +181,8 @@ public class Explorer extends JFrame
             	actualenemy=null;
             	actualconsumable=null;
             	actualobject=null;
-            	GameEngine.heroleft();
-        		System.out.println(GameEngine.getfirstxtile()+"|"+GameEngine.getfirstytile());
+            	game.heroleft();
+        		System.out.println(mapa.getfirstxtile()+"|"+mapa.getfirstytile());
 
             }
             if (input.isKeyDown(KeyEvent.VK_UP)) 
@@ -195,8 +194,8 @@ public class Explorer extends JFrame
             	actualenemy=null;
             	actualconsumable=null;
             	actualobject=null;
-            	GameEngine.heroup();
-        		System.out.println(GameEngine.getfirstxtile()+"|"+GameEngine.getfirstytile());
+            	game.heroup();
+        		System.out.println(mapa.getfirstxtile()+"|"+mapa.getfirstytile());
 
             } 
             if (input.isKeyDown(KeyEvent.VK_DOWN)) 
@@ -208,8 +207,8 @@ public class Explorer extends JFrame
             	actualenemy=null;
             	actualconsumable=null;
             	actualobject=null;
-            	GameEngine.herodown();
-        		System.out.println(GameEngine.getfirstxtile()+"|"+GameEngine.getfirstytile());
+            	game.herodown();
+        		System.out.println(mapa.getfirstxtile()+"|"+mapa.getfirstytile());
 
             }
             if (input.isKeyDown(KeyEvent.VK_D)) 
@@ -218,9 +217,9 @@ public class Explorer extends JFrame
             	object_drop_mode=0;
         		consumable_inv_mode=0;
         		just_fight=0;
-            	actualenemy=GameEngine.overenemy(); // get the enemy (if exist)
-            	actualconsumable=GameEngine.overconsumable(); // get the consumable (if exist)
-            	actualobject=GameEngine.overobject(); // get the object (if exist)
+            	actualenemy=game.overenemy(); // get the enemy (if exist)
+            	actualconsumable=game.overconsumable(); // get the consumable (if exist)
+            	actualobject=game.overobject(); // get the object (if exist)
             }
             
             if (input.isKeyDown(KeyEvent.VK_O)) 
@@ -358,22 +357,22 @@ public class Explorer extends JFrame
         		object_drop_mode=0;
         		just_fight=0;
             	// get consumable into inventory
-        		actualconsumable=GameEngine.overconsumable(); // get the consumable (if exist)
+        		actualconsumable=game.overconsumable(); // get the consumable (if exist)
         		if (actualconsumable.getname()!=null) {
         			// if consumable exists
         			if (consinv.getfreeslot()!=-1) {
         				consinv.set_consumable(consinv.getfreeslot(), actualconsumable);	
-        				GameEngine.removeconsumable(actualconsumable);
+        				game.removeconsumable(actualconsumable);
         			}
         			
         			
         		}
         		// get object into inventory
-        		actualobject=GameEngine.overobject(); // get the consumable (if exist)
+        		actualobject=game.overobject(); // get the consumable (if exist)
         		if (actualobject.getname()!=null) {
         			if (objinv.getfreeslot()!=-1) {
         				objinv.set_object(objinv.getfreeslot(), actualobject);
-        				GameEngine.removeobject(actualobject);
+        				game.removeobject(actualobject);
         			}
         		}
         		
@@ -385,19 +384,19 @@ public class Explorer extends JFrame
         		consumable_inv_mode=0;
         		object_drop_mode=0;
             	boolean resultoffight=false;
-            	actualenemy=GameEngine.overenemy(); // get the enemy (if exist)
+            	actualenemy=game.overenemy(); // get the enemy (if exist)
         		if (actualenemy.getname()!=null) {
-        			resultoffight=GameEngine.fight(actualenemy);
+        			resultoffight=prota.fight(actualenemy);
         			System.out.println("FIGHT!");
         			// if hero wins
         			if (resultoffight==true) {
         				// if you win
-        				GameEngine.removeenemy(actualenemy);
+        				game.removeenemy(actualenemy);
         				//System.out.println("YOU WIN!");
         				fightstate="Great! You Win the Battle!!";
         			} else {
         				// if you lose
-        				GameEngine.herodies();
+        				game.herodies();
         				fightstate="You lose the battle, you are at the graveyard!";
         			}
         		just_fight=1;
@@ -573,9 +572,9 @@ public class Explorer extends JFrame
             // draw background tiles 
             
             int relativex=0;
-            for (int xpos=GameEngine.getfirstxtile();xpos<(GameEngine.getfirstxtile()+GameEngine.ON_SCREEN_TILES_X);xpos++) {
+            for (int xpos=mapa.getfirstxtile();xpos<(mapa.getfirstxtile()+GameEngine.ON_SCREEN_TILES_X);xpos++) {
             	int relativey=0;
-            	for (int ypos=GameEngine.getfirstytile();ypos<(GameEngine.getfirstytile()+GameEngine.ON_SCREEN_TILES_Y);ypos++) {
+            	for (int ypos=mapa.getfirstytile();ypos<(mapa.getfirstytile()+GameEngine.ON_SCREEN_TILES_Y);ypos++) {
             			bbg.drawImage(tilelayout[xpos][ypos].gettileimage(),relativex*GameEngine.TILE_X_SIZE,relativey*GameEngine.TILE_Y_SIZE,null);
             			relativey++;
             	}
@@ -589,10 +588,10 @@ public class Explorer extends JFrame
             	//System.out.println("entra");
             	Enemy bguy=bgiterator.next();
             	//System.out.println(bguy.getabsolutex());
-            	if (bguy.enemyonscreen(GameEngine.getfirstxtile(), GameEngine.getfirstytile())==true) {
+            	if (bguy.enemyonscreen(mapa.getfirstxtile(), mapa.getfirstytile())==true) {
             		// draw enemy image
             		
-        			bbg.drawImage(bguy.getsprite(),(bguy.getabsolutex()-GameEngine.getfirstxtile())*GameEngine.TILE_X_SIZE,(bguy.getabsolutey()-GameEngine.getfirstytile())*GameEngine.TILE_Y_SIZE,null);       		
+        			bbg.drawImage(bguy.getsprite(),(bguy.getabsolutex()-mapa.getfirstxtile())*GameEngine.TILE_X_SIZE,(bguy.getabsolutey()-mapa.getfirstytile())*GameEngine.TILE_Y_SIZE,null);       		
             	}
             }
             
@@ -602,10 +601,10 @@ public class Explorer extends JFrame
             	//System.out.println("entra");
             	Object obj=objiterator.next();
             	//System.out.println(bguy.getabsolutex());
-            	if (obj.objectonscreen(GameEngine.getfirstxtile(), GameEngine.getfirstytile())==true) {
+            	if (obj.objectonscreen(mapa.getfirstxtile(), mapa.getfirstytile())==true) {
             		// draw enemy image
             		
-        			bbg.drawImage(obj.getsprite(),(obj.getabsolutex()-GameEngine.getfirstxtile())*GameEngine.TILE_X_SIZE,(obj.getabsolutey()-GameEngine.getfirstytile())*GameEngine.TILE_Y_SIZE,null);       		
+        			bbg.drawImage(obj.getsprite(),(obj.getabsolutex()-mapa.getfirstxtile())*GameEngine.TILE_X_SIZE,(obj.getabsolutey()-mapa.getfirstytile())*GameEngine.TILE_Y_SIZE,null);       		
             	}
             }
             
@@ -615,9 +614,9 @@ public class Explorer extends JFrame
             	//System.out.println("entra");
             	Consumable consumable=consumableiterator.next();
             	//System.out.println(bguy.getabsolutex());
-            	if (consumable.consumableonscreen(GameEngine.getfirstxtile(), GameEngine.getfirstytile())==true) {
+            	if (consumable.consumableonscreen(mapa.getfirstxtile(), mapa.getfirstytile())==true) {
             		// draw enemy image		
-        			bbg.drawImage(consumable.getsprite(),(consumable.getabsolutex()-GameEngine.getfirstxtile())*GameEngine.TILE_X_SIZE,(consumable.getabsolutey()-GameEngine.getfirstytile())*GameEngine.TILE_Y_SIZE,null);       		
+        			bbg.drawImage(consumable.getsprite(),(consumable.getabsolutex()-mapa.getfirstxtile())*GameEngine.TILE_X_SIZE,(consumable.getabsolutey()-mapa.getfirstytile())*GameEngine.TILE_Y_SIZE,null);       		
             	}
             }
             
