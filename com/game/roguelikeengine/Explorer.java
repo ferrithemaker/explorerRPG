@@ -1,3 +1,5 @@
+package com.game.roguelikeengine;
+
 /*
     Copyright (C) 2013  Ferran Fabregas (ferri.fc@gmail.com)
 
@@ -15,10 +17,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
 import java.awt.*; 
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
+
+
 import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Random;

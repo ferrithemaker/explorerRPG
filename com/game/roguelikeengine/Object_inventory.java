@@ -1,5 +1,7 @@
+package com.game.roguelikeengine;
+
 /*
-    Copyright (C) 2013  Ferran Fàbregas (ferri.fc@gmail.com)
+    Copyright (C) 2013  Ferran Fabregas (ferri.fc@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -15,29 +17,27 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-public class Consumable_inventory {
-
-	private Consumable inventory[];
+public class Object_inventory {
+	private Object inventory[];
 	
-	public Consumable_inventory() {
-		inventory= new Consumable[GameEngine.INVENTORY_SIZE];
+	public Object_inventory() {
+		inventory= new Object[GameEngine.INVENTORY_SIZE];
 		for (int i=0;i<10;i++) {
 			inventory[i]=null;
 		}
 	}
 	
-	public void set_consumable(int pos, Consumable obj) {
+	public void set_object(int pos, Object obj) {
 		inventory[pos]=obj;
 	}
 	
-	public Consumable get_consumable(int pos) {
+	public Object get_object(int pos) {
 		return inventory[pos];
 	}
-
-	public void delete_consumable(int pos) {
+	public void delete_object(int pos) {
 		inventory[pos]=null;
 	}
-	public int getfreeslot() { // if firstfreeposition=-1 theres no free slots
+	public int getfreeslot() { // return first avialable slot on inventory, if return firstfreeposition=-1 there is no free slots.
 		int firstfreeposition=-1;
 		for (int i=9;i>=0;i--) {
 			if (inventory[i]==null) {

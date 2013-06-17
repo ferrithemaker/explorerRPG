@@ -1,5 +1,7 @@
+package com.game.roguelikeengine;
+
 /*
-    Copyright (C) 2013  Ferran Fàbregas (ferri.fc@gmail.com)
+    Copyright (C) 2013  Ferran Fabregas (ferri.fc@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

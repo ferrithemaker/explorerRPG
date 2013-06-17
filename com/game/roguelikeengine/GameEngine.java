@@ -1,3 +1,5 @@
+package com.game.roguelikeengine;
+
 /*
     Copyright (C) 2013  Ferran Fabregas (ferri.fc@gmail.com)
 
@@ -16,8 +18,10 @@
 */
 
 
+
 import java.util.ArrayList;
 import java.util.Random;
+
 
 
 // Map class is a wrapper class for all other basic classes
@@ -55,7 +59,7 @@ public class GameEngine {
 	public GameEngine () {  
 			
 		// create hero
-        prota=new Hero("ferriman","human.gif");
+        prota=new Hero("ferriman","img/human.gif");
 		
         // create Map
         mapa=new Map();
@@ -157,13 +161,13 @@ public class GameEngine {
 		int enemytype = randomGenerator.nextInt(3); // random choose of enemy
 		if (!tilelayout[x][y].isbloqued()) { // if there is empty space
 			if (enemytype==0) {
-				badguys.add_enemy(new Enemy("vortex",5,5,5,5,x,y,"vortex.gif"));
+				badguys.add_enemy(new Enemy("vortex",5,5,5,5,x,y,"img/vortex.gif"));
 			}
 			if (enemytype==1) {
-				badguys.add_enemy(new Enemy("catharg",6,6,6,6,x,y,"cetharg.gif"));
+				badguys.add_enemy(new Enemy("catharg",6,6,6,6,x,y,"img/cetharg.gif"));
 			}
 			if (enemytype==2) {
-				badguys.add_enemy(new Enemy("assassin",7,8,7,7,x,y,"assassin.gif"));
+				badguys.add_enemy(new Enemy("assassin",7,8,7,7,x,y,"img/assassin.gif"));
 			}
 		}
 	}
@@ -191,57 +195,57 @@ public class GameEngine {
 		if (!tilelayout[x][y].isbloqued()) { // if there is empty space
 			if (objecttype==0) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("long sword","righthand",10,0,1,x,y,"longSword.gif"));
+					availableobjects.add_object(new Object("long sword","righthand",10,0,1,x,y,"img/longSword.gif"));
 				}
 			}
 			if (objecttype==1) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("dagger","righthand",6,0,1,x,y,"dagger.gif"));
+					availableobjects.add_object(new Object("dagger","righthand",6,0,1,x,y,"img/dagger.gif"));
 				}
 			}
 			if (objecttype==2) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("boots","foot",0,6,1,x,y,"boots.gif"));
+					availableobjects.add_object(new Object("boots","foot",0,6,1,x,y,"img/boots.gif"));
 				}
 			}
 			if (objecttype==3) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("heavy armor","body",0,15,1,x,y,"heavyKevlarArmor.gif"));
+					availableobjects.add_object(new Object("heavy armor","body",0,15,1,x,y,"img/heavyKevlarArmor.gif"));
 				}
 			}
 			if (objecttype==4) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("helm","head",0,4,1,x,y,"helm.gif"));
+					availableobjects.add_object(new Object("helm","head",0,4,1,x,y,"img/helm.gif"));
 				}
 			}
 			if (objecttype==5) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("mace","lefthand",7,0,1,x,y,"mace.gif"));
+					availableobjects.add_object(new Object("mace","lefthand",7,0,1,x,y,"img/mace.gif"));
 				}
 			}
 			if (objecttype==6) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("riot shield","lefthand",0,9,1,x,y,"riotShield.gif"));
+					availableobjects.add_object(new Object("riot shield","lefthand",0,9,1,x,y,"img/riotShield.gif"));
 				}
 			}
 			if (objecttype==7) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("armor","body",0,11,1,x,y,"reflecArmor.gif"));
+					availableobjects.add_object(new Object("armor","body",0,11,1,x,y,"img/reflecArmor.gif"));
 				}
 			}
 			if (objecttype==8) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("shield","lefthand",0,7,1,x,y,"shield.gif"));
+					availableobjects.add_object(new Object("shield","lefthand",0,7,1,x,y,"img/shield.gif"));
 				}
 			}
 			if (objecttype==9) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("skull cap","head",0,5,1,x,y,"skullcap.gif"));
+					availableobjects.add_object(new Object("skull cap","head",0,5,1,x,y,"img/skullcap.gif"));
 				}
 			}
 			if (objecttype==10) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("great shield","lefthand",0,12,1,x,y,"greatShield.gif"));
+					availableobjects.add_object(new Object("great shield","lefthand",0,12,1,x,y,"img/greatShield.gif"));
 				}
 			}
 		}
@@ -270,13 +274,13 @@ public class GameEngine {
 		int y = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES);
 		int potiontype = randomGenerator.nextInt(3);
         if (potiontype==0) {
-        	availableconsumables.add_consumable(new Consumable("Blue potion",1,1,x,y,"potionblue.gif"));
+        	availableconsumables.add_consumable(new Consumable("Blue potion",1,1,x,y,"img/potionblue.gif"));
         }
         if (potiontype==1) {
-        	availableconsumables.add_consumable(new Consumable("Red potion",1,1,x,y,"potionred.gif"));
+        	availableconsumables.add_consumable(new Consumable("Red potion",1,1,x,y,"img/potionred.gif"));
         }
         if (potiontype==2) {
-        	availableconsumables.add_consumable(new Consumable("Yellow potion",1,1,x,y,"potionyellow.gif"));
+        	availableconsumables.add_consumable(new Consumable("Yellow potion",1,1,x,y,"img/potionyellow.gif"));
         }
     }
 	public void createconsumable(String name, int p_agility, int p_life,int x,int y,String file) {

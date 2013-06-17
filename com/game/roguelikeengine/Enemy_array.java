@@ -1,3 +1,5 @@
+package com.game.roguelikeengine;
+
 /*
     Copyright (C) 2013  Ferran Fàbregas (ferri.fc@gmail.com)
 

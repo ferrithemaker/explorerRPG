@@ -1,9 +1,12 @@
+package com.game.roguelikeengine;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
+
 
 
 /*
@@ -40,14 +43,14 @@ public class Map {
 		// load all tile images
 		try {
 			// tiles
-			blockedtile = ImageIO.read(new File("roomWall33.gif"));
-			freetile = ImageIO.read(new File("herba.jpg"));
-			water_img = ImageIO.read(new File("water.gif"));
-			rocks_img = ImageIO.read(new File("rocks.jpg"));
-			bones_img = ImageIO.read(new File("bones.jpg"));
-			boulder_img= ImageIO.read(new File("boulder.jpg"));
-			fire_img= ImageIO.read(new File("fire.jpg"));
-			cross_img= ImageIO.read(new File("cross.jpg"));   
+			blockedtile = ImageIO.read(new File("img/roomWall33.gif"));
+			freetile = ImageIO.read(new File("img/herba.jpg"));
+			water_img = ImageIO.read(new File("img/water.gif"));
+			rocks_img = ImageIO.read(new File("img/rocks.jpg"));
+			bones_img = ImageIO.read(new File("img/bones.jpg"));
+			boulder_img= ImageIO.read(new File("img/boulder.jpg"));
+			fire_img= ImageIO.read(new File("img/fire.jpg"));
+			cross_img= ImageIO.read(new File("img/cross.jpg"));   
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -13,11 +13,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-All images are taken from http://opengameart.org/ and are copyrighted by their owners.
+All images are taken from http://opengameart.org/ and are copyrighted by their owners. Some are modified by me.
 
 ------------------
 
-This is an under development (very first stages) 2D RPG Engine (only classes) with rogue style.
+This is an under development (very first stages) rogue style 2D RPG Engine (only classes, not development UI).
 
 To test the engine, there are also a simple game called Explorer.
 

@@ -1,3 +1,5 @@
+package com.game.roguelikeengine;
+
 /*
     Copyright (C) 2013  Ferran Fabregas (ferri.fc@gmail.com)
 
@@ -15,12 +17,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
+
 
 
 
