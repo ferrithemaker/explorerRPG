@@ -39,7 +39,7 @@ public class GameEngine {
 	public final static int OPTION_MENU_X_SIZE=500;
 	public final static int WINDOWWITH=TILE_X_SIZE*ON_SCREEN_TILES_X+OPTION_MENU_X_SIZE;
 	public final static int WINDOWHEIGHT=TILE_Y_SIZE*ON_SCREEN_TILES_Y;
-	public final static int FPS=10;
+	public final static int FPS=8;
 	public final static int INVENTORY_SIZE=10;
 	public final static String APP_NAME="Rogue explorer";
 	public final static int NUMBER_OF_WALLS=100;
@@ -59,7 +59,7 @@ public class GameEngine {
 	public GameEngine () {  
 			
 		// create hero
-        prota=new Hero("ferriman","img/human.gif");
+        prota=new Hero("ferriman","img/holder_sprite.png");
 		
         // create Map
         mapa=new Map();

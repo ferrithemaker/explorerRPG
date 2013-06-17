@@ -38,6 +38,7 @@ public class Hero {
 	private int level;
 	private int exp;
 	private int resist;
+	private int current_sprite_position;
 	private BufferedImage sprite;
 	private Object head;
 	private Object lefthand;
@@ -55,6 +56,7 @@ public class Hero {
 		this.relative_y_tile=1;
 		this.relative_x_tile=1;
 		this.name=name;
+		this.current_sprite_position=7;
 		this.head = new Object(); // null object
 		this.body = new Object(); // null object
 		this.lefthand = new Object(); // null object
@@ -115,6 +117,33 @@ public class Hero {
 	public BufferedImage getimage() {
 		return this.sprite;
 	}
+	public int getyspriteposition() {
+		if (current_sprite_position==1 || current_sprite_position==2 || current_sprite_position==3) {
+			return 0;
+		}
+		if (current_sprite_position==4 || current_sprite_position==5 || current_sprite_position==6) {
+			return 40;
+		}
+		if (current_sprite_position==7 || current_sprite_position==8 || current_sprite_position==9) {
+			return 80;
+		}
+		if (current_sprite_position==10 || current_sprite_position==11 || current_sprite_position==12) {
+			return 120;
+		}
+		return 0;
+	}
+	public int getxspriteposition() {
+		if (current_sprite_position==1 || current_sprite_position==4 || current_sprite_position==7 || current_sprite_position==10 ) {
+			return 0;
+		}
+		if (current_sprite_position==2 || current_sprite_position==5 || current_sprite_position==8 || current_sprite_position==11) {
+			return 40;
+		}
+		if (current_sprite_position==3 || current_sprite_position==6 || current_sprite_position==9 || current_sprite_position==12) {
+			return 80;
+		}
+		return 0;
+	}
 	
 	// hero sets / updates
 	public void sethead(Object obj) {
@@ -161,21 +190,77 @@ public class Hero {
 	public void up() {
 		if (this.relative_y_tile>0) {
 			this.relative_y_tile -= 1;
+			switch(current_sprite_position) {
+			case 10:
+				current_sprite_position=11;
+				break;
+			case 11:
+				current_sprite_position=12;
+				break;
+			case 12:
+				current_sprite_position=10;
+				break;
+			default:
+				current_sprite_position=10;
+				break;
+			}
 		}
 	}
 	public void down() {
 		if (this.relative_y_tile<GameEngine.ON_SCREEN_TILES_Y-1) {
 			this.relative_y_tile += 1;
+			switch(current_sprite_position) {
+			case 1:
+				current_sprite_position=2;
+				break;
+			case 2:
+				current_sprite_position=3;
+				break;
+			case 3:
+				current_sprite_position=1;
+				break;
+			default:
+				current_sprite_position=1;
+				break;
+			}
 		}
 	}
 	public void left() {
 		if (this.relative_x_tile>0) {
 			this.relative_x_tile -= 1;
+			switch(current_sprite_position) {
+			case 4:
+				current_sprite_position=5;
+				break;
+			case 5:
+				current_sprite_position=6;
+				break;
+			case 6:
+				current_sprite_position=4;
+				break;
+			default:
+				current_sprite_position=4;
+				break;
+			}
 		}
 	}
 	public void right() {
 		if (this.relative_x_tile<GameEngine.ON_SCREEN_TILES_X-1) {
 			this.relative_x_tile += 1;
+			switch(current_sprite_position) {
+			case 7:
+				current_sprite_position=8;
+				break;
+			case 8:
+				current_sprite_position=9;
+				break;
+			case 9:
+				current_sprite_position=7;
+				break;
+			default:
+				current_sprite_position=7;
+				break;
+			}
 		}
 	}
 	public void scrollup() {

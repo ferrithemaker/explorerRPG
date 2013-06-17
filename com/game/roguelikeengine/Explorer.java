@@ -626,8 +626,8 @@ public class Explorer extends JFrame
             }
             
             // draw hero
-            bbg.drawImage(prota.getimage(),prota.getrelativextile()*GameEngine.TILE_X_SIZE,prota.getrelativeytile()*GameEngine.TILE_Y_SIZE,null);
-            
+            //bbg.drawImage(prota.getimage(),prota.getrelativextile()*GameEngine.TILE_X_SIZE,prota.getrelativeytile()*GameEngine.TILE_Y_SIZE,null);
+            bbg.drawImage(prota.getimage(), prota.getrelativextile()*GameEngine.TILE_X_SIZE, prota.getrelativeytile()*GameEngine.TILE_Y_SIZE, (prota.getrelativextile()*GameEngine.TILE_X_SIZE)+40, (prota.getrelativeytile()*GameEngine.TILE_Y_SIZE)+40, prota.getxspriteposition(), prota.getyspriteposition(), prota.getxspriteposition()+40, prota.getyspriteposition()+40, null);
             // draw fight result
             if (just_fight==1) {
             	bbg.setColor(Color.YELLOW);
