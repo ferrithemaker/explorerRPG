@@ -29,14 +29,18 @@ public class Consumable {
 	private String name;
 	private int powerup_agility;
 	private int powerup_life;
+	private int powerup_resist;
+	private int powerup_force;
 	private int absolute_x;
 	private int absolute_y;
 	private BufferedImage img;
 	
-	public Consumable(String name, int p_agility, int p_life,int x,int y,String file) {
+	public Consumable(String name, int agility, int hp,int force, int resist,int x,int y,String file) {
 		this.name=name;
-		this.powerup_agility=p_agility;
-		this.powerup_life=p_life;
+		this.powerup_agility=agility;
+		this.powerup_life=hp;
+		this.powerup_resist=resist;
+		this.powerup_force=force;
 		this.absolute_x=x;
 		this.absolute_y=y;
 		try {
@@ -47,7 +51,7 @@ public class Consumable {
 		}
 	}
 	public Consumable() {
-		// void constructor
+		// void constructor 
 	}
 	
 	// gets
@@ -65,6 +69,12 @@ public class Consumable {
 	}
 	public int getpoweruplife() {
 		return this.powerup_life;
+	}
+	public int getpowerupstrength() {
+		return this.powerup_force;
+	}
+	public int getpowerupresist() {
+		return this.powerup_resist;
 	}
 	public int getabsolutey() {
 		return this.absolute_y;

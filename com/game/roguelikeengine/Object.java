@@ -35,11 +35,11 @@ public class Object {
 	private String position;
 	private BufferedImage img;
 	
-	public Object(String name,String position,int attack, int defense, int durability,int x,int y,String file) {
+	public Object(String name,String position,int baseattack, int basedefense, int basedurability,int x,int y,String file) {
 		this.name=name;
-		this.attack=attack;
-		this.defense=defense;
-		this.durability=durability;
+		this.attack=baseattack;
+		this.defense=basedefense;
+		this.durability=basedurability;
 		this.absolute_x=x;
 		this.absolute_y=y;
 		this.position=position;

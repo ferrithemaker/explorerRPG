@@ -38,7 +38,7 @@ public class Hero {
 	private int level;
 	private int exp;
 	private int resist;
-	private int current_sprite_position;
+	private int current_sprite_position; // sprite that will be shown
 	private BufferedImage sprite;
 	private Object head;
 	private Object lefthand;
@@ -56,7 +56,7 @@ public class Hero {
 		this.relative_y_tile=1;
 		this.relative_x_tile=1;
 		this.name=name;
-		this.current_sprite_position=7;
+		init_sprite_pos(); // initial sprite position, every number corresponds to a sprite. Each set of sprites has different configuration
 		this.head = new Object(); // null object
 		this.body = new Object(); // null object
 		this.lefthand = new Object(); // null object
@@ -117,33 +117,7 @@ public class Hero {
 	public BufferedImage getimage() {
 		return this.sprite;
 	}
-	public int getyspriteposition() {
-		if (current_sprite_position==1 || current_sprite_position==2 || current_sprite_position==3) {
-			return 0;
-		}
-		if (current_sprite_position==4 || current_sprite_position==5 || current_sprite_position==6) {
-			return 40;
-		}
-		if (current_sprite_position==7 || current_sprite_position==8 || current_sprite_position==9) {
-			return 80;
-		}
-		if (current_sprite_position==10 || current_sprite_position==11 || current_sprite_position==12) {
-			return 120;
-		}
-		return 0;
-	}
-	public int getxspriteposition() {
-		if (current_sprite_position==1 || current_sprite_position==4 || current_sprite_position==7 || current_sprite_position==10 ) {
-			return 0;
-		}
-		if (current_sprite_position==2 || current_sprite_position==5 || current_sprite_position==8 || current_sprite_position==11) {
-			return 40;
-		}
-		if (current_sprite_position==3 || current_sprite_position==6 || current_sprite_position==9 || current_sprite_position==12) {
-			return 80;
-		}
-		return 0;
-	}
+	
 	
 	// hero sets / updates
 	public void sethead(Object obj) {
@@ -190,77 +164,26 @@ public class Hero {
 	public void up() {
 		if (this.relative_y_tile>0) {
 			this.relative_y_tile -= 1;
-			switch(current_sprite_position) {
-			case 10:
-				current_sprite_position=11;
-				break;
-			case 11:
-				current_sprite_position=12;
-				break;
-			case 12:
-				current_sprite_position=10;
-				break;
-			default:
-				current_sprite_position=10;
-				break;
-			}
+			sprite_goup();
 		}
 	}
 	public void down() {
 		if (this.relative_y_tile<GameEngine.ON_SCREEN_TILES_Y-1) {
 			this.relative_y_tile += 1;
-			switch(current_sprite_position) {
-			case 1:
-				current_sprite_position=2;
-				break;
-			case 2:
-				current_sprite_position=3;
-				break;
-			case 3:
-				current_sprite_position=1;
-				break;
-			default:
-				current_sprite_position=1;
-				break;
-			}
+			sprite_godown();
 		}
 	}
 	public void left() {
 		if (this.relative_x_tile>0) {
 			this.relative_x_tile -= 1;
-			switch(current_sprite_position) {
-			case 4:
-				current_sprite_position=5;
-				break;
-			case 5:
-				current_sprite_position=6;
-				break;
-			case 6:
-				current_sprite_position=4;
-				break;
-			default:
-				current_sprite_position=4;
-				break;
-			}
+			sprite_goleft();
 		}
 	}
 	public void right() {
 		if (this.relative_x_tile<GameEngine.ON_SCREEN_TILES_X-1) {
 			this.relative_x_tile += 1;
-			switch(current_sprite_position) {
-			case 7:
-				current_sprite_position=8;
-				break;
-			case 8:
-				current_sprite_position=9;
-				break;
-			case 9:
-				current_sprite_position=7;
-				break;
-			default:
-				current_sprite_position=7;
-				break;
-			}
+			sprite_goright();
+			
 		}
 	}
 	public void scrollup() {
@@ -277,7 +200,25 @@ public class Hero {
 	}
 	
 	// fight
-	// hero fights monster
+	// hero hit enemy
+	public String hit(Enemy enemy) {
+		int herohit= (((int)(Math.ceil(this.agility/3))*this.force)-enemy.getresist());
+		int enemyhit=(((int)(Math.ceil(enemy.getagility()/3))*this.force)-this.resist);
+		enemy.updatehp(herohit); // hero hits enemy
+		if (enemy.gethp()>0) { // if enemy is alive
+			this.life=this.life-enemyhit; // enemy hits hero
+		}
+		// return result control
+		if (enemy.gethp()<=0) {
+			return "ENEMYDEAD";
+		}
+		if (this.life<=0) {
+			return "HERODEAD";
+		}
+		return this.name+" deal "+herohit+" damage points to "+enemy.getname()+"\n and "+enemy.getname()+" deal "+enemyhit+" damage points to "+this.name;
+		
+	}
+	// hero fights enemy
 	public boolean fight(Enemy enemy) {
 		boolean heroturn;
 		int enemydicevalue;
@@ -331,4 +272,100 @@ public class Hero {
 		}
 	}
 	
+	// *** BEGIN hero sprite management. you MUST modify it with your own sprite behavior
+	private void init_sprite_pos() {
+		current_sprite_position=7;
+	}
+	private void sprite_goup() {
+		switch(current_sprite_position) {
+		case 10:
+			current_sprite_position=11;
+			break;
+		case 11:
+			current_sprite_position=12;
+			break;
+		case 12:
+			current_sprite_position=10;
+			break;
+		default:
+			current_sprite_position=10;
+			break;
+		}
+	}
+	private void sprite_godown() {
+		switch(current_sprite_position) {
+		case 1:
+			current_sprite_position=2;
+			break;
+		case 2:
+			current_sprite_position=3;
+			break;
+		case 3:
+			current_sprite_position=1;
+			break;
+		default:
+			current_sprite_position=1;
+			break;
+		}	
+	}
+	private void sprite_goleft() {
+		switch(current_sprite_position) {
+		case 4:
+			current_sprite_position=5;
+			break;
+		case 5:
+			current_sprite_position=6;
+			break;
+		case 6:
+			current_sprite_position=4;
+			break;
+		default:
+			current_sprite_position=4;
+			break;
+		}
+	}
+	private void sprite_goright() {
+		switch(current_sprite_position) {
+		case 7:
+			current_sprite_position=8;
+			break;
+		case 8:
+			current_sprite_position=9;
+			break;
+		case 9:
+			current_sprite_position=7;
+			break;
+		default:
+			current_sprite_position=7;
+			break;
+		}
+	}
+	public int getyspriteposition() {
+		if (current_sprite_position==1 || current_sprite_position==2 || current_sprite_position==3) {
+			return GameEngine.TILE_Y_SIZE*0;
+		}
+		if (current_sprite_position==4 || current_sprite_position==5 || current_sprite_position==6) {
+			return GameEngine.TILE_Y_SIZE*1;
+		}
+		if (current_sprite_position==7 || current_sprite_position==8 || current_sprite_position==9) {
+			return GameEngine.TILE_Y_SIZE*2;
+		}
+		if (current_sprite_position==10 || current_sprite_position==11 || current_sprite_position==12) {
+			return GameEngine.TILE_Y_SIZE*3;
+		}
+		return 0;
+	}
+	public int getxspriteposition() {
+		if (current_sprite_position==1 || current_sprite_position==4 || current_sprite_position==7 || current_sprite_position==10 ) {
+			return GameEngine.TILE_X_SIZE*0;
+		}
+		if (current_sprite_position==2 || current_sprite_position==5 || current_sprite_position==8 || current_sprite_position==11) {
+			return GameEngine.TILE_X_SIZE*1;
+		}
+		if (current_sprite_position==3 || current_sprite_position==6 || current_sprite_position==9 || current_sprite_position==12) {
+			return GameEngine.TILE_X_SIZE*2;
+		}
+		return 0;
+	}
+	// *** END hero sprite management. you MUST modify it with your own sprite behavior
 }

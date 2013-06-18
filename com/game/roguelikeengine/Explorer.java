@@ -383,26 +383,31 @@ public class Explorer extends JFrame
         		
         		
             }
-            if (input.isKeyDown(KeyEvent.VK_F)) 
+            if (input.isKeyDown(KeyEvent.VK_H)) 
             { 
             	object_inv_mode=0;
         		consumable_inv_mode=0;
         		object_drop_mode=0;
-            	boolean resultoffight=false;
+            	//boolean resultoffight=false;
+        		String resultoffight;
             	actualenemy=game.overenemy(); // get the enemy (if exist)
         		if (actualenemy.getname()!=null) {
-        			resultoffight=prota.fight(actualenemy);
-        			System.out.println("FIGHT!");
+        			//resultoffight=prota.fight(actualenemy);
+        			resultoffight=prota.hit(actualenemy);
+        			//System.out.println("FIGHT!");
         			// if hero wins
-        			if (resultoffight==true) {
+        			if (resultoffight=="ENEMYDEAD") {
         				// if you win
         				game.removeenemy(actualenemy);
         				//System.out.println("YOU WIN!");
         				fightstate="Great! You Win the Battle!!";
-        			} else {
-        				// if you lose
+        			} 
+        			if (resultoffight=="HERODEAD") {
         				game.herodies();
-        				fightstate="You lose the battle, you are at the graveyard!";
+        				fightstate="You lose the battle, you are in the graveyard!";
+        			}
+        			if (resultoffight!="ENEMYDEAD" && resultoffight!="HERODEAD") {
+        				fightstate=resultoffight;
         			}
         		just_fight=1;
         		}

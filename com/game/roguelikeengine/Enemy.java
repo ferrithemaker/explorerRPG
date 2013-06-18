@@ -36,13 +36,13 @@ public class Enemy {
 	private String name;
 	private BufferedImage enemyimg;
 	
-	public Enemy(String name,int ag,int str, int res, int lf, int x,int y,String file) {
+	public Enemy(String name,int baseagility,int basestrength, int baseresist, int basehp, int x,int y,String file) {
 		// initial set-up
-		this.agility=ag;
-		this.force=str;
-		this.life=lf;
+		this.agility=baseagility;
+		this.force=basestrength;
+		this.life=basehp;
 		this.name=name;
-		this.resist=res;
+		this.resist=baseresist;
 		this.absolute_x=x;
 		this.absolute_y=y;
 		try {
@@ -85,7 +85,7 @@ public class Enemy {
 	}
 	// sets / updates
 	public void updatehp(int value) {
-		this.life=this.life+value;
+		this.life=this.life-value;
 	}
 
 	// control methods
