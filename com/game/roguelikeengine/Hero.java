@@ -203,9 +203,11 @@ public class Hero {
 	// hero hit enemy
 	public String hit(Enemy enemy) {
 		int herohit= (((int)(Math.ceil(this.agility/3))*this.force)-enemy.getresist());
-		int enemyhit=(((int)(Math.ceil(enemy.getagility()/3))*this.force)-this.resist);
+		int enemyhit=(((int)(Math.ceil(enemy.getagility()/3))*enemy.getforce())-this.resist);
+		if (herohit<0) { herohit=0;	}
 		enemy.updatehp(herohit); // hero hits enemy
 		if (enemy.gethp()>0) { // if enemy is alive
+			if (enemyhit<0) { enemyhit=0; }
 			this.life=this.life-enemyhit; // enemy hits hero
 		}
 		// return result control
@@ -215,7 +217,7 @@ public class Hero {
 		if (this.life<=0) {
 			return "HERODEAD";
 		}
-		return this.name+" deal "+herohit+" damage points to "+enemy.getname()+"\n and "+enemy.getname()+" deal "+enemyhit+" damage points to "+this.name;
+		return this.name+" deal "+herohit+" damage points to "+enemy.getname()+"\r and "+enemy.getname()+" deal "+enemyhit+" damage points to "+this.name;
 		
 	}
 	// hero fights enemy
