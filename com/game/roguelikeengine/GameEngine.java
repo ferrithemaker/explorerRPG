@@ -19,6 +19,7 @@ package com.game.roguelikeengine;
 
 
 
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -296,5 +297,11 @@ public class GameEngine {
 	public void createconsumable(String name, int p_agility, int p_life,int force, int resist,int x,int y,String file) {
         availableconsumables.add_consumable(new Consumable(name,p_agility,p_life,force,resist,x,y,file));
 	}
+	
+	// Useful methods
+	public void drawString(Graphics g, String text, int x, int y) { // this function overrides drawstring and add newline functionality
+        for (String line : text.split("\n"))
+            g.drawString(line, x, y += g.getFontMetrics().getHeight());
+    }
 	
 }

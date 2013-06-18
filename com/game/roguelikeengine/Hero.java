@@ -48,9 +48,9 @@ public class Hero {
 	
 	public Hero(String name,String file) {
 		// initial set-up
-		this.agility=1; 
-		this.force=100; // offense
-		this.resist=1; // defense
+		this.agility=4; 
+		this.force=5; // offense
+		this.resist=3; // defense
 		this.life=100; // hp
 		this.exp=1; // experience
 		this.relative_y_tile=1;
@@ -202,8 +202,17 @@ public class Hero {
 	// fight
 	// hero hit enemy
 	public String hit(Enemy enemy) {
-		int herohit= (((int)(Math.ceil(this.agility/3))*this.force)-enemy.getresist());
-		int enemyhit=(((int)(Math.ceil(enemy.getagility()/3))*enemy.getforce())-this.resist);
+		//System.out.println("enemy force:"+enemy.getforce());
+		//System.out.println("enemy agility:"+enemy.getagility());
+		//System.out.println("enemy agility ceil:"+(int)(Math.ceil(((double)enemy.getagility()/(double)3))));
+		//System.out.println("hero resist:"+this.resist);
+		Random randomGenerator = new Random();
+		int herohit= (((int)(Math.ceil((double)((double)this.agility/(double)3)))*this.force)-enemy.getresist());
+		int enemyhit=(((int)(Math.ceil((double)((double)enemy.getagility()/(double)3)))*enemy.getforce())-this.resist);
+		int heromodifier = randomGenerator.nextInt(this.agility); // random component based on agility
+		int enemymodifier = randomGenerator.nextInt(enemy.getagility()); // random component based on agility
+		herohit=herohit+heromodifier;
+		enemyhit=enemyhit+enemymodifier;
 		if (herohit<0) { herohit=0;	}
 		enemy.updatehp(herohit); // hero hits enemy
 		if (enemy.gethp()>0) { // if enemy is alive
@@ -217,7 +226,7 @@ public class Hero {
 		if (this.life<=0) {
 			return "HERODEAD";
 		}
-		return this.name+" deal "+herohit+" damage points to "+enemy.getname()+"\r and "+enemy.getname()+" deal "+enemyhit+" damage points to "+this.name;
+		return this.name+" deal "+herohit+" damage points to "+enemy.getname()+"\nand "+enemy.getname()+" deal "+enemyhit+" damage points to "+this.name;
 		
 	}
 	// hero fights enemy

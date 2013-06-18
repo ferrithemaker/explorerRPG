@@ -36,6 +36,8 @@ public class Map {
     private BufferedImage bones_img;
     private BufferedImage fire_img;
     private BufferedImage cross_img;
+    private BufferedImage menu_img;
+    private BufferedImage backgroundtext_img;
     private int firstXtile; // defines current section of the map that is shown on screen
 	private int firstYtile; // defines current section of the map that is shown on screen
 	
@@ -50,7 +52,9 @@ public class Map {
 			bones_img = ImageIO.read(new File("img/bones.jpg"));
 			boulder_img= ImageIO.read(new File("img/boulder.jpg"));
 			fire_img= ImageIO.read(new File("img/fire.jpg"));
-			cross_img= ImageIO.read(new File("img/cross.jpg"));   
+			cross_img= ImageIO.read(new File("img/cross.jpg"));
+			menu_img= ImageIO.read(new File("img/menu.png"));
+			backgroundtext_img= ImageIO.read(new File("img/text_background.png"));  
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -166,4 +170,13 @@ public class Map {
 		public void setfirstytile(int value) {
 			firstYtile=value;
 		}
+		
+		// screen methods
+		public BufferedImage getmenubackground() {
+			return menu_img;
+		}
+		public BufferedImage gettextbackground() {
+			return backgroundtext_img;
+		}
+		
 }

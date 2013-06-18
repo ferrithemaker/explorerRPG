@@ -481,12 +481,15 @@ public class Explorer extends JFrame
             
             bbg.setColor(Color.WHITE);
             bbg.setFont(new Font("Serif", Font.BOLD, 12));
-            bbg.fillRect(0, 0, GameEngine.WINDOWWITH, GameEngine.WINDOWHEIGHT); 
+            bbg.fillRect(0, 0, GameEngine.WINDOWWITH, GameEngine.WINDOWHEIGHT);
             
+            // draw menu background
+			bbg.drawImage(mapa.getmenubackground(),800,0,null);
+
             bbg.setColor(Color.BLACK); 
             bbg.fillRect(GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X, 0, 5, GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y);
             // draw hero information
-            bbg.drawString("** "+GameEngine.APP_NAME+" **", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 30);
+            //bbg.drawString("** "+GameEngine.APP_NAME+" **", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 30);
             bbg.drawString("Hi "+prota.getname()+"!", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 50);
             bbg.drawString("Experience: "+prota.getexperience(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 70);
             bbg.drawString("Life Points: "+prota.gethp(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 90);
@@ -556,25 +559,25 @@ public class Explorer extends JFrame
             }
             
             // draw object inventory
-    		bbg.drawString("Object inventory", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+330, 270);
+    		bbg.drawString("Object inventory", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, 320);
 
             for (int i=0;i<10;i++) {
             	if (objinv.get_object(i)!=null) {
-            		bbg.drawString("Obj slot "+i+":"+objinv.get_object(i).getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+330, 290+(i*20));
+            		bbg.drawString("Obj slot "+i+":"+objinv.get_object(i).getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, 350+(i*20));
             	} else {
-            		bbg.drawString("Obj slot "+i+": available", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+330, 290+(i*20));
+            		bbg.drawString("Obj slot "+i+": available", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, 350+(i*20));
 
             	}
             }
             
             // draw consumable inventory
-    		bbg.drawString("Consumable inventory", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+330, 30);
+    		bbg.drawString("Consumable inventory", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, 40);
 
             for (int i=0;i<10;i++) {
             	if (consinv.get_consumable(i)!=null) {
-            		bbg.drawString("Cons slot "+i+":"+consinv.get_consumable(i).getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+330, 50+(i*20));
+            		bbg.drawString("Cons slot "+i+":"+consinv.get_consumable(i).getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, 70+(i*20));
             	} else {
-            		bbg.drawString("Cons slot "+i+": available", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+330, 50+(i*20));
+            		bbg.drawString("Cons slot "+i+": available", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, 70+(i*20));
 
             	}
             }
@@ -633,11 +636,13 @@ public class Explorer extends JFrame
             // draw hero
             //bbg.drawImage(prota.getimage(),prota.getrelativextile()*GameEngine.TILE_X_SIZE,prota.getrelativeytile()*GameEngine.TILE_Y_SIZE,null);
             bbg.drawImage(prota.getimage(), prota.getrelativextile()*GameEngine.TILE_X_SIZE, prota.getrelativeytile()*GameEngine.TILE_Y_SIZE, (prota.getrelativextile()*GameEngine.TILE_X_SIZE)+40, (prota.getrelativeytile()*GameEngine.TILE_Y_SIZE)+40, prota.getxspriteposition(), prota.getyspriteposition(), prota.getxspriteposition()+40, prota.getyspriteposition()+40, null);
+            
             // draw fight result
             if (just_fight==1) {
+            	bbg.drawImage(mapa.gettextbackground(),50,100,null);
             	bbg.setColor(Color.YELLOW);
                 bbg.setFont(new Font("Serif", Font.BOLD, 30));
-        		bbg.drawString(fightstate, 100, 100);
+        		game.drawString(bbg,fightstate, 100, 150); // override drawstring, allows newline
             }
             
             // draw on the backbuffer
@@ -645,4 +650,5 @@ public class Explorer extends JFrame
             
             
         } 
+        
 } 
