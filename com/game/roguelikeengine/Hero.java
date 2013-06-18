@@ -229,59 +229,7 @@ public class Hero {
 		return this.name+" deal "+herohit+" damage points to "+enemy.getname()+"\nand "+enemy.getname()+" deal "+enemyhit+" damage points to "+this.name;
 		
 	}
-	// hero fights enemy
-	public boolean fight(Enemy enemy) {
-		boolean heroturn;
-		int enemydicevalue;
-		int herodicevalue;
-		int enemyattackpower;
-		int heroattackpower;
-		Random randomGenerator = new Random();
-		// decide who hits first
-		if (enemy.getagility()>this.agility) { heroturn=false; } else { heroturn=true; }
-		// begin fight loop
-		while (enemy.gethp()>0 && this.life>0) { // while somebody is alive
-			enemydicevalue = randomGenerator.nextInt(5);
-			herodicevalue = randomGenerator.nextInt(5);
-			enemyattackpower=enemy.getforce()+enemydicevalue;
-			heroattackpower=this.force+herodicevalue;
-			if (heroturn==true) {
-				// hero attack
-				if (heroattackpower-enemy.getresist()>0) { // if do damage
-					enemy.updatehp(0-(heroattackpower-enemy.getresist()));
-					System.out.println("Hero turn:"+(heroattackpower-enemy.getresist()));
-					System.out.println("Enemy HP:"+enemy.gethp());
-					heroturn=false;
-				} else {
-					// if not
-					System.out.println("Hero turn: no damage");
-					heroturn=false;
-				}
-			} else {
-				// enemy attack
-				if (enemyattackpower-this.resist>0) { // if do damage
-					this.life=this.life-(enemyattackpower-this.resist);
-					System.out.println("Enemy turn:"+(enemyattackpower-this.resist));
-					System.out.println("prota HP:"+this.life);
-					heroturn=true;
-				} else {
-					// if not
-					System.out.println("Enemy turn: no damage");
-					heroturn=true;
-				}
-				
-			}
-		}
-		// who win?
-		if (enemy.gethp()<=0) { 
-			this.exp=this.exp+100;
-			System.out.println("YOU WIN!");
-			return true;
-		} else { 
-			System.out.println("YOU LOSE!");
-			return false;
-		}
-	}
+	
 	
 	// *** BEGIN hero sprite management. you MUST modify it with your own sprite behavior
 	private void init_sprite_pos() {

@@ -298,10 +298,6 @@ public class GameEngine {
         availableconsumables.add_consumable(new Consumable(name,p_agility,p_life,force,resist,x,y,file));
 	}
 	
-	// Useful methods
-	public void drawString(Graphics g, String text, int x, int y) { // this function overrides drawstring and add newline functionality
-        for (String line : text.split("\n"))
-            g.drawString(line, x, y += g.getFontMetrics().getHeight());
-    }
+	
 	
 }

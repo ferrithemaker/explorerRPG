@@ -46,6 +46,7 @@ public class Explorer extends JFrame
     GameEngine game;
     Hero prota;
     Map mapa;
+    Layout layout; 
     Enemy actualenemy; // enemy that i'm over
     Object actualobject; 
     Consumable actualconsumable;
@@ -120,6 +121,7 @@ public class Explorer extends JFrame
             // create tile layout
             game = new GameEngine();
             mapa=game.getmap();
+            layout=new Layout();
             tilelayout = mapa.gettiles();
             prota = game.gethero();
             badguys= game.getenemies();
@@ -480,61 +482,61 @@ public class Explorer extends JFrame
             Graphics bbg = backBuffer.getGraphics(); 
             
             bbg.setColor(Color.WHITE);
-            bbg.setFont(new Font("Serif", Font.BOLD, 12));
+            bbg.setFont(new Font("Arial", Font.BOLD, 12));
             bbg.fillRect(0, 0, GameEngine.WINDOWWITH, GameEngine.WINDOWHEIGHT);
             
             // draw menu background
-			bbg.drawImage(mapa.getmenubackground(),800,0,null);
+			bbg.drawImage(layout.getmenubackground(),800,0,null);
 
             bbg.setColor(Color.BLACK); 
             bbg.fillRect(GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X, 0, 5, GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y);
             // draw hero information
             //bbg.drawString("** "+GameEngine.APP_NAME+" **", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 30);
-            bbg.drawString("Hi "+prota.getname()+"!", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 50);
-            bbg.drawString("Experience: "+prota.getexperience(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 70);
-            bbg.drawString("Life Points: "+prota.gethp(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 90);
-            bbg.drawString("Resistance: "+prota.getresist(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,110);
-            bbg.drawString("Agility: "+prota.getagility(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,130);
-            bbg.drawString("Force: "+prota.getforce(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,150);
-            bbg.drawString("Wear:", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,170);
+            layout.drawString(bbg,"Hi "+prota.getname()+"!", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 30);
+            layout.drawString(bbg,"Experience: "+prota.getexperience(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 50);
+            layout.drawString(bbg,"Life Points: "+prota.gethp(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 70);
+            layout.drawString(bbg,"Resistance: "+prota.getresist(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,90);
+            layout.drawString(bbg,"Agility: "+prota.getagility(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,110);
+            layout.drawString(bbg,"Force: "+prota.getforce(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,130);
+            layout.drawString(bbg,"Wear:", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,150);
             if (prota.gethead().getname()!=null) {
-            	bbg.drawString("Head: "+prota.gethead().getname()+" At:+"+prota.gethead().getattack()+" Df:+"+prota.gethead().getdefense()+" Dur:"+prota.gethead().getdurability(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,190);
+            	layout.drawString(bbg,"Head: "+prota.gethead().getname()+" At:+"+prota.gethead().getattack()+" Df:+"+prota.gethead().getdefense()+" Dur:"+prota.gethead().getdurability(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,170);
             } else {
-            	bbg.drawString("Head: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,190);
+            	layout.drawString(bbg,"Head: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,170);
 
             }
             if (prota.getlefthand().getname()!=null) {
-            	bbg.drawString("Left hand: "+prota.getlefthand().getname()+" At:+"+prota.getlefthand().getattack()+" Df:+"+prota.getlefthand().getdefense()+" Dur:"+prota.getlefthand().getdurability(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,210);
+            	layout.drawString(bbg,"Left hand: "+prota.getlefthand().getname()+" At:+"+prota.getlefthand().getattack()+" Df:+"+prota.getlefthand().getdefense()+" Dur:"+prota.getlefthand().getdurability(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,190);
             } else {
-            	bbg.drawString("Lelft hand: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,210);
+            	layout.drawString(bbg,"Left hand: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,190);
 
             }
             if (prota.getrighthand().getname()!=null) {
-            	bbg.drawString("Right hand: "+prota.getrighthand().getname()+" At:+"+prota.getrighthand().getattack()+" Df:+"+prota.getrighthand().getdefense()+" Dur:"+prota.getrighthand().getdurability(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,230);
+            	layout.drawString(bbg,"Right hand: "+prota.getrighthand().getname()+" At:+"+prota.getrighthand().getattack()+" Df:+"+prota.getrighthand().getdefense()+" Dur:"+prota.getrighthand().getdurability(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,210);
             } else {
-            	bbg.drawString("Right hand: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,230);
+            	layout.drawString(bbg,"Right hand: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,210);
 
             }
             if (prota.getbody().getname()!=null) {
-            	bbg.drawString("Body: "+prota.getbody().getname()+" At:+"+prota.getbody().getattack()+" Df:+"+prota.getbody().getdefense()+" Dur:"+prota.getbody().getdurability(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,250);
+            	layout.drawString(bbg,"Body: "+prota.getbody().getname()+" At:+"+prota.getbody().getattack()+" Df:+"+prota.getbody().getdefense()+" Dur:"+prota.getbody().getdurability(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,230);
             } else {
-            	bbg.drawString("Body: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,250);
+            	layout.drawString(bbg,"Body: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,230);
 
             }
             if (prota.getfoot().getname()!=null) {
-            	bbg.drawString("Foot: "+prota.getfoot().getname()+" At:+"+prota.getfoot().getattack()+" Df:+"+prota.getfoot().getdefense()+" Dur:"+prota.getfoot().getdurability(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,270);
+            	layout.drawString(bbg,"Foot: "+prota.getfoot().getname()+" At:+"+prota.getfoot().getattack()+" Df:+"+prota.getfoot().getdefense()+" Dur:"+prota.getfoot().getdurability(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,250);
             } else {
-            	bbg.drawString("Foot: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,270);
+            	layout.drawString(bbg,"Foot: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,250);
             }
             // overenemy description
             
             if (actualenemy!=null) {
             	if (actualenemy.getname()!=null) {
-            		bbg.drawString("Enemy: "+actualenemy.getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 400);
-            		bbg.drawString("Life Points: "+actualenemy.gethp(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,420);
-            		bbg.drawString("Resistance: "+actualenemy.getresist(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,440);
-            		bbg.drawString("Agility: "+actualenemy.getagility(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,460);
-            		bbg.drawString("Force: "+actualenemy.getforce(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,480);
+            		layout.drawString(bbg,"Enemy: "+actualenemy.getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 400);
+            		layout.drawString(bbg,"Life Points: "+actualenemy.gethp(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,420);
+            		layout.drawString(bbg,"Resistance: "+actualenemy.getresist(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,440);
+            		layout.drawString(bbg,"Agility: "+actualenemy.getagility(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,460);
+            		layout.drawString(bbg,"Force: "+actualenemy.getforce(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,480);
             	}
             }
             
@@ -542,9 +544,9 @@ public class Explorer extends JFrame
             
             if (actualconsumable!=null) {
             	if (actualconsumable.getname()!=null) {
-            		bbg.drawString("Consumable: "+actualconsumable.getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 400);
-            		bbg.drawString("+ Life Points: "+actualconsumable.getpoweruplife(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,420);
-            		bbg.drawString("+ Agility Points: "+actualconsumable.getpowerupagility(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,440);
+            		layout.drawString(bbg,"Consumable: "+actualconsumable.getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 400);
+            		layout.drawString(bbg,"+ Life Points: "+actualconsumable.getpoweruplife(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,420);
+            		layout.drawString(bbg,"+ Agility Points: "+actualconsumable.getpowerupagility(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,440);
             	}
             }
             
@@ -552,32 +554,32 @@ public class Explorer extends JFrame
             
             if (actualobject!=null) {
             	if (actualobject.getname()!=null) {
-            		bbg.drawString("Object: "+actualobject.getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 400);
-            		bbg.drawString("+ defense: "+actualobject.getdefense(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,420);
-            		bbg.drawString("+ offense: "+actualobject.getattack(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,440);
+            		layout.drawString(bbg,"Object: "+actualobject.getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, 400);
+            		layout.drawString(bbg,"+ defense: "+actualobject.getdefense(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,420);
+            		layout.drawString(bbg,"+ offense: "+actualobject.getattack(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,440);
             	}
             }
             
             // draw object inventory
-    		bbg.drawString("Object inventory", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, 320);
+            layout.drawString(bbg,"Object inventory", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, 320);
 
             for (int i=0;i<10;i++) {
             	if (objinv.get_object(i)!=null) {
-            		bbg.drawString("Obj slot "+i+":"+objinv.get_object(i).getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, 350+(i*20));
+            		layout.drawString(bbg,"Obj slot "+i+":"+objinv.get_object(i).getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, 350+(i*20));
             	} else {
-            		bbg.drawString("Obj slot "+i+": available", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, 350+(i*20));
+            		layout.drawString(bbg,"Obj slot "+i+": available", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, 350+(i*20));
 
             	}
             }
             
             // draw consumable inventory
-    		bbg.drawString("Consumable inventory", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, 40);
+            layout.drawString(bbg,"Consumable inventory", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, 40);
 
             for (int i=0;i<10;i++) {
             	if (consinv.get_consumable(i)!=null) {
-            		bbg.drawString("Cons slot "+i+":"+consinv.get_consumable(i).getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, 70+(i*20));
+            		layout.drawString(bbg,"Cons slot "+i+":"+consinv.get_consumable(i).getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, 70+(i*20));
             	} else {
-            		bbg.drawString("Cons slot "+i+": available", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, 70+(i*20));
+            		layout.drawString(bbg,"Cons slot "+i+": available", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, 70+(i*20));
 
             	}
             }
@@ -639,10 +641,10 @@ public class Explorer extends JFrame
             
             // draw fight result
             if (just_fight==1) {
-            	bbg.drawImage(mapa.gettextbackground(),50,100,null);
+            	bbg.drawImage(layout.gettextbackground(),50,100,null);
             	bbg.setColor(Color.YELLOW);
-                bbg.setFont(new Font("Serif", Font.BOLD, 30));
-        		game.drawString(bbg,fightstate, 100, 150); // override drawstring, allows newline
+                bbg.setFont(new Font("Arial", Font.BOLD, 30));
+        		layout.drawString(bbg,fightstate, 100, 150); // override drawstring, allows newline
             }
             
             // draw on the backbuffer
