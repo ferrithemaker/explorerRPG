@@ -132,7 +132,7 @@ public class Explorer extends JFrame
                             insets.top + GameEngine.WINDOWHEIGHT + insets.bottom); 
             
             backBuffer = new BufferedImage(GameEngine.WINDOWWITH, GameEngine.WINDOWHEIGHT, BufferedImage.TYPE_INT_RGB); 
-            // empty enemy that hold enemy, object and consumable
+            // empty enemy object that hold enemy. Same as object and consumable.
             actualenemy= new Enemy();
             actualobject= new Object();
             actualconsumable= new Consumable();
@@ -140,7 +140,20 @@ public class Explorer extends JFrame
             objinv= new Object_inventory();
             consinv= new Consumable_inventory();
             
-            
+            // create final boss
+            boolean boss_created=false;
+    		while (boss_created==false) {
+    			Random randomGenerator = new Random();
+    			int x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
+    			int y = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES);
+    			if (!tilelayout[x][y].isbloqued()) { // if there is empty space
+    				game.createenemy("megaboss", 23, 26, 31, 110, x, y,"img/orc.gif");
+    				boss_created=true;
+    			}
+    				
+    		}
+    		
+    		
             // key handler
             input = new Inputhandler(this);
             
@@ -400,9 +413,15 @@ public class Explorer extends JFrame
         			// if hero wins
         			if (resultoffight=="ENEMYDEAD") {
         				// if you win
-        				game.removeenemy(actualenemy);
+        				prota.updateexperience(100);
         				//System.out.println("YOU WIN!");
-        				fightstate="Great! You Win the Battle!!";
+        				if (actualenemy.getname()=="megaboss") {
+        						fightstate="You get the amulet, you win the game!!";
+        				} else {
+        					fightstate="Great! You win the battle!!";
+        				}
+        				
+        				game.removeenemy(actualenemy);
         			} 
         			if (resultoffight=="HERODEAD") {
         				game.herodies();

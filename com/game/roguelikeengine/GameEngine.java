@@ -19,7 +19,6 @@ package com.game.roguelikeengine;
 
 
 
-import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -172,7 +171,7 @@ public class GameEngine {
 				badguys.add_enemy(new Enemy("assassin",3,8,1,30,x,y,"img/assassin.gif"));
 			}
 			if (enemytype==3) {
-				badguys.add_enemy(new Enemy("orc",1,10,8,60,x,y,"img/orc.gif"));
+				badguys.add_enemy(new Enemy("giant rat",1,10,8,60,x,y,"img/giantRat.gif"));
 			}
 			if (enemytype==4) {
 				badguys.add_enemy(new Enemy("medusa",5,4,5,30,x,y,"img/medusa.gif"));
@@ -211,12 +210,12 @@ public class GameEngine {
 			}
 			if (objecttype==1) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("dagger","righthand",3,0,10,x,y,"img/dagger.gif"));
+					availableobjects.add_object(new Object("dagger","righthand",3,0,7,x,y,"img/dagger.gif"));
 				}
 			}
 			if (objecttype==2) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("boots","foot",0,6,10,x,y,"img/boots.gif"));
+					availableobjects.add_object(new Object("boots","foot",0,6,4,x,y,"img/boots.gif"));
 				}
 			}
 			if (objecttype==3) {
@@ -226,37 +225,37 @@ public class GameEngine {
 			}
 			if (objecttype==4) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("helm","head",0,4,10,x,y,"img/helm.gif"));
+					availableobjects.add_object(new Object("helm","head",0,4,6,x,y,"img/helm.gif"));
 				}
 			}
 			if (objecttype==5) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("mace","lefthand",7,0,10,x,y,"img/mace.gif"));
+					availableobjects.add_object(new Object("mace","lefthand",7,0,8,x,y,"img/mace.gif"));
 				}
 			}
 			if (objecttype==6) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("riot shield","lefthand",0,9,10,x,y,"img/riotShield.gif"));
+					availableobjects.add_object(new Object("riot shield","lefthand",0,9,12,x,y,"img/riotShield.gif"));
 				}
 			}
 			if (objecttype==7) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("armor","body",0,11,10,x,y,"img/reflecArmor.gif"));
+					availableobjects.add_object(new Object("armor","body",0,11,7,x,y,"img/reflecArmor.gif"));
 				}
 			}
 			if (objecttype==8) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("shield","lefthand",0,7,10,x,y,"img/shield.gif"));
+					availableobjects.add_object(new Object("shield","lefthand",0,7,6,x,y,"img/shield.gif"));
 				}
 			}
 			if (objecttype==9) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("skull cap","head",0,5,10,x,y,"img/skullcap.gif"));
+					availableobjects.add_object(new Object("skull cap","head",0,5,5,x,y,"img/skullcap.gif"));
 				}
 			}
 			if (objecttype==10) {
 				if (chances<90) {
-					availableobjects.add_object(new Object("great shield","lefthand",0,12,10,x,y,"img/greatShield.gif"));
+					availableobjects.add_object(new Object("great shield","lefthand",0,12,11,x,y,"img/greatShield.gif"));
 				}
 			}
 		}

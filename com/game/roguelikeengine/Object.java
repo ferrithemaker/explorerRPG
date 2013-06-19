@@ -65,10 +65,18 @@ public class Object {
 		return this.position;
 	}
 	public int getattack() {
-		return this.attack;
+		if (this.durability>0) {
+			return this.attack;
+		} else {
+			return 0;
+		}
 	}
 	public int getdefense() {
-		return this.defense;
+		if (this.durability>0) {
+			return this.defense;
+		} else {
+			return 0;
+		}
 	}
 	public int getdurability() {
 		return this.durability;
@@ -81,7 +89,7 @@ public class Object {
 	}
 	// sets / updates
 	public void updatedurability(int value) {
-		this.durability=this.durability+value;
+		this.durability=this.durability-value;
 	}
 	// control methods
 	public boolean objectonscreen(int xinitpos,int yinitpos) { // return true of object is on current player screen

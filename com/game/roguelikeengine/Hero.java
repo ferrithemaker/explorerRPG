@@ -57,11 +57,11 @@ public class Hero {
 		this.relative_x_tile=1;
 		this.name=name;
 		init_sprite_pos(); // initial sprite position, every number corresponds to a sprite. Each set of sprites has different configuration
-		this.head = new Object(); // null object
-		this.body = new Object(); // null object
-		this.lefthand = new Object(); // null object
-		this.righthand = new Object(); // null object
-		this.foot = new Object(); // null object
+		this.head = new Object(); // empty object
+		this.body = new Object(); // empty object
+		this.lefthand = new Object(); // empty object
+		this.righthand = new Object(); // empty object
+		this.foot = new Object(); // empty object
 		try {
 			// hero
 			this.sprite=ImageIO.read(new File(file));
@@ -79,13 +79,13 @@ public class Hero {
 		return this.exp;
 	}
 	public int getresist() {
-		return this.resist+this.head.getdefense()+this.lefthand.getdefense()+this.righthand.getdefense()+this.body.getdefense()+this.foot.getdefense();
+		return this.resist+this.head.getdefense()+this.lefthand.getdefense()+this.righthand.getdefense()+this.body.getdefense()+this.foot.getdefense()+((int)(this.exp/1000));
 	}
 	public int getforce() {
-		return this.force+this.head.getattack()+this.lefthand.getattack()+this.righthand.getattack()+this.body.getattack()+this.foot.getattack();
+		return this.force+this.head.getattack()+this.lefthand.getattack()+this.righthand.getattack()+this.body.getattack()+this.foot.getattack()+((int)(this.exp/1000));
 	}
 	public int getagility() {
-		return this.agility;
+		return this.agility+((int)(this.exp/1000));
 	}
 	public int gethp() {
 		return this.life;
@@ -134,6 +134,52 @@ public class Hero {
 	}
 	public void setfoot(Object obj) {
 		this.foot=obj;
+	}
+	public void decayhead() {
+		 if (gethead().getname()!=null) { // if object exist
+			 gethead().updatedurability(1);
+		 }
+	}
+	public void decaylefthand() {
+		 if (getlefthand().getname()!=null) { // if object exist
+			 getlefthand().updatedurability(1);
+		 }
+	}
+	public void decayrighthand() {
+		if (getrighthand().getname()!=null) { // if object exist
+			 getrighthand().updatedurability(1);
+		 }
+	}
+	public void decaybody() {
+		if (getbody().getname()!=null) { // if object exist
+			 getbody().updatedurability(1);
+		 }
+	}
+	public void decayfoot() {
+		if (getfoot().getname()!=null) { // if object exist
+			 getfoot().updatedurability(1);
+		 }
+	}
+	public void randomdecay() {
+		Random randomGenerator = new Random();
+		int object_2_decay = randomGenerator.nextInt(5);
+		switch (object_2_decay) {
+		case 0:
+			decayfoot();
+			break;
+		case 1:
+			decayhead();
+			break;
+		case 2:
+			decaylefthand();
+			break;
+		case 3:
+			decayrighthand();
+			break;
+		case 4:
+			decaybody();
+			break;
+		}
 	}
 	public void setrelativextile(int value) {
 		this.relative_x_tile=value;
@@ -215,9 +261,11 @@ public class Hero {
 		enemyhit=enemyhit+enemymodifier;
 		if (herohit<0) { herohit=0;	}
 		enemy.updatehp(herohit); // hero hits enemy
+		randomdecay(); // durability decreases
 		if (enemy.gethp()>0) { // if enemy is alive
 			if (enemyhit<0) { enemyhit=0; }
 			this.life=this.life-enemyhit; // enemy hits hero
+			randomdecay(); // durability decreases
 		}
 		// return result control
 		if (enemy.gethp()<=0) {
