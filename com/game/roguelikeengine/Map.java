@@ -43,9 +43,9 @@ public class Map {
 		// load all tile images
 		try {
 			// tiles
-			blockedtile = ImageIO.read(new File("img/roomWall33.gif"));
+			blockedtile = ImageIO.read(new File("img/wall.png"));
 			freetile = ImageIO.read(new File("img/herba.jpg"));
-			water_img = ImageIO.read(new File("img/water.gif"));
+			water_img = ImageIO.read(new File("img/water.png"));
 			rocks_img = ImageIO.read(new File("img/rocks.jpg"));
 			bones_img = ImageIO.read(new File("img/bones.jpg"));
 			boulder_img= ImageIO.read(new File("img/boulder.jpg"));

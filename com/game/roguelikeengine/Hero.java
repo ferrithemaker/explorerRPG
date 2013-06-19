@@ -79,13 +79,13 @@ public class Hero {
 		return this.exp;
 	}
 	public int getresist() {
-		return this.resist+this.head.getdefense()+this.lefthand.getdefense()+this.righthand.getdefense()+this.body.getdefense()+this.foot.getdefense()+((int)(this.exp/1000));
+		return this.resist+this.head.getdefense()+this.lefthand.getdefense()+this.righthand.getdefense()+this.body.getdefense()+this.foot.getdefense()+((int)(this.exp/GameEngine.EXPERIENCE_NEXT_LEVEL_LIMIT));
 	}
 	public int getforce() {
-		return this.force+this.head.getattack()+this.lefthand.getattack()+this.righthand.getattack()+this.body.getattack()+this.foot.getattack()+((int)(this.exp/1000));
+		return this.force+this.head.getattack()+this.lefthand.getattack()+this.righthand.getattack()+this.body.getattack()+this.foot.getattack()+((int)(this.exp/GameEngine.EXPERIENCE_NEXT_LEVEL_LIMIT));
 	}
 	public int getagility() {
-		return this.agility+((int)(this.exp/1000));
+		return this.agility+((int)(this.exp/GameEngine.EXPERIENCE_NEXT_LEVEL_LIMIT));
 	}
 	public int gethp() {
 		return this.life;
@@ -137,27 +137,27 @@ public class Hero {
 	}
 	public void decayhead() {
 		 if (gethead().getname()!=null) { // if object exist
-			 gethead().updatedurability(1);
+			 gethead().reducedurability(1);
 		 }
 	}
 	public void decaylefthand() {
 		 if (getlefthand().getname()!=null) { // if object exist
-			 getlefthand().updatedurability(1);
+			 getlefthand().reducedurability(1);
 		 }
 	}
 	public void decayrighthand() {
 		if (getrighthand().getname()!=null) { // if object exist
-			 getrighthand().updatedurability(1);
+			 getrighthand().reducedurability(1);
 		 }
 	}
 	public void decaybody() {
 		if (getbody().getname()!=null) { // if object exist
-			 getbody().updatedurability(1);
+			 getbody().reducedurability(1);
 		 }
 	}
 	public void decayfoot() {
 		if (getfoot().getname()!=null) { // if object exist
-			 getfoot().updatedurability(1);
+			 getfoot().reducedurability(1);
 		 }
 	}
 	public void randomdecay() {

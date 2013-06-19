@@ -45,6 +45,7 @@ public class GameEngine {
 	public final static int NUMBER_OF_WALLS=100;
 	public final static int NUMBER_OF_LAKES=50;
 	public final static int NUMBER_OF_BLOCKING_OBJECTS=1000;
+	public final static int EXPERIENCE_NEXT_LEVEL_LIMIT=1000;
 	
 	// variables
 	private Tile[][] tilelayout;

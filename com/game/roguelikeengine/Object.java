@@ -88,8 +88,10 @@ public class Object {
 		return this.img;
 	}
 	// sets / updates
-	public void updatedurability(int value) {
-		this.durability=this.durability-value;
+	public void reducedurability(int value) {
+		if (this.durability>0) {
+			this.durability=this.durability-value;
+		}
 	}
 	// control methods
 	public boolean objectonscreen(int xinitpos,int yinitpos) { // return true of object is on current player screen
