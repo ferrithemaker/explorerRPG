@@ -284,15 +284,17 @@ public class GameEngine {
 		int x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
 		int y = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES);
 		int potiontype = randomGenerator.nextInt(3);
-        if (potiontype==0) {
-        	availableconsumables.add_consumable(new Consumable("Blue potion",1,1,0,2,x,y,"img/potionblue.gif"));
-        }
-        if (potiontype==1) {
-        	availableconsumables.add_consumable(new Consumable("Red potion",0,1,1,1,x,y,"img/potionred.gif"));
-        }
-        if (potiontype==2) {
-        	availableconsumables.add_consumable(new Consumable("Yellow potion",2,1,0,0,x,y,"img/potionyellow.gif"));
-        }
+		if (!tilelayout[x][y].isbloqued()) { // if there is empty space
+			if (potiontype==0) {
+				availableconsumables.add_consumable(new Consumable("Blue potion",1,1,0,2,x,y,"img/potionblue.gif"));
+			}
+			if (potiontype==1) {
+				availableconsumables.add_consumable(new Consumable("Red potion",0,1,1,1,x,y,"img/potionred.gif"));
+			}
+			if (potiontype==2) {
+				availableconsumables.add_consumable(new Consumable("Yellow potion",2,1,0,0,x,y,"img/potionyellow.gif"));
+			}
+		}
     }
 	public void createconsumable(String name, int p_agility, int p_life,int force, int resist,int x,int y,String file) {
         availableconsumables.add_consumable(new Consumable(name,p_agility,p_life,force,resist,x,y,file));

@@ -147,7 +147,7 @@ public class Explorer extends JFrame
     			int x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
     			int y = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES);
     			if (!tilelayout[x][y].isbloqued()) { // if there is empty space
-    				game.createenemy("megaboss", 23, 26, 31, 110, x, y,"img/orc.gif");
+    				game.createenemy("megaboss", 43, 46, 51, 310, x, y,"img/orc.gif");
     				boss_created=true;
     			}
     				
@@ -167,7 +167,7 @@ public class Explorer extends JFrame
         { 
         	// random elements generator
         	Random randomGenerator = new Random();
-        	int number=randomGenerator.nextInt(3);
+        	int number=randomGenerator.nextInt(6); // 50% chances to create something
         	if (number==0) { // create enemy
         		game.createrandomenemy();
         	}
