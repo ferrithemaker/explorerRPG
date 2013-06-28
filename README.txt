@@ -13,15 +13,24 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-All images are taken from http://opengameart.org/ and http://animatedbattlers.wordpress.com , released under GPL / Creative Commons and copyrighted by their owners. Some are modified by me.
+All images are taken from http://opengameart.org/ and http://animatedbattlers.wordpress.com , released under GPL / Creative Commons and copyrighted by their owners. Most modified by me.
 
 ------------------
 
-This is an under development (very first stages) rogue style 2D RPG Engine (only classes, not development UI).
+This is an under development (first stages) rogue style 2D RPG Engine build with LIBGDX (only classes, not development UI).
 
-To test the engine, there are also a simple testing game called Explorer.
+LIBGDX (http://libgdx.badlogicgames.com/) is a must. LIBGDX allows java cross-platform developments (html,ios,android and desktop)
 
-To run it: java Explorer
+To test the engine, there are also a simple testing game class called Explorer.
+
+You can see a demo video at: http://www.youtube.com/watch?v=ai6NanfRBMo&feature=youtu.be
+
+
+------------------
+
+There are 4 projects on GIT (the pre-libgdx one, and the 3 libgdx based (main, desktop and android). All preliminary tests are based on libdgx desktop version.
+
+For more information about running the project, refer to libgdx documentation.
 
 Thanks!
 
