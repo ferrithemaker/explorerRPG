@@ -278,7 +278,9 @@ public class Explorer_libgdx implements ApplicationListener {
         	}
     			
         }
-
+        // draw debug mode info
+        genericfont.draw(batch, "X:"+Gdx.input.getX(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-20);
+        genericfont.draw(batch, "Y:"+Gdx.input.getY(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-40);
 	    batch.end();
 	}
 	void frameratecontrol() {
