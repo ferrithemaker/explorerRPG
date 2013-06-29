@@ -195,29 +195,7 @@ public class Explorer_libgdx implements ApplicationListener {
         	}
         }
         
-        // draw object inventory
-        genericfont.draw(batch,"Object inventory", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-330);
-
-        for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
-        	if (objinv.get_object(i)!=null) {
-        		genericfont.draw(batch,"Obj slot "+i+":"+objinv.get_object(i).getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(360+(i*20)));
-        	} else {
-        		genericfont.draw(batch,"Obj slot "+i+": available", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(360+(i*20)));
-
-        	}
-        }
         
-        // draw consumable inventory
-        genericfont.draw(batch,"Consumable inventory", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-40);
-
-        for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
-        	if (consinv.get_consumable(i)!=null) {
-        		genericfont.draw(batch,"Cons slot "+i+":"+consinv.get_consumable(i).getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(70+(i*20)));
-        	} else {
-        		genericfont.draw(batch,"Cons slot "+i+": available", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(70+(i*20)));
-
-        	}
-        }
         
         // draw background tiles 
         int relativex=0;
@@ -285,6 +263,32 @@ public class Explorer_libgdx implements ApplicationListener {
         genericfont.draw(batch, "Mouse X:"+Gdx.input.getX(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-20);
         genericfont.draw(batch, "Mouse Y:"+Gdx.input.getY(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-40);
         genericfont.draw(batch, "I'm at X: "+mapa.getfirstxtile()+" Y: "+mapa.getfirstytile(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-60);
+        
+        
+        // draw object inventory
+        genericfont.draw(batch,"Object inventory", 200, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-330);
+
+        for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
+        	if (objinv.get_object(i)!=null) {
+        		genericfont.draw(batch,"Obj slot "+i+":"+objinv.get_object(i).getname(), 200, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(360+(i*20)));
+        	} else {
+        		genericfont.draw(batch,"Obj slot "+i+": available", 200, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(360+(i*20)));
+
+        	}
+        }
+        
+        // draw consumable inventory
+        genericfont.draw(batch,"Consumable inventory", 200, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-40);
+
+        for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
+        	if (consinv.get_consumable(i)!=null) {
+        		genericfont.draw(batch,"Cons slot "+i+":"+consinv.get_consumable(i).getname(), 200, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(70+(i*20)));
+        	} else {
+        		genericfont.draw(batch,"Cons slot "+i+": available", 200, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(70+(i*20)));
+
+        	}
+        }
+        
         batch.end();
 	}
 	void frameratecontrol() {

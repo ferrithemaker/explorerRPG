@@ -41,7 +41,7 @@ public class Consumable_inventory {
 	}
 	public int getfreeslot() { // if firstfreeposition=-1 theres no free slots
 		int firstfreeposition=-1;
-		for (int i=GameEngine.INVENTORY_SIZE;i>=0;i--) {
+		for (int i=GameEngine.INVENTORY_SIZE-1;i>=0;i--) {
 			if (inventory[i]==null) {
 				firstfreeposition=i;
 			}
