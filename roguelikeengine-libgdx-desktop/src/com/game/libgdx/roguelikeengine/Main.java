@@ -6,7 +6,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 public class Main {
 	public static void main(String[] args) {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-		cfg.title = "roguelikeengine-libgdx";
+		cfg.title = GameEngine.APP_NAME;
 		cfg.useGL20 = false;
 		cfg.width = GameEngine.WINDOWWITH;
 		cfg.height = GameEngine.WINDOWHEIGHT;

@@ -28,20 +28,23 @@ import java.util.Random;
 
 public class GameEngine {
 	// constants
-	public final static int TOTAL_X_TILES=320; // TOTAL TILES MUST BE MULTIPLE OF SCREEN TILES!!!!!!!!!
-	public final static int TOTAL_Y_TILES=640; // TOTAL TILES MUST BE MULTIPLE OF SCREEN TILES!!!!!!!!!
-	public final static int ON_SCREEN_TILES_X=15; // TOTAL TILES MUST BE MULTIPLE OF SCREEN TILES!!!!!!!!!
-	public final static int ON_SCREEN_TILES_Y=10; // TOTAL TILES MUST BE MULTIPLE OF SCREEN TILES!!!!!!!!!
+	public final static int ON_SCREEN_TILES_X=13;
+	public final static int ON_SCREEN_TILES_Y=10;
+	public final static int X_SCREENS=30;
+	public final static int Y_SCREENS=30;
+	public final static int TOTAL_X_TILES=X_SCREENS*ON_SCREEN_TILES_X;
+	public final static int TOTAL_Y_TILES=Y_SCREENS*ON_SCREEN_TILES_Y;
 	public final static int TILE_X_SIZE=64;
 	public final static int TILE_Y_SIZE=64;
-	public final static int MAX_WALL_LENGTH=15;
-	public final static int MAX_LAKE_SIZE=15;
-	public final static int OPTION_MENU_X_SIZE=512;
+	public final static int MAX_WALL_LENGTH=12;
+	public final static int MAX_LAKE_SIZE=12;
+	public final static int OPTION_MENU_X_SIZE=448;
+	public final static int ACTIONS_MENU_Y_SIZE=64;
 	public final static int WINDOWWITH=TILE_X_SIZE*ON_SCREEN_TILES_X+OPTION_MENU_X_SIZE;
-	public final static int WINDOWHEIGHT=TILE_Y_SIZE*ON_SCREEN_TILES_Y;
+	public final static int WINDOWHEIGHT=TILE_Y_SIZE*ON_SCREEN_TILES_Y+ACTIONS_MENU_Y_SIZE;
 	public final static int FPS=18;
-	public final static int INVENTORY_SIZE=10;
-	public final static String APP_NAME="Rogue explorer";
+	public final static int INVENTORY_SIZE=9;
+	public final static String APP_NAME="Rogue explorer (libgdx)";
 	public final static int NUMBER_OF_WALLS=300;
 	public final static int NUMBER_OF_LAKES=300;
 	public final static int NUMBER_OF_BLOCKING_OBJECTS=1000;

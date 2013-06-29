@@ -25,17 +25,22 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class Layout {
 	private Sprite menu_img;
     private Sprite backgroundtext_img;
+    private Sprite actionmenu_img;
 	// screen methods
     public Layout() {
     	// tiles
-		menu_img = new Sprite(new Texture(Gdx.files.internal("menu.png")),512,640);
+		menu_img = new Sprite(new Texture(Gdx.files.internal("charactermenu.png")),GameEngine.OPTION_MENU_X_SIZE,GameEngine.WINDOWHEIGHT);
 		backgroundtext_img= new Sprite(new Texture(Gdx.files.internal("text_background.png")),1000,300);
+		actionmenu_img= new Sprite(new Texture(Gdx.files.internal("actionmenu.png")),GameEngine.ON_SCREEN_TILES_X*GameEngine.TILE_X_SIZE,64);
     }
 	public Sprite getmenubackground() {
 		return menu_img;
 	}
 	public Sprite gettextbackground() {
 		return backgroundtext_img;
+	}
+	public Sprite getactionmenu() {
+		return actionmenu_img;
 	}
 
 }

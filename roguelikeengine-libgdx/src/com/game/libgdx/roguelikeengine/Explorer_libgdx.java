@@ -119,9 +119,12 @@ public class Explorer_libgdx implements ApplicationListener {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 	    batch.begin();
 	    
-	    // draw menu background
+	    // draw character menu background
 	 	batch.draw(layout.getmenubackground(),GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X,0);
 	 	
+	 	// draw action menu background
+	 	batch.draw(layout.getactionmenu(),0,GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y);
+	 	 	
 	 	// draw hero information
 	 	genericfont.draw(batch,"Hi "+prota.getname()+"!", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-30);
 	 	genericfont.draw(batch,"Experience: "+prota.getexperience(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-50);
@@ -195,7 +198,7 @@ public class Explorer_libgdx implements ApplicationListener {
         // draw object inventory
         genericfont.draw(batch,"Object inventory", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-330);
 
-        for (int i=0;i<10;i++) {
+        for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
         	if (objinv.get_object(i)!=null) {
         		genericfont.draw(batch,"Obj slot "+i+":"+objinv.get_object(i).getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(360+(i*20)));
         	} else {
@@ -207,7 +210,7 @@ public class Explorer_libgdx implements ApplicationListener {
         // draw consumable inventory
         genericfont.draw(batch,"Consumable inventory", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-40);
 
-        for (int i=0;i<10;i++) {
+        for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
         	if (consinv.get_consumable(i)!=null) {
         		genericfont.draw(batch,"Cons slot "+i+":"+consinv.get_consumable(i).getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+320, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(70+(i*20)));
         	} else {
@@ -279,9 +282,10 @@ public class Explorer_libgdx implements ApplicationListener {
     			
         }
         // draw debug mode info
-        genericfont.draw(batch, "X:"+Gdx.input.getX(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-20);
-        genericfont.draw(batch, "Y:"+Gdx.input.getY(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-40);
-	    batch.end();
+        genericfont.draw(batch, "Mouse X:"+Gdx.input.getX(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-20);
+        genericfont.draw(batch, "Mouse Y:"+Gdx.input.getY(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-40);
+        genericfont.draw(batch, "I'm at X: "+mapa.getfirstxtile()+" Y: "+mapa.getfirstytile(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-60);
+        batch.end();
 	}
 	void frameratecontrol() {
 		//  delay for each frame  -   time it took for one frame 
@@ -316,8 +320,8 @@ public class Explorer_libgdx implements ApplicationListener {
     	
     	// mouse control (not operative)
     	if (Gdx.input.isTouched()) {
-    		System.out.println("X:"+Gdx.input.getX());  // for  the X coordinates 
-    		System.out.println("Y:"+Gdx.input.getY());  // for the Y coordinates	
+    		//System.out.println("X:"+Gdx.input.getX());  // for  the X coordinates 
+    		//System.out.println("Y:"+Gdx.input.getY());  // for the Y coordinates	
     	}
     	
     	// key events control
@@ -331,7 +335,7 @@ public class Explorer_libgdx implements ApplicationListener {
     		actualconsumable=null;
     		actualobject=null;
     		game.heroright();
-    		System.out.println(mapa.getfirstxtile()+"|"+mapa.getfirstytile());
+    		
         } 
         if (Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) 
         { 
@@ -424,9 +428,9 @@ public class Explorer_libgdx implements ApplicationListener {
         if (Gdx.input.isKeyPressed(Keys.NUM_8) && object_inv_mode==1) {
         	getobject(objinv.get_object(8),8);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_9) && object_inv_mode==1) {
-        	getobject(objinv.get_object(9),9);
-        }
+        //if (Gdx.input.isKeyPressed(Keys.NUM_9) && object_inv_mode==1) {
+        //	getobject(objinv.get_object(9),9);
+        //}
         if (Gdx.input.isKeyPressed(Keys.NUM_0) && object_inv_mode==1) {
         	getobject(objinv.get_object(0),0);
         }
@@ -464,9 +468,9 @@ public class Explorer_libgdx implements ApplicationListener {
         if (Gdx.input.isKeyPressed(Keys.NUM_8) && object_drop_mode==1) {
         	objinv.delete_object(8);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_9) && object_drop_mode==1) {
-        	objinv.delete_object(9);
-        }
+        //if (Gdx.input.isKeyPressed(Keys.NUM_9) && object_drop_mode==1) {
+        //	objinv.delete_object(9);
+        //}
         if (Gdx.input.isKeyPressed(Keys.NUM_0) && object_drop_mode==1) {
         	objinv.delete_object(0);
         }
@@ -503,10 +507,10 @@ public class Explorer_libgdx implements ApplicationListener {
         	getconsumable(consinv.get_consumable(8));
         	consinv.delete_consumable(8);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_9) && consumable_inv_mode==1) {
-        	getconsumable(consinv.get_consumable(9));
-        	consinv.delete_consumable(9);
-        }
+        //if (Gdx.input.isKeyPressed(Keys.NUM_9) && consumable_inv_mode==1) {
+        //	getconsumable(consinv.get_consumable(9));
+        //	consinv.delete_consumable(9);
+        //}
         if (Gdx.input.isKeyPressed(Keys.NUM_0) && consumable_inv_mode==1) {
         	getconsumable(consinv.get_consumable(0));
         	consinv.delete_consumable(0);
