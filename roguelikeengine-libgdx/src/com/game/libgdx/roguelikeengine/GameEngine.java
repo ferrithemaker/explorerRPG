@@ -40,7 +40,7 @@ public class GameEngine {
 	public final static int MAX_LAKE_SIZE=12;
 	public final static int OPTION_MENU_X_SIZE=448;
 	public final static int ACTIONS_MENU_Y_SIZE=64;
-	public final static int WINDOWWITH=TILE_X_SIZE*ON_SCREEN_TILES_X+OPTION_MENU_X_SIZE;
+	public final static int WINDOWWIDTH=TILE_X_SIZE*ON_SCREEN_TILES_X+OPTION_MENU_X_SIZE;
 	public final static int WINDOWHEIGHT=TILE_Y_SIZE*ON_SCREEN_TILES_Y+ACTIONS_MENU_Y_SIZE;
 	public final static int FPS=18;
 	public final static int INVENTORY_SIZE=9;
@@ -49,6 +49,10 @@ public class GameEngine {
 	public final static int NUMBER_OF_LAKES=300;
 	public final static int NUMBER_OF_BLOCKING_OBJECTS=1000;
 	public final static int EXPERIENCE_NEXT_LEVEL_LIMIT=1000;
+	
+	// android specific constants
+	public final static int ANDROID_MENU_BAR_SIZE=43;
+	public final static boolean ANDROID_MENU_BAR_ENABLE=true;
 	
 	// variables
 	private Tile[][] tilelayout;

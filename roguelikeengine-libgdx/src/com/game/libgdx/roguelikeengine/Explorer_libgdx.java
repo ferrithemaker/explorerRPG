@@ -35,6 +35,9 @@ public class Explorer_libgdx implements ApplicationListener {
     int object_drop_mode=0;
     int consumable_inv_mode=0;
     
+    private int realXcoord;
+    private int realYcoord;
+    
     Enemy actualenemy; // enemy that i'm over
     Object actualobject; 
     Consumable actualconsumable;
@@ -113,7 +116,6 @@ public class Explorer_libgdx implements ApplicationListener {
 		// update method
 		update();
 		frameratecontrol();
-		
 		// draw
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -260,31 +262,35 @@ public class Explorer_libgdx implements ApplicationListener {
     			
         }
         // draw debug mode info
-        genericfont.draw(batch, "Mouse X:"+Gdx.input.getX(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-20);
-        genericfont.draw(batch, "Mouse Y:"+Gdx.input.getY(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-40);
+        genericfont.draw(batch, "Screen Mouse X:"+Gdx.input.getX()+" Projected Mouse X: "+realXcoord, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-20);
+        genericfont.draw(batch, "Screen Mouse Y:"+Gdx.input.getY()+" Projected Mouse Y: "+realYcoord, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-40);
         genericfont.draw(batch, "I'm at X: "+mapa.getfirstxtile()+" Y: "+mapa.getfirstytile(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-60);
+        genericfont.draw(batch, "Real screen size X:"+Gdx.graphics.getWidth(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-80);
+        genericfont.draw(batch, "Real screen size Y:"+Gdx.graphics.getHeight(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-100);
+       
         
+		
         
         // draw object inventory
-        genericfont.draw(batch,"Object inventory", 200, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-330);
+        genericfont.draw(batch,"Object inventory", 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-330);
 
         for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
         	if (objinv.get_object(i)!=null) {
-        		genericfont.draw(batch,"Obj slot "+i+":"+objinv.get_object(i).getname(), 200, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(360+(i*20)));
+        		genericfont.draw(batch,"Obj slot "+i+":"+objinv.get_object(i).getname(), 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(360+(i*20)));
         	} else {
-        		genericfont.draw(batch,"Obj slot "+i+": available", 200, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(360+(i*20)));
+        		genericfont.draw(batch,"Obj slot "+i+": available", 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(360+(i*20)));
 
         	}
         }
         
         // draw consumable inventory
-        genericfont.draw(batch,"Consumable inventory", 200, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-40);
+        genericfont.draw(batch,"Consumable inventory", 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-40);
 
         for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
         	if (consinv.get_consumable(i)!=null) {
-        		genericfont.draw(batch,"Cons slot "+i+":"+consinv.get_consumable(i).getname(), 200, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(70+(i*20)));
+        		genericfont.draw(batch,"Cons slot "+i+":"+consinv.get_consumable(i).getname(), 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(70+(i*20)));
         	} else {
-        		genericfont.draw(batch,"Cons slot "+i+": available", 200, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(70+(i*20)));
+        		genericfont.draw(batch,"Cons slot "+i+": available", 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(70+(i*20)));
 
         	}
         }
@@ -321,75 +327,57 @@ public class Explorer_libgdx implements ApplicationListener {
     	if (number==2) { // create object
     		game.createrandomobject();
     	}
-    	
-    	// mouse control (not operative)
+    	// get relative mouse coord instead of real ones
+    	realXcoord=(int)((float)Gdx.input.getX()*(float)((float)GameEngine.WINDOWWIDTH/(float)Gdx.graphics.getWidth()));
+		realYcoord=(int)((float)Gdx.input.getY()*(float)((float)GameEngine.WINDOWHEIGHT/(float)Gdx.graphics.getHeight()))*-1+(GameEngine.WINDOWHEIGHT);
+    	if (GameEngine.ANDROID_MENU_BAR_ENABLE) { // i don't like this hardcoded way to do things
+    		realYcoord=realYcoord+GameEngine.ANDROID_MENU_BAR_SIZE;
+    	}
+    	// mouse events control
     	if (Gdx.input.isTouched()) {
-    		//System.out.println("X:"+Gdx.input.getX());  // for  the X coordinates 
-    		//System.out.println("Y:"+Gdx.input.getY());  // for the Y coordinates	
+    		// HIT BUTTON!
+    		if (realXcoord>0 && realXcoord<64 && realYcoord>640 && realYcoord<704) {
+    			fight();
+    		}
+    		// directions
+    		// LEFT BUTTON!
+    		if (realXcoord>576 && realXcoord<640 && realYcoord>640 && realYcoord<704) {
+    			goleft();
+    		}
+    		// RIGHT BUTTON!
+    		if (realXcoord>768 && realXcoord<832 && realYcoord>640 && realYcoord<704) {
+    			goright();
+    		}
+    		// UP BUTTON!
+    		if (realXcoord>704 && realXcoord<768 && realYcoord>640 && realYcoord<704) {
+    			goup();
+    		}
+    		// DOWN BUTTON!
+    		if (realXcoord>640 && realXcoord<704 && realYcoord>640 && realYcoord<704) {
+    			godown();
+    		}
+    		// TAKE BUTTON!
+    		if (realXcoord>64 && realXcoord<128 && realYcoord>640 && realYcoord<704) {
+    			take();
+    		}
+    		// DROP BUTTON!
+    		if (realXcoord>128 && realXcoord<192 && realYcoord>640 &&  realYcoord<704) {
+    			
+    		}
+    		// LOOK BUTTON! 
+    		if (realXcoord>192 && realXcoord<256 && realYcoord>640 && realYcoord<704) {
+    			look();
+    		}
     	}
     	
     	// key events control
-    	if (Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) 
-        { 
-    		just_fight=0;
-    		object_inv_mode=0;
-    		object_drop_mode=0;
-    		consumable_inv_mode=0;
-    		actualenemy=null;
-    		actualconsumable=null;
-    		actualobject=null;
-    		game.heroright();
-    		
-        } 
-        if (Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) 
-        { 
-        	object_inv_mode=0;
-        	object_drop_mode=0;
-    		consumable_inv_mode=0;
-    		just_fight=0;
-        	actualenemy=null;
-        	actualconsumable=null;
-        	actualobject=null;
-        	game.heroleft();
-    		System.out.println(mapa.getfirstxtile()+"|"+mapa.getfirstytile());
-
-        }
-        if (Gdx.input.isKeyPressed(Keys.DPAD_UP)) 
-        { 
-        	object_inv_mode=0;
-        	object_drop_mode=0;
-    		consumable_inv_mode=0;
-    		just_fight=0;
-        	actualenemy=null;
-        	actualconsumable=null;
-        	actualobject=null;
-        	game.heroup();
-    		System.out.println(mapa.getfirstxtile()+"|"+mapa.getfirstytile());
-
-        } 
-        if (Gdx.input.isKeyPressed(Keys.DPAD_DOWN)) 
-        { 
-        	object_inv_mode=0;
-        	object_drop_mode=0;
-    		consumable_inv_mode=0;
-    		just_fight=0;
-        	actualenemy=null;
-        	actualconsumable=null;
-        	actualobject=null;
-        	game.herodown();
-    		System.out.println(mapa.getfirstxtile()+"|"+mapa.getfirstytile());
-
-        }
-        if (Gdx.input.isKeyPressed(Keys.D)) 
-        { 
-        	object_inv_mode=0;
-        	object_drop_mode=0;
-    		consumable_inv_mode=0;
-    		just_fight=0;
-        	actualenemy=game.overenemy(); // get the enemy (if exist)
-        	actualconsumable=game.overconsumable(); // get the consumable (if exist)
-        	actualobject=game.overobject(); // get the object (if exist)
-        }
+    	if (Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) { goright(); } 
+        if (Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) { goleft(); }
+        if (Gdx.input.isKeyPressed(Keys.DPAD_UP)) { goup(); } 
+        if (Gdx.input.isKeyPressed(Keys.DPAD_DOWN)) { godown();}
+        if (Gdx.input.isKeyPressed(Keys.D)) { look(); }
+        if (Gdx.input.isKeyPressed(Keys.H)) { fight(); }
+        if (Gdx.input.isKeyPressed(Keys.G)) { take(); }
         
         if (Gdx.input.isKeyPressed(Keys.O)) 
         { 
@@ -519,69 +507,9 @@ public class Explorer_libgdx implements ApplicationListener {
         	getconsumable(consinv.get_consumable(0));
         	consinv.delete_consumable(0);
         }
-        if (Gdx.input.isKeyPressed(Keys.G)) 
-        { 	
-        	object_inv_mode=0;
-    		consumable_inv_mode=0;
-    		object_drop_mode=0;
-    		just_fight=0;
-        	// get consumable into inventory
-    		actualconsumable=game.overconsumable(); // get the consumable (if exist)
-    		if (actualconsumable.getname()!=null) {
-    			// if consumable exists
-    			if (consinv.getfreeslot()!=-1) {
-    				consinv.set_consumable(consinv.getfreeslot(), actualconsumable);	
-    				game.removeconsumable(actualconsumable);
-    			}
-    			
-    			
-    		}
-    		// get object into inventory
-    		actualobject=game.overobject(); // get the consumable (if exist)
-    		if (actualobject.getname()!=null) {
-    			if (objinv.getfreeslot()!=-1) {
-    				objinv.set_object(objinv.getfreeslot(), actualobject);
-    				game.removeobject(actualobject);
-    			}
-    		}
-    		
-    		
-        }
-        if (Gdx.input.isKeyPressed(Keys.H)) 
-        { 
-        	object_inv_mode=0;
-    		consumable_inv_mode=0;
-    		object_drop_mode=0;
-        	//boolean resultoffight=false;
-    		String resultoffight;
-        	actualenemy=game.overenemy(); // get the enemy (if exist)
-    		if (actualenemy.getname()!=null) {
-    			//resultoffight=prota.fight(actualenemy);
-    			resultoffight=prota.hit(actualenemy);
-    			//System.out.println("FIGHT!");
-    			// if hero wins
-    			if (resultoffight=="ENEMYDEAD") {
-    				// if you win
-    				prota.updateexperience(100);
-    				//System.out.println("YOU WIN!");
-    				if (actualenemy.getname()=="megaboss") {
-    						fightstate="You get the amulet, you win the game!!";
-    				} else {
-    					fightstate="Great! You win the battle!!";
-    				}
-    				
-    				game.removeenemy(actualenemy);
-    			} 
-    			if (resultoffight=="HERODEAD") {
-    				game.herodies();
-    				fightstate="You lose the battle, you are in the graveyard!";
-    			}
-    			if (resultoffight!="ENEMYDEAD" && resultoffight!="HERODEAD") {
-    				fightstate=resultoffight;
-    			}
-    		just_fight=1;
-    		}
-        }
+        
+        
+        	
     }    
     void getobject(Object obj,int pos) {
     	if (obj!=null) {
@@ -633,6 +561,7 @@ public class Explorer_libgdx implements ApplicationListener {
 			}
     	}
     }
+    
     void getconsumable(Consumable obj) {
     	if (obj!=null) {
 			// if consumable exists
@@ -640,7 +569,115 @@ public class Explorer_libgdx implements ApplicationListener {
 			prota.updatehp(obj.getpoweruplife());
     	}
     }
-
+    void fight() {
+    	object_inv_mode=0;
+		consumable_inv_mode=0;
+		object_drop_mode=0;
+    	//boolean resultoffight=false;
+		String resultoffight;
+    	actualenemy=game.overenemy(); // get the enemy (if exist)
+		if (actualenemy.getname()!=null) {
+			//resultoffight=prota.fight(actualenemy);
+			resultoffight=prota.hit(actualenemy);
+			//System.out.println("FIGHT!");
+			// if hero wins
+			if (resultoffight=="ENEMYDEAD") {
+				// if you win
+				prota.updateexperience(100);
+				//System.out.println("YOU WIN!");
+				if (actualenemy.getname()=="megaboss") {
+						fightstate="You get the amulet, you win the game!!";
+				} else {
+					fightstate="Great! You win the battle!!";
+				}
+				
+				game.removeenemy(actualenemy);
+			} 
+			if (resultoffight=="HERODEAD") {
+				game.herodies();
+				fightstate="You lose the battle, you are in the graveyard!";
+			}
+			if (resultoffight!="ENEMYDEAD" && resultoffight!="HERODEAD") {
+				fightstate=resultoffight;
+			}
+		just_fight=1;
+		}
+    }
+    void goup() {
+    	object_inv_mode=0;
+    	object_drop_mode=0;
+		consumable_inv_mode=0;
+		just_fight=0;
+    	actualenemy=null;
+    	actualconsumable=null;
+    	actualobject=null;
+    	game.heroup();
+    }
+    void godown() {
+    	object_inv_mode=0;
+    	object_drop_mode=0;
+		consumable_inv_mode=0;
+		just_fight=0;
+    	actualenemy=null;
+    	actualconsumable=null;
+    	actualobject=null;
+    	game.herodown();
+    }
+    void goleft() {
+    	object_inv_mode=0;
+    	object_drop_mode=0;
+		consumable_inv_mode=0;
+		just_fight=0;
+    	actualenemy=null;
+    	actualconsumable=null;
+    	actualobject=null;
+    	game.heroleft();
+    }
+    void goright() {
+    	just_fight=0;
+		object_inv_mode=0;
+		object_drop_mode=0;
+		consumable_inv_mode=0;
+		actualenemy=null;
+		actualconsumable=null;
+		actualobject=null;
+		game.heroright();
+    }
+    void look() {
+    	object_inv_mode=0;
+    	object_drop_mode=0;
+		consumable_inv_mode=0;
+		just_fight=0;
+    	actualenemy=game.overenemy(); // get the enemy (if exist)
+    	actualconsumable=game.overconsumable(); // get the consumable (if exist)
+    	actualobject=game.overobject(); // get the object (if exist)
+    }
+    void take() {
+    	object_inv_mode=0;
+		consumable_inv_mode=0;
+		object_drop_mode=0;
+		just_fight=0;
+    	// get consumable into inventory
+		actualconsumable=game.overconsumable(); // get the consumable (if exist)
+		if (actualconsumable.getname()!=null) {
+			// if consumable exists
+			if (consinv.getfreeslot()!=-1) {
+				consinv.set_consumable(consinv.getfreeslot(), actualconsumable);	
+				game.removeconsumable(actualconsumable);
+			}
+			
+			
+		}
+		// get object into inventory
+		actualobject=game.overobject(); // get the consumable (if exist)
+		if (actualobject.getname()!=null) {
+			if (objinv.getfreeslot()!=-1) {
+				objinv.set_object(objinv.getfreeslot(), actualobject);
+				game.removeobject(actualobject);
+			}
+		}
+    }
+    // Original class methods
 	@Override
 	public void resize(int width, int height) {
 	}
