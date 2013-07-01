@@ -52,7 +52,7 @@ public class GameEngine {
 	
 	// android specific constants
 	public final static int ANDROID_MENU_BAR_SIZE=43;
-	public final static boolean ANDROID_MENU_BAR_ENABLE=true;
+	public final static boolean ANDROID_MENU_BAR_ENABLE=false;
 	
 	// variables
 	private Tile[][] tilelayout;

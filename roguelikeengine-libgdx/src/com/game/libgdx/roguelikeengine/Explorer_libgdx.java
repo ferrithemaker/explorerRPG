@@ -277,6 +277,8 @@ public class Explorer_libgdx implements ApplicationListener {
         for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
         	if (objinv.get_object(i)!=null) {
         		genericfont.draw(batch,"Obj slot "+i+":"+objinv.get_object(i).getname(), 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(360+(i*20)));
+                batch.draw(objinv.get_object(i).getsprite(), 1000,640-(i*64));
+
         	} else {
         		genericfont.draw(batch,"Obj slot "+i+": available", 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(360+(i*20)));
 
@@ -289,6 +291,7 @@ public class Explorer_libgdx implements ApplicationListener {
         for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
         	if (consinv.get_consumable(i)!=null) {
         		genericfont.draw(batch,"Cons slot "+i+":"+consinv.get_consumable(i).getname(), 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(70+(i*20)));
+        		batch.draw(consinv.get_consumable(i).getsprite(), 1100,640-(i*64));
         	} else {
         		genericfont.draw(batch,"Cons slot "+i+": available", 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(70+(i*20)));
 
@@ -330,7 +333,7 @@ public class Explorer_libgdx implements ApplicationListener {
     	// get relative mouse coord instead of real ones
     	realXcoord=(int)((float)Gdx.input.getX()*(float)((float)GameEngine.WINDOWWIDTH/(float)Gdx.graphics.getWidth()));
 		realYcoord=(int)((float)Gdx.input.getY()*(float)((float)GameEngine.WINDOWHEIGHT/(float)Gdx.graphics.getHeight()))*-1+(GameEngine.WINDOWHEIGHT);
-    	if (GameEngine.ANDROID_MENU_BAR_ENABLE) { // i don't like this hardcoded way to do things
+    	if (GameEngine.ANDROID_MENU_BAR_ENABLE) { // I don't like this hardcoded way to do things
     		realYcoord=realYcoord+GameEngine.ANDROID_MENU_BAR_SIZE;
     	}
     	// mouse events control
@@ -362,7 +365,7 @@ public class Explorer_libgdx implements ApplicationListener {
     		}
     		// DROP BUTTON!
     		if (realXcoord>128 && realXcoord<192 && realYcoord>640 &&  realYcoord<704) {
-    			
+    			drop();
     		}
     		// LOOK BUTTON! 
     		if (realXcoord>192 && realXcoord<256 && realYcoord>640 && realYcoord<704) {
@@ -378,6 +381,7 @@ public class Explorer_libgdx implements ApplicationListener {
         if (Gdx.input.isKeyPressed(Keys.D)) { look(); }
         if (Gdx.input.isKeyPressed(Keys.H)) { fight(); }
         if (Gdx.input.isKeyPressed(Keys.G)) { take(); }
+        if (Gdx.input.isKeyPressed(Keys.Q)) { drop();}
         
         if (Gdx.input.isKeyPressed(Keys.O)) 
         { 
@@ -426,15 +430,7 @@ public class Explorer_libgdx implements ApplicationListener {
         if (Gdx.input.isKeyPressed(Keys.NUM_0) && object_inv_mode==1) {
         	getobject(objinv.get_object(0),0);
         }
-        // Q (DROP) INVENTORY OBJECT
-        if (Gdx.input.isKeyPressed(Keys.Q)) 
-        { 
-        	// ENABLE CONSUMABLE INVENTORY MODE
-        	object_inv_mode=0;
-    		consumable_inv_mode=0;
-    		object_drop_mode=1;
-    		just_fight=0;
-        }
+        
         // OBJECT DROP INVENTORY ACTIONS
         if (Gdx.input.isKeyPressed(Keys.NUM_1) && object_drop_mode==1) {
         	objinv.delete_object(1);
@@ -677,6 +673,14 @@ public class Explorer_libgdx implements ApplicationListener {
 			}
 		}
     }
+    
+    void drop() {
+		// ENABLE CONSUMABLE INVENTORY MODE
+    	object_inv_mode=0;
+		consumable_inv_mode=0;
+		object_drop_mode=1;
+		just_fight=0;
+	}
     // Original class methods
 	@Override
 	public void resize(int width, int height) {
