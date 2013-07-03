@@ -33,6 +33,7 @@ public class Explorer_libgdx implements ApplicationListener {
     // inventory status
     int object_inv_mode=0;
     int object_drop_mode=0;
+    int eye_mode=0;
     int consumable_inv_mode=0;
     
     private int realXcoord;
@@ -128,41 +129,49 @@ public class Explorer_libgdx implements ApplicationListener {
 	 	batch.draw(layout.getactionmenu(),0,GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y);
 	 	 	
 	 	// draw hero information
-	 	genericfont.draw(batch,"Hi "+prota.getname()+"!", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-30);
-	 	genericfont.draw(batch,"Experience: "+prota.getexperience(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-50);
-	 	genericfont.draw(batch,"Life Points: "+prota.gethp(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-70);
-	 	genericfont.draw(batch,"Resistance: "+prota.getresist(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-90);
-	 	genericfont.draw(batch,"Agility: "+prota.getagility(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-110);
-	 	genericfont.draw(batch,"Force: "+prota.getforce(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-130);
-	 	genericfont.draw(batch,"Wear:", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-150);
+	 	//genericfont.draw(batch,"Hi "+prota.getname()+"!", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-30);
+	 	genericfont.draw(batch,"Experience: "+prota.getexperience(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, (GameEngine.WINDOWHEIGHT)-10);
+	 	genericfont.draw(batch,"Life Points: "+prota.gethp(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, (GameEngine.WINDOWHEIGHT)-30);
+	 	genericfont.draw(batch,"Resistance: "+prota.getresist(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.WINDOWHEIGHT)-50);
+	 	genericfont.draw(batch,"Agility: "+prota.getagility(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.WINDOWHEIGHT)-70);
+	 	genericfont.draw(batch,"Force: "+prota.getforce(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.WINDOWHEIGHT)-90);
+	 	
+	 	// draw equipment
+	 	//genericfont.draw(batch,"Wear:", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-150);
+	 	
 	 	if (prota.gethead().getname()!=null) {
-	 		genericfont.draw(batch,"Head: "+prota.gethead().getname()+" At:+"+prota.gethead().getattack()+" Df:+"+prota.gethead().getdefense()+" Dur:"+prota.gethead().getdurability(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-170);
+	 		batch.draw(prota.gethead().getsprite(),970,545);
+	 		//genericfont.draw(batch,"Head: "+prota.gethead().getname()+" At:+"+prota.gethead().getattack()+" Df:+"+prota.gethead().getdefense()+" Dur:"+prota.gethead().getdurability(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-170);
         } else {
-        	genericfont.draw(batch,"Head: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-170);
+        	//genericfont.draw(batch,"Head: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-170);
 
         }
         if (prota.getlefthand().getname()!=null) {
-        	genericfont.draw(batch,"Left hand: "+prota.getlefthand().getname()+" At:+"+prota.getlefthand().getattack()+" Df:+"+prota.getlefthand().getdefense()+" Dur:"+prota.getlefthand().getdurability(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-190);
+        	batch.draw(prota.getlefthand().getsprite(),1058,448);
+        	//genericfont.draw(batch,"Left hand: "+prota.getlefthand().getname()+" At:+"+prota.getlefthand().getattack()+" Df:+"+prota.getlefthand().getdefense()+" Dur:"+prota.getlefthand().getdurability(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-190);
         } else {
-        	genericfont.draw(batch,"Left hand: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-190);
+        	//genericfont.draw(batch,"Left hand: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-190);
 
         }
         if (prota.getrighthand().getname()!=null) {
-        	genericfont.draw(batch,"Right hand: "+prota.getrighthand().getname()+" At:+"+prota.getrighthand().getattack()+" Df:+"+prota.getrighthand().getdefense()+" Dur:"+prota.getrighthand().getdurability(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-210);
+        	batch.draw(prota.getrighthand().getsprite(),882,448);
+        	//genericfont.draw(batch,"Right hand: "+prota.getrighthand().getname()+" At:+"+prota.getrighthand().getattack()+" Df:+"+prota.getrighthand().getdefense()+" Dur:"+prota.getrighthand().getdurability(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-210);
         } else {
-        	genericfont.draw(batch,"Right hand: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-210);
+        	//genericfont.draw(batch,"Right hand: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-210);
 
         }
         if (prota.getbody().getname()!=null) {
-        	genericfont.draw(batch,"Body: "+prota.getbody().getname()+" At:+"+prota.getbody().getattack()+" Df:+"+prota.getbody().getdefense()+" Dur:"+prota.getbody().getdurability(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-230);
+        	batch.draw(prota.getbody().getsprite(),971,448);
+        	//genericfont.draw(batch,"Body: "+prota.getbody().getname()+" At:+"+prota.getbody().getattack()+" Df:+"+prota.getbody().getdefense()+" Dur:"+prota.getbody().getdurability(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-230);
         } else {
-        	genericfont.draw(batch,"Body: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-230);
+        	//genericfont.draw(batch,"Body: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-230);
 
         }
         if (prota.getfoot().getname()!=null) {
-        	genericfont.draw(batch,"Foot: "+prota.getfoot().getname()+" At:+"+prota.getfoot().getattack()+" Df:+"+prota.getfoot().getdefense()+" Dur:"+prota.getfoot().getdurability(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-250);
+        	batch.draw(prota.getfoot().getsprite(),971,350);
+        	//genericfont.draw(batch,"Foot: "+prota.getfoot().getname()+" At:+"+prota.getfoot().getattack()+" Df:+"+prota.getfoot().getdefense()+" Dur:"+prota.getfoot().getdurability(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-250);
         } else {
-        	genericfont.draw(batch,"Foot: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-250);
+        	//genericfont.draw(batch,"Foot: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-250);
         }
         
         // overenemy description
@@ -250,7 +259,10 @@ public class Explorer_libgdx implements ApplicationListener {
         
         // draw hero
         batch.draw(prota.getsprite(), prota.getrelativextile()*GameEngine.TILE_X_SIZE, prota.getrelativeytile()*GameEngine.TILE_Y_SIZE);
-		
+	
+        
+        
+        
         // draw fight result
         if (just_fight==1) {
         	batch.draw(layout.gettextbackground(),50,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-400);
@@ -272,28 +284,28 @@ public class Explorer_libgdx implements ApplicationListener {
 		
         
         // draw object inventory
-        genericfont.draw(batch,"Object inventory", 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-330);
+        //genericfont.draw(batch,"Object inventory", 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-330);
 
         for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
         	if (objinv.get_object(i)!=null) {
-        		genericfont.draw(batch,"Obj slot "+i+":"+objinv.get_object(i).getname(), 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(360+(i*20)));
-                batch.draw(objinv.get_object(i).getsprite(), 1000,640-(i*64));
+        		//genericfont.draw(batch,"Obj slot "+i+":"+objinv.get_object(i).getname(), 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(360+(i*20)));
+                batch.draw(objinv.get_object(i).getsprite(), 1216,640-(i*64));
 
         	} else {
-        		genericfont.draw(batch,"Obj slot "+i+": available", 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(360+(i*20)));
+        		//genericfont.draw(batch,"Obj slot "+i+": available", 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(360+(i*20)));
 
         	}
         }
         
         // draw consumable inventory
-        genericfont.draw(batch,"Consumable inventory", 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-40);
+        //genericfont.draw(batch,"Consumable inventory", 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-40);
 
         for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
         	if (consinv.get_consumable(i)!=null) {
-        		genericfont.draw(batch,"Cons slot "+i+":"+consinv.get_consumable(i).getname(), 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(70+(i*20)));
-        		batch.draw(consinv.get_consumable(i).getsprite(), 1100,640-(i*64));
+        		//genericfont.draw(batch,"Cons slot "+i+":"+consinv.get_consumable(i).getname(), 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(70+(i*20)));
+        		batch.draw(consinv.get_consumable(i).getsprite(), 1152,640-(i*64));
         	} else {
-        		genericfont.draw(batch,"Cons slot "+i+": available", 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(70+(i*20)));
+        		//genericfont.draw(batch,"Cons slot "+i+": available", 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(70+(i*20)));
 
         	}
         }
@@ -371,7 +383,34 @@ public class Explorer_libgdx implements ApplicationListener {
     		if (realXcoord>192 && realXcoord<256 && realYcoord>640 && realYcoord<704) {
     			look();
     		}
-    	}
+    		// CONSUMABLE INVENTORY ACTIONS
+    		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
+    			if (realXcoord>1152 && realXcoord<1216 && realYcoord>640-(64*i) && realYcoord<704-(64*i)) {
+    				getconsumable(consinv.get_consumable(i));
+    				consinv.delete_consumable(i);
+    			}
+            }
+    		// OBJECT INVENTORY ACTIONS
+    		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
+    			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && object_drop_mode==0) {
+    				getobject(objinv.get_object(i),i);
+    			}
+            }
+    		// OBJECT INVENTORY DROP
+    		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
+    			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && object_drop_mode==1) {
+    				objinv.delete_object(i);
+    			}
+            }
+    		// EYEMODE OBJECT INVENTORY
+    		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
+    			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==1) {
+    				//objinv.delete_object(i);
+    			}
+            }	
+    		
+    	} 
+    	// end mouse events control
     	
     	// key events control
     	if (Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) { goright(); } 
@@ -603,6 +642,7 @@ public class Explorer_libgdx implements ApplicationListener {
     	object_inv_mode=0;
     	object_drop_mode=0;
 		consumable_inv_mode=0;
+		eye_mode=0;
 		just_fight=0;
     	actualenemy=null;
     	actualconsumable=null;
@@ -613,6 +653,7 @@ public class Explorer_libgdx implements ApplicationListener {
     	object_inv_mode=0;
     	object_drop_mode=0;
 		consumable_inv_mode=0;
+		eye_mode=0;
 		just_fight=0;
     	actualenemy=null;
     	actualconsumable=null;
@@ -623,6 +664,7 @@ public class Explorer_libgdx implements ApplicationListener {
     	object_inv_mode=0;
     	object_drop_mode=0;
 		consumable_inv_mode=0;
+		eye_mode=0;
 		just_fight=0;
     	actualenemy=null;
     	actualconsumable=null;
@@ -630,6 +672,7 @@ public class Explorer_libgdx implements ApplicationListener {
     	game.heroleft();
     }
     void goright() {
+    	eye_mode=0;
     	just_fight=0;
 		object_inv_mode=0;
 		object_drop_mode=0;
@@ -640,6 +683,7 @@ public class Explorer_libgdx implements ApplicationListener {
 		game.heroright();
     }
     void look() {
+    	eye_mode=1;
     	object_inv_mode=0;
     	object_drop_mode=0;
 		consumable_inv_mode=0;
@@ -649,6 +693,7 @@ public class Explorer_libgdx implements ApplicationListener {
     	actualobject=game.overobject(); // get the object (if exist)
     }
     void take() {
+    	eye_mode=0;
     	object_inv_mode=0;
 		consumable_inv_mode=0;
 		object_drop_mode=0;
@@ -661,8 +706,6 @@ public class Explorer_libgdx implements ApplicationListener {
 				consinv.set_consumable(consinv.getfreeslot(), actualconsumable);	
 				game.removeconsumable(actualconsumable);
 			}
-			
-			
 		}
 		// get object into inventory
 		actualobject=game.overobject(); // get the consumable (if exist)
@@ -676,6 +719,7 @@ public class Explorer_libgdx implements ApplicationListener {
     
     void drop() {
 		// ENABLE CONSUMABLE INVENTORY MODE
+    	eye_mode=0;
     	object_inv_mode=0;
 		consumable_inv_mode=0;
 		object_drop_mode=1;
