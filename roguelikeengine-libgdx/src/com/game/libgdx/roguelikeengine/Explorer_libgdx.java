@@ -117,11 +117,11 @@ public class Explorer_libgdx implements ApplicationListener {
 	 	 	
 	 	// draw hero information
 	 	//genericfont.draw(batch,"Hi "+prota.getname()+"!", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-30);
-	 	genericfont.draw(batch,"Experience: "+prota.getexperience(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, (GameEngine.WINDOWHEIGHT)-10);
-	 	genericfont.draw(batch,"Life Points: "+prota.gethp(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, (GameEngine.WINDOWHEIGHT)-30);
-	 	genericfont.draw(batch,"Resistance: "+prota.getresist(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.WINDOWHEIGHT)-50);
-	 	genericfont.draw(batch,"Agility: "+prota.getagility(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.WINDOWHEIGHT)-70);
-	 	genericfont.draw(batch,"Force: "+prota.getforce(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.WINDOWHEIGHT)-90);
+	 	genericfont.draw(batch,"Experience: "+prota.getexperience(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, (GameEngine.WINDOWHEIGHT)-20);
+	 	genericfont.draw(batch,"Life Points: "+prota.gethp(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, (GameEngine.WINDOWHEIGHT)-40);
+	 	genericfont.draw(batch,"Resistance: "+prota.getresist(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.WINDOWHEIGHT)-60);
+	 	genericfont.draw(batch,"Agility: "+prota.getagility(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.WINDOWHEIGHT)-80);
+	 	genericfont.draw(batch,"Force: "+prota.getforce(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.WINDOWHEIGHT)-100);
 	 	
 	 	// draw equipment
 	 	//genericfont.draw(batch,"Wear:", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-150);
@@ -153,7 +153,7 @@ public class Explorer_libgdx implements ApplicationListener {
         if (prota.getbody().getname()!=null) {
         	batch.draw(prota.getbody().getsprite(),971,448);
         	//genericfont.draw(batch,prota.getbody().getname(),931,532);
-        	genericfont.draw(batch,"At:+"+prota.getbody().getattack()+" Df:+"+prota.getbody().getdefense()+" Dur:"+prota.getbody().getdurability(),931,428);
+        	genericfont.draw(batch,"At:+"+prota.getbody().getattack()+" Df:+"+prota.getbody().getdefense()+" Dur:"+prota.getbody().getdurability(),931,442);
         } else {
         	//genericfont.draw(batch,"Body: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-230);
 

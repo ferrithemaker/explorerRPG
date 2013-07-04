@@ -171,7 +171,7 @@ public class GameEngine {
 		int enemytype = randomGenerator.nextInt(6); // random enemy choose
 		if (!tilelayout[x][y].isbloqued()) { // if there is empty space
 			if (enemytype==0) {
-				badguys.add_enemy(new Enemy("vortex",2,5,3,20,x,y,"vortex.png"));
+				badguys.add_enemy(new Enemy("vortex",2,5,3,20,x,y,"vortex2.png"));
 			}
 			if (enemytype==1) {
 				badguys.add_enemy(new Enemy("catharg",3,6,4,40,x,y,"cetharg.png"));
@@ -180,7 +180,7 @@ public class GameEngine {
 				badguys.add_enemy(new Enemy("assassin",3,8,1,30,x,y,"assassin.png"));
 			}
 			if (enemytype==3) {
-				badguys.add_enemy(new Enemy("giant rat",1,10,8,60,x,y,"giantRat.png"));
+				badguys.add_enemy(new Enemy("giant rat",1,10,8,60,x,y,"giantrat2.png"));
 			}
 			if (enemytype==4) {
 				badguys.add_enemy(new Enemy("medusa",5,4,5,30,x,y,"medusa.png"));
