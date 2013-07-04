@@ -43,8 +43,8 @@ public class GameEngine {
 	public final static int WINDOWWIDTH=TILE_X_SIZE*ON_SCREEN_TILES_X+OPTION_MENU_X_SIZE;
 	public final static int WINDOWHEIGHT=TILE_Y_SIZE*ON_SCREEN_TILES_Y+ACTIONS_MENU_Y_SIZE;
 	public final static int FPS=18;
-	public final static int INVENTORY_SIZE=9;
-	public final static String APP_NAME="Rogue explorer (libgdx)";
+	public final static int INVENTORY_SIZE=10;
+	public final static String APP_NAME="Rogue explorer testing game (libgdx)";
 	public final static int NUMBER_OF_WALLS=300;
 	public final static int NUMBER_OF_LAKES=300;
 	public final static int NUMBER_OF_BLOCKING_OBJECTS=1000;

@@ -34,3 +34,6 @@ For more information about running the project, refer to libgdx documentation.
 
 Thanks!
 
+To run jar file: (you must need Java JRE)
+
+java -jar testingGame.jar or double click in some OS.

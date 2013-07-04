@@ -10,7 +10,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
+//import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -21,7 +21,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Explorer_libgdx implements ApplicationListener {
 	private SpriteBatch batch;
-	private Texture texture;
+	//private Texture texture;
 	private BitmapFont genericfont;
 	private BitmapFont messagefont;
 
@@ -49,6 +49,8 @@ public class Explorer_libgdx implements ApplicationListener {
     
     Object_inventory objinv;
     Consumable_inventory consinv;
+    
+    private Screen_text screentext;
     
     // fight status
     int just_fight=0;
@@ -78,18 +80,9 @@ public class Explorer_libgdx implements ApplicationListener {
 		
 		messagefont.setColor(Color.YELLOW);
 		messagefont.setScale(2f);
-        //camera = new OrthographicCamera(1, h/w);
-		//batch = new SpriteBatch();
-		
-		//texture = new Texture(Gdx.files.internal("data/libgdx.png"));
-		//texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		
-		//TextureRegion region = new TextureRegion(texture, 0, 0, 512, 275);
-		
-		//sprite = new Sprite(region);
-		//sprite.setSize(0.9f, 0.9f * sprite.getHeight() / sprite.getWidth());
-		//sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
-		//sprite.setPosition(-sprite.getWidth()/2, -sprite.getHeight()/2);
+        
+		// create a fight message info screen 
+		screentext=new Screen_text(100,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-400,"text_background.png",1000,300);
         
         // create final boss
         boolean boss_created=false;
@@ -103,12 +96,6 @@ public class Explorer_libgdx implements ApplicationListener {
 			}
 				
 		}
-	}
-
-	@Override
-	public void dispose() {
-		batch.dispose();
-		texture.dispose();
 	}
 
 	@Override
@@ -141,35 +128,40 @@ public class Explorer_libgdx implements ApplicationListener {
 	 	
 	 	if (prota.gethead().getname()!=null) {
 	 		batch.draw(prota.gethead().getsprite(),970,545);
-	 		//genericfont.draw(batch,"Head: "+prota.gethead().getname()+" At:+"+prota.gethead().getattack()+" Df:+"+prota.gethead().getdefense()+" Dur:"+prota.gethead().getdurability(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-170);
+	 		//genericfont.draw(batch,prota.gethead().getname(), 930,619);
+	 		genericfont.draw(batch,"At:+"+prota.gethead().getattack()+" Df:+"+prota.gethead().getdefense()+" Dur:"+prota.gethead().getdurability(), 930,535);
         } else {
         	//genericfont.draw(batch,"Head: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-170);
 
         }
         if (prota.getlefthand().getname()!=null) {
         	batch.draw(prota.getlefthand().getsprite(),1058,448);
-        	//genericfont.draw(batch,"Left hand: "+prota.getlefthand().getname()+" At:+"+prota.getlefthand().getattack()+" Df:+"+prota.getlefthand().getdefense()+" Dur:"+prota.getlefthand().getdurability(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-190);
+        	//genericfont.draw(batch,prota.getlefthand().getname(), 1018,532 );
+        	genericfont.draw(batch,"At:+"+prota.getlefthand().getattack()+" Df:+"+prota.getlefthand().getdefense()+" Dur:"+prota.getlefthand().getdurability(), 1018,428 );
         } else {
         	//genericfont.draw(batch,"Left hand: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-190);
 
         }
         if (prota.getrighthand().getname()!=null) {
         	batch.draw(prota.getrighthand().getsprite(),882,448);
-        	//genericfont.draw(batch,"Right hand: "+prota.getrighthand().getname()+" At:+"+prota.getrighthand().getattack()+" Df:+"+prota.getrighthand().getdefense()+" Dur:"+prota.getrighthand().getdurability(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-210);
+        	//genericfont.draw(batch,prota.getrighthand().getname(), 842,532);
+        	genericfont.draw(batch,"At:+"+prota.getrighthand().getattack()+" Df:+"+prota.getrighthand().getdefense()+" Dur:"+prota.getrighthand().getdurability(), 842,428);
         } else {
         	//genericfont.draw(batch,"Right hand: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-210);
 
         }
         if (prota.getbody().getname()!=null) {
         	batch.draw(prota.getbody().getsprite(),971,448);
-        	//genericfont.draw(batch,"Body: "+prota.getbody().getname()+" At:+"+prota.getbody().getattack()+" Df:+"+prota.getbody().getdefense()+" Dur:"+prota.getbody().getdurability(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-230);
+        	//genericfont.draw(batch,prota.getbody().getname(),931,532);
+        	genericfont.draw(batch,"At:+"+prota.getbody().getattack()+" Df:+"+prota.getbody().getdefense()+" Dur:"+prota.getbody().getdurability(),931,428);
         } else {
         	//genericfont.draw(batch,"Body: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-230);
 
         }
         if (prota.getfoot().getname()!=null) {
         	batch.draw(prota.getfoot().getsprite(),971,350);
-        	//genericfont.draw(batch,"Foot: "+prota.getfoot().getname()+" At:+"+prota.getfoot().getattack()+" Df:+"+prota.getfoot().getdefense()+" Dur:"+prota.getfoot().getdurability(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-250);
+        	//genericfont.draw(batch,prota.getfoot().getname(),931,425);
+        	genericfont.draw(batch,"At:+"+prota.getfoot().getattack()+" Df:+"+prota.getfoot().getdefense()+" Dur:"+prota.getfoot().getdurability(),931,330);
         } else {
         	//genericfont.draw(batch,"Foot: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-250);
         }
@@ -265,20 +257,18 @@ public class Explorer_libgdx implements ApplicationListener {
         
         // draw fight result
         if (just_fight==1) {
-        	batch.draw(layout.gettextbackground(),50,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-400);
-        	int linepos=0;
-        	for (String line : fightstate.split("\n")) {
-        		messagefont.draw(batch,line, 100, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(200+(linepos*40)));
-        		linepos++;
-        	}
-    			
+        	screentext.drawScreen(batch, messagefont,fightstate);	
         }
+        
+
         // draw debug mode info
         genericfont.draw(batch, "Screen Mouse X:"+Gdx.input.getX()+" Projected Mouse X: "+realXcoord, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-20);
         genericfont.draw(batch, "Screen Mouse Y:"+Gdx.input.getY()+" Projected Mouse Y: "+realYcoord, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-40);
         genericfont.draw(batch, "I'm at X: "+mapa.getfirstxtile()+" Y: "+mapa.getfirstytile(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-60);
         genericfont.draw(batch, "Real screen size X:"+Gdx.graphics.getWidth(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-80);
         genericfont.draw(batch, "Real screen size Y:"+Gdx.graphics.getHeight(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-100);
+        genericfont.draw(batch, "Eye mode:"+eye_mode, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-120);
+        genericfont.draw(batch, "Drop mode:"+object_drop_mode, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-140);
        
         
 		
@@ -350,6 +340,10 @@ public class Explorer_libgdx implements ApplicationListener {
     	}
     	// mouse events control
     	if (Gdx.input.isTouched()) {
+    		// EXIT BUTTON!
+    		if (realXcoord>512 && realXcoord<576 && realYcoord>640 && realYcoord<704) {
+    			dispose();
+    		}
     		// HIT BUTTON!
     		if (realXcoord>0 && realXcoord<64 && realYcoord>640 && realYcoord<704) {
     			fight();
@@ -385,27 +379,33 @@ public class Explorer_libgdx implements ApplicationListener {
     		}
     		// CONSUMABLE INVENTORY ACTIONS
     		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
-    			if (realXcoord>1152 && realXcoord<1216 && realYcoord>640-(64*i) && realYcoord<704-(64*i)) {
+    			if (realXcoord>1152 && realXcoord<1216 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==0) {
     				getconsumable(consinv.get_consumable(i));
     				consinv.delete_consumable(i);
     			}
             }
     		// OBJECT INVENTORY ACTIONS
     		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
-    			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && object_drop_mode==0) {
+    			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && object_drop_mode==0 && eye_mode==0) {
     				getobject(objinv.get_object(i),i);
     			}
             }
     		// OBJECT INVENTORY DROP
     		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
-    			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && object_drop_mode==1) {
+    			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && object_drop_mode==1  && eye_mode==0) {
     				objinv.delete_object(i);
     			}
             }
     		// EYEMODE OBJECT INVENTORY
     		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
     			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==1) {
-    				//objinv.delete_object(i);
+    				actualobject=objinv.get_object(i);
+    			}
+            }
+    		// EYEMODE CONSUMABLE INVENTORY
+    		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
+    			if (realXcoord>1152 && realXcoord<1216 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==1) {
+    				actualconsumable=consinv.get_consumable(i);
     			}
             }	
     		
@@ -421,6 +421,7 @@ public class Explorer_libgdx implements ApplicationListener {
         if (Gdx.input.isKeyPressed(Keys.H)) { fight(); }
         if (Gdx.input.isKeyPressed(Keys.G)) { take(); }
         if (Gdx.input.isKeyPressed(Keys.Q)) { drop();}
+        if (Gdx.input.isKeyPressed(Keys.Z)) { dispose();}
         
         if (Gdx.input.isKeyPressed(Keys.O)) 
         { 
@@ -463,9 +464,9 @@ public class Explorer_libgdx implements ApplicationListener {
         if (Gdx.input.isKeyPressed(Keys.NUM_8) && object_inv_mode==1) {
         	getobject(objinv.get_object(8),8);
         }
-        //if (Gdx.input.isKeyPressed(Keys.NUM_9) && object_inv_mode==1) {
-        //	getobject(objinv.get_object(9),9);
-        //}
+        if (Gdx.input.isKeyPressed(Keys.NUM_9) && object_inv_mode==1) {
+        	getobject(objinv.get_object(9),9);
+        }
         if (Gdx.input.isKeyPressed(Keys.NUM_0) && object_inv_mode==1) {
         	getobject(objinv.get_object(0),0);
         }
@@ -495,9 +496,9 @@ public class Explorer_libgdx implements ApplicationListener {
         if (Gdx.input.isKeyPressed(Keys.NUM_8) && object_drop_mode==1) {
         	objinv.delete_object(8);
         }
-        //if (Gdx.input.isKeyPressed(Keys.NUM_9) && object_drop_mode==1) {
-        //	objinv.delete_object(9);
-        //}
+        if (Gdx.input.isKeyPressed(Keys.NUM_9) && object_drop_mode==1) {
+        	objinv.delete_object(9);
+        }
         if (Gdx.input.isKeyPressed(Keys.NUM_0) && object_drop_mode==1) {
         	objinv.delete_object(0);
         }
@@ -534,10 +535,10 @@ public class Explorer_libgdx implements ApplicationListener {
         	getconsumable(consinv.get_consumable(8));
         	consinv.delete_consumable(8);
         }
-        //if (Gdx.input.isKeyPressed(Keys.NUM_9) && consumable_inv_mode==1) {
-        //	getconsumable(consinv.get_consumable(9));
-        //	consinv.delete_consumable(9);
-        //}
+        if (Gdx.input.isKeyPressed(Keys.NUM_9) && consumable_inv_mode==1) {
+        	getconsumable(consinv.get_consumable(9));
+        	consinv.delete_consumable(9);
+        }
         if (Gdx.input.isKeyPressed(Keys.NUM_0) && consumable_inv_mode==1) {
         	getconsumable(consinv.get_consumable(0));
         	consinv.delete_consumable(0);
@@ -736,5 +737,11 @@ public class Explorer_libgdx implements ApplicationListener {
 
 	@Override
 	public void resume() {
+	}
+	
+	@Override
+	public void dispose() {
+		batch.dispose();
+		//texture.dispose();
 	}
 }
