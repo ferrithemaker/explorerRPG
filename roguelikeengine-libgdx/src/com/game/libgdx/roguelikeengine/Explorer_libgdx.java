@@ -19,6 +19,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import java.util.ArrayList;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
@@ -28,34 +30,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Explorer_libgdx extends Game {
 	private SpriteBatch batch;
-	//private Texture texture;
 	
-    // inventory status
-    int object_inv_mode=0;
-    int object_drop_mode=0;
-    int eye_mode=0;
-    int consumable_inv_mode=0;
-    
-   
-    
-    Enemy actualenemy; // enemy that i'm over
-    Object actualobject; 
-    Consumable actualconsumable;
-    String fightstate="";
-    ArrayList<Enemy> badguys;
-    ArrayList<Object> availableobjects;
-    ArrayList<Consumable> availableconsumables;
-    
-    Object_inventory objinv;
-    Consumable_inventory consinv;
-    
-   
-    
-    // fight status
-    int just_fight=0;
+	
 	
 	@Override
-	public void create() {		
+	public void create() {
+		// load music
+		Music music = Gdx.audio.newMusic(Gdx.files.internal("CavernsOfMadness.ogg"));
+		music.setLooping(true);
+		music.setVolume(0.3f);
+		music.play();
+		// load splashscreen
 		setScreen(new SplashScreen(this));
 	}
 
@@ -64,12 +49,7 @@ public class Explorer_libgdx extends Game {
 		super.render();
 		
 	}
-	
-	
-	
-   
-    
-   
+
     // Original class methods
 	@Override
 	public void resize(int width, int height) {

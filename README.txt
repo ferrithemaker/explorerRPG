@@ -15,6 +15,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 All images are taken from http://opengameart.org/ and http://animatedbattlers.wordpress.com , released under GPL / Creative Commons and copyrighted by their owners. Most modified by me.
 
+Music from: https://soundcloud.com/desperate-measurez/
+
 ------------------
 
 This is an under development (first stages) rogue style 2D RPG Engine build with LIBGDX (only classes, not development UI).
@@ -23,7 +25,7 @@ LIBGDX (http://libgdx.badlogicgames.com/) is a must. LIBGDX allows java cross-pl
 
 To test the engine, there are also a simple testing game class called Explorer.
 
-You can see a demo video at: http://www.youtube.com/watch?v=ai6NanfRBMo&feature=youtu.be
+You can see a demo video at: http://www.youtube.com/watch?v=ZWgQhCEKEgY
 
 
 ------------------

@@ -168,25 +168,33 @@ public class GameEngine {
 		// generates random position
 		int x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
 		int y = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES);
+		int x2 = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
+		int y2 = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES);
 		int enemytype = randomGenerator.nextInt(6); // random enemy choose
 		if (!tilelayout[x][y].isbloqued()) { // if there is empty space
 			if (enemytype==0) {
 				badguys.add_enemy(new Enemy("vortex",2,5,3,20,x,y,"vortex2.png"));
+				badguys.add_enemy(new Enemy("vortex",2,5,3,20,x2,y2,"vortex2.png"));
 			}
 			if (enemytype==1) {
 				badguys.add_enemy(new Enemy("catharg",3,6,4,40,x,y,"cetharg.png"));
+				badguys.add_enemy(new Enemy("catharg",3,6,4,40,x2,y2,"cetharg.png"));
 			}
 			if (enemytype==2) {
 				badguys.add_enemy(new Enemy("assassin",3,8,1,30,x,y,"assassin.png"));
+				badguys.add_enemy(new Enemy("assassin",3,8,1,30,x2,y2,"assassin.png"));
 			}
 			if (enemytype==3) {
-				badguys.add_enemy(new Enemy("giant rat",1,10,8,60,x,y,"giantrat2.png"));
+				badguys.add_enemy(new Enemy("giant rat",1,8,8,40,x,y,"giantrat2.png"));
+				badguys.add_enemy(new Enemy("giant rat",1,8,8,40,x2,y2,"giantrat2.png"));
 			}
 			if (enemytype==4) {
 				badguys.add_enemy(new Enemy("medusa",5,4,5,30,x,y,"medusa.png"));
+				badguys.add_enemy(new Enemy("medusa",5,4,5,30,x2,y2,"medusa.png"));
 			}
 			if (enemytype==5) {
 				badguys.add_enemy(new Enemy("warlock",8,5,5,25,x,y,"warlock.png"));
+				badguys.add_enemy(new Enemy("warlock",8,5,5,25,x2,y2,"warlock.png"));
 			}
 		}
 	}
@@ -209,62 +217,84 @@ public class GameEngine {
 		// generates random position
 		int x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
 		int y = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES);
+		int x2 = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
+		int y2 = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES);
 		int chances = randomGenerator.nextInt(100);
 		int objecttype = randomGenerator.nextInt(11);
 		if (!tilelayout[x][y].isbloqued()) { // if there is empty space
 			if (objecttype==0) {
 				if (chances<90) {
 					availableobjects.add_object(new Object("long sword","righthand",10,0,10,x,y,"longSword.png"));
+					availableobjects.add_object(new Object("long sword","righthand",10,0,10,x2,y2,"longSword.png"));
+
 				}
 			}
 			if (objecttype==1) {
 				if (chances<90) {
 					availableobjects.add_object(new Object("dagger","righthand",3,0,7,x,y,"dagger.png"));
+					availableobjects.add_object(new Object("dagger","righthand",3,0,7,x2,y2,"dagger.png"));
 				}
 			}
 			if (objecttype==2) {
 				if (chances<90) {
 					availableobjects.add_object(new Object("boots","foot",0,6,4,x,y,"boots.png"));
+					availableobjects.add_object(new Object("boots","foot",0,6,4,x2,y2,"boots.png"));					
 				}
 			}
 			if (objecttype==3) {
 				if (chances<90) {
 					availableobjects.add_object(new Object("heavy armor","body",0,15,10,x,y,"heavyarmor.png"));
+					availableobjects.add_object(new Object("heavy armor","body",0,15,10,x2,y2,"heavyarmor.png"));
+
 				}
 			}
 			if (objecttype==4) {
 				if (chances<90) {
 					availableobjects.add_object(new Object("helm","head",0,4,6,x,y,"helm.png"));
+					availableobjects.add_object(new Object("helm","head",0,4,6,x2,y2,"helm.png"));
+
 				}
 			}
 			if (objecttype==5) {
 				if (chances<90) {
 					availableobjects.add_object(new Object("mace","lefthand",7,0,8,x,y,"mace.png"));
+					availableobjects.add_object(new Object("mace","lefthand",7,0,8,x2,y2,"mace.png"));
+
 				}
 			}
 			if (objecttype==6) {
 				if (chances<90) {
 					availableobjects.add_object(new Object("riot shield","lefthand",0,9,12,x,y,"riotShield.png"));
+					availableobjects.add_object(new Object("riot shield","lefthand",0,9,12,x2,y2,"riotShield.png"));
+
 				}
 			}
 			if (objecttype==7) {
 				if (chances<90) {
 					availableobjects.add_object(new Object("armor","body",0,11,7,x,y,"reflecArmor.png"));
+					availableobjects.add_object(new Object("armor","body",0,11,7,x2,y2,"reflecArmor.png"));
+
 				}
 			}
 			if (objecttype==8) {
 				if (chances<90) {
 					availableobjects.add_object(new Object("shield","lefthand",0,7,6,x,y,"shield.png"));
+					availableobjects.add_object(new Object("shield","lefthand",0,7,6,x2,y2,"shield.png"));
+
 				}
 			}
 			if (objecttype==9) {
 				if (chances<90) {
 					availableobjects.add_object(new Object("skull cap","head",0,5,5,x,y,"skullcap.png"));
+					availableobjects.add_object(new Object("skull cap","head",0,5,5,x2,y2,"skullcap.png"));
+
 				}
 			}
 			if (objecttype==10) {
 				if (chances<90) {
 					availableobjects.add_object(new Object("great shield","lefthand",0,12,11,x,y,"greatShield.png"));
+					availableobjects.add_object(new Object("great shield","lefthand",0,12,11,x2,y2,"greatShield.png"));
+
 				}
 			}
 		}
@@ -291,16 +321,24 @@ public class GameEngine {
 		// generates random position
 		int x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
 		int y = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES);
+		int x2 = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
+		int y2 = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES);
 		int potiontype = randomGenerator.nextInt(3);
 		if (!tilelayout[x][y].isbloqued()) { // if there is empty space
 			if (potiontype==0) {
 				availableconsumables.add_consumable(new Consumable("Blue potion",1,1,0,2,x,y,"potionblue.png"));
+				availableconsumables.add_consumable(new Consumable("Blue potion",1,1,0,2,x2,y2,"potionblue.png"));
+
 			}
 			if (potiontype==1) {
 				availableconsumables.add_consumable(new Consumable("Red potion",0,1,1,1,x,y,"potionred.png"));
+				availableconsumables.add_consumable(new Consumable("Red potion",0,1,1,1,x2,y2,"potionred.png"));
+
 			}
 			if (potiontype==2) {
 				availableconsumables.add_consumable(new Consumable("Yellow potion",2,1,0,0,x,y,"potionyellow.png"));
+				availableconsumables.add_consumable(new Consumable("Yellow potion",2,1,0,0,x2,y2,"potionyellow.png"));
+
 			}
 		}
     }

@@ -26,7 +26,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class SplashScreen implements Screen {
 	
-	private Explorer_libgdx myGame;
+	private Explorer_libgdx theGame;
 	private SpriteBatch spriteBatch;
 	private PopupInfoText screentext;
 	private BitmapFont messagefont;
@@ -34,7 +34,7 @@ public class SplashScreen implements Screen {
 	
 	public SplashScreen(Explorer_libgdx g)
     {
-            myGame = g;
+            theGame = g;
     }
 	
 	@Override
@@ -44,10 +44,11 @@ public class SplashScreen implements Screen {
     	spriteBatch = new SpriteBatch();
     	messagefont = new BitmapFont();
     	messagefont.setColor(Color.YELLOW);
-		messagefont.setScale(2f);
-		text="You awake in the andor graveyard, trapped in the great gardens of andor, and the only way to leave is use the amulet of willing.\n You must recover it defeating megaboss.\nTo defeat megaboss, you must upgrade your character killing monsters, taking objects and drinking potions.\nGood luck.";
+		messagefont.setScale(3f);
+		text="WELCOME TO EXPLORER TEST GAME.\nYou awake in the andor graveyard, \ntrapped in the great gardens of andor.\nThe only way to leave \nis using the amulet of willing.\nYou must recover it defeating megaboss.\nTo defeat megaboss, you must upgrade\nyour character killing monsters,\ntaking objects and drinking potions.\n\nGood luck.";
     	// create a fight message info screen 
     	screentext=new PopupInfoText(0,0,"splashscreen.png",1280,704);
+    	screentext.settextoffset(200, 150);
     }
 
     @Override
@@ -59,7 +60,7 @@ public class SplashScreen implements Screen {
             spriteBatch.end();
             
             if(Gdx.input.justTouched())
-                    myGame.setScreen(new GameplayScreen(myGame));
+                    theGame.setScreen(new GameplayScreen(theGame));
     }
     
      

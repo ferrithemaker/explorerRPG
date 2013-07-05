@@ -44,7 +44,7 @@ public class Map {
 		bones_img = new Sprite(new Texture(Gdx.files.internal("bones.png")));
 		boulder_img = new Sprite(new Texture(Gdx.files.internal("boulder.png")));
 		fire_img= new Sprite(new Texture(Gdx.files.internal("fire.png")));
-		cross_img = new Sprite(new Texture(Gdx.files.internal("cross.png")));
+		cross_img = new Sprite(new Texture(Gdx.files.internal("graveyard.png")));
 		// first tile position must be multiple of tile_size
 		firstXtile=0;
 		firstYtile=0;
@@ -130,10 +130,14 @@ public class Map {
 			}
 		}
 		public void createcementery() {
+			Random randomGenerator = new Random();
 			for (int x=0;x<11;x=x+2) {
 				for (int y=0;y<11;y=y+2) {
-					tilelayout[x][y].block();
-					tilelayout[x][y].updatetileimage(cross_img);
+					int chances = randomGenerator.nextInt(2);
+					if (chances==0) {
+						tilelayout[x][y].block();
+						tilelayout[x][y].updatetileimage(cross_img);
+					}
 				}
 			}
 		}

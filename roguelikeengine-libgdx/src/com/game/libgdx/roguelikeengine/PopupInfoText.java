@@ -30,6 +30,8 @@ public class PopupInfoText {
 	private int y;
 	private int xsize;
 	private int ysize;
+	private int textoffsetx;
+	private int textoffsety;
 	
 	public PopupInfoText (int x,int y, String file, int xsize,int ysize) {
 		this.x=x;
@@ -47,6 +49,10 @@ public class PopupInfoText {
 	public void update_y(int y) {
 		this.y=y;
 	}
+	public void settextoffset(int x, int y) {
+		this.textoffsetx=x;
+		this.textoffsety=y;
+	}
 	// gets
 	public int get_x() {
 		return this.x;
@@ -59,7 +65,7 @@ public class PopupInfoText {
  		int linepos=0;
  		//font.draw(batch,this.text, x,y);
  		for (String line : text.split("\n")) {
-    		font.draw(batch,line, x+(xsize/10),(y+ysize)-((ysize/10)+(linepos*40)));
+    		font.draw(batch,line, x+(textoffsetx),(y+ysize)-((textoffsety)+(linepos*40)));
     		linepos++;
     	}
 	}

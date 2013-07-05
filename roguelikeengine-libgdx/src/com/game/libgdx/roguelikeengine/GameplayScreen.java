@@ -23,6 +23,7 @@ import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Color;
 //import com.badlogic.gdx.graphics.Texture;
@@ -48,10 +49,12 @@ public class GameplayScreen implements Screen {
 	private GameEngine game;
     private Layout layout; 
     private Tile[][] tilelayout;
-    // inventory status
+    
+    // inventory status and modes
     int object_inv_mode=0;
     int object_drop_mode=0;
     int eye_mode=0;
+    int debug_mode=0;
     int consumable_inv_mode=0;
     
     private int realXcoord;
@@ -110,7 +113,8 @@ public class GameplayScreen implements Screen {
         
 		// create a fight message info screen 
 		screentext=new PopupInfoText(100,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-400,"text_background.png",1000,300);
-        
+		screentext.settextoffset(50, 50);
+		
         // create final boss
         boolean boss_created=false;
 		while (boss_created==false) {
@@ -123,6 +127,7 @@ public class GameplayScreen implements Screen {
 			}
 				
 		}
+		
 	}
 
 	@Override
@@ -289,14 +294,15 @@ public class GameplayScreen implements Screen {
         
 
         // draw debug mode info
-        genericfont.draw(batch, "Screen Mouse X:"+Gdx.input.getX()+" Projected Mouse X: "+realXcoord, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-20);
-        genericfont.draw(batch, "Screen Mouse Y:"+Gdx.input.getY()+" Projected Mouse Y: "+realYcoord, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-40);
-        genericfont.draw(batch, "I'm at X: "+mapa.getfirstxtile()+" Y: "+mapa.getfirstytile(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-60);
-        genericfont.draw(batch, "Real screen size X:"+Gdx.graphics.getWidth(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-80);
-        genericfont.draw(batch, "Real screen size Y:"+Gdx.graphics.getHeight(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-100);
-        genericfont.draw(batch, "Eye mode:"+eye_mode, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-120);
-        genericfont.draw(batch, "Drop mode:"+object_drop_mode, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-140);
-       
+        if (debug_mode==1) {
+        	genericfont.draw(batch, "Screen Mouse X:"+Gdx.input.getX()+" Projected Mouse X: "+realXcoord, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-20);
+        	genericfont.draw(batch, "Screen Mouse Y:"+Gdx.input.getY()+" Projected Mouse Y: "+realYcoord, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-40);
+        	genericfont.draw(batch, "I'm at X: "+mapa.getfirstxtile()+" Y: "+mapa.getfirstytile(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-60);
+        	genericfont.draw(batch, "Real screen size X:"+Gdx.graphics.getWidth(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-80);
+        	genericfont.draw(batch, "Real screen size Y:"+Gdx.graphics.getHeight(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-100);
+        	genericfont.draw(batch, "Eye mode:"+eye_mode, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-120);
+        	genericfont.draw(batch, "Drop mode:"+object_drop_mode, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-140);
+        }
         
 		
         
@@ -449,6 +455,9 @@ public class GameplayScreen implements Screen {
         if (Gdx.input.isKeyPressed(Keys.G)) { take(); }
         if (Gdx.input.isKeyPressed(Keys.Q)) { drop();}
         if (Gdx.input.isKeyPressed(Keys.Z)) { dispose();}
+        if (Gdx.input.isKeyPressed(Keys.P)) {
+        	if (debug_mode==0) { debug_mode=1; } else { debug_mode=0; }
+        }
         
         if (Gdx.input.isKeyPressed(Keys.O)) 
         { 
