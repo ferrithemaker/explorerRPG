@@ -35,6 +35,9 @@ public class Tile {
 	public boolean isbloqued() {
 		return this.bloqued;
 	}
+	public boolean isempty() {
+		return !isbloqued();
+	}
 	public void block() {
 		this.bloqued=true;
 	}

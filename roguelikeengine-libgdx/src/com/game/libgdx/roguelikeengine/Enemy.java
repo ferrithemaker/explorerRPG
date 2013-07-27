@@ -77,7 +77,7 @@ public class Enemy {
 	}
 	// sets / updates
 	public void updatehp(int value) {
-		this.life=this.life-value;
+		this.life=Math.max(0, this.life-value);
 	}
 
 	// control methods
