@@ -253,30 +253,31 @@ public class Hero {
 		int enemyhit=(((int)(Math.ceil((double)((double)enemy.getagility()/(double)3)))*enemy.getforce())-this.resist);
 		int heromodifier = randomGenerator.nextInt(this.agility); // random component based on agility
 		int enemymodifier = randomGenerator.nextInt(enemy.getagility()); // random component based on agility
-		herohit=herohit+heromodifier;
-		enemyhit=enemyhit+enemymodifier;
-		if (herohit<0) { herohit=0;	}
+		
+		herohit=Math.max(0, herohit+heromodifier);
+		
+		enemyhit=Math.max(0, enemyhit+enemymodifier);
 		enemy.updatehp(herohit); // hero hits enemy
+		
 		randomdecay(); // durability decreases
 		if (enemy.gethp()>0) { // if enemy is alive
-			if (enemyhit<0) { enemyhit=0; }
-			this.life=this.life-enemyhit; // enemy hits hero
-			randomdecay(); // durability decreases
-		}
-		// return result control
-		if (enemy.gethp()<=0) {
+			this.life=Math.max(0, this.life-enemyhit); // enemy hits hero
+			randomdecay(); // durability decreases, twice?
+		} else {
 			return "ENEMYDEAD";
 		}
+		
 		if (this.life<=0) {
 			return "HERODEAD";
 		}
+		
 		return this.name+" deal "+herohit+" damage points to "+enemy.getname()+"\nand "+enemy.getname()+" deal "+enemyhit+" damage points to "+this.name;
 		
 	}
 	
 	
 	// *** BEGIN hero sprite management. you MUST modify it with your own sprite behavior
-	private void init_sprite_pos() {
+	private void init_sprite_pos() {	// why does the naming scheme change here?
 		current_sprite_position=7;
 	}
 	private void sprite_godown() {
