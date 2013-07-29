@@ -57,7 +57,7 @@ public class Hero {
 		this.relative_y_tile=1;
 		this.relative_x_tile=1;
 		this.name=name;
-		init_sprite_pos(); // initial sprite position, every number corresponds to a sprite. Each set of sprites has different configuration
+		initspriteposition(); // initial sprite position, every number corresponds to a sprite. Each set of sprites has different configuration
 		this.head = new Object(); // empty object
 		this.body = new Object(); // empty object
 		this.lefthand = new Object(); // empty object
@@ -206,25 +206,25 @@ public class Hero {
 	public void up() {
 		if (this.relative_y_tile>0) {
 			this.relative_y_tile -= 1;
-			sprite_goup();
+			spritegoup();
 		}
 	}
 	public void down() {
 		if (this.relative_y_tile<GameEngine.ON_SCREEN_TILES_Y-1) {
 			this.relative_y_tile += 1;
-			sprite_godown();
+			spritegodown();
 		}
 	}
 	public void left() {
 		if (this.relative_x_tile>0) {
 			this.relative_x_tile -= 1;
-			sprite_goleft();
+			spritegoleft();
 		}
 	}
 	public void right() {
 		if (this.relative_x_tile<GameEngine.ON_SCREEN_TILES_X-1) {
 			this.relative_x_tile += 1;
-			sprite_goright();
+			spritegoright();
 			
 		}
 	}
@@ -277,10 +277,10 @@ public class Hero {
 	
 	
 	// *** BEGIN hero sprite management. you MUST modify it with your own sprite behavior
-	private void init_sprite_pos() {	// why does the naming scheme change here?
+	private void initspriteposition() {
 		current_sprite_position=7;
 	}
-	private void sprite_godown() {
+	private void spritegodown() {
 		switch(current_sprite_position) {
 		case 10:
 			current_sprite_position=11;
@@ -296,7 +296,7 @@ public class Hero {
 			break;
 		}
 	}
-	private void sprite_goup() {
+	private void spritegoup() {
 		switch(current_sprite_position) {
 		case 1:
 			current_sprite_position=2;
@@ -312,7 +312,7 @@ public class Hero {
 			break;
 		}	
 	}
-	private void sprite_goleft() {
+	private void spritegoleft() {
 		switch(current_sprite_position) {
 		case 4:
 			current_sprite_position=5;
@@ -328,7 +328,7 @@ public class Hero {
 			break;
 		}
 	}
-	private void sprite_goright() {
+	private void spritegoright() {
 		switch(current_sprite_position) {
 		case 7:
 			current_sprite_position=8;
