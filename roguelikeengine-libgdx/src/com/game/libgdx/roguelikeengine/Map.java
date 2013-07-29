@@ -161,4 +161,8 @@ public class Map {
 			firstYtile=value;
 		}
 		
+		public boolean istileempty(int x, int y) {
+			return tilelayout[x][y].isempty();
+		}
+		
 }

@@ -35,6 +35,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
 public class GameplayScreen implements Screen {
+	public static GameplayScreen instance = null;
+	
 	// game itself
 	private Explorer_libgdx thegame;
 	
@@ -77,6 +79,8 @@ public class GameplayScreen implements Screen {
     
     public GameplayScreen(Explorer_libgdx mygame) {
     	this.thegame=mygame;
+    	
+    	if(instance == null) instance = this;
     }
 	
     @Override
@@ -86,6 +90,34 @@ public class GameplayScreen implements Screen {
     
 	@Override
 	public void show() {		
+		init();
+		
+        placeboss();
+		
+	}
+
+	/**
+	 * 
+	 */
+	protected void placeboss() {
+		// create final boss
+        boolean boss_created=false;
+		while (boss_created==false) {
+			Random randomGenerator = new Random();
+			int x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
+			int y = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES);
+			if (!tilelayout[x][y].isbloqued()) { // if there is empty space
+				game.createenemy("megaboss", 43, 46, 51, 310, x, y,"orc.png");
+				boss_created=true;
+			}
+				
+		}
+	}
+
+	/**
+	 * 
+	 */
+	protected void init() {
 		batch = new SpriteBatch();
 		genericfont = new BitmapFont();
 		messagefont = new BitmapFont();
@@ -113,20 +145,6 @@ public class GameplayScreen implements Screen {
 		// create a fight message info screen 
 		screentext=new PopupInfoText(100,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-400,"text_background.png",1000,300);
 		screentext.settextoffset(50, 50);
-		
-        // create final boss
-        boolean boss_created=false;
-		while (boss_created==false) {
-			Random randomGenerator = new Random();
-			int x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
-			int y = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES);
-			if (!tilelayout[x][y].isbloqued()) { // if there is empty space
-				game.createenemy("megaboss", 43, 46, 51, 310, x, y,"orc.png");
-				boss_created=true;
-			}
-				
-		}
-		
 	}
 
 	@Override
@@ -140,7 +158,62 @@ public class GameplayScreen implements Screen {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 	    batch.begin();
 	    
-	    // draw character menu background
+	    drawinterface();
+	 	
+	 	// draw equipment
+	 	//genericfont.draw(batch,"Wear:", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-150);
+	 	
+	 	drawequipment();
+        
+        // overenemy description
+        drawdescriptions();
+        
+        
+        
+        // draw background tiles 
+        drawtiles();
+        
+        // draw enemies
+        drawenemies();
+
+        // draw consumables
+        drawconsumables();
+        
+        // draw objects
+        drawobjects();
+        
+        // draw hero
+        batch.draw(prota.getsprite(), prota.getrelativextile()*GameEngine.TILE_X_SIZE, prota.getrelativeytile()*GameEngine.TILE_Y_SIZE);
+	
+        
+        
+        
+        // draw fight result
+        if (just_fight==1) {
+        	screentext.drawScreen(batch, messagefont,fightstate);	
+        }
+        
+
+        // draw debug mode info
+        if (debug_mode==1) {
+        	drawdebug();
+        }
+        
+		
+        
+        // draw object inventory
+        //genericfont.draw(batch,"Object inventory", 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-330);
+
+        drawinventory();
+        
+        batch.end();
+	}
+
+	/**
+	 * 
+	 */
+	protected void drawinterface() {
+		// draw character menu background
 	 	batch.draw(layout.getmenubackground(),GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X,0);
 	 	
 	 	// draw action menu background
@@ -153,11 +226,178 @@ public class GameplayScreen implements Screen {
 	 	genericfont.draw(batch,"Resistance: "+prota.getresist(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.WINDOWHEIGHT)-60);
 	 	genericfont.draw(batch,"Agility: "+prota.getagility(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.WINDOWHEIGHT)-80);
 	 	genericfont.draw(batch,"Force: "+prota.getforce(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.WINDOWHEIGHT)-100);
-	 	
-	 	// draw equipment
-	 	//genericfont.draw(batch,"Wear:", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-150);
-	 	
-	 	if (prota.gethead().getname()!=null) {
+	}
+
+	/**
+	 * 
+	 */
+	protected void drawinventory() {
+		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
+        	if (objinv.get_object(i)!=null) {
+        		//genericfont.draw(batch,"Obj slot "+i+":"+objinv.get_object(i).getname(), 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(360+(i*20)));
+                batch.draw(objinv.get_object(i).getsprite(), 1216,640-(i*64));
+
+        	} else {
+        		//genericfont.draw(batch,"Obj slot "+i+": available", 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(360+(i*20)));
+
+        	}
+        }
+        
+        // draw consumable inventory
+        //genericfont.draw(batch,"Consumable inventory", 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-40);
+
+        for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
+        	if (consinv.get_consumable(i)!=null) {
+        		//genericfont.draw(batch,"Cons slot "+i+":"+consinv.get_consumable(i).getname(), 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(70+(i*20)));
+        		batch.draw(consinv.get_consumable(i).getsprite(), 1152,640-(i*64));
+        	} else {
+        		//genericfont.draw(batch,"Cons slot "+i+": available", 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(70+(i*20)));
+
+        	}
+        }
+	}
+
+	/**
+	 * 
+	 */
+	protected void drawdebug() {
+		genericfont.draw(batch, "Screen Mouse X:"+Gdx.input.getX()+" Projected Mouse X: "+realXcoord, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-20);
+		genericfont.draw(batch, "Screen Mouse Y:"+Gdx.input.getY()+" Projected Mouse Y: "+realYcoord, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-40);
+		genericfont.draw(batch, "I'm at X: "+mapa.getfirstxtile()+" Y: "+mapa.getfirstytile(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-60);
+		genericfont.draw(batch, "Real screen size X:"+Gdx.graphics.getWidth(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-80);
+		genericfont.draw(batch, "Real screen size Y:"+Gdx.graphics.getHeight(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-100);
+		genericfont.draw(batch, "Eye mode:"+eye_mode, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-120);
+		genericfont.draw(batch, "Drop mode:"+object_drop_mode, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-140);
+	}
+
+	/**
+	 * 
+	 */
+	protected void drawconsumables() {
+		ListIterator<Consumable> consumableiterator = availableconsumables.listIterator();
+        while (consumableiterator.hasNext()) {
+        	//System.out.println("entra");
+        	Consumable consumable=consumableiterator.next();
+        	//System.out.println(bguy.getabsolutex());
+        	if (consumable.consumableonscreen(mapa.getfirstxtile(), mapa.getfirstytile())==true) {
+        		// draw enemy image		
+    			batch.draw(consumable.getsprite(),(consumable.getabsolutex()-mapa.getfirstxtile())*GameEngine.TILE_X_SIZE,(consumable.getabsolutey()-mapa.getfirstytile())*GameEngine.TILE_Y_SIZE);       		
+        	}
+        }
+	}
+
+	/**
+	 * 
+	 */
+	protected void drawobjects() {
+		ListIterator<Object> objiterator = availableobjects.listIterator();
+        while (objiterator.hasNext()) {
+        	//System.out.println("entra");
+        	Object obj=objiterator.next();
+        	//System.out.println(bguy.getabsolutex());
+        	if (obj.objectonscreen(mapa.getfirstxtile(), mapa.getfirstytile())==true) {
+        		// draw enemy image
+        		
+    			batch.draw(obj.getsprite(),(obj.getabsolutex()-mapa.getfirstxtile())*GameEngine.TILE_X_SIZE,(obj.getabsolutey()-mapa.getfirstytile())*GameEngine.TILE_Y_SIZE);       		
+        	}
+        }
+	}
+
+	/**
+	 * 
+	 */
+	protected void drawenemies() {
+		ListIterator<Enemy> bgiterator = badguys.listIterator();
+        while (bgiterator.hasNext()) {
+        	//System.out.println("entra");
+        	Enemy bguy=bgiterator.next();
+        	//System.out.println(bguy.getabsolutex());
+        	if (bguy.enemyonscreen(mapa.getfirstxtile(), mapa.getfirstytile())==true) {
+        		// draw enemy image
+        		
+    			batch.draw(bguy.getsprite(),getrelativextileposition(bguy),getrelativeytileposition(bguy));
+        	}
+        }
+	}
+
+	/**
+	 * @param bguy
+	 * @return
+	 */
+	public int getrelativeytileposition(Enemy bguy) {
+		return (bguy.getabsolutey()-mapa.getfirstytile())*GameEngine.TILE_Y_SIZE;
+	}
+
+	/**
+	 * @param bguy
+	 * @return
+	 */
+	public int getrelativextileposition(Enemy bguy) {
+		return (bguy.getabsolutex()-mapa.getfirstxtile())*GameEngine.TILE_X_SIZE;
+	}
+	
+	public int getabsolutextile(Hero hero) {
+		return hero.getrelativextile() + (mapa == null ? 0 : mapa.getfirstxtile());
+	}
+	
+	public int getabsoluteytile(Hero hero) {
+		return hero.getrelativeytile() + (mapa == null ? 0 :  mapa.getfirstytile());
+	}
+	/**
+	 * 
+	 */
+	protected void drawtiles() {
+		int relativex=0;
+        for (int xpos=mapa.getfirstxtile();xpos<(mapa.getfirstxtile()+GameEngine.ON_SCREEN_TILES_X);xpos++) {
+        	int relativey=0;
+        	for (int ypos=mapa.getfirstytile();ypos<(mapa.getfirstytile()+GameEngine.ON_SCREEN_TILES_Y);ypos++) {
+        			batch.draw(tilelayout[xpos][ypos].gettileimage(),relativex*GameEngine.TILE_X_SIZE,relativey*GameEngine.TILE_Y_SIZE);
+        			relativey++;
+        	}
+        	relativex++;
+        }
+	}
+
+	/**
+	 * 
+	 */
+	protected void drawdescriptions() {
+		if (actualenemy!=null) {
+        	if (actualenemy.getname()!=null) {
+        		genericfont.draw(batch,"Enemy: "+actualenemy.getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-400);
+        		genericfont.draw(batch,"Life Points: "+actualenemy.gethp(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-420);
+        		genericfont.draw(batch,"Resistance: "+actualenemy.getresist(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-440);
+        		genericfont.draw(batch,"Agility: "+actualenemy.getagility(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-460);
+        		genericfont.draw(batch,"Force: "+actualenemy.getforce(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-480);
+        	}
+        }
+        
+        // overconsumable description
+        
+        if (actualconsumable!=null) {
+        	if (actualconsumable.getname()!=null) {
+        		genericfont.draw(batch,"Consumable: "+actualconsumable.getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-400);
+        		genericfont.draw(batch,"+ Life Points: "+actualconsumable.getpoweruplife(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-420);
+        		genericfont.draw(batch,"+ Agility Points: "+actualconsumable.getpowerupagility(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-440);
+        	}
+        }
+        
+        // overobject description
+        
+        if (actualobject!=null) {
+        	if (actualobject.getname()!=null) {
+        		genericfont.draw(batch,"Object: "+actualobject.getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-400);
+        		genericfont.draw(batch,"+ defense: "+actualobject.getdefense(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-420);
+        		genericfont.draw(batch,"+ offense: "+actualobject.getattack(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-440);
+        	}
+        }
+	}
+
+	/**
+	 * 
+	 */
+	protected void drawequipment() {
+		if (prota.gethead().getname()!=null) {
 	 		batch.draw(prota.gethead().getsprite(),970,545);
 	 		//genericfont.draw(batch,prota.gethead().getname(), 930,619);
 	 		genericfont.draw(batch,"At:+"+prota.gethead().getattack()+" Df:+"+prota.gethead().getdefense()+" Dur:"+prota.gethead().getdurability(), 930,535);
@@ -196,143 +436,6 @@ public class GameplayScreen implements Screen {
         } else {
         	//genericfont.draw(batch,"Foot: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-250);
         }
-        
-        // overenemy description
-        
-        if (actualenemy!=null) {
-        	if (actualenemy.getname()!=null) {
-        		genericfont.draw(batch,"Enemy: "+actualenemy.getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-400);
-        		genericfont.draw(batch,"Life Points: "+actualenemy.gethp(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-420);
-        		genericfont.draw(batch,"Resistance: "+actualenemy.getresist(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-440);
-        		genericfont.draw(batch,"Agility: "+actualenemy.getagility(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-460);
-        		genericfont.draw(batch,"Force: "+actualenemy.getforce(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-480);
-        	}
-        }
-        
-        // overconsumable description
-        
-        if (actualconsumable!=null) {
-        	if (actualconsumable.getname()!=null) {
-        		genericfont.draw(batch,"Consumable: "+actualconsumable.getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-400);
-        		genericfont.draw(batch,"+ Life Points: "+actualconsumable.getpoweruplife(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-420);
-        		genericfont.draw(batch,"+ Agility Points: "+actualconsumable.getpowerupagility(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-440);
-        	}
-        }
-        
-        // overobject description
-        
-        if (actualobject!=null) {
-        	if (actualobject.getname()!=null) {
-        		genericfont.draw(batch,"Object: "+actualobject.getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-400);
-        		genericfont.draw(batch,"+ defense: "+actualobject.getdefense(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-420);
-        		genericfont.draw(batch,"+ offense: "+actualobject.getattack(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-440);
-        	}
-        }
-        
-        
-        
-        // draw background tiles 
-        int relativex=0;
-        for (int xpos=mapa.getfirstxtile();xpos<(mapa.getfirstxtile()+GameEngine.ON_SCREEN_TILES_X);xpos++) {
-        	int relativey=0;
-        	for (int ypos=mapa.getfirstytile();ypos<(mapa.getfirstytile()+GameEngine.ON_SCREEN_TILES_Y);ypos++) {
-        			batch.draw(tilelayout[xpos][ypos].gettileimage(),relativex*GameEngine.TILE_X_SIZE,relativey*GameEngine.TILE_Y_SIZE);
-        			relativey++;
-        	}
-        	relativex++;
-        }
-        
-        // draw enemies
-        ListIterator<Enemy> bgiterator = badguys.listIterator();
-        while (bgiterator.hasNext()) {
-        	//System.out.println("entra");
-        	Enemy bguy=bgiterator.next();
-        	//System.out.println(bguy.getabsolutex());
-        	if (bguy.enemyonscreen(mapa.getfirstxtile(), mapa.getfirstytile())==true) {
-        		// draw enemy image
-        		
-    			batch.draw(bguy.getsprite(),(bguy.getabsolutex()-mapa.getfirstxtile())*GameEngine.TILE_X_SIZE,(bguy.getabsolutey()-mapa.getfirstytile())*GameEngine.TILE_Y_SIZE);       		
-        	}
-        }
-        
-        // draw objects
-        ListIterator<Object> objiterator = availableobjects.listIterator();
-        while (objiterator.hasNext()) {
-        	//System.out.println("entra");
-        	Object obj=objiterator.next();
-        	//System.out.println(bguy.getabsolutex());
-        	if (obj.objectonscreen(mapa.getfirstxtile(), mapa.getfirstytile())==true) {
-        		// draw enemy image
-        		
-    			batch.draw(obj.getsprite(),(obj.getabsolutex()-mapa.getfirstxtile())*GameEngine.TILE_X_SIZE,(obj.getabsolutey()-mapa.getfirstytile())*GameEngine.TILE_Y_SIZE);       		
-        	}
-        }
-        
-        // draw consumables
-        ListIterator<Consumable> consumableiterator = availableconsumables.listIterator();
-        while (consumableiterator.hasNext()) {
-        	//System.out.println("entra");
-        	Consumable consumable=consumableiterator.next();
-        	//System.out.println(bguy.getabsolutex());
-        	if (consumable.consumableonscreen(mapa.getfirstxtile(), mapa.getfirstytile())==true) {
-        		// draw enemy image		
-    			batch.draw(consumable.getsprite(),(consumable.getabsolutex()-mapa.getfirstxtile())*GameEngine.TILE_X_SIZE,(consumable.getabsolutey()-mapa.getfirstytile())*GameEngine.TILE_Y_SIZE);       		
-        	}
-        }
-        
-        // draw hero
-        batch.draw(prota.getsprite(), prota.getrelativextile()*GameEngine.TILE_X_SIZE, prota.getrelativeytile()*GameEngine.TILE_Y_SIZE);
-	
-        
-        
-        
-        // draw fight result
-        if (just_fight==1) {
-        	screentext.drawScreen(batch, messagefont,fightstate);	
-        }
-        
-
-        // draw debug mode info
-        if (debug_mode==1) {
-        	genericfont.draw(batch, "Screen Mouse X:"+Gdx.input.getX()+" Projected Mouse X: "+realXcoord, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-20);
-        	genericfont.draw(batch, "Screen Mouse Y:"+Gdx.input.getY()+" Projected Mouse Y: "+realYcoord, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-40);
-        	genericfont.draw(batch, "I'm at X: "+mapa.getfirstxtile()+" Y: "+mapa.getfirstytile(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-60);
-        	genericfont.draw(batch, "Real screen size X:"+Gdx.graphics.getWidth(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-80);
-        	genericfont.draw(batch, "Real screen size Y:"+Gdx.graphics.getHeight(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-100);
-        	genericfont.draw(batch, "Eye mode:"+eye_mode, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-120);
-        	genericfont.draw(batch, "Drop mode:"+object_drop_mode, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-140);
-        }
-        
-		
-        
-        // draw object inventory
-        //genericfont.draw(batch,"Object inventory", 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-330);
-
-        for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
-        	if (objinv.get_object(i)!=null) {
-        		//genericfont.draw(batch,"Obj slot "+i+":"+objinv.get_object(i).getname(), 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(360+(i*20)));
-                batch.draw(objinv.get_object(i).getsprite(), 1216,640-(i*64));
-
-        	} else {
-        		//genericfont.draw(batch,"Obj slot "+i+": available", 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(360+(i*20)));
-
-        	}
-        }
-        
-        // draw consumable inventory
-        //genericfont.draw(batch,"Consumable inventory", 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-40);
-
-        for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
-        	if (consinv.get_consumable(i)!=null) {
-        		//genericfont.draw(batch,"Cons slot "+i+":"+consinv.get_consumable(i).getname(), 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(70+(i*20)));
-        		batch.draw(consinv.get_consumable(i).getsprite(), 1152,640-(i*64));
-        	} else {
-        		//genericfont.draw(batch,"Cons slot "+i+": available", 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(70+(i*20)));
-
-        	}
-        }
-        
-        batch.end();
 	}
 	void frameratecontrol() {
 		//  delay for each frame  -   time it took for one frame 
@@ -371,81 +474,21 @@ public class GameplayScreen implements Screen {
     		realYcoord=realYcoord+GameEngine.ANDROID_MENU_BAR_SIZE;
     	}
     	// mouse events control
-    	if (Gdx.input.isTouched()) {
-    		// EXIT BUTTON!
-    		if (realXcoord>512 && realXcoord<576 && realYcoord>640 && realYcoord<704) {
-    			dispose();
-    		}
-    		// HIT BUTTON!
-    		if (realXcoord>0 && realXcoord<64 && realYcoord>640 && realYcoord<704) {
-    			fight();
-    		}
-    		// directions
-    		// LEFT BUTTON!
-    		if (realXcoord>576 && realXcoord<640 && realYcoord>640 && realYcoord<704) {
-    			goleft();
-    		}
-    		// RIGHT BUTTON!
-    		if (realXcoord>768 && realXcoord<832 && realYcoord>640 && realYcoord<704) {
-    			goright();
-    		}
-    		// UP BUTTON!
-    		if (realXcoord>704 && realXcoord<768 && realYcoord>640 && realYcoord<704) {
-    			goup();
-    		}
-    		// DOWN BUTTON!
-    		if (realXcoord>640 && realXcoord<704 && realYcoord>640 && realYcoord<704) {
-    			godown();
-    		}
-    		// TAKE BUTTON!
-    		if (realXcoord>64 && realXcoord<128 && realYcoord>640 && realYcoord<704) {
-    			take();
-    		}
-    		// DROP BUTTON!
-    		if (realXcoord>128 && realXcoord<192 && realYcoord>640 &&  realYcoord<704) {
-    			drop();
-    		}
-    		// LOOK BUTTON! 
-    		if (realXcoord>192 && realXcoord<256 && realYcoord>640 && realYcoord<704) {
-    			look();
-    		}
-    		// CONSUMABLE INVENTORY ACTIONS
-    		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
-    			if (realXcoord>1152 && realXcoord<1216 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==0) {
-    				getconsumable(consinv.get_consumable(i));
-    				consinv.delete_consumable(i);
-    			}
-            }
-    		// OBJECT INVENTORY ACTIONS
-    		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
-    			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && object_drop_mode==0 && eye_mode==0) {
-    				getobject(objinv.get_object(i),i);
-    			}
-            }
-    		// OBJECT INVENTORY DROP
-    		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
-    			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && object_drop_mode==1  && eye_mode==0) {
-    				objinv.delete_object(i);
-    			}
-            }
-    		// EYEMODE OBJECT INVENTORY
-    		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
-    			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==1) {
-    				actualobject=objinv.get_object(i);
-    			}
-            }
-    		// EYEMODE CONSUMABLE INVENTORY
-    		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
-    			if (realXcoord>1152 && realXcoord<1216 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==1) {
-    				actualconsumable=consinv.get_consumable(i);
-    			}
-            }	
-    		
-    	} 
+    	handlemouseinput(); 
     	// end mouse events control
     	
     	// key events control
-    	if (Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) { goright(); } 
+    	handlekeyboardinput();
+        
+        game.update();
+        	
+    }
+
+	/**
+	 * 
+	 */
+	protected void handlekeyboardinput() {
+		if (Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) { goright(); } 
         if (Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) { goleft(); }
         if (Gdx.input.isKeyPressed(Keys.DPAD_UP)) { goup(); } 
         if (Gdx.input.isKeyPressed(Keys.DPAD_DOWN)) { godown();}
@@ -578,10 +621,84 @@ public class GameplayScreen implements Screen {
         	getconsumable(consinv.get_consumable(0));
         	consinv.delete_consumable(0);
         }
-        
-        
-        	
-    }    
+	}
+
+	/**
+	 * 
+	 */
+	protected void handlemouseinput() {
+		if (Gdx.input.isTouched()) {
+    		// EXIT BUTTON!
+    		if (realXcoord>512 && realXcoord<576 && realYcoord>640 && realYcoord<704) {
+    			dispose();
+    		}
+    		// HIT BUTTON!
+    		if (realXcoord>0 && realXcoord<64 && realYcoord>640 && realYcoord<704) {
+    			fight();
+    		}
+    		// directions
+    		// LEFT BUTTON!
+    		if (realXcoord>576 && realXcoord<640 && realYcoord>640 && realYcoord<704) {
+    			goleft();
+    		}
+    		// RIGHT BUTTON!
+    		if (realXcoord>768 && realXcoord<832 && realYcoord>640 && realYcoord<704) {
+    			goright();
+    		}
+    		// UP BUTTON!
+    		if (realXcoord>704 && realXcoord<768 && realYcoord>640 && realYcoord<704) {
+    			goup();
+    		}
+    		// DOWN BUTTON!
+    		if (realXcoord>640 && realXcoord<704 && realYcoord>640 && realYcoord<704) {
+    			godown();
+    		}
+    		// TAKE BUTTON!
+    		if (realXcoord>64 && realXcoord<128 && realYcoord>640 && realYcoord<704) {
+    			take();
+    		}
+    		// DROP BUTTON!
+    		if (realXcoord>128 && realXcoord<192 && realYcoord>640 &&  realYcoord<704) {
+    			drop();
+    		}
+    		// LOOK BUTTON! 
+    		if (realXcoord>192 && realXcoord<256 && realYcoord>640 && realYcoord<704) {
+    			look();
+    		}
+    		// CONSUMABLE INVENTORY ACTIONS
+    		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
+    			if (realXcoord>1152 && realXcoord<1216 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==0) {
+    				getconsumable(consinv.get_consumable(i));
+    				consinv.delete_consumable(i);
+    			}
+            }
+    		// OBJECT INVENTORY ACTIONS
+    		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
+    			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && object_drop_mode==0 && eye_mode==0) {
+    				getobject(objinv.get_object(i),i);
+    			}
+            }
+    		// OBJECT INVENTORY DROP
+    		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
+    			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && object_drop_mode==1  && eye_mode==0) {
+    				objinv.delete_object(i);
+    			}
+            }
+    		// EYEMODE OBJECT INVENTORY
+    		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
+    			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==1) {
+    				actualobject=objinv.get_object(i);
+    			}
+            }
+    		// EYEMODE CONSUMABLE INVENTORY
+    		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
+    			if (realXcoord>1152 && realXcoord<1216 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==1) {
+    				actualconsumable=consinv.get_consumable(i);
+    			}
+            }	
+    		
+    	}
+	}    
     void getobject(Object obj,int pos) {
     	if (obj!=null) {
 			// if object exists
@@ -779,4 +896,9 @@ public class GameplayScreen implements Screen {
 		batch.dispose();
 		//texture.dispose();
 	}
+
+	public Map getmap() {
+		return mapa;
+	}
+	
 }

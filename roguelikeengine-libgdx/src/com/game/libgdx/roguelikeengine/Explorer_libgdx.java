@@ -52,19 +52,22 @@ public class Explorer_libgdx extends Game {
     // Original class methods
 	@Override
 	public void resize(int width, int height) {
+		
 	}
 
 	@Override
 	public void pause() {
+		
 	}
 
 	@Override
 	public void resume() {
+		
 	}
 	
 	@Override
 	public void dispose() {
-		batch.dispose();
+		if(batch != null) batch.dispose();
 		//texture.dispose();
 	}
 }

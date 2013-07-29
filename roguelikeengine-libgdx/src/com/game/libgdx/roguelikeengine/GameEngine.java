@@ -67,7 +67,7 @@ public class GameEngine {
 	public GameEngine () {  
 			
 		// create hero
-        prota=new Hero("ferriman","holder_sprite.png");
+        prota=new Hero(this, "ferriman","holder_sprite.png");
 		
         // create Map
         mapa=new Map();
@@ -82,6 +82,19 @@ public class GameEngine {
         
         // create initial empty consumable array
         availableconsumables=new Consumable_array();
+        
+        insurevalidplayerposition();
+	}
+
+	/**
+	 *  Moves the player up one tile at a time until the player is on valid, empty land.
+	 */
+	protected void insurevalidplayerposition() {
+		int x = prota.getrelativextile();
+        int y = prota.getrelativeytile();
+        while(tilelayout[x][y].isbloqued()) {
+        	prota.setrelativeytile(++y);
+        }
 	}
 	
 	// MAP CLASS WRAPPER
@@ -358,7 +371,17 @@ public class GameEngine {
 	public void createconsumable(String name, int p_agility, int p_life,int force, int resist,int x,int y,String file) {
         availableconsumables.add_consumable(new Consumable(name,p_agility,p_life,force,resist,x,y,file));
 	}
+
+	/*
+	 *  Called from GameScreen
+	 */
+	public void update() {
+		this.badguys.update();
+		
+	}
 	
-	
+	public void onplayermove() {
+		this.badguys.onplayermove(prota);
+	}
 	
 }
