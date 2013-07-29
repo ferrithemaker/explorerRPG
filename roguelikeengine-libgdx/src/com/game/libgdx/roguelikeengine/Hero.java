@@ -31,7 +31,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class Hero {
 	private int agility;
 	private int force;
-	private int relative_x_tile;
+	private int relative_x_tile;	
 	private int relative_y_tile;
 	private String name;
 	private int life;
@@ -47,7 +47,11 @@ public class Hero {
 	private Object body;
 	private Object foot;
 	
-	public Hero(String name,String file) {
+	private GameEngine engine;
+	
+	public Hero(GameEngine engine, String name, String file) {
+		this.engine = engine;
+		
 		// initial set-up
 		this.agility=4; 
 		this.force=5; // offense
@@ -177,11 +181,22 @@ public class Hero {
 			break;
 		}
 	}
+	
+	public int getabsolutextile() {
+		return GameplayScreen.instance.getabsolutextile(this);
+	}
+	
+	public int getabsoluteytile() {
+		return GameplayScreen.instance.getabsoluteytile(this);
+	}
+	
 	public void setrelativextile(int value) {
 		this.relative_x_tile=value;
+		this.engine.onplayermove();
 	}
 	public void setrelativeytile(int value) {
 		this.relative_y_tile=value;
+		this.engine.onplayermove();
 	}
 	public void updateagility(int value) {
 		this.agility=this.agility+value;
@@ -205,40 +220,40 @@ public class Hero {
 	// hero position updates
 	public void up() {
 		if (this.relative_y_tile>0) {
-			this.relative_y_tile -= 1;
+			this.setrelativeytile(this.relative_y_tile - 1);
 			sprite_goup();
 		}
 	}
 	public void down() {
 		if (this.relative_y_tile<GameEngine.ON_SCREEN_TILES_Y-1) {
-			this.relative_y_tile += 1;
+			this.setrelativeytile(this.relative_y_tile + 1);
 			sprite_godown();
 		}
 	}
 	public void left() {
 		if (this.relative_x_tile>0) {
-			this.relative_x_tile -= 1;
+			this.setrelativextile(this.relative_x_tile - 1);
 			sprite_goleft();
 		}
 	}
 	public void right() {
 		if (this.relative_x_tile<GameEngine.ON_SCREEN_TILES_X-1) {
-			this.relative_x_tile += 1;
+			this.setrelativextile(this.relative_x_tile + 1);
 			sprite_goright();
 			
 		}
 	}
 	public void scrollup() {
-		this.relative_y_tile=GameEngine.ON_SCREEN_TILES_Y-1;
+		this.setrelativeytile(GameEngine.ON_SCREEN_TILES_Y-1);
 	}
 	public void scrolldown() {
-		this.relative_y_tile=0;
+		this.setrelativeytile(0);
 	}
 	public void scrollleft() {
-		this.relative_x_tile=GameEngine.ON_SCREEN_TILES_X-1;
+		this.setrelativextile(GameEngine.ON_SCREEN_TILES_X-1);
 	}
 	public void scrollrigth() {
-		this.relative_x_tile=0;
+		this.setrelativextile(0);
 	}
 	
 	// fight

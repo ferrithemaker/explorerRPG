@@ -18,9 +18,11 @@ package com.game.libgdx.roguelikeengine;
 */
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.ListIterator;
 
 public class Enemy_array {
+	public static int LOGIC_RANGE = 10;
 	
 	private ArrayList<Enemy> Enemylist;
 	
@@ -53,4 +55,50 @@ public class Enemy_array {
         }
         return rightbguy;
 	}
+	
+	public LinkedList<Enemy> onscreenonly(int x, int y) {
+		LinkedList<Enemy> result = new LinkedList<Enemy>();
+		
+		for(Enemy enemy : this.Enemylist) {
+			if(enemy.enemyonscreen(x, y)) result.add(enemy);
+		}
+		
+		return result;
+	}
+	
+	
+	public LinkedList<Enemy> inlogicrangeonly(Hero hero) {
+		int x = hero.getabsolutextile(), y = hero.getabsoluteytile();
+		return inlogicrangeonly(x, y);
+	}
+	public LinkedList<Enemy> inlogicrangeonly(int x, int y) {
+		LinkedList<Enemy> result = new LinkedList<Enemy>();
+		
+		int rangesq = LOGIC_RANGE * LOGIC_RANGE;
+		
+		
+		int dist;
+		for(Enemy enemy : this.Enemylist) {
+			dist = enemy.getabsolutedistancesq(x, y);
+			
+			if(dist < rangesq) {
+				result.add(enemy);
+			}
+		}
+		
+		
+		return result;
+	}
+
+	public void update() {
+		
+	}
+	
+	public void onplayermove(Hero hero) {
+		LinkedList<Enemy> inrange = inlogicrangeonly(hero);
+		for(Enemy enemy : inrange) {
+			enemy.onplayermove(hero);
+		}
+	}
+	
 }
