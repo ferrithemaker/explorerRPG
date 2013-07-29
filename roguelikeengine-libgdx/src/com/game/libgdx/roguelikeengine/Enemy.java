@@ -131,7 +131,7 @@ public class Enemy {
 	}
 	
 	public boolean overenemy(int x,int y) {
-		if (this.absolute_x==x && this.absolute_y==y) { return true; } else { return false; }
+		return (this.absolute_x==x && this.absolute_y==y);
 	}
 	
 	
