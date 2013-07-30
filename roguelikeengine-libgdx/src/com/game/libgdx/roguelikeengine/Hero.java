@@ -35,7 +35,8 @@ public class Hero {
 	private int relative_y_tile;
 	private String name;
 	private int life;
-	private int level;
+	private int maxlife;
+	private int level=1;
 	private int exp;
 	private int resist;
 	private int current_sprite_position; // sprite that will be shown
@@ -56,7 +57,7 @@ public class Hero {
 		this.agility=4; 
 		this.force=5; // offense
 		this.resist=3; // defense
-		this.life=100; // hp
+		this.life=this.maxlife=100; // hp
 		this.exp=1; // experience
 		this.relative_y_tile=1;
 		this.relative_x_tile=1;
@@ -203,9 +204,11 @@ public class Hero {
 	}
 	public void updateexperience(int value) {
 		this.exp=this.exp+value;
+		
+		// check for level up
 	}
 	public void updatehp(int value) {
-		this.life=this.life+value;
+		this.life=Math.min(this.maxlife, this.life+value);
 	}
 	public void updatelevel() {
 		this.level++;
