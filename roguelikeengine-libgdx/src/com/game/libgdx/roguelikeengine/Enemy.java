@@ -131,7 +131,7 @@ public class Enemy {
 	}
 	
 	public boolean overenemy(int x,int y) {
-		if (this.absolute_x==x && this.absolute_y==y) { return true; } else { return false; }
+		return (this.absolute_x==x && this.absolute_y==y);
 	}
 	
 	
@@ -158,7 +158,7 @@ public class Enemy {
 			System.out.println("  --is moving towards player!");
 		} else {
 			if(random.nextBoolean()) { // 50% chance to do nothing || run
-				if(Math.abs(absolute_x - GameplayScreen.instance.getabsolutextile(hero)) >
+				if(Math.abs(absolute_x - GameplayScreen.instance.getabsolutextile(hero)) <
 				   Math.abs(absolute_y - GameplayScreen.instance.getabsoluteytile(hero))) {
 					moveawayx(hero);
 				} else {

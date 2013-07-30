@@ -162,7 +162,11 @@ public class Map {
 		}
 		
 		public boolean istileempty(int x, int y) {
-			return tilelayout[x][y].isempty();
+			try {
+				return tilelayout[x][y].isempty();
+			} catch(ArrayIndexOutOfBoundsException e) {
+				return false;
+			}
 		}
 		
 }
