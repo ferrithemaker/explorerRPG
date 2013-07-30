@@ -30,7 +30,6 @@ local.properties
 *.class
 
 # Package Files #
-*.jar
 *.war
 *.ear
 *.class
