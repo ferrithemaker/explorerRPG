@@ -46,10 +46,13 @@ public class GameplayScreen implements Screen {
 	private BitmapFont messagefont;
 
 	private Map mapa;
+	private Map dungeon;
 	private Hero prota;
 	private GameEngine game;
     private Layout layout; 
     private Tile[][] tilelayout;
+    private Tile[][] tilelayoutdungeon;
+    private Tile[][] selectedtiles;
     
     // inventory status and modes
     int object_inv_mode=0;
@@ -57,6 +60,8 @@ public class GameplayScreen implements Screen {
     int eye_mode=0;
     int debug_mode=0;
     int consumable_inv_mode=0;
+    
+   
     
     private int realXcoord;
     private int realYcoord;
@@ -121,12 +126,16 @@ public class GameplayScreen implements Screen {
 		batch = new SpriteBatch();
 		genericfont = new BitmapFont();
 		messagefont = new BitmapFont();
-        // create tile layout
+		// create tile layout
         game = new GameEngine();
         mapa=game.getmap();
+        mapa.createdoor(GameEngine.LAYER_0_ENTRY_XPOS,GameEngine.LAYER_0_ENTRY_YPOS );
+        dungeon=game.getdungeon();
+        dungeon.createdoor(GameEngine.LAYER_1_ENTRY_XPOS,GameEngine.LAYER_1_ENTRY_YPOS);
         layout=new Layout();
         prota = game.gethero();
         tilelayout = mapa.gettiles();
+        tilelayoutdungeon=dungeon.gettiles();
         badguys= game.getenemies();
         availableobjects=game.getobjects();
         availableconsumables=game.getconsumables();
@@ -454,7 +463,14 @@ public class GameplayScreen implements Screen {
 	
 	void update() 
     { 
-    	// random elements generator
+    	// update layer
+		if (game.getlayer()==0) {
+			selectedtiles=tilelayout;
+		}
+		if (game.getlayer()==1) {
+			selectedtiles=tilelayoutdungeon;
+		}
+		// random elements generator
     	Random randomGenerator = new Random();
     	int number=randomGenerator.nextInt(6); // 50% chances to create something
     	if (number==0) { // create enemy

@@ -50,17 +50,26 @@ public class GameEngine {
 	public final static int NUMBER_OF_BLOCKING_OBJECTS=1000;
 	public final static int EXPERIENCE_NEXT_LEVEL_LIMIT=1000;
 	
+	// default entry coords for dungeons
+	public final static int LAYER_0_ENTRY_XPOS=0;
+	public final static int LAYER_0_ENTRY_YPOS=0;
+	public final static int LAYER_1_ENTRY_XPOS=1;
+	public final static int LAYER_1_ENTRY_YPOS=1;
+	
 	// android specific constants
 	public final static int ANDROID_MENU_BAR_SIZE=43;
 	public final static boolean ANDROID_MENU_BAR_ENABLE=false;
 	
 	// variables
 	private Tile[][] tilelayout;
+	private Tile[][] tilelayoutdungeon;
     private Enemy_array badguys;
     private Object_array availableobjects;
     private Consumable_array availableconsumables;
     private Hero prota;
     private Map mapa;
+    private Map dungeon;
+    private int layer;
 
     
 	// START METHOD INITIALIZES ALL CLASSES OF THE GAME
@@ -73,7 +82,15 @@ public class GameEngine {
         mapa=new Map();
         mapa.createrandommap();
         tilelayout=mapa.gettiles();
-             
+        
+        // create Map
+        dungeon=new Map();
+        dungeon.createrandomdungeon();
+        tilelayoutdungeon=dungeon.gettiles();
+        
+        // setup initial layer
+        layer=0;
+        
         // create initial empty enemy array
         badguys= new Enemy_array();
 		
@@ -100,6 +117,19 @@ public class GameEngine {
 	// MAP CLASS WRAPPER
 	public Map getmap() {
 		return mapa;
+	}
+	
+	public Map getdungeon() {
+		return dungeon;
+	}
+	public int getlayer() {
+		return layer;
+	}
+	public void layerup() {
+		layer++;
+	}
+	public void layerdown() {
+		layer--;
 	}
 		
 	// HERO CLASS WRAPPER

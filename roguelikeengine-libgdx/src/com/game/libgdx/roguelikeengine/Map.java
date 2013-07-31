@@ -31,15 +31,19 @@ import com.badlogic.gdx.Gdx;
 
 public class Map {
 	private Tile tilelayout[][];
-    private Sprite blockedtile,freetile,water_img,rocks_img,fire_img,boulder_img,bones_img,cross_img;
+    private Sprite blockedtile,freetile,water_img,rocks_img,fire_img,boulder_img,bones_img,cross_img,freedungeontile,door_img;
     private int firstXtile; // defines current section of the map that is shown on screen
 	private int firstYtile; // defines current section of the map that is shown on screen
+	private int Xentrypos;
+	private int Yentrypos;
 	
 	public Map() {
 		
 		blockedtile = new Sprite(new Texture(Gdx.files.internal("wall.png")));
 		freetile= new Sprite(new Texture(Gdx.files.internal("herba.png")));
+		freedungeontile= new Sprite(new Texture(Gdx.files.internal("dungeon.png")));
 		water_img= new Sprite(new Texture(Gdx.files.internal("water.png")));
+		door_img= new Sprite(new Texture(Gdx.files.internal("door.png")));
 		rocks_img= new Sprite(new Texture(Gdx.files.internal("rocks.png")));
 		bones_img = new Sprite(new Texture(Gdx.files.internal("bones.png")));
 		boulder_img = new Sprite(new Texture(Gdx.files.internal("boulder.png")));
@@ -74,6 +78,28 @@ public class Map {
 				createrandomlake();
 			}
 			createcementery();
+		}
+		public void createdoor(int x,int y) {
+			Xentrypos=x;
+			Yentrypos=y;
+			tilelayout[x][y].updatetileimage(door_img);
+		}
+		public void createrandomdungeon() {
+			// fill with freetiles
+			 for (int xpos=0;xpos<GameEngine.TOTAL_X_TILES;xpos++) {
+		        	for (int ypos=0;ypos<GameEngine.TOTAL_Y_TILES;ypos++) {
+		        		tilelayout[xpos][ypos]= new Tile(false,freedungeontile);
+		        	}
+		        }
+			// create random walls
+			for (int num=0; num<(int)(GameEngine.NUMBER_OF_WALLS/2);num++) {
+				createrandomvwall();
+				createrandomhwall();
+			}
+			// create individual elements
+			for (int num=0; num<GameEngine.NUMBER_OF_BLOCKING_OBJECTS;num++) {
+				createblockingelement();
+			}
 		}
 		public void createrandomhwall() {
 			Random randomGenerator = new Random();
@@ -152,6 +178,13 @@ public class Map {
 		public int getfirstytile() {
 			return firstYtile;
 		}
+		public int getXentrypos() {
+			return Xentrypos;
+		}
+		public int getYentrypos() {
+			return Yentrypos;
+		}
+		
 		
 		// sets / updates
 		public void setfirstxtile(int value) {
@@ -159,6 +192,12 @@ public class Map {
 		}
 		public void setfirstytile(int value) {
 			firstYtile=value;
+		}
+		public void setXentrypos(int value) {
+			Xentrypos=value;
+		}
+		public void setYentrypos(int value) {
+			Yentrypos=value;
 		}
 		
 		public boolean istileempty(int x, int y) {
