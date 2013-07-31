@@ -36,9 +36,11 @@ public class Enemy {
 	private int absolute_y;
 	private String name;
 	private Sprite enemyimg;
+	private int layer;
 	
-	public Enemy(String name,int baseagility,int basestrength, int baseresist, int basehp, int x,int y,String file) {
+	public Enemy(int layer,String name,int baseagility,int basestrength, int baseresist, int basehp, int x,int y,String file) {
 		// initial set-up
+		this.layer=layer;
 		this.agility=baseagility;
 		this.force=basestrength;
 		this.life=this.maxlife=basehp;
@@ -77,6 +79,9 @@ public class Enemy {
 	}
 	public int getagility() {
 		return this.agility;
+	}
+	public int getlayer() {
+		return layer;
 	}
 	public int percentlife() {
 		return (this.maxlife / this.life) * 100;

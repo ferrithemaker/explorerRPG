@@ -112,7 +112,7 @@ public class GameplayScreen implements Screen {
 			int x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
 			int y = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES);
 			if (!tilelayout[x][y].isbloqued()) { // if there is empty space
-				game.createenemy("megaboss", 43, 46, 51, 310, x, y,"orc.png");
+				game.createenemy(0,"megaboss", 43, 46, 51, 310, x, y,"orc.png");
 				boss_created=true;
 			}
 				
@@ -289,9 +289,11 @@ public class GameplayScreen implements Screen {
         	Consumable consumable=consumableiterator.next();
         	//System.out.println(bguy.getabsolutex());
         	if (consumable.consumableonscreen(mapa.getfirstxtile(), mapa.getfirstytile())==true) {
-        		// draw enemy image		
-    			batch.draw(consumable.getsprite(),(consumable.getabsolutex()-mapa.getfirstxtile())*GameEngine.TILE_X_SIZE,(consumable.getabsolutey()-mapa.getfirstytile())*GameEngine.TILE_Y_SIZE);       		
-        	}
+        		// draw consumable image		
+    			if (consumable.getlayer()==game.getlayer()) {
+    				batch.draw(consumable.getsprite(),(consumable.getabsolutex()-mapa.getfirstxtile())*GameEngine.TILE_X_SIZE,(consumable.getabsolutey()-mapa.getfirstytile())*GameEngine.TILE_Y_SIZE);       		
+    			}
+    		}
         }
 	}
 
@@ -305,9 +307,10 @@ public class GameplayScreen implements Screen {
         	Object obj=objiterator.next();
         	//System.out.println(bguy.getabsolutex());
         	if (obj.objectonscreen(mapa.getfirstxtile(), mapa.getfirstytile())==true) {
-        		// draw enemy image
-        		
-    			batch.draw(obj.getsprite(),(obj.getabsolutex()-mapa.getfirstxtile())*GameEngine.TILE_X_SIZE,(obj.getabsolutey()-mapa.getfirstytile())*GameEngine.TILE_Y_SIZE);       		
+        		// draw object image
+        		if (obj.getlayer()==game.getlayer()) { // if it is the correct layer
+        			batch.draw(obj.getsprite(),(obj.getabsolutex()-mapa.getfirstxtile())*GameEngine.TILE_X_SIZE,(obj.getabsolutey()-mapa.getfirstytile())*GameEngine.TILE_Y_SIZE);       		
+        		}
         	}
         }
 	}
@@ -322,9 +325,10 @@ public class GameplayScreen implements Screen {
         	Enemy bguy=bgiterator.next();
         	//System.out.println(bguy.getabsolutex());
         	if (bguy.enemyonscreen(mapa.getfirstxtile(), mapa.getfirstytile())==true) {
-        		// draw enemy image
-        		
-    			batch.draw(bguy.getsprite(),getrelativextileposition(bguy),getrelativeytileposition(bguy));
+        		// draw enemy image if the layer is correct
+        		if (bguy.getlayer()==game.getlayer()) {
+        			batch.draw(bguy.getsprite(),getrelativextileposition(bguy),getrelativeytileposition(bguy));
+        		}
         	}
         }
 	}

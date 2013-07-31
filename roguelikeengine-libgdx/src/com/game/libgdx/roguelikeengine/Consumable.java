@@ -32,8 +32,10 @@ public class Consumable {
 	private int absolute_x;
 	private int absolute_y;
 	private Sprite img;
+	private int layer;
 	
-	public Consumable(String name, int agility, int hp,int force, int resist,int x,int y,String file) {
+	public Consumable(int layer,String name, int agility, int hp,int force, int resist,int x,int y,String file) {
+		this.layer=layer;
 		this.name=name;
 		this.powerup_agility=agility;
 		this.powerup_life=hp;
@@ -56,6 +58,9 @@ public class Consumable {
 	}
 	public String getname() {
 		return this.name;
+	}
+	public int getlayer() {
+		return layer;
 	}
 	public int getpowerupagility() {
 		return this.powerup_agility;

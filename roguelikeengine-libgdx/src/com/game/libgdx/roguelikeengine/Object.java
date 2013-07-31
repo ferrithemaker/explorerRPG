@@ -30,10 +30,12 @@ public class Object {
 	private int durability;
 	private int absolute_x;
 	private int absolute_y;
+	private int layer;
 	private String position;
 	private Sprite img;
 	
-	public Object(String name,String position,int baseattack, int basedefense, int basedurability,int x,int y,String file) {
+	public Object(int layer,String name,String position,int baseattack, int basedefense, int basedurability,int x,int y,String file) {
+		this.layer=layer;
 		this.name=name;
 		this.attack=baseattack;
 		this.defense=basedefense;
@@ -53,6 +55,9 @@ public class Object {
 	}
 	public String getname() {
 		return this.name;
+	}
+	public int getlayer() {
+		return layer;
 	}
 	public String getposition() {
 		return this.position;
