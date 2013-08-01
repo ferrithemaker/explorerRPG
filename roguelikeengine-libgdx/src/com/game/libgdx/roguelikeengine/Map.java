@@ -31,7 +31,7 @@ import com.badlogic.gdx.Gdx;
 
 public class Map {
 	private Tile tilelayout[][];
-    private Sprite blockedtile,freetile,water_img,rocks_img,fire_img,boulder_img,bones_img,cross_img,freedungeontile,door_img;
+    private Sprite blockedtile,freetile,water_img,rocks_img,fire_img,boulder_img,bones_img,cross_img,freedungeontile,door_img,web_img,altar_img,hole_img;
     private int firstXtile; // defines current section of the map that is shown on screen
 	private int firstYtile; // defines current section of the map that is shown on screen
 	private int Xentrypos;
@@ -44,6 +44,9 @@ public class Map {
 		freedungeontile= new Sprite(new Texture(Gdx.files.internal("dungeon.png")));
 		water_img= new Sprite(new Texture(Gdx.files.internal("water.png")));
 		door_img= new Sprite(new Texture(Gdx.files.internal("door.png")));
+		web_img= new Sprite(new Texture(Gdx.files.internal("web.png")));
+		altar_img= new Sprite(new Texture(Gdx.files.internal("altar.png")));
+		hole_img= new Sprite(new Texture(Gdx.files.internal("hole.png")));
 		rocks_img= new Sprite(new Texture(Gdx.files.internal("rocks.png")));
 		bones_img = new Sprite(new Texture(Gdx.files.internal("bones.png")));
 		boulder_img = new Sprite(new Texture(Gdx.files.internal("boulder.png")));
@@ -98,7 +101,7 @@ public class Map {
 			}
 			// create individual elements
 			for (int num=0; num<GameEngine.NUMBER_OF_BLOCKING_OBJECTS;num++) {
-				createblockingelement();
+				createdungeonblockingelement();
 			}
 		}
 		public void createrandomhwall() {
@@ -153,6 +156,22 @@ public class Map {
 			}
 			if (element==3) {
 				tilelayout[x][y].updatetileimage(fire_img);
+			}
+		}
+		public void createdungeonblockingelement() {
+			Random randomGenerator = new Random();
+			int x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
+			int y = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES);
+			int element= randomGenerator.nextInt(3);
+			tilelayout[x][y].block();
+			if (element==0) {
+				tilelayout[x][y].updatetileimage(altar_img);
+			}
+			if (element==1) {
+				tilelayout[x][y].updatetileimage(hole_img);
+			}
+			if (element==2) {
+				tilelayout[x][y].updatetileimage(web_img);
 			}
 		}
 		public void createcementery() {
