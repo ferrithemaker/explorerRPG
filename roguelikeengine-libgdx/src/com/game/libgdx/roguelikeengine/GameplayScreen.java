@@ -474,6 +474,13 @@ public class GameplayScreen implements Screen {
 		if (game.getlayer()==1) {
 			selectedtiles=tilelayoutdungeon;
 		}
+		// layer change control
+		if (prota.getabsolutextile()==GameEngine.LAYER_0_ENTRY_XPOS && prota.getabsoluteytile()==GameEngine.LAYER_0_ENTRY_YPOS) {
+			game.layerup();
+		}
+		if (prota.getabsolutextile()==GameEngine.LAYER_1_ENTRY_XPOS && prota.getabsoluteytile()==GameEngine.LAYER_1_ENTRY_YPOS) {
+			game.layerdown();
+		}
 		// random elements generator
     	Random randomGenerator = new Random();
     	int number=randomGenerator.nextInt(6); // 50% chances to create something
@@ -821,12 +828,6 @@ public class GameplayScreen implements Screen {
     	actualconsumable=null;
     	actualobject=null;
     	game.heroup();
-    	if (prota.getabsolutextile()==GameEngine.LAYER_0_ENTRY_XPOS && prota.getabsoluteytile()==GameEngine.LAYER_0_ENTRY_YPOS) {
-			game.layerup();
-		}
-    	if (prota.getabsolutextile()==GameEngine.LAYER_1_ENTRY_XPOS && prota.getabsoluteytile()==GameEngine.LAYER_1_ENTRY_YPOS) {
-			game.layerdown();
-		}
     }
     void godown() {
     	object_inv_mode=0;
@@ -838,12 +839,6 @@ public class GameplayScreen implements Screen {
     	actualconsumable=null;
     	actualobject=null;
     	game.herodown();
-    	if (prota.getabsolutextile()==GameEngine.LAYER_0_ENTRY_XPOS && prota.getabsoluteytile()==GameEngine.LAYER_0_ENTRY_YPOS) {
-			game.layerup();
-		}
-    	if (prota.getabsolutextile()==GameEngine.LAYER_1_ENTRY_XPOS && prota.getabsoluteytile()==GameEngine.LAYER_1_ENTRY_YPOS) {
-			game.layerdown();
-		}
     }
     void goleft() {
     	object_inv_mode=0;
@@ -855,12 +850,6 @@ public class GameplayScreen implements Screen {
     	actualconsumable=null;
     	actualobject=null;
     	game.heroleft();
-    	if (prota.getabsolutextile()==GameEngine.LAYER_0_ENTRY_XPOS && prota.getabsoluteytile()==GameEngine.LAYER_0_ENTRY_YPOS) {
-			game.layerup();
-		}
-    	if (prota.getabsolutextile()==GameEngine.LAYER_1_ENTRY_XPOS && prota.getabsoluteytile()==GameEngine.LAYER_1_ENTRY_YPOS) {
-			game.layerdown();
-		}
     }
     void goright() {
     	eye_mode=0;
@@ -872,12 +861,6 @@ public class GameplayScreen implements Screen {
 		actualconsumable=null;
 		actualobject=null;
 		game.heroright();
-		if (prota.getabsolutextile()==GameEngine.LAYER_0_ENTRY_XPOS && prota.getabsoluteytile()==GameEngine.LAYER_0_ENTRY_YPOS) {
-			game.layerup();
-		}
-		if (prota.getabsolutextile()==GameEngine.LAYER_1_ENTRY_XPOS && prota.getabsoluteytile()==GameEngine.LAYER_1_ENTRY_YPOS) {
-			game.layerdown();
-		}
     }
     void look() {
     	eye_mode=1;
