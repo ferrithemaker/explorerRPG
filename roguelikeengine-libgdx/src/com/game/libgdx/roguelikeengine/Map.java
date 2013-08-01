@@ -95,7 +95,11 @@ public class Map {
 		        	}
 		        }
 			// create random walls
-			for (int num=0; num<(int)(GameEngine.NUMBER_OF_WALLS/2);num++) {
+			for (int num=0; num<(int)(GameEngine.NUMBER_OF_WALLS);num++) {
+				createrandomvwall();
+				createrandomhwall();
+				createrandomvwall();
+				createrandomhwall();
 				createrandomvwall();
 				createrandomhwall();
 			}

@@ -178,7 +178,9 @@ public class GameplayScreen implements Screen {
         drawdescriptions();
         
         
-        
+        // layer change control
+     	layercontrol();
+     	
         // draw background tiles 
         drawtiles();
         
@@ -356,6 +358,24 @@ public class GameplayScreen implements Screen {
 	public int getabsoluteytile(Hero hero) {
 		return hero.getrelativeytile() + (mapa == null ? 0 :  mapa.getfirstytile());
 	}
+	
+	// layer control
+	public void layercontrol() {
+		if (prota.getabsolutextile()==GameEngine.LAYER_0_ENTRY_XPOS && prota.getabsoluteytile()==GameEngine.LAYER_0_ENTRY_YPOS) {
+     		game.layerup();
+     	}
+     	if (prota.getabsolutextile()==GameEngine.LAYER_1_ENTRY_XPOS && prota.getabsoluteytile()==GameEngine.LAYER_1_ENTRY_YPOS) {
+     		game.layerdown();
+     	}
+     	// update layer
+     	if (game.getlayer()==0) {
+     		selectedtiles=tilelayout;
+     	}
+     	if (game.getlayer()==1) {
+     		selectedtiles=tilelayoutdungeon;
+     	}
+	}
+	
 	/**
 	 * 
 	 */
@@ -467,20 +487,6 @@ public class GameplayScreen implements Screen {
 	
 	void update() 
     { 
-    	// update layer
-		if (game.getlayer()==0) {
-			selectedtiles=tilelayout;
-		}
-		if (game.getlayer()==1) {
-			selectedtiles=tilelayoutdungeon;
-		}
-		// layer change control
-		if (prota.getabsolutextile()==GameEngine.LAYER_0_ENTRY_XPOS && prota.getabsoluteytile()==GameEngine.LAYER_0_ENTRY_YPOS) {
-			game.layerup();
-		}
-		if (prota.getabsolutextile()==GameEngine.LAYER_1_ENTRY_XPOS && prota.getabsoluteytile()==GameEngine.LAYER_1_ENTRY_YPOS) {
-			game.layerdown();
-		}
 		// random elements generator
     	Random randomGenerator = new Random();
     	int number=randomGenerator.nextInt(6); // 50% chances to create something
