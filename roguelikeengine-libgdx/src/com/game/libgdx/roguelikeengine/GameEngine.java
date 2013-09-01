@@ -50,6 +50,8 @@ public class GameEngine {
 	public final static int NUMBER_OF_BLOCKING_OBJECTS=1000;
 	public final static int EXPERIENCE_NEXT_LEVEL_LIMIT=1000;
 	
+	// dynamic layers 
+	public final static int NUMBER_OF_MAP_LAYERS=2;
 	// default entry coords for dungeons
 	public final static int LAYER_0_ENTRY_XPOS=1;
 	public final static int LAYER_0_ENTRY_YPOS=0;
@@ -61,16 +63,19 @@ public class GameEngine {
 	public final static boolean ANDROID_MENU_BAR_ENABLE=false;
 	
 	// variables
-	private Tile[][] tilelayout;
-	private Tile[][] tilelayoutdungeon;
+	//private Tile[][] tilelayout; // deprecated, must be removed when dynamic layer system will be finished 
+	//private Tile[][] tilelayoutdungeon; // deprecated, must be removed when dynamic layer system will be finished 
+	private Tile[][][] layertiles = new Tile[2][][]; // new dynamic layer system ([layer number][x][y])
 	private Tile[][] selectedtiles;
     private Enemy_array badguys;
     private Object_array availableobjects;
     private Consumable_array availableconsumables;
     private Hero prota;
-    private Map mapa;
-    private Map dungeon;
+    //private Map mapa; // deprecated, must be removed when dynamic layer system will be finished 
+    //private Map dungeon; // deprecated, must be removed when dynamic layer system will be finished 
+    private Map[] maplayers = new Map[2]; // new dynamic layer system
     private int layer;
+
 
     
 	// START METHOD INITIALIZES ALL CLASSES OF THE GAME
@@ -80,18 +85,25 @@ public class GameEngine {
         prota=new Hero(this, "ferriman","holder_sprite.png");
 		
         // create Map
-        mapa=new Map();
-        mapa.createrandommap();
-        tilelayout=mapa.gettiles();
+        
+        maplayers[0]= new Map();
+        maplayers[1]= new Map();
+        maplayers[0].createrandommap();
+        maplayers[1].createrandomdungeon();
+        layertiles[0]=maplayers[0].gettiles();
+        layertiles[1]=maplayers[1].gettiles();
+        
+        //mapa.createrandommap();
+        //tilelayout=mapa.gettiles();
         
         // create Map
-        dungeon=new Map();
-        dungeon.createrandomdungeon();
-        tilelayoutdungeon=dungeon.gettiles();
+        //dungeon=new Map();
+        //dungeon.createrandomdungeon();
+        //tilelayoutdungeon=dungeon.gettiles();
         
         // setup initial layer
         layer=0;
-        selectedtiles=tilelayout;
+        selectedtiles=layertiles[0];
         
         // create initial empty enemy array
         badguys= new Enemy_array();
@@ -117,23 +129,25 @@ public class GameEngine {
 	}
 	
 	// MAP CLASS WRAPPER
-	public Map getmap() {
-		return mapa;
+	public Map getmaplayer(int value) {
+		return maplayers[value];
 	}
 	
-	public Map getdungeon() {
+	/*public Map getdungeon() { // deprecated, use getmaplayer
 		return dungeon;
-	}
-	public int getlayer() {
-		return layer;
+	}*/
+	public int getlayer() { // this is the actual layer
+		return layer; // this variable has the actual layer
 	}
 	public void layerup() {
-		selectedtiles=tilelayoutdungeon;
 		layer++;
+		if (layer>NUMBER_OF_MAP_LAYERS-1) layer=NUMBER_OF_MAP_LAYERS-1;
+		selectedtiles=layertiles[layer];
 	}
 	public void layerdown() {
 		layer--;
-		selectedtiles=tilelayout;
+		if (layer<0) layer=0;
+		selectedtiles=layertiles[layer];
 	}
 		
 	// HERO CLASS WRAPPER
@@ -142,8 +156,8 @@ public class GameEngine {
 	}
 	
 	public void herodies() {
-		mapa.setfirstxtile(0);
-		mapa.setfirstytile(0);
+		maplayers[layer].setfirstxtile(0);
+		maplayers[layer].setfirstytile(0);
 		prota.setrelativextile(1);
 		prota.setrelativeytile(1);
 		prota.updatehp(50);
@@ -152,11 +166,11 @@ public class GameEngine {
 	// hero updates
 	public void heroup() {
 		
-		if (mapa.getfirstytile()+prota.getrelativeytile()<GameEngine.TOTAL_Y_TILES-1) {
-			if (prota.getrelativeytile()==GameEngine.ON_SCREEN_TILES_Y-1 && selectedtiles[mapa.getfirstxtile()+prota.getrelativextile()][1+mapa.getfirstytile()+prota.getrelativeytile()].isbloqued()==false) {		
-				if (mapa.getfirstytile()<GameEngine.TOTAL_Y_TILES-GameEngine.ON_SCREEN_TILES_Y) { prota.scrolldown();  mapa.setfirstytile(mapa.getfirstytile() + GameEngine.ON_SCREEN_TILES_Y); }
+		if (maplayers[layer].getfirstytile()+prota.getrelativeytile()<GameEngine.TOTAL_Y_TILES-1) {
+			if (prota.getrelativeytile()==GameEngine.ON_SCREEN_TILES_Y-1 && selectedtiles[maplayers[layer].getfirstxtile()+prota.getrelativextile()][1+maplayers[layer].getfirstytile()+prota.getrelativeytile()].isbloqued()==false) {		
+				if (maplayers[layer].getfirstytile()<GameEngine.TOTAL_Y_TILES-GameEngine.ON_SCREEN_TILES_Y) { prota.scrolldown();  maplayers[layer].setfirstytile(maplayers[layer].getfirstytile() + GameEngine.ON_SCREEN_TILES_Y); }
 			} else {
-				if (selectedtiles[mapa.getfirstxtile()+prota.getrelativextile()][1+mapa.getfirstytile()+prota.getrelativeytile()].isbloqued()==false) {
+				if (selectedtiles[maplayers[layer].getfirstxtile()+prota.getrelativextile()][1+maplayers[layer].getfirstytile()+prota.getrelativeytile()].isbloqued()==false) {
 					prota.down();
 				}
 			}
@@ -164,11 +178,11 @@ public class GameEngine {
 	}
 		
 	public void herodown() {
-		if (mapa.getfirstytile()+prota.getrelativeytile()>0) {
-			if (prota.getrelativeytile()==0 && selectedtiles[mapa.getfirstxtile()+prota.getrelativextile()][mapa.getfirstytile()+prota.getrelativeytile()-1].isbloqued()==false) {		
-				if (mapa.getfirstytile()>0) { prota.scrollup(); mapa.setfirstytile(mapa.getfirstytile() - GameEngine.ON_SCREEN_TILES_Y); }
+		if (maplayers[layer].getfirstytile()+prota.getrelativeytile()>0) {
+			if (prota.getrelativeytile()==0 && selectedtiles[maplayers[layer].getfirstxtile()+prota.getrelativextile()][maplayers[layer].getfirstytile()+prota.getrelativeytile()-1].isbloqued()==false) {		
+				if (maplayers[layer].getfirstytile()>0) { prota.scrollup(); maplayers[layer].setfirstytile(maplayers[layer].getfirstytile() - GameEngine.ON_SCREEN_TILES_Y); }
 			} else {
-				if (selectedtiles[mapa.getfirstxtile()+prota.getrelativextile()][mapa.getfirstytile()+prota.getrelativeytile()-1].isbloqued()==false) {
+				if (selectedtiles[maplayers[layer].getfirstxtile()+prota.getrelativextile()][maplayers[layer].getfirstytile()+prota.getrelativeytile()-1].isbloqued()==false) {
 					prota.up();
 				}	
 			}
@@ -176,11 +190,11 @@ public class GameEngine {
 	}
 		
 	public void heroright() {
-		if (mapa.getfirstxtile()+prota.getrelativextile()<GameEngine.TOTAL_X_TILES-1) {
-			if (prota.getrelativextile()==GameEngine.ON_SCREEN_TILES_X-1 && selectedtiles[1+mapa.getfirstxtile()+prota.getrelativextile()][mapa.getfirstytile()+prota.getrelativeytile()].isbloqued()==false) {
-				if (mapa.getfirstxtile()<GameEngine.TOTAL_X_TILES-GameEngine.ON_SCREEN_TILES_X) { prota.scrollrigth(); mapa.setfirstxtile(mapa.getfirstxtile() + GameEngine.ON_SCREEN_TILES_X); }
+		if (maplayers[layer].getfirstxtile()+prota.getrelativextile()<GameEngine.TOTAL_X_TILES-1) {
+			if (prota.getrelativextile()==GameEngine.ON_SCREEN_TILES_X-1 && selectedtiles[1+maplayers[layer].getfirstxtile()+prota.getrelativextile()][maplayers[layer].getfirstytile()+prota.getrelativeytile()].isbloqued()==false) {
+				if (maplayers[layer].getfirstxtile()<GameEngine.TOTAL_X_TILES-GameEngine.ON_SCREEN_TILES_X) { prota.scrollrigth(); maplayers[layer].setfirstxtile(maplayers[layer].getfirstxtile() + GameEngine.ON_SCREEN_TILES_X); }
 			} else {
-				if (selectedtiles[1+mapa.getfirstxtile()+prota.getrelativextile()][mapa.getfirstytile()+prota.getrelativeytile()].isbloqued()==false) {
+				if (selectedtiles[1+maplayers[layer].getfirstxtile()+prota.getrelativextile()][maplayers[layer].getfirstytile()+prota.getrelativeytile()].isbloqued()==false) {
 					prota.right();
 				}
 			}
@@ -188,11 +202,11 @@ public class GameEngine {
 	}
 		
 	public void heroleft() {
-		if (mapa.getfirstxtile()+prota.getrelativextile()>0) {
-			if (prota.getrelativextile()==0 && selectedtiles[mapa.getfirstxtile()+prota.getrelativextile()-1][mapa.getfirstytile()+prota.getrelativeytile()].isbloqued()==false) {
-				if (mapa.getfirstxtile()>0) { prota.scrollleft(); mapa.setfirstxtile(mapa.getfirstxtile() - GameEngine.ON_SCREEN_TILES_X); }
+		if (maplayers[layer].getfirstxtile()+prota.getrelativextile()>0) {
+			if (prota.getrelativextile()==0 && selectedtiles[maplayers[layer].getfirstxtile()+prota.getrelativextile()-1][maplayers[layer].getfirstytile()+prota.getrelativeytile()].isbloqued()==false) {
+				if (maplayers[layer].getfirstxtile()>0) { prota.scrollleft(); maplayers[layer].setfirstxtile(maplayers[layer].getfirstxtile() - GameEngine.ON_SCREEN_TILES_X); }
 			} else {
-				if (selectedtiles[mapa.getfirstxtile()+prota.getrelativextile()-1][mapa.getfirstytile()+prota.getrelativeytile()].isbloqued()==false) {
+				if (selectedtiles[maplayers[layer].getfirstxtile()+prota.getrelativextile()-1][maplayers[layer].getfirstytile()+prota.getrelativeytile()].isbloqued()==false) {
 					prota.left();
 				}
 			}
@@ -205,7 +219,7 @@ public class GameEngine {
 		return badguys.getlist();
 	}
 	public Enemy overenemy() {
-		 return badguys.overenemy(prota.getrelativextile()+mapa.getfirstxtile(),prota.getrelativeytile()+mapa.getfirstytile());
+		 return badguys.overenemy(prota.getrelativextile()+maplayers[layer].getfirstxtile(),prota.getrelativeytile()+maplayers[layer].getfirstytile());
 	}
 	public void removeenemy(Enemy obj) {
 		badguys.remove_enemy(obj);
@@ -260,7 +274,7 @@ public class GameEngine {
 		return availableobjects.getlist();
 	}
 	public Object overobject() {
-		 return availableobjects.overobject(prota.getrelativextile()+mapa.getfirstxtile(),prota.getrelativeytile()+mapa.getfirstytile());
+		 return availableobjects.overobject(prota.getrelativextile()+maplayers[layer].getfirstxtile(),prota.getrelativeytile()+maplayers[layer].getfirstytile());
 	}
 	public void removeobject(Object obj) {
 		availableobjects.remove_object(obj);
@@ -365,7 +379,7 @@ public class GameEngine {
 		return availableconsumables.getlist();
 	}
 	public Consumable overconsumable() {
-		 return availableconsumables.overconsumable(prota.getrelativextile()+mapa.getfirstxtile(),prota.getrelativeytile()+mapa.getfirstytile());
+		 return availableconsumables.overconsumable(prota.getrelativextile()+maplayers[layer].getfirstxtile(),prota.getrelativeytile()+maplayers[layer].getfirstytile());
 	}
 	public void removeconsumable(Consumable c) {
 		availableconsumables.remove_consumable(c);

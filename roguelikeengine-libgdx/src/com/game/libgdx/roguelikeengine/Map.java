@@ -34,8 +34,9 @@ public class Map {
     private Sprite blockedtile,freetile,water_img,rocks_img,fire_img,boulder_img,bones_img,cross_img,freedungeontile,door_img,web_img,altar_img,hole_img;
     private int firstXtile; // defines current section of the map that is shown on screen
 	private int firstYtile; // defines current section of the map that is shown on screen
-	private int Xentrypos;
-	private int Yentrypos;
+	private int xexitcoord;
+	private int yexitcoord;
+	private int layermap;
 	
 	public Map() {
 		
@@ -83,8 +84,8 @@ public class Map {
 			createcementery();
 		}
 		public void createdoor(int x,int y) {
-			Xentrypos=x;
-			Yentrypos=y;
+			xexitcoord=x;
+			yexitcoord=y;
 			tilelayout[x][y].updatetileimage(door_img);
 		}
 		public void createrandomdungeon() {
@@ -201,11 +202,14 @@ public class Map {
 		public int getfirstytile() {
 			return firstYtile;
 		}
-		public int getXentrypos() {
-			return Xentrypos;
+		public int getXexitcoord() {
+			return xexitcoord;
 		}
-		public int getYentrypos() {
-			return Yentrypos;
+		public int getYexitcoord() {
+			return yexitcoord;
+		}
+		public int getlayer() {
+			return layermap;
 		}
 		
 		
@@ -217,10 +221,13 @@ public class Map {
 			firstYtile=value;
 		}
 		public void setXentrypos(int value) {
-			Xentrypos=value;
+			xexitcoord=value;
 		}
 		public void setYentrypos(int value) {
-			Yentrypos=value;
+			yexitcoord=value;
+		}
+		public void setlayer(int value) {
+			layermap=value;
 		}
 		
 		public boolean istileempty(int x, int y) {

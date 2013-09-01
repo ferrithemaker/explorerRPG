@@ -45,14 +45,16 @@ public class GameplayScreen implements Screen {
 	private BitmapFont genericfont;
 	private BitmapFont messagefont;
 
-	private Map mapa;
-	private Map dungeon;
+	private Map mapa; // deprecated, must be removed when dynamic layer system will be finished 
+	private Map dungeon; // deprecated, must be removed when dynamic layer system will be finished 
+	private Map[] maplayers; // new dynamic layer system
 	private Hero prota;
 	private GameEngine game;
     private Layout layout; 
-    private Tile[][] tilelayout;
-    private Tile[][] tilelayoutdungeon;
+    private Tile[][] tilelayout; // deprecated, must be removed when dynamic layer system will be finished 
+    private Tile[][] tilelayoutdungeon; // deprecated, must be removed when dynamic layer system will be finished 
     private Tile[][] selectedtiles;
+    private Tile[][] layertiles; // new dynamic layer system
     
     // inventory status and modes
     int object_inv_mode=0;
@@ -128,10 +130,12 @@ public class GameplayScreen implements Screen {
 		messagefont = new BitmapFont();
 		// create tile layout
         game = new GameEngine();
-        mapa=game.getmap();
+        mapa=game.getmaplayer(0);
         mapa.createdoor(GameEngine.LAYER_0_ENTRY_XPOS,GameEngine.LAYER_0_ENTRY_YPOS );
-        dungeon=game.getdungeon();
+        dungeon=game.getmaplayer(1);
+        mapa.setlayer(1);
         dungeon.createdoor(GameEngine.LAYER_1_ENTRY_XPOS,GameEngine.LAYER_1_ENTRY_YPOS);
+        dungeon.setlayer(2);
         layout=new Layout();
         prota = game.gethero();
         tilelayout = mapa.gettiles();
