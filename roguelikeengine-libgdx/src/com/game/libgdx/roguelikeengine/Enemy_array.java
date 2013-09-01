@@ -94,11 +94,11 @@ public class Enemy_array {
 		
 	}
 	
-	public void onplayermove(Hero hero) {
+	/*public void onplayermove(Hero hero) {
 		LinkedList<Enemy> inrange = inlogicrangeonly(hero);
 		for(Enemy enemy : inrange) {
 			enemy.onplayermove(hero);
 		}
-	}
+	}*/
 	
 }

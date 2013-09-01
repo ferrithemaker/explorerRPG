@@ -429,7 +429,7 @@ public class GameEngine {
 	}
 	
 	public void onplayermove() {
-		this.badguys.onplayermove(prota);
+		//this.badguys.onplayermove(prota);
 	}
 	
 }

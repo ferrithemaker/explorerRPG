@@ -139,7 +139,7 @@ public class Enemy {
 		return (this.absolute_x==x && this.absolute_y==y);
 	}
 	
-	
+	/*
 	// hero in range = true, at this point
 	public void onplayermove(Hero hero) {
 		Random random = new Random();
@@ -181,7 +181,7 @@ public class Enemy {
 	public void movetowardsx(Hero hero) {
 		if(this.absolute_x < hero.getabsolutextile() && GameplayScreen.instance.getmap().istileempty(absolute_x + 1, absolute_y)) {
 			this.absolute_x += 1;
-		} else if(GameplayScreen.instance.getmap().istileempty(absolute_x - 1, absolute_y)) {
+		} else if(GameplayScreen.instance.getmaplayer(game.getlayer()).istileempty(absolute_x - 1, absolute_y)) {
 			this.absolute_x -= 1;
 		} else {
 			System.out.println("  --  couldn't move x!");
@@ -222,7 +222,7 @@ public class Enemy {
 		}
 		enforcenonpenetrationconstraints();
 	}
-	
+	*/
 	private void enforcenonpenetrationconstraints() {
 		// TODO check with map, my array, the game engine, or 
 		// something else to make sure the move I tried to make 

@@ -45,16 +45,16 @@ public class GameplayScreen implements Screen {
 	private BitmapFont genericfont;
 	private BitmapFont messagefont;
 
-	private Map mapa; // deprecated, must be removed when dynamic layer system will be finished 
-	private Map dungeon; // deprecated, must be removed when dynamic layer system will be finished 
-	private Map[] maplayers; // new dynamic layer system
+	//private Map mapa; // deprecated, must be removed when dynamic layer system will be finished 
+	//private Map dungeon; // deprecated, must be removed when dynamic layer system will be finished 
+	private Map[] maplayers = new Map[2]; // new dynamic layer system
 	private Hero prota;
 	private GameEngine game;
     private Layout layout; 
-    private Tile[][] tilelayout; // deprecated, must be removed when dynamic layer system will be finished 
-    private Tile[][] tilelayoutdungeon; // deprecated, must be removed when dynamic layer system will be finished 
+    //private Tile[][] tilelayout; // deprecated, must be removed when dynamic layer system will be finished 
+    //private Tile[][] tilelayoutdungeon; // deprecated, must be removed when dynamic layer system will be finished 
     private Tile[][] selectedtiles;
-    private Tile[][] layertiles; // new dynamic layer system
+    private Tile[][][] layertiles = new Tile[2][][]; // new dynamic layer system
     
     // inventory status and modes
     int object_inv_mode=0;
@@ -113,7 +113,7 @@ public class GameplayScreen implements Screen {
 			Random randomGenerator = new Random();
 			int x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
 			int y = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES);
-			if (!tilelayout[x][y].isbloqued()) { // if there is empty space
+			if (!layertiles[0][x][y].isbloqued()) { // if there is empty space
 				game.createenemy(0,"megaboss", 43, 46, 51, 310, x, y,"orc.png");
 				boss_created=true;
 			}
@@ -130,16 +130,16 @@ public class GameplayScreen implements Screen {
 		messagefont = new BitmapFont();
 		// create tile layout
         game = new GameEngine();
-        mapa=game.getmaplayer(0);
-        mapa.createdoor(GameEngine.LAYER_0_ENTRY_XPOS,GameEngine.LAYER_0_ENTRY_YPOS );
-        dungeon=game.getmaplayer(1);
-        mapa.setlayer(1);
-        dungeon.createdoor(GameEngine.LAYER_1_ENTRY_XPOS,GameEngine.LAYER_1_ENTRY_YPOS);
-        dungeon.setlayer(2);
+        maplayers[0]=game.getmaplayer(0);
+        maplayers[0].createdoor(GameEngine.LAYER_0_ENTRY_XPOS,GameEngine.LAYER_0_ENTRY_YPOS );
+        maplayers[1]=game.getmaplayer(1);
+        maplayers[0].setlayer(1);
+        maplayers[1].createdoor(GameEngine.LAYER_1_ENTRY_XPOS,GameEngine.LAYER_1_ENTRY_YPOS);
+        maplayers[1].setlayer(2);
         layout=new Layout();
         prota = game.gethero();
-        tilelayout = mapa.gettiles();
-        tilelayoutdungeon=dungeon.gettiles();
+        layertiles[0] = maplayers[0].gettiles();
+        layertiles[1]=maplayers[1].gettiles();
         badguys= game.getenemies();
         availableobjects=game.getobjects();
         availableconsumables=game.getconsumables();
@@ -278,7 +278,7 @@ public class GameplayScreen implements Screen {
 	protected void drawdebug() {
 		genericfont.draw(batch, "Screen Mouse X:"+Gdx.input.getX()+" Projected Mouse X: "+realXcoord, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-20);
 		genericfont.draw(batch, "Screen Mouse Y:"+Gdx.input.getY()+" Projected Mouse Y: "+realYcoord, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-40);
-		genericfont.draw(batch, "I'm at X: "+mapa.getfirstxtile()+" Y: "+mapa.getfirstytile(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-60);
+		genericfont.draw(batch, "I'm at X: "+ maplayers[game.getlayer()].getfirstxtile()+" Y: "+maplayers[game.getlayer()].getfirstytile(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-60);
 		genericfont.draw(batch, "Real screen size X:"+Gdx.graphics.getWidth(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-80);
 		genericfont.draw(batch, "Real screen size Y:"+Gdx.graphics.getHeight(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-100);
 		genericfont.draw(batch, "Eye mode:"+eye_mode, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-120);
@@ -294,10 +294,10 @@ public class GameplayScreen implements Screen {
         	//System.out.println("entra");
         	Consumable consumable=consumableiterator.next();
         	//System.out.println(bguy.getabsolutex());
-        	if (consumable.consumableonscreen(mapa.getfirstxtile(), mapa.getfirstytile())==true) {
+        	if (consumable.consumableonscreen(maplayers[game.getlayer()].getfirstxtile(), maplayers[game.getlayer()].getfirstytile())==true) {
         		// draw consumable image		
     			if (consumable.getlayer()==game.getlayer()) {
-    				batch.draw(consumable.getsprite(),(consumable.getabsolutex()-mapa.getfirstxtile())*GameEngine.TILE_X_SIZE,(consumable.getabsolutey()-mapa.getfirstytile())*GameEngine.TILE_Y_SIZE);       		
+    				batch.draw(consumable.getsprite(),(consumable.getabsolutex()-maplayers[game.getlayer()].getfirstxtile())*GameEngine.TILE_X_SIZE,(consumable.getabsolutey()-maplayers[game.getlayer()].getfirstytile())*GameEngine.TILE_Y_SIZE);       		
     			}
     		}
         }
@@ -312,10 +312,10 @@ public class GameplayScreen implements Screen {
         	//System.out.println("entra");
         	Object obj=objiterator.next();
         	//System.out.println(bguy.getabsolutex());
-        	if (obj.objectonscreen(mapa.getfirstxtile(), mapa.getfirstytile())==true) {
+        	if (obj.objectonscreen(maplayers[game.getlayer()].getfirstxtile(), maplayers[game.getlayer()].getfirstytile())==true) {
         		// draw object image
         		if (obj.getlayer()==game.getlayer()) { // if it is the correct layer
-        			batch.draw(obj.getsprite(),(obj.getabsolutex()-mapa.getfirstxtile())*GameEngine.TILE_X_SIZE,(obj.getabsolutey()-mapa.getfirstytile())*GameEngine.TILE_Y_SIZE);       		
+        			batch.draw(obj.getsprite(),(obj.getabsolutex()-maplayers[game.getlayer()].getfirstxtile())*GameEngine.TILE_X_SIZE,(obj.getabsolutey()-maplayers[game.getlayer()].getfirstytile())*GameEngine.TILE_Y_SIZE);       		
         		}
         	}
         }
@@ -330,7 +330,7 @@ public class GameplayScreen implements Screen {
         	//System.out.println("entra");
         	Enemy bguy=bgiterator.next();
         	//System.out.println(bguy.getabsolutex());
-        	if (bguy.enemyonscreen(mapa.getfirstxtile(), mapa.getfirstytile())==true) {
+        	if (bguy.enemyonscreen(maplayers[game.getlayer()].getfirstxtile(), maplayers[game.getlayer()].getfirstytile())==true) {
         		// draw enemy image if the layer is correct
         		if (bguy.getlayer()==game.getlayer()) {
         			batch.draw(bguy.getsprite(),getrelativextileposition(bguy),getrelativeytileposition(bguy));
@@ -344,7 +344,7 @@ public class GameplayScreen implements Screen {
 	 * @return
 	 */
 	public int getrelativeytileposition(Enemy bguy) {
-		return (bguy.getabsolutey()-mapa.getfirstytile())*GameEngine.TILE_Y_SIZE;
+		return (bguy.getabsolutey()-maplayers[game.getlayer()].getfirstytile())*GameEngine.TILE_Y_SIZE;
 	}
 
 	/**
@@ -352,15 +352,15 @@ public class GameplayScreen implements Screen {
 	 * @return
 	 */
 	public int getrelativextileposition(Enemy bguy) {
-		return (bguy.getabsolutex()-mapa.getfirstxtile())*GameEngine.TILE_X_SIZE;
+		return (bguy.getabsolutex()-maplayers[game.getlayer()].getfirstxtile())*GameEngine.TILE_X_SIZE;
 	}
 	
 	public int getabsolutextile(Hero hero) {
-		return hero.getrelativextile() + (mapa == null ? 0 : mapa.getfirstxtile());
+		return hero.getrelativextile() + (maplayers[game.getlayer()] == null ? 0 : maplayers[game.getlayer()].getfirstxtile());
 	}
 	
 	public int getabsoluteytile(Hero hero) {
-		return hero.getrelativeytile() + (mapa == null ? 0 :  mapa.getfirstytile());
+		return hero.getrelativeytile() + (maplayers[game.getlayer()] == null ? 0 :  maplayers[game.getlayer()].getfirstytile());
 	}
 	
 	// layer control
@@ -372,12 +372,8 @@ public class GameplayScreen implements Screen {
      		game.layerdown();
      	}
      	// update layer
-     	if (game.getlayer()==0) {
-     		selectedtiles=tilelayout;
-     	}
-     	if (game.getlayer()==1) {
-     		selectedtiles=tilelayoutdungeon;
-     	}
+     	selectedtiles=layertiles[game.getlayer()];
+     	
 	}
 	
 	/**
@@ -385,9 +381,9 @@ public class GameplayScreen implements Screen {
 	 */
 	protected void drawtiles() {
 		int relativex=0;
-        for (int xpos=mapa.getfirstxtile();xpos<(mapa.getfirstxtile()+GameEngine.ON_SCREEN_TILES_X);xpos++) {
+        for (int xpos=maplayers[game.getlayer()].getfirstxtile();xpos<(maplayers[game.getlayer()].getfirstxtile()+GameEngine.ON_SCREEN_TILES_X);xpos++) {
         	int relativey=0;
-        	for (int ypos=mapa.getfirstytile();ypos<(mapa.getfirstytile()+GameEngine.ON_SCREEN_TILES_Y);ypos++) {
+        	for (int ypos=maplayers[game.getlayer()].getfirstytile();ypos<(maplayers[game.getlayer()].getfirstytile()+GameEngine.ON_SCREEN_TILES_Y);ypos++) {
         			batch.draw(selectedtiles[xpos][ypos].gettileimage(),relativex*GameEngine.TILE_X_SIZE,relativey*GameEngine.TILE_Y_SIZE);
         			relativey++;
         	}
@@ -934,8 +930,8 @@ public class GameplayScreen implements Screen {
 		//texture.dispose();
 	}
 
-	public Map getmap() {
-		return mapa;
+	public Map getmaplayer(int value) {
+		return maplayers[value];
 	}
 	
 }
