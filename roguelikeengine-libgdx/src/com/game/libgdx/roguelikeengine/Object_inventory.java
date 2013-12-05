@@ -21,8 +21,8 @@ public class Object_inventory {
 	private Object inventory[];
 	
 	public Object_inventory() {
-		inventory= new Object[GameEngine.INVENTORY_SIZE];
-		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
+		inventory= new Object[WrapperEngine.INVENTORY_SIZE];
+		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
 			inventory[i]=null;
 		}
 	}
@@ -39,7 +39,7 @@ public class Object_inventory {
 	}
 	public int getfreeslot() { // return first avialable slot on inventory, if return firstfreeposition=-1 there is no free slots.
 		int firstfreeposition=-1;
-		for (int i=GameEngine.INVENTORY_SIZE-1;i>=0;i--) {
+		for (int i=WrapperEngine.INVENTORY_SIZE-1;i>=0;i--) {
 			if (inventory[i]==null) {
 				firstfreeposition=i;
 			}

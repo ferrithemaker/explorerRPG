@@ -48,9 +48,9 @@ public class Hero {
 	private Object body;
 	private Object foot;
 
-	private GameEngine engine;
+	private WrapperEngine engine;
 
-	public Hero(GameEngine engine, String name, String file) {
+	public Hero(WrapperEngine engine, String name, String file) {
 		this.engine = engine;
 
 		// initial set-up
@@ -80,13 +80,13 @@ public class Hero {
 		return this.exp;
 	}
 	public int getresist() {
-		return this.resist+this.head.getdefense()+this.lefthand.getdefense()+this.righthand.getdefense()+this.body.getdefense()+this.foot.getdefense()+((int)(this.exp/GameEngine.EXPERIENCE_NEXT_LEVEL_LIMIT));
+		return this.resist+this.head.getdefense()+this.lefthand.getdefense()+this.righthand.getdefense()+this.body.getdefense()+this.foot.getdefense()+((int)(this.exp/WrapperEngine.EXPERIENCE_NEXT_LEVEL_LIMIT));
 	}
 	public int getforce() {
-		return this.force+this.head.getattack()+this.lefthand.getattack()+this.righthand.getattack()+this.body.getattack()+this.foot.getattack()+((int)(this.exp/GameEngine.EXPERIENCE_NEXT_LEVEL_LIMIT));
+		return this.force+this.head.getattack()+this.lefthand.getattack()+this.righthand.getattack()+this.body.getattack()+this.foot.getattack()+((int)(this.exp/WrapperEngine.EXPERIENCE_NEXT_LEVEL_LIMIT));
 	}
 	public int getagility() {
-		return this.agility+((int)(this.exp/GameEngine.EXPERIENCE_NEXT_LEVEL_LIMIT));
+		return this.agility+((int)(this.exp/WrapperEngine.EXPERIENCE_NEXT_LEVEL_LIMIT));
 	}
 	public int gethp() {
 		return this.life;
@@ -228,7 +228,7 @@ public class Hero {
 		}
 	}
 	public void down() {
-		if (this.relative_y_tile<GameEngine.ON_SCREEN_TILES_Y-1) {
+		if (this.relative_y_tile<WrapperEngine.ON_SCREEN_TILES_Y-1) {
 			this.setrelativeytile(this.relative_y_tile + 1);
 			sprite_godown();
 		}
@@ -240,20 +240,20 @@ public class Hero {
 		}
 	}
 	public void right() {
-		if (this.relative_x_tile<GameEngine.ON_SCREEN_TILES_X-1) {
+		if (this.relative_x_tile<WrapperEngine.ON_SCREEN_TILES_X-1) {
 			this.setrelativextile(this.relative_x_tile + 1);
 			sprite_goright();
 
 		}
 	}
 	public void scrollup() {
-		this.setrelativeytile(GameEngine.ON_SCREEN_TILES_Y-1);
+		this.setrelativeytile(WrapperEngine.ON_SCREEN_TILES_Y-1);
 	}
 	public void scrolldown() {
 		this.setrelativeytile(0);
 	}
 	public void scrollleft() {
-		this.setrelativextile(GameEngine.ON_SCREEN_TILES_X-1);
+		this.setrelativextile(WrapperEngine.ON_SCREEN_TILES_X-1);
 	}
 	public void scrollrigth() {
 		this.setrelativextile(0);
@@ -364,33 +364,33 @@ public class Hero {
 	}
 	public int getyspriteposition() {
 		if (current_sprite_position==1 || current_sprite_position==2 || current_sprite_position==3) {
-			return GameEngine.TILE_Y_SIZE*0;
+			return WrapperEngine.TILE_Y_SIZE*0;
 		}
 		if (current_sprite_position==4 || current_sprite_position==5 || current_sprite_position==6) {
-			return GameEngine.TILE_Y_SIZE*1;
+			return WrapperEngine.TILE_Y_SIZE*1;
 		}
 		if (current_sprite_position==7 || current_sprite_position==8 || current_sprite_position==9) {
-			return GameEngine.TILE_Y_SIZE*2;
+			return WrapperEngine.TILE_Y_SIZE*2;
 		}
 		if (current_sprite_position==10 || current_sprite_position==11 || current_sprite_position==12) {
-			return GameEngine.TILE_Y_SIZE*3;
+			return WrapperEngine.TILE_Y_SIZE*3;
 		}
 		return 0;
 	}
 	public int getxspriteposition() {
 		if (current_sprite_position==1 || current_sprite_position==4 || current_sprite_position==7 || current_sprite_position==10 ) {
-			return GameEngine.TILE_X_SIZE*0;
+			return WrapperEngine.TILE_X_SIZE*0;
 		}
 		if (current_sprite_position==2 || current_sprite_position==5 || current_sprite_position==8 || current_sprite_position==11) {
-			return GameEngine.TILE_X_SIZE*1;
+			return WrapperEngine.TILE_X_SIZE*1;
 		}
 		if (current_sprite_position==3 || current_sprite_position==6 || current_sprite_position==9 || current_sprite_position==12) {
-			return GameEngine.TILE_X_SIZE*2;
+			return WrapperEngine.TILE_X_SIZE*2;
 		}
 		return 0;
 	}
 	public Sprite getsprite() {
-        return new Sprite(texture,getxspriteposition(),getyspriteposition(),GameEngine.TILE_X_SIZE,GameEngine.TILE_Y_SIZE);
+        return new Sprite(texture,getxspriteposition(),getyspriteposition(),WrapperEngine.TILE_X_SIZE,WrapperEngine.TILE_Y_SIZE);
         //return new Sprite(texture,0,128,64,64);
 
 	}

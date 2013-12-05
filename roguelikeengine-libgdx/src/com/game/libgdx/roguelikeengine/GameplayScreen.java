@@ -48,13 +48,14 @@ public class GameplayScreen implements Screen {
 	//private Map mapa; // deprecated, must be removed when dynamic layer system will be finished 
 	//private Map dungeon; // deprecated, must be removed when dynamic layer system will be finished 
 	private Map[] maplayers = new Map[2]; // new dynamic layer system
+	private Map activemap;
 	private Hero prota;
-	private GameEngine game;
+	private WrapperEngine game;
     private Layout layout; 
     //private Tile[][] tilelayout; // deprecated, must be removed when dynamic layer system will be finished 
     //private Tile[][] tilelayoutdungeon; // deprecated, must be removed when dynamic layer system will be finished 
-    private Tile[][] selectedtiles;
-    private Tile[][][] layertiles = new Tile[2][][]; // new dynamic layer system
+    //private Tile[][] selectedtiles;
+    //private Tile[][][] layertiles = new Tile[2][][]; // new dynamic layer system
     
     // inventory status and modes
     int object_inv_mode=0;
@@ -111,9 +112,9 @@ public class GameplayScreen implements Screen {
         boolean boss_created=false;
 		while (boss_created==false) {
 			Random randomGenerator = new Random();
-			int x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
-			int y = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES);
-			if (!layertiles[0][x][y].isbloqued()) { // if there is empty space
+			int x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
+			int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
+			if (maplayers[0].gettiles()[x][y].isbloqued()) { // if there is empty space
 				game.createenemy(0,"megaboss", 43, 46, 51, 310, x, y,"orc.png");
 				boss_created=true;
 			}
@@ -129,17 +130,17 @@ public class GameplayScreen implements Screen {
 		genericfont = new BitmapFont();
 		messagefont = new BitmapFont();
 		// create tile layout
-        game = new GameEngine();
+        game = new WrapperEngine();
         maplayers[0]=game.getmaplayer(0);
-        maplayers[0].createdoor(GameEngine.LAYER_0_ENTRY_XPOS,GameEngine.LAYER_0_ENTRY_YPOS );
+        maplayers[0].createdoor(WrapperEngine.LAYER_0_ENTRY_XPOS,WrapperEngine.LAYER_0_ENTRY_YPOS );
         maplayers[1]=game.getmaplayer(1);
         maplayers[0].setlayer(1);
-        maplayers[1].createdoor(GameEngine.LAYER_1_ENTRY_XPOS,GameEngine.LAYER_1_ENTRY_YPOS);
+        maplayers[1].createdoor(WrapperEngine.LAYER_1_ENTRY_XPOS,WrapperEngine.LAYER_1_ENTRY_YPOS);
         maplayers[1].setlayer(2);
         layout=new Layout();
         prota = game.gethero();
-        layertiles[0] = maplayers[0].gettiles();
-        layertiles[1]=maplayers[1].gettiles();
+        //layertiles[0] = maplayers[0].gettiles();
+        //layertiles[1]=maplayers[1].gettiles();
         badguys= game.getenemies();
         availableobjects=game.getobjects();
         availableconsumables=game.getconsumables();
@@ -156,7 +157,7 @@ public class GameplayScreen implements Screen {
 		messagefont.setScale(2f);
         
 		// create a fight message info screen 
-		screentext=new PopupInfoText(100,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-400,"text_background.png",1000,300);
+		screentext=new PopupInfoText(100,(WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-400,"text_background.png",1000,300);
 		screentext.settextoffset(50, 50);
 	}
 
@@ -198,7 +199,7 @@ public class GameplayScreen implements Screen {
         drawobjects();
         
         // draw hero
-        batch.draw(prota.getsprite(), prota.getrelativextile()*GameEngine.TILE_X_SIZE, prota.getrelativeytile()*GameEngine.TILE_Y_SIZE);
+        batch.draw(prota.getsprite(), prota.getrelativextile()*WrapperEngine.TILE_X_SIZE, prota.getrelativeytile()*WrapperEngine.TILE_Y_SIZE);
 	
         
         
@@ -229,25 +230,25 @@ public class GameplayScreen implements Screen {
 	 */
 	protected void drawinterface() {
 		// draw character menu background
-	 	batch.draw(layout.getmenubackground(),GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X,0);
+	 	batch.draw(layout.getmenubackground(),WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X,0);
 	 	
 	 	// draw action menu background
-	 	batch.draw(layout.getactionmenu(),0,GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y);
+	 	batch.draw(layout.getactionmenu(),0,WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y);
 	 	 	
 	 	// draw hero information
 	 	//genericfont.draw(batch,"Hi "+prota.getname()+"!", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-30);
-	 	genericfont.draw(batch,"Experience: "+prota.getexperience(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, (GameEngine.WINDOWHEIGHT)-20);
-	 	genericfont.draw(batch,"Life Points: "+prota.gethp(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, (GameEngine.WINDOWHEIGHT)-40);
-	 	genericfont.draw(batch,"Resistance: "+prota.getresist(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.WINDOWHEIGHT)-60);
-	 	genericfont.draw(batch,"Agility: "+prota.getagility(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.WINDOWHEIGHT)-80);
-	 	genericfont.draw(batch,"Force: "+prota.getforce(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.WINDOWHEIGHT)-100);
+	 	genericfont.draw(batch,"Experience: "+prota.getexperience(), (WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+25, (WrapperEngine.WINDOWHEIGHT)-20);
+	 	genericfont.draw(batch,"Life Points: "+prota.gethp(), (WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+25, (WrapperEngine.WINDOWHEIGHT)-40);
+	 	genericfont.draw(batch,"Resistance: "+prota.getresist(), (WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+25,(WrapperEngine.WINDOWHEIGHT)-60);
+	 	genericfont.draw(batch,"Agility: "+prota.getagility(), (WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+25,(WrapperEngine.WINDOWHEIGHT)-80);
+	 	genericfont.draw(batch,"Force: "+prota.getforce(), (WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+25,(WrapperEngine.WINDOWHEIGHT)-100);
 	}
 
 	/**
 	 * 
 	 */
 	protected void drawinventory() {
-		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
+		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
         	if (objinv.get_object(i)!=null) {
         		//genericfont.draw(batch,"Obj slot "+i+":"+objinv.get_object(i).getname(), 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(360+(i*20)));
                 batch.draw(objinv.get_object(i).getsprite(), 1216,640-(i*64));
@@ -261,7 +262,7 @@ public class GameplayScreen implements Screen {
         // draw consumable inventory
         //genericfont.draw(batch,"Consumable inventory", 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-40);
 
-        for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
+        for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
         	if (consinv.get_consumable(i)!=null) {
         		//genericfont.draw(batch,"Cons slot "+i+":"+consinv.get_consumable(i).getname(), 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(70+(i*20)));
         		batch.draw(consinv.get_consumable(i).getsprite(), 1152,640-(i*64));
@@ -276,13 +277,13 @@ public class GameplayScreen implements Screen {
 	 * 
 	 */
 	protected void drawdebug() {
-		genericfont.draw(batch, "Screen Mouse X:"+Gdx.input.getX()+" Projected Mouse X: "+realXcoord, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-20);
-		genericfont.draw(batch, "Screen Mouse Y:"+Gdx.input.getY()+" Projected Mouse Y: "+realYcoord, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-40);
-		genericfont.draw(batch, "I'm at X: "+ maplayers[game.getlayer()].getfirstxtile()+" Y: "+maplayers[game.getlayer()].getfirstytile(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-60);
-		genericfont.draw(batch, "Real screen size X:"+Gdx.graphics.getWidth(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-80);
-		genericfont.draw(batch, "Real screen size Y:"+Gdx.graphics.getHeight(), 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-100);
-		genericfont.draw(batch, "Eye mode:"+eye_mode, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-120);
-		genericfont.draw(batch, "Drop mode:"+object_drop_mode, 20, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-140);
+		genericfont.draw(batch, "Screen Mouse X:"+Gdx.input.getX()+" Projected Mouse X: "+realXcoord, 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-20);
+		genericfont.draw(batch, "Screen Mouse Y:"+Gdx.input.getY()+" Projected Mouse Y: "+realYcoord, 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-40);
+		genericfont.draw(batch, "I'm at X: "+ maplayers[game.getlayer()].getfirstxtile()+" Y: "+maplayers[game.getlayer()].getfirstytile(), 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-60);
+		genericfont.draw(batch, "Real screen size X:"+Gdx.graphics.getWidth(), 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-80);
+		genericfont.draw(batch, "Real screen size Y:"+Gdx.graphics.getHeight(), 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-100);
+		genericfont.draw(batch, "Eye mode:"+eye_mode, 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-120);
+		genericfont.draw(batch, "Drop mode:"+object_drop_mode, 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-140);
 	}
 
 	/**
@@ -297,7 +298,7 @@ public class GameplayScreen implements Screen {
         	if (consumable.consumableonscreen(maplayers[game.getlayer()].getfirstxtile(), maplayers[game.getlayer()].getfirstytile())==true) {
         		// draw consumable image		
     			if (consumable.getlayer()==game.getlayer()) {
-    				batch.draw(consumable.getsprite(),(consumable.getabsolutex()-maplayers[game.getlayer()].getfirstxtile())*GameEngine.TILE_X_SIZE,(consumable.getabsolutey()-maplayers[game.getlayer()].getfirstytile())*GameEngine.TILE_Y_SIZE);       		
+    				batch.draw(consumable.getsprite(),(consumable.getabsolutex()-maplayers[game.getlayer()].getfirstxtile())*WrapperEngine.TILE_X_SIZE,(consumable.getabsolutey()-maplayers[game.getlayer()].getfirstytile())*WrapperEngine.TILE_Y_SIZE);       		
     			}
     		}
         }
@@ -315,7 +316,7 @@ public class GameplayScreen implements Screen {
         	if (obj.objectonscreen(maplayers[game.getlayer()].getfirstxtile(), maplayers[game.getlayer()].getfirstytile())==true) {
         		// draw object image
         		if (obj.getlayer()==game.getlayer()) { // if it is the correct layer
-        			batch.draw(obj.getsprite(),(obj.getabsolutex()-maplayers[game.getlayer()].getfirstxtile())*GameEngine.TILE_X_SIZE,(obj.getabsolutey()-maplayers[game.getlayer()].getfirstytile())*GameEngine.TILE_Y_SIZE);       		
+        			batch.draw(obj.getsprite(),(obj.getabsolutex()-maplayers[game.getlayer()].getfirstxtile())*WrapperEngine.TILE_X_SIZE,(obj.getabsolutey()-maplayers[game.getlayer()].getfirstytile())*WrapperEngine.TILE_Y_SIZE);       		
         		}
         	}
         }
@@ -344,7 +345,7 @@ public class GameplayScreen implements Screen {
 	 * @return
 	 */
 	public int getrelativeytileposition(Enemy bguy) {
-		return (bguy.getabsolutey()-maplayers[game.getlayer()].getfirstytile())*GameEngine.TILE_Y_SIZE;
+		return (bguy.getabsolutey()-maplayers[game.getlayer()].getfirstytile())*WrapperEngine.TILE_Y_SIZE;
 	}
 
 	/**
@@ -352,7 +353,7 @@ public class GameplayScreen implements Screen {
 	 * @return
 	 */
 	public int getrelativextileposition(Enemy bguy) {
-		return (bguy.getabsolutex()-maplayers[game.getlayer()].getfirstxtile())*GameEngine.TILE_X_SIZE;
+		return (bguy.getabsolutex()-maplayers[game.getlayer()].getfirstxtile())*WrapperEngine.TILE_X_SIZE;
 	}
 	
 	public int getabsolutextile(Hero hero) {
@@ -365,14 +366,14 @@ public class GameplayScreen implements Screen {
 	
 	// layer control
 	public void layercontrol() {
-		if (prota.getabsolutextile()==GameEngine.LAYER_0_ENTRY_XPOS && prota.getabsoluteytile()==GameEngine.LAYER_0_ENTRY_YPOS) {
+		if (prota.getabsolutextile()==WrapperEngine.LAYER_0_ENTRY_XPOS && prota.getabsoluteytile()==WrapperEngine.LAYER_0_ENTRY_YPOS) {
      		game.layerup();
      	}
-     	if (prota.getabsolutextile()==GameEngine.LAYER_1_ENTRY_XPOS && prota.getabsoluteytile()==GameEngine.LAYER_1_ENTRY_YPOS) {
+     	if (prota.getabsolutextile()==WrapperEngine.LAYER_1_ENTRY_XPOS && prota.getabsoluteytile()==WrapperEngine.LAYER_1_ENTRY_YPOS) {
      		game.layerdown();
      	}
      	// update layer
-     	selectedtiles=layertiles[game.getlayer()];
+     	activemap=maplayers[game.getlayer()];
      	
 	}
 	
@@ -381,10 +382,10 @@ public class GameplayScreen implements Screen {
 	 */
 	protected void drawtiles() {
 		int relativex=0;
-        for (int xpos=maplayers[game.getlayer()].getfirstxtile();xpos<(maplayers[game.getlayer()].getfirstxtile()+GameEngine.ON_SCREEN_TILES_X);xpos++) {
+        for (int xpos=maplayers[game.getlayer()].getfirstxtile();xpos<(maplayers[game.getlayer()].getfirstxtile()+WrapperEngine.ON_SCREEN_TILES_X);xpos++) {
         	int relativey=0;
-        	for (int ypos=maplayers[game.getlayer()].getfirstytile();ypos<(maplayers[game.getlayer()].getfirstytile()+GameEngine.ON_SCREEN_TILES_Y);ypos++) {
-        			batch.draw(selectedtiles[xpos][ypos].gettileimage(),relativex*GameEngine.TILE_X_SIZE,relativey*GameEngine.TILE_Y_SIZE);
+        	for (int ypos=maplayers[game.getlayer()].getfirstytile();ypos<(maplayers[game.getlayer()].getfirstytile()+WrapperEngine.ON_SCREEN_TILES_Y);ypos++) {
+        			batch.draw(activemap.gettiles()[xpos][ypos].gettileimage(),relativex*WrapperEngine.TILE_X_SIZE,relativey*WrapperEngine.TILE_Y_SIZE);
         			relativey++;
         	}
         	relativex++;
@@ -397,11 +398,11 @@ public class GameplayScreen implements Screen {
 	protected void drawdescriptions() {
 		if (actualenemy!=null) {
         	if (actualenemy.getname()!=null) {
-        		genericfont.draw(batch,"Enemy: "+actualenemy.getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-400);
-        		genericfont.draw(batch,"Life Points: "+actualenemy.gethp(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-420);
-        		genericfont.draw(batch,"Resistance: "+actualenemy.getresist(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-440);
-        		genericfont.draw(batch,"Agility: "+actualenemy.getagility(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-460);
-        		genericfont.draw(batch,"Force: "+actualenemy.getforce(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-480);
+        		genericfont.draw(batch,"Enemy: "+actualenemy.getname(), (WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+25, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-400);
+        		genericfont.draw(batch,"Life Points: "+actualenemy.gethp(), (WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+25,(WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-420);
+        		genericfont.draw(batch,"Resistance: "+actualenemy.getresist(), (WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+25,(WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-440);
+        		genericfont.draw(batch,"Agility: "+actualenemy.getagility(), (WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+25,(WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-460);
+        		genericfont.draw(batch,"Force: "+actualenemy.getforce(), (WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+25,(WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-480);
         	}
         }
         
@@ -409,9 +410,9 @@ public class GameplayScreen implements Screen {
         
         if (actualconsumable!=null) {
         	if (actualconsumable.getname()!=null) {
-        		genericfont.draw(batch,"Consumable: "+actualconsumable.getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-400);
-        		genericfont.draw(batch,"+ Life Points: "+actualconsumable.getpoweruplife(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-420);
-        		genericfont.draw(batch,"+ Agility Points: "+actualconsumable.getpowerupagility(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-440);
+        		genericfont.draw(batch,"Consumable: "+actualconsumable.getname(), (WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+25, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-400);
+        		genericfont.draw(batch,"+ Life Points: "+actualconsumable.getpoweruplife(), (WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+25,(WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-420);
+        		genericfont.draw(batch,"+ Agility Points: "+actualconsumable.getpowerupagility(), (WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+25,(WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-440);
         	}
         }
         
@@ -419,9 +420,9 @@ public class GameplayScreen implements Screen {
         
         if (actualobject!=null) {
         	if (actualobject.getname()!=null) {
-        		genericfont.draw(batch,"Object: "+actualobject.getname(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-400);
-        		genericfont.draw(batch,"+ defense: "+actualobject.getdefense(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-420);
-        		genericfont.draw(batch,"+ offense: "+actualobject.getattack(), (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-440);
+        		genericfont.draw(batch,"Object: "+actualobject.getname(), (WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+25, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-400);
+        		genericfont.draw(batch,"+ defense: "+actualobject.getdefense(), (WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+25,(WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-420);
+        		genericfont.draw(batch,"+ offense: "+actualobject.getattack(), (WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+25,(WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-440);
         	}
         }
 	}
@@ -473,7 +474,7 @@ public class GameplayScreen implements Screen {
 	void frameratecontrol() {
 		//  delay for each frame  -   time it took for one frame 
 		long time = System.currentTimeMillis(); 
-		time = (1000 / GameEngine.FPS) - (System.currentTimeMillis() - time); 
+		time = (1000 / WrapperEngine.FPS) - (System.currentTimeMillis() - time); 
         
         if (time > 0) 
         { 
@@ -501,10 +502,10 @@ public class GameplayScreen implements Screen {
     		game.createrandomobject();
     	}
     	// get relative mouse coord instead of real ones
-    	realXcoord=(int)((float)Gdx.input.getX()*(float)((float)GameEngine.WINDOWWIDTH/(float)Gdx.graphics.getWidth()));
-		realYcoord=(int)((float)Gdx.input.getY()*(float)((float)GameEngine.WINDOWHEIGHT/(float)Gdx.graphics.getHeight()))*-1+(GameEngine.WINDOWHEIGHT);
-    	if (GameEngine.ANDROID_MENU_BAR_ENABLE) { // I don't like this hardcoded way to do things
-    		realYcoord=realYcoord+GameEngine.ANDROID_MENU_BAR_SIZE;
+    	realXcoord=(int)((float)Gdx.input.getX()*(float)((float)WrapperEngine.WINDOWWIDTH/(float)Gdx.graphics.getWidth()));
+		realYcoord=(int)((float)Gdx.input.getY()*(float)((float)WrapperEngine.WINDOWHEIGHT/(float)Gdx.graphics.getHeight()))*-1+(WrapperEngine.WINDOWHEIGHT);
+    	if (WrapperEngine.ANDROID_MENU_BAR_ENABLE) { // I don't like this hardcoded way to do things
+    		realYcoord=realYcoord+WrapperEngine.ANDROID_MENU_BAR_SIZE;
     	}
     	// mouse events control
     	handlemouseinput(); 
@@ -699,32 +700,32 @@ public class GameplayScreen implements Screen {
     			look();
     		}
     		// CONSUMABLE INVENTORY ACTIONS
-    		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
+    		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
     			if (realXcoord>1152 && realXcoord<1216 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==0) {
     				getconsumable(consinv.get_consumable(i));
     				consinv.delete_consumable(i);
     			}
             }
     		// OBJECT INVENTORY ACTIONS
-    		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
+    		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
     			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && object_drop_mode==0 && eye_mode==0) {
     				getobject(objinv.get_object(i),i);
     			}
             }
     		// OBJECT INVENTORY DROP
-    		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
+    		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
     			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && object_drop_mode==1  && eye_mode==0) {
     				objinv.delete_object(i);
     			}
             }
     		// EYEMODE OBJECT INVENTORY
-    		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
+    		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
     			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==1) {
     				actualobject=objinv.get_object(i);
     			}
             }
     		// EYEMODE CONSUMABLE INVENTORY
-    		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
+    		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
     			if (realXcoord>1152 && realXcoord<1216 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==1) {
     				actualconsumable=consinv.get_consumable(i);
     			}

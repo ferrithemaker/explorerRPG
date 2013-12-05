@@ -6,10 +6,10 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 public class Main {
 	public static void main(String[] args) {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-		cfg.title = GameEngine.APP_NAME;
+		cfg.title = WrapperEngine.APP_NAME;
 		cfg.useGL20 = false;
-		cfg.width = GameEngine.WINDOWWIDTH;
-		cfg.height = GameEngine.WINDOWHEIGHT;
+		cfg.width = WrapperEngine.WINDOWWIDTH;
+		cfg.height = WrapperEngine.WINDOWHEIGHT;
 		
 		new LwjglApplication(new Explorer_libgdx(), cfg);
 	}

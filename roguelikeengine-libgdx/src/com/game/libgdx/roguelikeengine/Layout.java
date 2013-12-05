@@ -28,8 +28,8 @@ public class Layout {
 	// screen methods
     public Layout() {
     	// tiles
-		menu_img = new Sprite(new Texture(Gdx.files.internal("charactermenu.png")),GameEngine.OPTION_MENU_X_SIZE,GameEngine.WINDOWHEIGHT);
-		actionmenu_img= new Sprite(new Texture(Gdx.files.internal("actionmenu.png")),GameEngine.ON_SCREEN_TILES_X*GameEngine.TILE_X_SIZE,64);
+		menu_img = new Sprite(new Texture(Gdx.files.internal("charactermenu.png")),WrapperEngine.OPTION_MENU_X_SIZE,WrapperEngine.WINDOWHEIGHT);
+		actionmenu_img= new Sprite(new Texture(Gdx.files.internal("actionmenu.png")),WrapperEngine.ON_SCREEN_TILES_X*WrapperEngine.TILE_X_SIZE,64);
     }
 	public Sprite getmenubackground() {
 		return menu_img;

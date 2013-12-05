@@ -131,8 +131,8 @@ public class Enemy {
 		return false;
 		*/
 		
-		return absolute_x >= xinitpos && absolute_x < xinitpos + GameEngine.ON_SCREEN_TILES_X &&
-			   absolute_y >= yinitpos && absolute_y < yinitpos + GameEngine.ON_SCREEN_TILES_Y;
+		return absolute_x >= xinitpos && absolute_x < xinitpos + WrapperEngine.ON_SCREEN_TILES_X &&
+			   absolute_y >= yinitpos && absolute_y < yinitpos + WrapperEngine.ON_SCREEN_TILES_Y;
 	}
 	
 	public boolean overenemy(int x,int y) {

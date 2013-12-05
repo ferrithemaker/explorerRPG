@@ -79,8 +79,8 @@ public class Consumable {
 	}
 	// control methods
 	public boolean consumableonscreen(int xinitpos,int yinitpos) {
-		for (int x=xinitpos;x<xinitpos+GameEngine.ON_SCREEN_TILES_X;x++) {
-			for (int y=yinitpos;y<yinitpos+GameEngine.ON_SCREEN_TILES_Y;y++) {
+		for (int x=xinitpos;x<xinitpos+WrapperEngine.ON_SCREEN_TILES_X;x++) {
+			for (int y=yinitpos;y<yinitpos+WrapperEngine.ON_SCREEN_TILES_Y;y++) {
 				if (absolute_x==x && absolute_y==y) { return true; }
 			}
 		}

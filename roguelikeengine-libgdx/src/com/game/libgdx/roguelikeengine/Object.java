@@ -31,7 +31,7 @@ public class Object {
 	private int absolute_x;
 	private int absolute_y;
 	private int layer;
-	private String position;
+	private String bodyLocation;
 	private Sprite img;
 	
 	public Object(int layer,String name,String position,int baseattack, int basedefense, int basedurability,int x,int y,String file) {
@@ -42,7 +42,7 @@ public class Object {
 		this.durability=basedurability;
 		this.absolute_x=x;
 		this.absolute_y=y;
-		this.position=position;
+		this.bodyLocation=position;
 		this.img = new Sprite(new Texture(Gdx.files.internal(file)));
 	}
 	public Object() {
@@ -60,7 +60,7 @@ public class Object {
 		return layer;
 	}
 	public String getposition() {
-		return this.position;
+		return this.bodyLocation;
 	}
 	public int getattack() {
 		if (this.durability>0) {
@@ -93,8 +93,8 @@ public class Object {
 	}
 	// control methods
 	public boolean objectonscreen(int xinitpos,int yinitpos) { // return true of object is on current player screen
-		for (int x=xinitpos;x<xinitpos+GameEngine.ON_SCREEN_TILES_X;x++) {
-			for (int y=yinitpos;y<yinitpos+GameEngine.ON_SCREEN_TILES_Y;y++) {
+		for (int x=xinitpos;x<xinitpos+WrapperEngine.ON_SCREEN_TILES_X;x++) {
+			for (int y=yinitpos;y<yinitpos+WrapperEngine.ON_SCREEN_TILES_Y;y++) {
 				if (absolute_x==x && absolute_y==y) { return true; }
 			}
 		}

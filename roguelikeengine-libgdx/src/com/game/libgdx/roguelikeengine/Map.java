@@ -57,28 +57,28 @@ public class Map {
 		firstXtile=0;
 		firstYtile=0;
 		// create tile layout
-        tilelayout = new Tile[GameEngine.TOTAL_X_TILES][GameEngine.TOTAL_Y_TILES];
+        tilelayout = new Tile[WrapperEngine.TOTAL_X_TILES][WrapperEngine.TOTAL_Y_TILES];
 	}
 		// **** BEGIN MAP CREATION
 		public void createrandommap() {
 			// fill with freetiles
-			 for (int xpos=0;xpos<GameEngine.TOTAL_X_TILES;xpos++) {
-		        	for (int ypos=0;ypos<GameEngine.TOTAL_Y_TILES;ypos++) {
+			 for (int xpos=0;xpos<WrapperEngine.TOTAL_X_TILES;xpos++) {
+		        	for (int ypos=0;ypos<WrapperEngine.TOTAL_Y_TILES;ypos++) {
 		        		tilelayout[xpos][ypos]= new Tile(false,freetile);
 		        	}
 		        }
 			// create random walls
-			for (int num=0; num<(int)(GameEngine.NUMBER_OF_WALLS/2);num++) {
+			for (int num=0; num<(int)(WrapperEngine.NUMBER_OF_WALLS/2);num++) {
 				createrandomvwall();
 				createrandomhwall();
 			}
 			// create individual elements
-			for (int num=0; num<GameEngine.NUMBER_OF_BLOCKING_OBJECTS;num++) {
+			for (int num=0; num<WrapperEngine.NUMBER_OF_BLOCKING_OBJECTS;num++) {
 				createblockingelement();
 			}
 			
 			// create lakes
-			for (int num=0; num<GameEngine.NUMBER_OF_LAKES;num++) {
+			for (int num=0; num<WrapperEngine.NUMBER_OF_LAKES;num++) {
 				createrandomlake();
 			}
 			createcementery();
@@ -90,13 +90,13 @@ public class Map {
 		}
 		public void createrandomdungeon() {
 			// fill with freetiles
-			 for (int xpos=0;xpos<GameEngine.TOTAL_X_TILES;xpos++) {
-		        	for (int ypos=0;ypos<GameEngine.TOTAL_Y_TILES;ypos++) {
+			 for (int xpos=0;xpos<WrapperEngine.TOTAL_X_TILES;xpos++) {
+		        	for (int ypos=0;ypos<WrapperEngine.TOTAL_Y_TILES;ypos++) {
 		        		tilelayout[xpos][ypos]= new Tile(false,freedungeontile);
 		        	}
 		        }
 			// create random walls
-			for (int num=0; num<(int)(GameEngine.NUMBER_OF_WALLS);num++) {
+			for (int num=0; num<(int)(WrapperEngine.NUMBER_OF_WALLS);num++) {
 				createrandomvwall();
 				createrandomhwall();
 				createrandomvwall();
@@ -105,15 +105,15 @@ public class Map {
 				createrandomhwall();
 			}
 			// create individual elements
-			for (int num=0; num<GameEngine.NUMBER_OF_BLOCKING_OBJECTS;num++) {
+			for (int num=0; num<WrapperEngine.NUMBER_OF_BLOCKING_OBJECTS;num++) {
 				createdungeonblockingelement();
 			}
 		}
 		public void createrandomhwall() {
 			Random randomGenerator = new Random();
-			int lenght = randomGenerator.nextInt(GameEngine.MAX_WALL_LENGTH);
-			int start = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES-GameEngine.MAX_WALL_LENGTH);
-			int height = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES);
+			int lenght = randomGenerator.nextInt(WrapperEngine.MAX_WALL_LENGTH);
+			int start = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES-WrapperEngine.MAX_WALL_LENGTH);
+			int height = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
 			for (int xpos=start;xpos<start+lenght;xpos++) {
 	        	tilelayout[xpos][height].block();
 	        	tilelayout[xpos][height].updatetileimage(blockedtile);	
@@ -121,9 +121,9 @@ public class Map {
 		}
 		public void createrandomvwall() {
 			Random randomGenerator = new Random();
-			int lenght = randomGenerator.nextInt(GameEngine.MAX_WALL_LENGTH);
-			int start = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES-GameEngine.MAX_WALL_LENGTH);
-			int width = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
+			int lenght = randomGenerator.nextInt(WrapperEngine.MAX_WALL_LENGTH);
+			int start = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES-WrapperEngine.MAX_WALL_LENGTH);
+			int width = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
 			for (int ypos=start;ypos<start+lenght;ypos++) {
 	        	tilelayout[width][ypos].block();
 	        	tilelayout[width][ypos].updatetileimage(blockedtile);	
@@ -132,10 +132,10 @@ public class Map {
 		}
 		public void createrandomlake() {
 			Random randomGenerator = new Random();
-			int lenght = randomGenerator.nextInt(GameEngine.MAX_LAKE_SIZE);
-			int start_x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES-GameEngine.MAX_LAKE_SIZE);
-			int start_y = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES-GameEngine.MAX_LAKE_SIZE);
-			int width = randomGenerator.nextInt(GameEngine.MAX_LAKE_SIZE);
+			int lenght = randomGenerator.nextInt(WrapperEngine.MAX_LAKE_SIZE);
+			int start_x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES-WrapperEngine.MAX_LAKE_SIZE);
+			int start_y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES-WrapperEngine.MAX_LAKE_SIZE);
+			int width = randomGenerator.nextInt(WrapperEngine.MAX_LAKE_SIZE);
 			for (int xpos=start_x;xpos<start_x+lenght;xpos++) {
 				for (int ypos=start_y;ypos<start_y+width;ypos++) {
 					tilelayout[xpos][ypos].block();
@@ -146,8 +146,8 @@ public class Map {
 		}
 		public void createblockingelement() {
 			Random randomGenerator = new Random();
-			int x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
-			int y = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES);
+			int x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
+			int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
 			int element= randomGenerator.nextInt(4);
 			tilelayout[x][y].block();
 			if (element==0) {
@@ -165,8 +165,8 @@ public class Map {
 		}
 		public void createdungeonblockingelement() {
 			Random randomGenerator = new Random();
-			int x = randomGenerator.nextInt(GameEngine.TOTAL_X_TILES);
-			int y = randomGenerator.nextInt(GameEngine.TOTAL_Y_TILES);
+			int x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
+			int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
 			int element= randomGenerator.nextInt(3);
 			tilelayout[x][y].block();
 			if (element==0) {

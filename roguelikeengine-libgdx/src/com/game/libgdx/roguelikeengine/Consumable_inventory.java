@@ -22,8 +22,8 @@ public class Consumable_inventory {
 	private Consumable inventory[];
 	
 	public Consumable_inventory() {
-		inventory= new Consumable[GameEngine.INVENTORY_SIZE];
-		for (int i=0;i<GameEngine.INVENTORY_SIZE;i++) {
+		inventory= new Consumable[WrapperEngine.INVENTORY_SIZE];
+		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
 			inventory[i]=null;
 		}
 	}
@@ -41,7 +41,7 @@ public class Consumable_inventory {
 	}
 	public int getfreeslot() { // if firstfreeposition=-1 theres no free slots
 		int firstfreeposition=-1;
-		for (int i=GameEngine.INVENTORY_SIZE-1;i>=0;i--) {
+		for (int i=WrapperEngine.INVENTORY_SIZE-1;i>=0;i--) {
 			if (inventory[i]==null) {
 				firstfreeposition=i;
 			}
