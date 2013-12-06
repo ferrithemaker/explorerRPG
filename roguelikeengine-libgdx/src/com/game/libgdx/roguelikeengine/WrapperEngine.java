@@ -51,8 +51,8 @@ public class WrapperEngine {
 	public final static int EXPERIENCE_NEXT_LEVEL_LIMIT=1000;
 	
 	// dynamic layers 
-	public final static int NUMBER_OF_MAP_LAYERS=2;
-	public final static int NUMBER_OF_ACCESSPOINTS=16;
+	public final static int NUMBER_OF_MAP_LAYERS=3;
+	public final static int NUMBER_OF_ACCESSPOINTS=30;
 	
 	// default entry coords for dungeons DEPRECATED!!
 	//public final static int LAYER_0_ENTRY_XPOS=1;
@@ -75,7 +75,7 @@ public class WrapperEngine {
     private Hero prota;
     //private Map mapa; // deprecated, must be removed when dynamic layer system will be finished 
     //private Map dungeon; // deprecated, must be removed when dynamic layer system will be finished 
-    private Map[] maplayers = new Map[2]; // new dynamic layer system
+    private Map[] maplayers = new Map[WrapperEngine.NUMBER_OF_MAP_LAYERS]; // new dynamic layer system
     private Map activemap;
     private int layer;
     private int numberOfAP; // number of access points created
@@ -88,12 +88,14 @@ public class WrapperEngine {
 		// create hero
         prota=new Hero(this, "ferriman","holder_sprite.png");
 		
-        // create Map
-        
+        // create Maps
         maplayers[0]= new Map();
         maplayers[1]= new Map();
+        maplayers[2]= new Map();
         maplayers[0].createrandommap();
         maplayers[1].createrandomdungeon();
+        maplayers[2].createrandomdungeon();
+        
         // create access points to layers
         
         
@@ -185,9 +187,16 @@ public class WrapperEngine {
 	public int getlayer() { // this is the actual layer
 		return layer; // this variable has the actual layer
 	}
-	public void changelayer(int layer) {
-		this.layer=layer;
+	public void changelayer(AccessToLayer atl,int rx,int ry) {
+		
+		//int activefirstxtile;
+		//int activefirstytile;
+		//activefirstxtile=activemap.getfirstxtile();
+		//activefirstytile=activemap.getfirstytile();
+		this.layer=atl.getIncommingLayer();
 		activemap=maplayers[this.layer];
+		activemap.setfirstxtile(atl.getOutcommingX()-(rx-1)); // BUG HERE!!!!
+		activemap.setfirstytile(atl.getOutcommingY()-ry);
 	}
 	/*public void layerup() {
 		layer++;
@@ -281,37 +290,38 @@ public class WrapperEngine {
 		int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
 		int x2 = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
 		int y2 = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
+		int randomlayer=randomGenerator.nextInt(WrapperEngine.NUMBER_OF_MAP_LAYERS);
 		int enemytype = randomGenerator.nextInt(6); // random enemy choose
-		if (!activemap.gettiles()[x][y].isbloqued()) { // if there is empty space
+		if (!maplayers[randomlayer].gettiles()[x][y].isbloqued()) { // if there is empty space
 			if (enemytype==0) {
-				badguys.add_enemy(new Enemy(0,"vortex",2,5,3,20,x,y,"vortex2.png"));
-				if (!activemap.gettiles()[x2][y2].isbloqued()) 
-					badguys.add_enemy(new Enemy(1,"vortex",2,5,3,20,x2,y2,"vortex2.png"));
+				badguys.add_enemy(new Enemy(randomlayer,"vortex",2,5,3,20,x,y,"vortex2.png"));
+				if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
+					badguys.add_enemy(new Enemy(randomlayer,"vortex",2,5,3,20,x2,y2,"vortex2.png"));
 			}
 			if (enemytype==1) {
-				badguys.add_enemy(new Enemy(0,"catharg",3,6,4,40,x,y,"cetharg.png"));
-				if (!activemap.gettiles()[x2][y2].isbloqued()) 
-					badguys.add_enemy(new Enemy(1,"catharg",3,6,4,40,x2,y2,"cetharg.png"));
+				badguys.add_enemy(new Enemy(randomlayer,"catharg",3,6,4,40,x,y,"cetharg.png"));
+				if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
+					badguys.add_enemy(new Enemy(randomlayer,"catharg",3,6,4,40,x2,y2,"cetharg.png"));
 			}
 			if (enemytype==2) {
-				badguys.add_enemy(new Enemy(0,"assassin",3,8,1,30,x,y,"assassin.png"));
-				if (!activemap.gettiles()[x2][y2].isbloqued()) 
-					badguys.add_enemy(new Enemy(1,"assassin",3,8,1,30,x2,y2,"assassin.png"));
+				badguys.add_enemy(new Enemy(randomlayer,"assassin",3,8,1,30,x,y,"assassin.png"));
+				if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
+					badguys.add_enemy(new Enemy(randomlayer,"assassin",3,8,1,30,x2,y2,"assassin.png"));
 			}
 			if (enemytype==3) {
-				badguys.add_enemy(new Enemy(0,"giant rat",1,8,8,40,x,y,"giantrat2.png"));
-				if (!activemap.gettiles()[x2][y2].isbloqued()) 
-					badguys.add_enemy(new Enemy(1,"giant rat",1,8,8,40,x2,y2,"giantrat2.png"));
+				badguys.add_enemy(new Enemy(randomlayer,"giant rat",1,8,8,40,x,y,"giantrat2.png"));
+				if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
+					badguys.add_enemy(new Enemy(randomlayer,"giant rat",1,8,8,40,x2,y2,"giantrat2.png"));
 			}
 			if (enemytype==4) {
-				badguys.add_enemy(new Enemy(0,"medusa",5,4,5,30,x,y,"medusa.png"));
-				if (!activemap.gettiles()[x2][y2].isbloqued()) 
-					badguys.add_enemy(new Enemy(1,"medusa",5,4,5,30,x2,y2,"medusa.png"));
+				badguys.add_enemy(new Enemy(randomlayer,"medusa",5,4,5,30,x,y,"medusa.png"));
+				if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
+					badguys.add_enemy(new Enemy(randomlayer,"medusa",5,4,5,30,x2,y2,"medusa.png"));
 			}
 			if (enemytype==5) {
-				badguys.add_enemy(new Enemy(0,"warlock",8,5,5,25,x,y,"warlock.png"));
-				if (!activemap.gettiles()[x2][y2].isbloqued()) 
-					badguys.add_enemy(new Enemy(1,"warlock",8,5,5,25,x2,y2,"warlock.png"));
+				badguys.add_enemy(new Enemy(randomlayer,"warlock",8,5,5,25,x,y,"warlock.png"));
+				if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
+					badguys.add_enemy(new Enemy(randomlayer,"warlock",8,5,5,25,x2,y2,"warlock.png"));
 			}
 		}
 	}
@@ -336,85 +346,86 @@ public class WrapperEngine {
 		int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
 		int x2 = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
 		int y2 = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
+		int randomlayer=randomGenerator.nextInt(WrapperEngine.NUMBER_OF_MAP_LAYERS);
 		int chances = randomGenerator.nextInt(100);
 		int objecttype = randomGenerator.nextInt(11);
-		if (!activemap.gettiles()[x][y].isbloqued()) { // if there is empty space
+		if (!maplayers[randomlayer].gettiles()[x][y].isbloqued()) { // if there is empty space
 			if (objecttype==0) {
 				if (chances<90) {
-					availableobjects.add_object(new Object(0,"long sword","righthand",10,0,10,x,y,"longSword.png"));
-					if (!activemap.gettiles()[x2][y2].isbloqued()) // make sure second item is placed on an empty space, too
-						availableobjects.add_object(new Object(1,"long sword","righthand",10,0,10,x2,y2,"longSword.png"));
+					availableobjects.add_object(new Object(randomlayer,"long sword","righthand",10,0,10,x,y,"longSword.png"));
+					if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) // make sure second item is placed on an empty space, too
+						availableobjects.add_object(new Object(randomlayer,"long sword","righthand",10,0,10,x2,y2,"longSword.png"));
 					// return true? 
 				}
 			}
 			if (objecttype==1) {
 				if (chances<90) {
-					availableobjects.add_object(new Object(0,"dagger","righthand",3,0,7,x,y,"dagger.png"));
-					if (!activemap.gettiles()[x2][y2].isbloqued()) 
-						availableobjects.add_object(new Object(1,"dagger","righthand",3,0,7,x2,y2,"dagger.png"));
+					availableobjects.add_object(new Object(randomlayer,"dagger","righthand",3,0,7,x,y,"dagger.png"));
+					if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
+						availableobjects.add_object(new Object(randomlayer,"dagger","righthand",3,0,7,x2,y2,"dagger.png"));
 				}
 			}
 			if (objecttype==2) {
 				if (chances<90) {
-					availableobjects.add_object(new Object(0,"boots","foot",0,6,4,x,y,"boots.png"));
-					if (!activemap.gettiles()[x2][y2].isbloqued()) 
-						availableobjects.add_object(new Object(1,"boots","foot",0,6,4,x2,y2,"boots.png"));					
+					availableobjects.add_object(new Object(randomlayer,"boots","foot",0,6,4,x,y,"boots.png"));
+					if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
+						availableobjects.add_object(new Object(randomlayer,"boots","foot",0,6,4,x2,y2,"boots.png"));					
 				}
 			}
 			if (objecttype==3) {
 				if (chances<90) {
-					availableobjects.add_object(new Object(0,"heavy armor","body",0,15,10,x,y,"heavyarmor.png"));
-					if (!activemap.gettiles()[x2][y2].isbloqued()) 
-						availableobjects.add_object(new Object(1,"heavy armor","body",0,15,10,x2,y2,"heavyarmor.png"));
+					availableobjects.add_object(new Object(randomlayer,"heavy armor","body",0,15,10,x,y,"heavyarmor.png"));
+					if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
+						availableobjects.add_object(new Object(randomlayer,"heavy armor","body",0,15,10,x2,y2,"heavyarmor.png"));
 				}
 			}
 			if (objecttype==4) {
 				if (chances<90) {
-					availableobjects.add_object(new Object(0,"helm","head",0,4,6,x,y,"helm.png"));
-					if (!activemap.gettiles()[x2][y2].isbloqued()) 
-						availableobjects.add_object(new Object(1,"helm","head",0,4,6,x2,y2,"helm.png"));
+					availableobjects.add_object(new Object(randomlayer,"helm","head",0,4,6,x,y,"helm.png"));
+					if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
+						availableobjects.add_object(new Object(randomlayer,"helm","head",0,4,6,x2,y2,"helm.png"));
 				}
 			}
 			if (objecttype==5) {
 				if (chances<90) {
-					availableobjects.add_object(new Object(0,"mace","lefthand",7,0,8,x,y,"mace.png"));
-					if (!activemap.gettiles()[x2][y2].isbloqued()) 
-						availableobjects.add_object(new Object(1,"mace","lefthand",7,0,8,x2,y2,"mace.png"));
+					availableobjects.add_object(new Object(randomlayer,"mace","lefthand",7,0,8,x,y,"mace.png"));
+					if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
+						availableobjects.add_object(new Object(randomlayer,"mace","lefthand",7,0,8,x2,y2,"mace.png"));
 				}
 			}
 			if (objecttype==6) {
 				if (chances<90) {
-					availableobjects.add_object(new Object(0,"riot shield","lefthand",0,9,12,x,y,"riotShield.png"));
-					if (!activemap.gettiles()[x2][y2].isbloqued()) 
-						availableobjects.add_object(new Object(1,"riot shield","lefthand",0,9,12,x2,y2,"riotShield.png"));
+					availableobjects.add_object(new Object(randomlayer,"riot shield","lefthand",0,9,12,x,y,"riotShield.png"));
+					if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
+						availableobjects.add_object(new Object(randomlayer,"riot shield","lefthand",0,9,12,x2,y2,"riotShield.png"));
 				}
 			}
 			if (objecttype==7) {
 				if (chances<90) {
-					availableobjects.add_object(new Object(0,"armor","body",0,11,7,x,y,"reflecArmor.png"));
-					if (!activemap.gettiles()[x2][y2].isbloqued()) 
-						availableobjects.add_object(new Object(1,"armor","body",0,11,7,x2,y2,"reflecArmor.png"));
+					availableobjects.add_object(new Object(randomlayer,"armor","body",0,11,7,x,y,"reflecArmor.png"));
+					if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
+						availableobjects.add_object(new Object(randomlayer,"armor","body",0,11,7,x2,y2,"reflecArmor.png"));
 				}
 			}
 			if (objecttype==8) {
 				if (chances<90) {
-					availableobjects.add_object(new Object(0,"shield","lefthand",0,7,6,x,y,"shield.png"));
-					if (!activemap.gettiles()[x2][y2].isbloqued()) 
-						availableobjects.add_object(new Object(1,"shield","lefthand",0,7,6,x2,y2,"shield.png"));
+					availableobjects.add_object(new Object(randomlayer,"shield","lefthand",0,7,6,x,y,"shield.png"));
+					if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
+						availableobjects.add_object(new Object(randomlayer,"shield","lefthand",0,7,6,x2,y2,"shield.png"));
 				}
 			}
 			if (objecttype==9) {
 				if (chances<90) {
-					availableobjects.add_object(new Object(0,"skull cap","head",0,5,5,x,y,"skullcap.png"));
-					if (!activemap.gettiles()[x2][y2].isbloqued()) 
-						availableobjects.add_object(new Object(1,"skull cap","head",0,5,5,x2,y2,"skullcap.png"));
+					availableobjects.add_object(new Object(randomlayer,"skull cap","head",0,5,5,x,y,"skullcap.png"));
+					if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
+						availableobjects.add_object(new Object(randomlayer,"skull cap","head",0,5,5,x2,y2,"skullcap.png"));
 				}
 			}
 			if (objecttype==10) {
 				if (chances<90) {
-					availableobjects.add_object(new Object(0,"great shield","lefthand",0,12,11,x,y,"greatShield.png"));
-					if (!activemap.gettiles()[x2][y2].isbloqued()) 
-						availableobjects.add_object(new Object(1,"great shield","lefthand",0,12,11,x2,y2,"greatShield.png"));
+					availableobjects.add_object(new Object(randomlayer,"great shield","lefthand",0,12,11,x,y,"greatShield.png"));
+					if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
+						availableobjects.add_object(new Object(randomlayer,"great shield","lefthand",0,12,11,x2,y2,"greatShield.png"));
 				}
 			}
 		}
@@ -444,24 +455,25 @@ public class WrapperEngine {
 		int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
 		int x2 = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
 		int y2 = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
+		int randomlayer=randomGenerator.nextInt(WrapperEngine.NUMBER_OF_MAP_LAYERS);
 		int potiontype = randomGenerator.nextInt(3);
-		if (!activemap.gettiles()[x][y].isbloqued()) { // if there is empty space
+		if (!maplayers[randomlayer].gettiles()[x][y].isbloqued()) { // if there is empty space
 			if (potiontype==0) {
-				availableconsumables.add_consumable(new Consumable(0,"Blue potion",1,1,0,2,x,y,"potionblue.png"));
-				if (!activemap.gettiles()[x2][y2].isbloqued()) 
-					availableconsumables.add_consumable(new Consumable(1,"Blue potion",1,1,0,2,x2,y2,"potionblue.png"));
+				availableconsumables.add_consumable(new Consumable(randomlayer,"Blue potion",1,1,0,2,x,y,"potionblue.png"));
+				if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
+					availableconsumables.add_consumable(new Consumable(randomlayer,"Blue potion",1,1,0,2,x2,y2,"potionblue.png"));
 
 			}
 			if (potiontype==1) {
-				availableconsumables.add_consumable(new Consumable(0,"Red potion",0,1,1,1,x,y,"potionred.png"));
-				if (!activemap.gettiles()[x2][y2].isbloqued()) 
-					availableconsumables.add_consumable(new Consumable(1,"Red potion",0,1,1,1,x2,y2,"potionred.png"));
+				availableconsumables.add_consumable(new Consumable(randomlayer,"Red potion",0,1,1,1,x,y,"potionred.png"));
+				if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
+					availableconsumables.add_consumable(new Consumable(randomlayer,"Red potion",0,1,1,1,x2,y2,"potionred.png"));
 
 			}
 			if (potiontype==2) {
-				availableconsumables.add_consumable(new Consumable(0,"Yellow potion",2,1,0,0,x,y,"potionyellow.png"));
-				if (!activemap.gettiles()[x2][y2].isbloqued()) 
-					availableconsumables.add_consumable(new Consumable(1,"Yellow potion",2,1,0,0,x2,y2,"potionyellow.png"));
+				availableconsumables.add_consumable(new Consumable(randomlayer,"Yellow potion",2,1,0,0,x,y,"potionyellow.png"));
+				if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
+					availableconsumables.add_consumable(new Consumable(randomlayer,"Yellow potion",2,1,0,0,x2,y2,"potionyellow.png"));
 
 			}
 		}

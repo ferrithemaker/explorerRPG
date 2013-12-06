@@ -37,7 +37,7 @@ public class Map {
 	private int firstYtile; // defines current section of the map that is shown on screen
 	//private int xexitcoord; // MUST BE REMOVED, substituted by Access to layer
 	//private int yexitcoord; // MUST BE REMOVED, substituted by Access to layer
-	private int layermap;
+	//private int layermap;
 	private ArrayList<AccessToLayer> accesspoints;
 	//private int numberOfAccessPoints;
 	
@@ -224,9 +224,9 @@ public class Map {
 		public int getYexitcoord() {
 			return yexitcoord;
 		}*/
-		public int getlayer() {
+		/*public int getlayer() {
 			return layermap;
-		}
+		}*/
 		
 		
 		// sets / updates
@@ -242,9 +242,9 @@ public class Map {
 		public void setYentrypos(int value) {
 			yexitcoord=value;
 		}*/
-		public void setlayer(int value) {
+		/*public void setlayer(int value) {
 			layermap=value;
-		}
+		}*/
 		
 		public boolean istileempty(int x, int y) {
 			try {

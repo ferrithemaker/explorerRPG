@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
@@ -47,7 +48,7 @@ public class GameplayScreen implements Screen {
 
 	//private Map mapa; // deprecated, must be removed when dynamic layer system will be finished 
 	//private Map dungeon; // deprecated, must be removed when dynamic layer system will be finished 
-	private Map[] maplayers = new Map[2]; // new dynamic layer system
+	private Map[] maplayers = new Map[WrapperEngine.NUMBER_OF_MAP_LAYERS]; // new dynamic layer system
 	private Map activemap;
 	private Hero prota;
 	private WrapperEngine game;
@@ -61,7 +62,7 @@ public class GameplayScreen implements Screen {
     int object_inv_mode=0;
     int object_drop_mode=0;
     int eye_mode=0;
-    int debug_mode=1;
+    int debug_mode=0;
     int consumable_inv_mode=0;
     
    
@@ -133,10 +134,11 @@ public class GameplayScreen implements Screen {
         game = new WrapperEngine();
         maplayers[0]=game.getmaplayer(0);
         //maplayers[0].createdoor(WrapperEngine.LAYER_0_ENTRY_XPOS,WrapperEngine.LAYER_0_ENTRY_YPOS );
+        //maplayers[0].setlayer(1);
         maplayers[1]=game.getmaplayer(1);
-        maplayers[0].setlayer(1);
+        maplayers[2]=game.getmaplayer(2);
         //maplayers[1].createdoor(WrapperEngine.LAYER_1_ENTRY_XPOS,WrapperEngine.LAYER_1_ENTRY_YPOS);
-        maplayers[1].setlayer(2);
+        //maplayers[1].setlayer(2);
         layout=new Layout();
         prota = game.gethero();
         //layertiles[0] = maplayers[0].gettiles();
@@ -289,10 +291,12 @@ public class GameplayScreen implements Screen {
 		
 		genericfont.draw(batch, "Eye mode:"+eye_mode, 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-120);
 		genericfont.draw(batch, "Drop mode:"+object_drop_mode, 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-140);
+		genericfont.draw(batch, "Layer:"+game.getlayer(), 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-180);
+
 		int i=0;
 		for (AccessToLayer atl: maplayers[game.getlayer()].getAPs()) {
 			i++;
-			genericfont.draw(batch, "Door on layer "+game.getlayer()+" at "+atl.getIncommingX()+","+atl.getIncommingY(), 400, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-(20*i));			
+			genericfont.draw(batch, "Door on layer "+game.getlayer()+" to layer "+atl.getIncommingLayer()+" at "+atl.getIncommingX()+","+atl.getIncommingY(), 400, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-(20*i));			
 		}
 	}
 
@@ -381,7 +385,7 @@ public class GameplayScreen implements Screen {
 		for (AccessToLayer atl: maplayers[game.getlayer()].getAPs()) {
 			//System.out.println("Door on layer"+game.getlayer()+":"+atl.getOutcommingX()+","+atl.getOutcommingY());
 			if ((prota.getrelativextile()+maplayers[game.getlayer()].getfirstxtile())==atl.getIncommingX() && (prota.getrelativeytile()+maplayers[game.getlayer()].getfirstytile())==atl.getIncommingY()) {
-	     		game.changelayer(atl.getIncommingLayer()); //changelayer
+	     		game.changelayer(atl,prota.getrelativextile(),prota.getrelativeytile()); //changelayer
 	     		System.out.println("Over the DOOR!");
 	     		//prota.setabsolutextile(atl.getIncommingX());
 			}
