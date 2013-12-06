@@ -222,7 +222,7 @@ public class Enemy {
 		}
 		enforcenonpenetrationconstraints();
 	}
-	*/
+	
 	private void enforcenonpenetrationconstraints() {
 		// TODO check with map, my array, the game engine, or 
 		// something else to make sure the move I tried to make 
@@ -242,4 +242,5 @@ public class Enemy {
 	public int getabsolutedistance(int x, int y) {
 		return (int) Math.sqrt(getabsolutedistancesq(x, y));
 	}
+	*/
 }

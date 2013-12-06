@@ -52,11 +52,13 @@ public class WrapperEngine {
 	
 	// dynamic layers 
 	public final static int NUMBER_OF_MAP_LAYERS=2;
-	// default entry coords for dungeons
-	public final static int LAYER_0_ENTRY_XPOS=1;
-	public final static int LAYER_0_ENTRY_YPOS=0;
-	public final static int LAYER_1_ENTRY_XPOS=1;
-	public final static int LAYER_1_ENTRY_YPOS=3;
+	public final static int NUMBER_OF_ACCESSPOINTS=50;
+	
+	// default entry coords for dungeons DEPRECATED!!
+	//public final static int LAYER_0_ENTRY_XPOS=1;
+	//public final static int LAYER_0_ENTRY_YPOS=0;
+	//public final static int LAYER_1_ENTRY_XPOS=1;
+	//public final static int LAYER_1_ENTRY_YPOS=3;
 	
 	// android specific constants
 	public final static int ANDROID_MENU_BAR_SIZE=43;
@@ -76,6 +78,7 @@ public class WrapperEngine {
     private Map[] maplayers = new Map[2]; // new dynamic layer system
     private Map activemap;
     private int layer;
+    private int numberOfAP; // number of access points created
 
 
     
@@ -91,6 +94,9 @@ public class WrapperEngine {
         maplayers[1]= new Map();
         maplayers[0].createrandommap();
         maplayers[1].createrandomdungeon();
+        // create access points to layers
+        
+        
         //layertiles[0]=maplayers[0].gettiles();
         //layertiles[1]=maplayers[1].gettiles();
         
@@ -104,6 +110,8 @@ public class WrapperEngine {
         
         // setup initial layer
         layer=0;
+        
+        numberOfAP=0; // current number of AP
         //selectedtiles=layertiles[0];
         activemap=maplayers[0];
         
@@ -115,6 +123,9 @@ public class WrapperEngine {
         
         // create initial empty consumable array
         availableconsumables=new Consumable_array();
+        
+        //createAllAP
+        createAllAP();
         
         insurevalidplayerposition();
 	}
@@ -135,13 +146,49 @@ public class WrapperEngine {
 		return maplayers[value];
 	}
 	
+	public void createAllAP() {
+		int creationok;
+		while (numberOfAP!=WrapperEngine.NUMBER_OF_ACCESSPOINTS) {
+			creationok=createAP();
+			if (creationok==1) { 
+				numberOfAP++; 
+				//System.out.println("AP created");
+			}
+		}
+	}
+	
+	public int createAP() {
+		Random randomGenerator = new Random();
+		int inx = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
+		int iny = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
+		int outx = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
+		int outy = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
+		int outlayer = randomGenerator.nextInt(WrapperEngine.NUMBER_OF_MAP_LAYERS);
+		int inlayer = randomGenerator.nextInt(WrapperEngine.NUMBER_OF_MAP_LAYERS);
+		if (!maplayers[inlayer].gettiles()[inx][iny].isbloqued() && !maplayers[outlayer].gettiles()[outx][outy].isbloqued() && inlayer!=outlayer) {
+			// if constraints are right
+			maplayers[inlayer].createAccess(inx,iny,outx,outy,outlayer); // first socket
+			maplayers[outlayer].createAccess(outx,outy,inx,iny,inlayer); // and the reverse
+			return 1; // sockets created
+		} else {
+			return 0; // socket not created
+		}
+		
+		
+		
+	}
+	
 	/*public Map getdungeon() { // deprecated, use getmaplayer
 		return dungeon;
 	}*/
 	public int getlayer() { // this is the actual layer
 		return layer; // this variable has the actual layer
 	}
-	public void layerup() {
+	public void changelayer(int layer) {
+		this.layer=layer;
+		activemap=maplayers[this.layer];
+	}
+	/*public void layerup() {
 		layer++;
 		if (layer>NUMBER_OF_MAP_LAYERS-1) layer=NUMBER_OF_MAP_LAYERS-1;
 		activemap=maplayers[layer];
@@ -150,7 +197,7 @@ public class WrapperEngine {
 		layer--;
 		if (layer<0) layer=0;
 		activemap=maplayers[layer];
-	}
+	}*/
 		
 	// HERO CLASS WRAPPER
 	public Hero gethero() {
@@ -425,6 +472,7 @@ public class WrapperEngine {
 	/*
 	 *  Called from GameScreen
 	 */
+	/*
 	public void update() {
 		this.badguys.update();
 		
@@ -433,5 +481,5 @@ public class WrapperEngine {
 	public void onplayermove() {
 		//this.badguys.onplayermove(prota);
 	}
-	
+	*/
 }

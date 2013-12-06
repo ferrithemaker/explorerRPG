@@ -3,6 +3,7 @@ package com.game.libgdx.roguelikeengine;
 
 
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -34,9 +35,11 @@ public class Map {
     private Sprite blockedtile,freetile,water_img,rocks_img,fire_img,boulder_img,bones_img,cross_img,freedungeontile,door_img,web_img,altar_img,hole_img;
     private int firstXtile; // defines current section of the map that is shown on screen
 	private int firstYtile; // defines current section of the map that is shown on screen
-	private int xexitcoord;
-	private int yexitcoord;
+	//private int xexitcoord; // MUST BE REMOVED, substituted by Access to layer
+	//private int yexitcoord; // MUST BE REMOVED, substituted by Access to layer
 	private int layermap;
+	private ArrayList<AccessToLayer> accesspoints;
+	//private int numberOfAccessPoints;
 	
 	public Map() {
 		
@@ -56,8 +59,12 @@ public class Map {
 		// first tile position must be multiple of tile_size
 		firstXtile=0;
 		firstYtile=0;
+		// number of access points = 0 in the instanciation
+		//numberOfAccessPoints=0;
 		// create tile layout
         tilelayout = new Tile[WrapperEngine.TOTAL_X_TILES][WrapperEngine.TOTAL_Y_TILES];
+        // create access point arraylist
+        accesspoints=new ArrayList<AccessToLayer>();
 	}
 		// **** BEGIN MAP CREATION
 		public void createrandommap() {
@@ -83,10 +90,19 @@ public class Map {
 			}
 			createcementery();
 		}
-		public void createdoor(int x,int y) {
+		/*
+		public void createdoor(int x,int y) { // MUST BE REMOVED, substituted by createAccess()
 			xexitcoord=x;
 			yexitcoord=y;
 			tilelayout[x][y].updatetileimage(door_img);
+		}*/
+		public void createAccess(int inx,int iny, int outx, int outy,int layerout) {
+			// data must be prevalidated, this method don't check it
+			accesspoints.add(new AccessToLayer(inx,iny,outx,outy,layerout));
+			tilelayout[inx][iny].updatetileimage(door_img);
+		}
+		public ArrayList<AccessToLayer> getAPs() {
+			return accesspoints;
 		}
 		public void createrandomdungeon() {
 			// fill with freetiles
@@ -202,12 +218,12 @@ public class Map {
 		public int getfirstytile() {
 			return firstYtile;
 		}
-		public int getXexitcoord() {
+		/*public int getXexitcoord() {
 			return xexitcoord;
 		}
 		public int getYexitcoord() {
 			return yexitcoord;
-		}
+		}*/
 		public int getlayer() {
 			return layermap;
 		}
@@ -220,12 +236,12 @@ public class Map {
 		public void setfirstytile(int value) {
 			firstYtile=value;
 		}
-		public void setXentrypos(int value) {
+		/*public void setXentrypos(int value) {
 			xexitcoord=value;
 		}
 		public void setYentrypos(int value) {
 			yexitcoord=value;
-		}
+		}*/
 		public void setlayer(int value) {
 			layermap=value;
 		}

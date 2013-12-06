@@ -66,11 +66,12 @@ public class Enemy_array {
 		return result;
 	}
 	
-	
+	/*
 	public LinkedList<Enemy> inlogicrangeonly(Hero hero) {
 		int x = hero.getabsolutextile(), y = hero.getabsoluteytile();
 		return inlogicrangeonly(x, y);
 	}
+	
 	public LinkedList<Enemy> inlogicrangeonly(int x, int y) {
 		LinkedList<Enemy> result = new LinkedList<Enemy>();
 		

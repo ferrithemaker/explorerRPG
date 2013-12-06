@@ -132,10 +132,10 @@ public class GameplayScreen implements Screen {
 		// create tile layout
         game = new WrapperEngine();
         maplayers[0]=game.getmaplayer(0);
-        maplayers[0].createdoor(WrapperEngine.LAYER_0_ENTRY_XPOS,WrapperEngine.LAYER_0_ENTRY_YPOS );
+        //maplayers[0].createdoor(WrapperEngine.LAYER_0_ENTRY_XPOS,WrapperEngine.LAYER_0_ENTRY_YPOS );
         maplayers[1]=game.getmaplayer(1);
         maplayers[0].setlayer(1);
-        maplayers[1].createdoor(WrapperEngine.LAYER_1_ENTRY_XPOS,WrapperEngine.LAYER_1_ENTRY_YPOS);
+        //maplayers[1].createdoor(WrapperEngine.LAYER_1_ENTRY_XPOS,WrapperEngine.LAYER_1_ENTRY_YPOS);
         maplayers[1].setlayer(2);
         layout=new Layout();
         prota = game.gethero();
@@ -184,7 +184,8 @@ public class GameplayScreen implements Screen {
         
         
         // layer change control
-     	layercontrol();
+        //layercontrol();
+        APCheck();
      	
         // draw background tiles 
         drawtiles();
@@ -365,7 +366,17 @@ public class GameplayScreen implements Screen {
 	}
 	
 	// layer control
-	public void layercontrol() {
+	public void APCheck() {
+		for (AccessToLayer atl: maplayers[game.getlayer()].getAPs()) {
+			if (prota.getabsolutextile()==atl.getOutcommingX() && prota.getabsoluteytile()==atl.getOutcommingY()) {
+	     		game.changelayer(atl.getIncommingLayer()); //changelayer
+	     		//prota.setabsolutextile(atl.getIncommingX());
+			}
+		}
+		activemap=maplayers[game.getlayer()];
+	}
+	// MUST BE REMOVED
+	/*public void layercontrol() {
 		if (prota.getabsolutextile()==WrapperEngine.LAYER_0_ENTRY_XPOS && prota.getabsoluteytile()==WrapperEngine.LAYER_0_ENTRY_YPOS) {
      		game.layerup();
      	}
@@ -375,7 +386,7 @@ public class GameplayScreen implements Screen {
      	// update layer
      	activemap=maplayers[game.getlayer()];
      	
-	}
+	}*/
 	
 	/**
 	 * 
@@ -514,7 +525,7 @@ public class GameplayScreen implements Screen {
     	// key events control
     	handlekeyboardinput();
         
-        game.update();
+        //game.update();
         	
     }
 
