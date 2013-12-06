@@ -183,13 +183,13 @@ public class Hero {
 		}
 	}
 
-	public int getabsolutextile() {
+	/*public int getabsolutextile() {
 		return GameplayScreen.instance.getabsolutextile(this);
 	}
 
 	public int getabsoluteytile() {
 		return GameplayScreen.instance.getabsoluteytile(this);
-	}
+	}*/
 
 	public void setrelativextile(int value) {
 		this.relative_x_tile=value;

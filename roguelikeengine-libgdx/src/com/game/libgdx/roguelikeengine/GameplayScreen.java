@@ -61,7 +61,7 @@ public class GameplayScreen implements Screen {
     int object_inv_mode=0;
     int object_drop_mode=0;
     int eye_mode=0;
-    int debug_mode=0;
+    int debug_mode=1;
     int consumable_inv_mode=0;
     
    
@@ -185,7 +185,8 @@ public class GameplayScreen implements Screen {
         
         // layer change control
         //layercontrol();
-        APCheck();
+        activemap=maplayers[game.getlayer()];
+        
      	
         // draw background tiles 
         drawtiles();
@@ -280,11 +281,19 @@ public class GameplayScreen implements Screen {
 	protected void drawdebug() {
 		genericfont.draw(batch, "Screen Mouse X:"+Gdx.input.getX()+" Projected Mouse X: "+realXcoord, 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-20);
 		genericfont.draw(batch, "Screen Mouse Y:"+Gdx.input.getY()+" Projected Mouse Y: "+realYcoord, 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-40);
-		genericfont.draw(batch, "I'm at X: "+ maplayers[game.getlayer()].getfirstxtile()+" Y: "+maplayers[game.getlayer()].getfirstytile(), 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-60);
+		genericfont.draw(batch, "I'm at Screen X: "+ maplayers[game.getlayer()].getfirstxtile()+" Y: "+maplayers[game.getlayer()].getfirstytile(), 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-60);
+		genericfont.draw(batch, "I'm at tile X: "+ (maplayers[game.getlayer()].getfirstxtile()+prota.getrelativextile())+" Y: "+(maplayers[game.getlayer()].getfirstytile()+prota.getrelativeytile()), 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-160);
+
 		genericfont.draw(batch, "Real screen size X:"+Gdx.graphics.getWidth(), 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-80);
 		genericfont.draw(batch, "Real screen size Y:"+Gdx.graphics.getHeight(), 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-100);
+		
 		genericfont.draw(batch, "Eye mode:"+eye_mode, 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-120);
 		genericfont.draw(batch, "Drop mode:"+object_drop_mode, 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-140);
+		int i=0;
+		for (AccessToLayer atl: maplayers[game.getlayer()].getAPs()) {
+			i++;
+			genericfont.draw(batch, "Door on layer "+game.getlayer()+" at "+atl.getIncommingX()+","+atl.getIncommingY(), 400, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-(20*i));			
+		}
 	}
 
 	/**
@@ -367,13 +376,17 @@ public class GameplayScreen implements Screen {
 	
 	// layer control
 	public void APCheck() {
+		System.out.println("Hero Absolute x:"+(prota.getrelativextile()+maplayers[game.getlayer()].getfirstxtile()));
+ 		System.out.println("Hero Absolute y:"+(prota.getrelativeytile()+maplayers[game.getlayer()].getfirstytile()));
 		for (AccessToLayer atl: maplayers[game.getlayer()].getAPs()) {
-			if (prota.getabsolutextile()==atl.getOutcommingX() && prota.getabsoluteytile()==atl.getOutcommingY()) {
+			//System.out.println("Door on layer"+game.getlayer()+":"+atl.getOutcommingX()+","+atl.getOutcommingY());
+			if ((prota.getrelativextile()+maplayers[game.getlayer()].getfirstxtile())==atl.getIncommingX() && (prota.getrelativeytile()+maplayers[game.getlayer()].getfirstytile())==atl.getIncommingY()) {
 	     		game.changelayer(atl.getIncommingLayer()); //changelayer
+	     		System.out.println("Over the DOOR!");
 	     		//prota.setabsolutextile(atl.getIncommingX());
 			}
 		}
-		activemap=maplayers[game.getlayer()];
+		
 	}
 	// MUST BE REMOVED
 	/*public void layercontrol() {
@@ -845,6 +858,7 @@ public class GameplayScreen implements Screen {
     	actualenemy=null;
     	actualconsumable=null;
     	actualobject=null;
+    	APCheck();
     	game.heroup();
     }
     void godown() {
@@ -856,6 +870,7 @@ public class GameplayScreen implements Screen {
     	actualenemy=null;
     	actualconsumable=null;
     	actualobject=null;
+    	APCheck();
     	game.herodown();
     }
     void goleft() {
@@ -867,6 +882,7 @@ public class GameplayScreen implements Screen {
     	actualenemy=null;
     	actualconsumable=null;
     	actualobject=null;
+    	APCheck();
     	game.heroleft();
     }
     void goright() {
@@ -878,6 +894,7 @@ public class GameplayScreen implements Screen {
 		actualenemy=null;
 		actualconsumable=null;
 		actualobject=null;
+		APCheck();
 		game.heroright();
     }
     void look() {

@@ -52,7 +52,7 @@ public class WrapperEngine {
 	
 	// dynamic layers 
 	public final static int NUMBER_OF_MAP_LAYERS=2;
-	public final static int NUMBER_OF_ACCESSPOINTS=50;
+	public final static int NUMBER_OF_ACCESSPOINTS=16;
 	
 	// default entry coords for dungeons DEPRECATED!!
 	//public final static int LAYER_0_ENTRY_XPOS=1;
@@ -169,6 +169,7 @@ public class WrapperEngine {
 			// if constraints are right
 			maplayers[inlayer].createAccess(inx,iny,outx,outy,outlayer); // first socket
 			maplayers[outlayer].createAccess(outx,outy,inx,iny,inlayer); // and the reverse
+			System.out.println("AP created on layer "+inlayer+":"+inx+"|"+iny+"|"+outx+"|"+outy+"|"+outlayer);
 			return 1; // sockets created
 		} else {
 			return 0; // socket not created
