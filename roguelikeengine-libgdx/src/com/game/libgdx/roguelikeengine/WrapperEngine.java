@@ -191,12 +191,16 @@ public class WrapperEngine {
 		
 		//int activefirstxtile;
 		//int activefirstytile;
+		int numberofXscreens;
+		int numberofYscreens;
+		numberofXscreens=atl.getOutcommingX()/ON_SCREEN_TILES_X;
+		numberofYscreens=atl.getOutcommingY()/ON_SCREEN_TILES_Y;
 		//activefirstxtile=activemap.getfirstxtile();
 		//activefirstytile=activemap.getfirstytile();
 		this.layer=atl.getIncommingLayer();
 		activemap=maplayers[this.layer];
-		activemap.setfirstxtile(atl.getOutcommingX()-(rx-1)); // BUG HERE!!!!
-		activemap.setfirstytile(atl.getOutcommingY()-ry);
+		activemap.setfirstxtile(numberofXscreens*ON_SCREEN_TILES_X);
+		activemap.setfirstytile(numberofYscreens*ON_SCREEN_TILES_Y);
 	}
 	/*public void layerup() {
 		layer++;
