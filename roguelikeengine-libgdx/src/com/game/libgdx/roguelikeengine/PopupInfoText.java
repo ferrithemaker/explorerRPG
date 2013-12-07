@@ -38,7 +38,7 @@ public class PopupInfoText {
 		this.y=y;
 		this.xsize=xsize;
 		this.ysize=ysize;
-		this.background = new Sprite(new Texture(Gdx.files.internal(file)),xsize,ysize);
+		this.background = new Sprite(new Texture(Gdx.files.internal(file)),this.xsize,this.ysize);
 	}
 	
 	// sets

@@ -123,7 +123,7 @@ public class GameplayScreen implements Screen {
 		// fonts setup
 		FileHandle fontFile = Gdx.files.internal("diabloheavy.ttf");
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
-		genericfont = new BitmapFont();
+		//genericfont = new BitmapFont();
 		//messagefont = new BitmapFont();
 		messagefont = generator.generateFont(30); // px
     	messagefont.setColor(Color.YELLOW);
