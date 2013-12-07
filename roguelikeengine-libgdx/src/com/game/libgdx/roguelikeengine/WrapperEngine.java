@@ -49,6 +49,9 @@ public class WrapperEngine {
 	public final static int NUMBER_OF_LAKES=300;
 	public final static int NUMBER_OF_BLOCKING_OBJECTS=1000;
 	public final static int EXPERIENCE_NEXT_LEVEL_LIMIT=1000;
+	public final static int NUMBER_OF_ENEMIES_PER_LOOP=20;
+	public final static int NUMBER_OF_OBJECTS_PER_LOOP=20;
+	public final static int NUMBER_OF_CONSUMABLES_PER_LOOP=20;
 	
 	// dynamic layers 
 	public final static int NUMBER_OF_MAP_LAYERS=3;
@@ -288,44 +291,33 @@ public class WrapperEngine {
 		badguys.remove_enemy(obj);
 	}
 	public void createrandomenemy() { // create a random enemy
-		Random randomGenerator = new Random();
-		// generates random position
-		int x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
-		int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
-		int x2 = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
-		int y2 = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
-		int randomlayer=randomGenerator.nextInt(WrapperEngine.NUMBER_OF_MAP_LAYERS);
-		int enemytype = randomGenerator.nextInt(6); // random enemy choose
-		if (!maplayers[randomlayer].gettiles()[x][y].isbloqued()) { // if there is empty space
-			if (enemytype==0) {
-				badguys.add_enemy(new Enemy(randomlayer,"vortex",2,5,3,20,x,y,"vortex2.png"));
-				if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
-					badguys.add_enemy(new Enemy(randomlayer,"vortex",2,5,3,20,x2,y2,"vortex2.png"));
-			}
-			if (enemytype==1) {
-				badguys.add_enemy(new Enemy(randomlayer,"catharg",3,6,4,40,x,y,"cetharg.png"));
-				if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
-					badguys.add_enemy(new Enemy(randomlayer,"catharg",3,6,4,40,x2,y2,"cetharg.png"));
-			}
-			if (enemytype==2) {
-				badguys.add_enemy(new Enemy(randomlayer,"assassin",3,8,1,30,x,y,"assassin.png"));
-				if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
-					badguys.add_enemy(new Enemy(randomlayer,"assassin",3,8,1,30,x2,y2,"assassin.png"));
-			}
-			if (enemytype==3) {
-				badguys.add_enemy(new Enemy(randomlayer,"giant rat",1,8,8,40,x,y,"giantrat2.png"));
-				if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
-					badguys.add_enemy(new Enemy(randomlayer,"giant rat",1,8,8,40,x2,y2,"giantrat2.png"));
-			}
-			if (enemytype==4) {
-				badguys.add_enemy(new Enemy(randomlayer,"medusa",5,4,5,30,x,y,"medusa.png"));
-				if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
-					badguys.add_enemy(new Enemy(randomlayer,"medusa",5,4,5,30,x2,y2,"medusa.png"));
-			}
-			if (enemytype==5) {
-				badguys.add_enemy(new Enemy(randomlayer,"warlock",8,5,5,25,x,y,"warlock.png"));
-				if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
-					badguys.add_enemy(new Enemy(randomlayer,"warlock",8,5,5,25,x2,y2,"warlock.png"));
+		int i;
+		for (i=0;i<NUMBER_OF_ENEMIES_PER_LOOP;i++) {
+			Random randomGenerator = new Random();
+			// generates random position
+			int x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
+			int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
+			int randomlayer=randomGenerator.nextInt(WrapperEngine.NUMBER_OF_MAP_LAYERS);
+			int enemytype = randomGenerator.nextInt(6); // random enemy choose
+			if (!maplayers[randomlayer].gettiles()[x][y].isbloqued()) { // if there is empty space
+				if (enemytype==0) {
+					badguys.add_enemy(new Enemy(randomlayer,"vortex",2,5,3,20,x,y,"vortex2.png"));
+				}
+				if (enemytype==1) {
+					badguys.add_enemy(new Enemy(randomlayer,"catharg",3,6,4,40,x,y,"cetharg.png"));
+				}
+				if (enemytype==2) {
+					badguys.add_enemy(new Enemy(randomlayer,"assassin",3,8,1,30,x,y,"assassin.png"));
+				}
+				if (enemytype==3) {
+					badguys.add_enemy(new Enemy(randomlayer,"giant rat",1,8,8,40,x,y,"giantrat2.png"));
+				}
+				if (enemytype==4) {
+					badguys.add_enemy(new Enemy(randomlayer,"medusa",5,4,5,30,x,y,"medusa.png"));
+				}
+				if (enemytype==5) {
+					badguys.add_enemy(new Enemy(randomlayer,"warlock",8,5,5,25,x,y,"warlock.png"));
+				}
 			}
 		}
 	}
@@ -344,92 +336,70 @@ public class WrapperEngine {
 		availableobjects.remove_object(obj);
 	}
 	public void createrandomobject() {	// should return something to indicate something was generated?
-		Random randomGenerator = new Random();
-		// generates random position
-		int x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
-		int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
-		int x2 = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
-		int y2 = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
-		int randomlayer=randomGenerator.nextInt(WrapperEngine.NUMBER_OF_MAP_LAYERS);
-		int chances = randomGenerator.nextInt(100);
-		int objecttype = randomGenerator.nextInt(11);
-		if (!maplayers[randomlayer].gettiles()[x][y].isbloqued()) { // if there is empty space
-			if (objecttype==0) {
-				if (chances<90) {
-					availableobjects.add_object(new Object(randomlayer,"long sword","righthand",10,0,10,x,y,"longSword.png"));
-					if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) // make sure second item is placed on an empty space, too
-						availableobjects.add_object(new Object(randomlayer,"long sword","righthand",10,0,10,x2,y2,"longSword.png"));
-					// return true? 
+		int i;
+		for (i=0;i<NUMBER_OF_OBJECTS_PER_LOOP;i++) {
+			Random randomGenerator = new Random();
+			// generates random position
+			int x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
+			int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
+			int randomlayer=randomGenerator.nextInt(WrapperEngine.NUMBER_OF_MAP_LAYERS);
+			int chances = randomGenerator.nextInt(100);
+			int objecttype = randomGenerator.nextInt(11);
+			if (!maplayers[randomlayer].gettiles()[x][y].isbloqued()) { // if there is empty space
+				if (objecttype==0) {
+					if (chances<90) {
+						availableobjects.add_object(new Object(randomlayer,"long sword","righthand",10,0,10,x,y,"longSword.png"));
+					}
 				}
-			}
-			if (objecttype==1) {
-				if (chances<90) {
-					availableobjects.add_object(new Object(randomlayer,"dagger","righthand",3,0,7,x,y,"dagger.png"));
-					if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
-						availableobjects.add_object(new Object(randomlayer,"dagger","righthand",3,0,7,x2,y2,"dagger.png"));
+				if (objecttype==1) {
+					if (chances<90) {
+						availableobjects.add_object(new Object(randomlayer,"dagger","righthand",3,0,7,x,y,"dagger.png"));	
+					}
 				}
-			}
-			if (objecttype==2) {
-				if (chances<90) {
-					availableobjects.add_object(new Object(randomlayer,"boots","foot",0,6,4,x,y,"boots.png"));
-					if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
-						availableobjects.add_object(new Object(randomlayer,"boots","foot",0,6,4,x2,y2,"boots.png"));					
+				if (objecttype==2) {
+					if (chances<90) {
+						availableobjects.add_object(new Object(randomlayer,"boots","foot",0,6,4,x,y,"boots.png"));
+					}
 				}
-			}
-			if (objecttype==3) {
-				if (chances<90) {
-					availableobjects.add_object(new Object(randomlayer,"heavy armor","body",0,15,10,x,y,"heavyarmor.png"));
-					if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
-						availableobjects.add_object(new Object(randomlayer,"heavy armor","body",0,15,10,x2,y2,"heavyarmor.png"));
+				if (objecttype==3) {
+					if (chances<90) {
+						availableobjects.add_object(new Object(randomlayer,"heavy armor","body",0,15,10,x,y,"heavyarmor.png"));
+					}
 				}
-			}
-			if (objecttype==4) {
-				if (chances<90) {
-					availableobjects.add_object(new Object(randomlayer,"helm","head",0,4,6,x,y,"helm.png"));
-					if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
-						availableobjects.add_object(new Object(randomlayer,"helm","head",0,4,6,x2,y2,"helm.png"));
+				if (objecttype==4) {
+					if (chances<90) {
+						availableobjects.add_object(new Object(randomlayer,"helm","head",0,4,6,x,y,"helm.png"));
+					}
 				}
-			}
-			if (objecttype==5) {
-				if (chances<90) {
-					availableobjects.add_object(new Object(randomlayer,"mace","lefthand",7,0,8,x,y,"mace.png"));
-					if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
-						availableobjects.add_object(new Object(randomlayer,"mace","lefthand",7,0,8,x2,y2,"mace.png"));
+				if (objecttype==5) {
+					if (chances<90) {
+						availableobjects.add_object(new Object(randomlayer,"mace","lefthand",7,0,8,x,y,"mace.png"));
+					}
 				}
-			}
-			if (objecttype==6) {
-				if (chances<90) {
-					availableobjects.add_object(new Object(randomlayer,"riot shield","lefthand",0,9,12,x,y,"riotShield.png"));
-					if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
-						availableobjects.add_object(new Object(randomlayer,"riot shield","lefthand",0,9,12,x2,y2,"riotShield.png"));
+				if (objecttype==6) {
+					if (chances<90) {
+						availableobjects.add_object(new Object(randomlayer,"riot shield","lefthand",0,9,12,x,y,"riotShield.png"));
+					}
 				}
-			}
-			if (objecttype==7) {
-				if (chances<90) {
-					availableobjects.add_object(new Object(randomlayer,"armor","body",0,11,7,x,y,"reflecArmor.png"));
-					if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
-						availableobjects.add_object(new Object(randomlayer,"armor","body",0,11,7,x2,y2,"reflecArmor.png"));
+				if (objecttype==7) {
+					if (chances<90) {
+						availableobjects.add_object(new Object(randomlayer,"armor","body",0,11,7,x,y,"reflecArmor.png"));
+					}
 				}
-			}
-			if (objecttype==8) {
-				if (chances<90) {
-					availableobjects.add_object(new Object(randomlayer,"shield","lefthand",0,7,6,x,y,"shield.png"));
-					if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
-						availableobjects.add_object(new Object(randomlayer,"shield","lefthand",0,7,6,x2,y2,"shield.png"));
+				if (objecttype==8) {
+					if (chances<90) {
+						availableobjects.add_object(new Object(randomlayer,"shield","lefthand",0,7,6,x,y,"shield.png"));
+					}
 				}
-			}
-			if (objecttype==9) {
-				if (chances<90) {
-					availableobjects.add_object(new Object(randomlayer,"skull cap","head",0,5,5,x,y,"skullcap.png"));
-					if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
-						availableobjects.add_object(new Object(randomlayer,"skull cap","head",0,5,5,x2,y2,"skullcap.png"));
+				if (objecttype==9) {
+					if (chances<90) {
+						availableobjects.add_object(new Object(randomlayer,"skull cap","head",0,5,5,x,y,"skullcap.png"));
+					}
 				}
-			}
-			if (objecttype==10) {
-				if (chances<90) {
-					availableobjects.add_object(new Object(randomlayer,"great shield","lefthand",0,12,11,x,y,"greatShield.png"));
-					if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
-						availableobjects.add_object(new Object(randomlayer,"great shield","lefthand",0,12,11,x2,y2,"greatShield.png"));
+				if (objecttype==10) {
+					if (chances<90) {
+						availableobjects.add_object(new Object(randomlayer,"great shield","lefthand",0,12,11,x,y,"greatShield.png"));
+					}
 				}
 			}
 		}
@@ -453,32 +423,24 @@ public class WrapperEngine {
 		availableconsumables.add_consumable(c);
 	}
 	public void createrandomconsumable() {
-		Random randomGenerator = new Random();
-		// generates random position
-		int x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
-		int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
-		int x2 = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
-		int y2 = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
-		int randomlayer=randomGenerator.nextInt(WrapperEngine.NUMBER_OF_MAP_LAYERS);
-		int potiontype = randomGenerator.nextInt(3);
-		if (!maplayers[randomlayer].gettiles()[x][y].isbloqued()) { // if there is empty space
-			if (potiontype==0) {
-				availableconsumables.add_consumable(new Consumable(randomlayer,"Blue potion",1,1,0,2,x,y,"potionblue.png"));
-				if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
-					availableconsumables.add_consumable(new Consumable(randomlayer,"Blue potion",1,1,0,2,x2,y2,"potionblue.png"));
-
-			}
-			if (potiontype==1) {
-				availableconsumables.add_consumable(new Consumable(randomlayer,"Red potion",0,1,1,1,x,y,"potionred.png"));
-				if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
-					availableconsumables.add_consumable(new Consumable(randomlayer,"Red potion",0,1,1,1,x2,y2,"potionred.png"));
-
-			}
-			if (potiontype==2) {
-				availableconsumables.add_consumable(new Consumable(randomlayer,"Yellow potion",2,1,0,0,x,y,"potionyellow.png"));
-				if (!maplayers[randomlayer].gettiles()[x2][y2].isbloqued()) 
-					availableconsumables.add_consumable(new Consumable(randomlayer,"Yellow potion",2,1,0,0,x2,y2,"potionyellow.png"));
-
+		int i;
+		for (i=0;i<NUMBER_OF_CONSUMABLES_PER_LOOP;i++) {
+			Random randomGenerator = new Random();
+			// generates random position
+			int x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
+			int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
+			int randomlayer=randomGenerator.nextInt(WrapperEngine.NUMBER_OF_MAP_LAYERS);
+			int potiontype = randomGenerator.nextInt(3);
+			if (!maplayers[randomlayer].gettiles()[x][y].isbloqued()) { // if there is empty space
+				if (potiontype==0) {
+					availableconsumables.add_consumable(new Consumable(randomlayer,"Blue potion",1,1,0,2,x,y,"potionblue.png"));	
+				}
+				if (potiontype==1) {
+					availableconsumables.add_consumable(new Consumable(randomlayer,"Red potion",0,1,1,1,x,y,"potionred.png"));
+				}
+				if (potiontype==2) {
+					availableconsumables.add_consumable(new Consumable(randomlayer,"Yellow potion",2,1,0,0,x,y,"potionyellow.png"));		
+				}
 			}
 		}
     }
