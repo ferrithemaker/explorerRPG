@@ -19,10 +19,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+
 
 public class SplashScreen implements Screen {
 	
@@ -40,15 +43,18 @@ public class SplashScreen implements Screen {
 	@Override
     public void show()
     {
-    	//layout=new Layout();    
+    	//layout=new Layout();
+		FileHandle fontFile = Gdx.files.internal("diabloheavy.ttf");
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
     	spriteBatch = new SpriteBatch();
-    	messagefont = new BitmapFont();
+    	//messagefont = new BitmapFont();
+    	messagefont = generator.generateFont(40); // px
     	messagefont.setColor(Color.YELLOW);
-		messagefont.setScale(3f);
+		//messagefont.setScale(3f); 
 		text="WELCOME TO EXPLORER TEST GAME.\nYou awake in the andor graveyard, \ntrapped in the great gardens of andor.\nThe only way to leave \nis using the amulet of willing.\nYou must recover it defeating megaboss.\nTo defeat megaboss, you must upgrade\nyour character killing monsters,\ntaking objects and drinking potions.\n\nGood luck.";
     	// create a fight message info screen 
     	screentext=new PopupInfoText(0,0,"splashscreen.png",1280,704);
-    	screentext.settextoffset(200, 150);
+    	screentext.settextoffset(100, 150);
     }
 
     @Override

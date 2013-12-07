@@ -24,11 +24,13 @@ import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Color;
 //import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
 
 
@@ -118,8 +120,15 @@ public class GameplayScreen implements Screen {
 	 */
 	protected void init() {
 		batch = new SpriteBatch();
+		// fonts setup
+		FileHandle fontFile = Gdx.files.internal("diabloheavy.ttf");
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
 		genericfont = new BitmapFont();
-		messagefont = new BitmapFont();
+		//messagefont = new BitmapFont();
+		messagefont = generator.generateFont(30); // px
+    	messagefont.setColor(Color.YELLOW);
+    	genericfont = generator.generateFont(14); // px
+    	genericfont.setColor(Color.WHITE);
 		// create tile layout
         game = new WrapperEngine();
         maplayers[0]=game.getmaplayer(0);
@@ -139,8 +148,6 @@ public class GameplayScreen implements Screen {
         objinv= new Object_inventory();
         consinv= new Consumable_inventory();
 		
-		messagefont.setColor(Color.YELLOW);
-		messagefont.setScale(2f);
         
 		// create a fight message info screen 
 		screentext=new PopupInfoText(100,(WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-400,"text_background.png",1000,300);
@@ -277,7 +284,7 @@ public class GameplayScreen implements Screen {
 		int i=0;
 		for (AccessToLayer atl: maplayers[game.getlayer()].getAPs()) {
 			i++;
-			genericfont.draw(batch, "Door on layer "+game.getlayer()+" to layer "+atl.getIncommingLayer()+" at "+atl.getIncommingX()+","+atl.getIncommingY(), 400, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-(20*i));			
+			genericfont.draw(batch, "Door on layer "+game.getlayer()+" to layer "+atl.getIncommingLayer()+" at "+atl.getIncommingX()+","+atl.getIncommingY(), 440, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-(20*i));			
 		}
 	}
 
