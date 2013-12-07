@@ -209,7 +209,7 @@ public class GameplayScreen implements Screen {
         }
         
 		// draw version build
-        genericfont.draw(batch, "Development build 63", 10, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-620);
+        genericfont.draw(batch, "Development build 65", 10, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-620);
 
         
         // draw object inventory
