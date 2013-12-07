@@ -48,10 +48,10 @@ public class Hero {
 	private Object body;
 	private Object foot;
 
-	private WrapperEngine engine;
+	
 
 	public Hero(WrapperEngine engine, String name, String file) {
-		this.engine = engine;
+		
 
 		// initial set-up
 		this.agility=4; 
@@ -69,7 +69,7 @@ public class Hero {
 		this.righthand = new Object(); // empty object
 		this.foot = new Object(); // empty object
 		this.texture= new Texture(Gdx.files.internal(file));
-		//this.sprite = new Sprite(new Texture(Gdx.files.internal(file)));
+		
 	}
 
 	// hero gets
@@ -183,14 +183,6 @@ public class Hero {
 		}
 	}
 
-	/*public int getabsolutextile() {
-		return GameplayScreen.instance.getabsolutextile(this);
-	}
-
-	public int getabsoluteytile() {
-		return GameplayScreen.instance.getabsoluteytile(this);
-	}*/
-
 	public void setrelativextile(int value) {
 		this.relative_x_tile=value;
 		//this.engine.onplayermove();
@@ -205,7 +197,7 @@ public class Hero {
 	public void updateexperience(int value) {
 		this.exp=this.exp+value;
 		
-		// check for level up
+	// check for level up
 	}
 	public void updatehp(int value) {
 		this.life=Math.min(this.maxlife, this.life+value);
@@ -262,10 +254,6 @@ public class Hero {
 	// fight
 	// hero hit enemy
 	public String hit(Enemy enemy) {
-		//System.out.println("enemy force:"+enemy.getforce());
-		//System.out.println("enemy agility:"+enemy.getagility());
-		//System.out.println("enemy agility ceil:"+(int)(Math.ceil(((double)enemy.getagility()/(double)3))));
-		//System.out.println("hero resist:"+this.resist);
 		Random randomGenerator = new Random();
 		int herohit= (((int)(Math.ceil((double)((double)this.agility/(double)3)))*this.force)-enemy.getresist());
 		int enemyhit=(((int)(Math.ceil((double)((double)enemy.getagility()/(double)3)))*enemy.getforce())-this.resist);
@@ -391,8 +379,6 @@ public class Hero {
 	}
 	public Sprite getsprite() {
         return new Sprite(texture,getxspriteposition(),getyspriteposition(),WrapperEngine.TILE_X_SIZE,WrapperEngine.TILE_Y_SIZE);
-        //return new Sprite(texture,0,128,64,64);
-
 	}
 	// *** END hero sprite management. you MUST modify it with your own sprite behavior
 }

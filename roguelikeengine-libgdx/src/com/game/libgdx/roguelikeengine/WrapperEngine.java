@@ -57,27 +57,16 @@ public class WrapperEngine {
 	public final static int NUMBER_OF_MAP_LAYERS=3;
 	public final static int NUMBER_OF_ACCESSPOINTS=30;
 	
-	// default entry coords for dungeons DEPRECATED!!
-	//public final static int LAYER_0_ENTRY_XPOS=1;
-	//public final static int LAYER_0_ENTRY_YPOS=0;
-	//public final static int LAYER_1_ENTRY_XPOS=1;
-	//public final static int LAYER_1_ENTRY_YPOS=3;
 	
 	// android specific constants
 	public final static int ANDROID_MENU_BAR_SIZE=43;
 	public final static boolean ANDROID_MENU_BAR_ENABLE=false;
 	
 	// variables
-	//private Tile[][] tilelayout; // deprecated, must be removed when dynamic layer system will be finished 
-	//private Tile[][] tilelayoutdungeon; // deprecated, must be removed when dynamic layer system will be finished 
-	//private Tile[][][] layertiles = new Tile[2][][]; // new dynamic layer system ([layer number][x][y])
-	//private Tile[][] selectedtiles;
     private Enemy_array badguys;
     private Object_array availableobjects;
     private Consumable_array availableconsumables;
     private Hero prota;
-    //private Map mapa; // deprecated, must be removed when dynamic layer system will be finished 
-    //private Map dungeon; // deprecated, must be removed when dynamic layer system will be finished 
     private Map[] maplayers = new Map[WrapperEngine.NUMBER_OF_MAP_LAYERS]; // new dynamic layer system
     private Map activemap;
     private int layer;
@@ -99,25 +88,11 @@ public class WrapperEngine {
         maplayers[1].createrandomdungeon();
         maplayers[2].createrandomdungeon();
         
-        // create access points to layers
-        
-        
-        //layertiles[0]=maplayers[0].gettiles();
-        //layertiles[1]=maplayers[1].gettiles();
-        
-        //mapa.createrandommap();
-        //tilelayout=mapa.gettiles();
-        
-        // create Map
-        //dungeon=new Map();
-        //dungeon.createrandomdungeon();
-        //tilelayoutdungeon=dungeon.gettiles();
-        
         // setup initial layer
         layer=0;
         
         numberOfAP=0; // current number of AP
-        //selectedtiles=layertiles[0];
+
         activemap=maplayers[0];
         
         // create initial empty enemy array
@@ -184,37 +159,20 @@ public class WrapperEngine {
 		
 	}
 	
-	/*public Map getdungeon() { // deprecated, use getmaplayer
-		return dungeon;
-	}*/
+	
 	public int getlayer() { // this is the actual layer
 		return layer; // this variable has the actual layer
 	}
 	public void changelayer(AccessToLayer atl,int rx,int ry) {
-		
-		//int activefirstxtile;
-		//int activefirstytile;
 		int numberofXscreens;
 		int numberofYscreens;
 		numberofXscreens=atl.getOutcommingX()/ON_SCREEN_TILES_X;
 		numberofYscreens=atl.getOutcommingY()/ON_SCREEN_TILES_Y;
-		//activefirstxtile=activemap.getfirstxtile();
-		//activefirstytile=activemap.getfirstytile();
 		this.layer=atl.getIncommingLayer();
 		activemap=maplayers[this.layer];
 		activemap.setfirstxtile(numberofXscreens*ON_SCREEN_TILES_X);
 		activemap.setfirstytile(numberofYscreens*ON_SCREEN_TILES_Y);
 	}
-	/*public void layerup() {
-		layer++;
-		if (layer>NUMBER_OF_MAP_LAYERS-1) layer=NUMBER_OF_MAP_LAYERS-1;
-		activemap=maplayers[layer];
-	}
-	public void layerdown() {
-		layer--;
-		if (layer<0) layer=0;
-		activemap=maplayers[layer];
-	}*/
 		
 	// HERO CLASS WRAPPER
 	public Hero gethero() {
@@ -447,18 +405,4 @@ public class WrapperEngine {
 	public void createconsumable(int layer,String name, int p_agility, int p_life,int force, int resist,int x,int y,String file) {
         availableconsumables.add_consumable(new Consumable(layer,name,p_agility,p_life,force,resist,x,y,file));
 	}
-
-	/*
-	 *  Called from GameScreen
-	 */
-	/*
-	public void update() {
-		this.badguys.update();
-		
-	}
-	
-	public void onplayermove() {
-		//this.badguys.onplayermove(prota);
-	}
-	*/
 }

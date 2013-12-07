@@ -60,7 +60,7 @@ public class SplashScreen implements Screen {
             spriteBatch.end();
             
             if(Gdx.input.justTouched())
-                    theGame.setScreen(new GameplayScreen(theGame));
+                    theGame.setScreen(new GameplayScreen());
     }
     
      
@@ -78,6 +78,7 @@ public class SplashScreen implements Screen {
     }
     @Override
     public void dispose() {
+    	if(spriteBatch != null) spriteBatch.dispose();
     	
     }
     @Override

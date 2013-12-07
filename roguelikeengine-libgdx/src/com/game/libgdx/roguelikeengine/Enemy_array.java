@@ -1,7 +1,7 @@
 package com.game.libgdx.roguelikeengine;
 
 /*
-    Copyright (C) 2013  Ferran F�bregas (ferri.fc@gmail.com)
+    Copyright (C) 2013  Ferran Fabregas (ferri.fc@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -65,41 +65,4 @@ public class Enemy_array {
 		
 		return result;
 	}
-	
-	/*
-	public LinkedList<Enemy> inlogicrangeonly(Hero hero) {
-		int x = hero.getabsolutextile(), y = hero.getabsoluteytile();
-		return inlogicrangeonly(x, y);
-	}
-	
-	public LinkedList<Enemy> inlogicrangeonly(int x, int y) {
-		LinkedList<Enemy> result = new LinkedList<Enemy>();
-		
-		int rangesq = LOGIC_RANGE * LOGIC_RANGE;
-		
-		
-		int dist;
-		for(Enemy enemy : this.Enemylist) {
-			dist = enemy.getabsolutedistancesq(x, y);
-			
-			if(dist < rangesq) {
-				result.add(enemy);
-			}
-		}
-		
-		
-		return result;
-	}
-
-	public void update() {
-		
-	}
-	
-	/*public void onplayermove(Hero hero) {
-		LinkedList<Enemy> inrange = inlogicrangeonly(hero);
-		for(Enemy enemy : inrange) {
-			enemy.onplayermove(hero);
-		}
-	}*/
-	
 }

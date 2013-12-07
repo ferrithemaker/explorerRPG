@@ -68,6 +68,5 @@ public class Explorer_libgdx extends Game {
 	@Override
 	public void dispose() {
 		if(batch != null) batch.dispose();
-		//texture.dispose();
 	}
 }

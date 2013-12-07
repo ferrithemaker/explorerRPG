@@ -38,25 +38,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class GameplayScreen implements Screen {
 	public static GameplayScreen instance = null;
 	
-	// game itself
-	private Explorer_libgdx thegame;
-	
 	private SpriteBatch batch;
 	//private Texture texture;
 	private BitmapFont genericfont;
 	private BitmapFont messagefont;
 
-	//private Map mapa; // deprecated, must be removed when dynamic layer system will be finished 
-	//private Map dungeon; // deprecated, must be removed when dynamic layer system will be finished 
 	private Map[] maplayers = new Map[WrapperEngine.NUMBER_OF_MAP_LAYERS]; // new dynamic layer system
 	private Map activemap;
 	private Hero prota;
 	private WrapperEngine game;
     private Layout layout; 
-    //private Tile[][] tilelayout; // deprecated, must be removed when dynamic layer system will be finished 
-    //private Tile[][] tilelayoutdungeon; // deprecated, must be removed when dynamic layer system will be finished 
-    //private Tile[][] selectedtiles;
-    //private Tile[][][] layertiles = new Tile[2][][]; // new dynamic layer system
     
     // inventory status and modes
     int object_inv_mode=0;
@@ -86,8 +77,7 @@ public class GameplayScreen implements Screen {
     // fight status
     int just_fight=0;
     
-    public GameplayScreen(Explorer_libgdx mygame) {
-    	this.thegame=mygame;
+    public GameplayScreen() {
     	
     	if(instance == null) instance = this;
     }
@@ -133,16 +123,10 @@ public class GameplayScreen implements Screen {
 		// create tile layout
         game = new WrapperEngine();
         maplayers[0]=game.getmaplayer(0);
-        //maplayers[0].createdoor(WrapperEngine.LAYER_0_ENTRY_XPOS,WrapperEngine.LAYER_0_ENTRY_YPOS );
-        //maplayers[0].setlayer(1);
         maplayers[1]=game.getmaplayer(1);
         maplayers[2]=game.getmaplayer(2);
-        //maplayers[1].createdoor(WrapperEngine.LAYER_1_ENTRY_XPOS,WrapperEngine.LAYER_1_ENTRY_YPOS);
-        //maplayers[1].setlayer(2);
         layout=new Layout();
         prota = game.gethero();
-        //layertiles[0] = maplayers[0].gettiles();
-        //layertiles[1]=maplayers[1].gettiles();
         badguys= game.getenemies();
         availableobjects=game.getobjects();
         availableconsumables=game.getconsumables();
@@ -177,15 +161,13 @@ public class GameplayScreen implements Screen {
 	    drawinterface();
 	 	
 	 	// draw equipment
-	 	//genericfont.draw(batch,"Wear:", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-150);
-	 	
 	 	drawequipment();
         
         // overenemy description
         drawdescriptions();
         
         
-        // layer change control
+
         //layercontrol();
         activemap=maplayers[game.getlayer()];
         
@@ -219,11 +201,11 @@ public class GameplayScreen implements Screen {
         	drawdebug();
         }
         
-		
+		// draw version build
+        genericfont.draw(batch, "Development build 63", 10, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-620);
+
         
         // draw object inventory
-        //genericfont.draw(batch,"Object inventory", 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-330);
-
         drawinventory();
         
         batch.end();
@@ -264,8 +246,7 @@ public class GameplayScreen implements Screen {
         }
         
         // draw consumable inventory
-        //genericfont.draw(batch,"Consumable inventory", 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-40);
-
+        
         for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
         	if (consinv.get_consumable(i)!=null) {
         		//genericfont.draw(batch,"Cons slot "+i+":"+consinv.get_consumable(i).getname(), 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(70+(i*20)));
@@ -392,22 +373,7 @@ public class GameplayScreen implements Screen {
 		}
 		
 	}
-	// MUST BE REMOVED
-	/*public void layercontrol() {
-		if (prota.getabsolutextile()==WrapperEngine.LAYER_0_ENTRY_XPOS && prota.getabsoluteytile()==WrapperEngine.LAYER_0_ENTRY_YPOS) {
-     		game.layerup();
-     	}
-     	if (prota.getabsolutextile()==WrapperEngine.LAYER_1_ENTRY_XPOS && prota.getabsoluteytile()==WrapperEngine.LAYER_1_ENTRY_YPOS) {
-     		game.layerdown();
-     	}
-     	// update layer
-     	activemap=maplayers[game.getlayer()];
-     	
-	}*/
 	
-	/**
-	 * 
-	 */
 	protected void drawtiles() {
 		int relativex=0;
         for (int xpos=maplayers[game.getlayer()].getfirstxtile();xpos<(maplayers[game.getlayer()].getfirstxtile()+WrapperEngine.ON_SCREEN_TILES_X);xpos++) {
@@ -420,9 +386,6 @@ public class GameplayScreen implements Screen {
         }
 	}
 
-	/**
-	 * 
-	 */
 	protected void drawdescriptions() {
 		if (actualenemy!=null) {
         	if (actualenemy.getname()!=null) {
@@ -959,7 +922,7 @@ public class GameplayScreen implements Screen {
 	
 	@Override
 	public void dispose() {
-		batch.dispose();
+		if(batch != null) batch.dispose();
 		//texture.dispose();
 	}
 
