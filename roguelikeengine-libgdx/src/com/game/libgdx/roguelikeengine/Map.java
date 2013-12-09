@@ -32,7 +32,8 @@ import com.badlogic.gdx.Gdx;
 
 public class Map {
 	private Tile tilelayout[][];
-    private Sprite blockedtile,freetile,water_img,rocks_img,fire_img,boulder_img,bones_img,cross_img,freedungeontile,door_img,web_img,altar_img,hole_img;
+    private Sprite blockedtile,freetile,rocks_img,fire_img,boulder_img,bones_img,cross_img,freedungeontile,door_img,web_img,altar_img,hole_img;
+    private Sprite waterUL_img,waterUR_img, waterDL_img, waterDR_img, water_img;
     private int firstXtile; // defines current section of the map that is shown on screen
 	private int firstYtile; // defines current section of the map that is shown on screen
 	private ArrayList<AccessToLayer> accesspoints;
@@ -53,6 +54,10 @@ public class Map {
 		boulder_img = new Sprite(new Texture(Gdx.files.internal("boulder.png")));
 		fire_img= new Sprite(new Texture(Gdx.files.internal("fire.png")));
 		cross_img = new Sprite(new Texture(Gdx.files.internal("graveyard.png")));
+		waterDR_img = new Sprite(new Texture(Gdx.files.internal("waterDR.png")));
+		waterDL_img = new Sprite(new Texture(Gdx.files.internal("waterDL.png")));
+		waterUR_img= new Sprite(new Texture(Gdx.files.internal("waterUR.png")));
+		waterUL_img = new Sprite(new Texture(Gdx.files.internal("waterUL.png")));
 		// first tile position must be multiple of tile_size
 		firstXtile=0;
 		firstYtile=0;
@@ -141,17 +146,21 @@ public class Map {
 		}
 		public void createrandomlake() {
 			Random randomGenerator = new Random();
-			int lenght = randomGenerator.nextInt(WrapperEngine.MAX_LAKE_SIZE);
+			int lenght = (randomGenerator.nextInt(WrapperEngine.MAX_LAKE_SIZE-1)+1);
 			int start_x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES-WrapperEngine.MAX_LAKE_SIZE);
 			int start_y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES-WrapperEngine.MAX_LAKE_SIZE);
-			int width = randomGenerator.nextInt(WrapperEngine.MAX_LAKE_SIZE);
+			int width = (randomGenerator.nextInt(WrapperEngine.MAX_LAKE_SIZE-1)+1);
 			for (int xpos=start_x;xpos<start_x+lenght;xpos++) {
 				for (int ypos=start_y;ypos<start_y+width;ypos++) {
 					tilelayout[xpos][ypos].block();
 					tilelayout[xpos][ypos].updatetileimage(water_img);
 				}
 	        }
-			
+			// lake corners
+			tilelayout[start_x][start_y].updatetileimage(waterDL_img);
+			tilelayout[start_x+lenght-1][start_y].updatetileimage(waterDR_img);
+			tilelayout[start_x][start_y+width-1].updatetileimage(waterUL_img);
+			tilelayout[start_x+lenght-1][start_y+width-1].updatetileimage(waterUR_img);
 		}
 		public void createblockingelement() {
 			Random randomGenerator = new Random();
