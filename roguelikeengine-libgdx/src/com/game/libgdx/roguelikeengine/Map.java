@@ -34,6 +34,7 @@ public class Map {
 	private Tile tilelayout[][];
     private Sprite blockedtile,freetile,rocks_img,fire_img,boulder_img,bones_img,cross_img,freedungeontile,door_img,web_img,altar_img,hole_img;
     private Sprite waterUL_img,waterUR_img, waterDL_img, waterDR_img, water_img;
+    private Sprite upperwall_img,frontwall_img;
     private int firstXtile; // defines current section of the map that is shown on screen
 	private int firstYtile; // defines current section of the map that is shown on screen
 	private ArrayList<AccessToLayer> accesspoints;
@@ -58,6 +59,8 @@ public class Map {
 		waterDL_img = new Sprite(new Texture(Gdx.files.internal("waterDL.png")));
 		waterUR_img= new Sprite(new Texture(Gdx.files.internal("waterUR.png")));
 		waterUL_img = new Sprite(new Texture(Gdx.files.internal("waterUL.png")));
+		upperwall_img= new Sprite(new Texture(Gdx.files.internal("upperwall.png")));
+		frontwall_img = new Sprite(new Texture(Gdx.files.internal("frontwall.png")));
 		// first tile position must be multiple of tile_size
 		firstXtile=0;
 		firstYtile=0;
@@ -75,6 +78,12 @@ public class Map {
 		        		tilelayout[xpos][ypos]= new Tile(false,freetile);
 		        	}
 		        }
+			
+			
+			// create lakes
+			for (int num=0; num<WrapperEngine.NUMBER_OF_LAKES;num++) {
+				createrandomlake();
+			}
 			// create random walls
 			for (int num=0; num<(int)(WrapperEngine.NUMBER_OF_WALLS/2);num++) {
 				createrandomvwall();
@@ -83,12 +92,7 @@ public class Map {
 			// create individual elements
 			for (int num=0; num<WrapperEngine.NUMBER_OF_BLOCKING_OBJECTS;num++) {
 				createblockingelement();
-			}
-			
-			// create lakes
-			for (int num=0; num<WrapperEngine.NUMBER_OF_LAKES;num++) {
-				createrandomlake();
-			}
+			}			
 			createcementery();
 		}
 		
@@ -127,21 +131,25 @@ public class Map {
 			Random randomGenerator = new Random();
 			int lenght = randomGenerator.nextInt(WrapperEngine.MAX_WALL_LENGTH);
 			int start = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES-WrapperEngine.MAX_WALL_LENGTH);
-			int height = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
+			int height = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES-1);
 			for (int xpos=start;xpos<start+lenght;xpos++) {
+	        	tilelayout[xpos][height+1].block();
+	        	tilelayout[xpos][height+1].updatetileimage(upperwall_img);
 	        	tilelayout[xpos][height].block();
-	        	tilelayout[xpos][height].updatetileimage(blockedtile);	
+	        	tilelayout[xpos][height].updatetileimage(frontwall_img);
 	        }
 		}
 		public void createrandomvwall() {
 			Random randomGenerator = new Random();
-			int lenght = randomGenerator.nextInt(WrapperEngine.MAX_WALL_LENGTH);
+			int lenght = randomGenerator.nextInt(WrapperEngine.MAX_WALL_LENGTH-1)+1;
 			int start = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES-WrapperEngine.MAX_WALL_LENGTH);
 			int width = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
 			for (int ypos=start;ypos<start+lenght;ypos++) {
 	        	tilelayout[width][ypos].block();
-	        	tilelayout[width][ypos].updatetileimage(blockedtile);	
+	        	tilelayout[width][ypos].updatetileimage(upperwall_img);	
 	        }
+			tilelayout[width][start].updatetileimage(frontwall_img);
+			tilelayout[width][start].block();
 			
 		}
 		public void createrandomlake() {
@@ -167,18 +175,20 @@ public class Map {
 			int x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
 			int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
 			int element= randomGenerator.nextInt(4);
-			tilelayout[x][y].block();
-			if (element==0) {
-				tilelayout[x][y].updatetileimage(rocks_img);
-			}
-			if (element==1) {
-				tilelayout[x][y].updatetileimage(boulder_img);
-			}
-			if (element==2) {
-				tilelayout[x][y].updatetileimage(bones_img);
-			}
-			if (element==3) {
-				tilelayout[x][y].updatetileimage(fire_img);
+			if (!tilelayout[x][y].isbloqued()) {
+				tilelayout[x][y].block();
+				if (element==0) {
+					tilelayout[x][y].updatetileimage(rocks_img);
+				}
+				if (element==1) {
+					tilelayout[x][y].updatetileimage(boulder_img);
+				}
+				if (element==2) {
+					tilelayout[x][y].updatetileimage(bones_img);
+				}
+				if (element==3) {
+					tilelayout[x][y].updatetileimage(fire_img);
+				}
 			}
 		}
 		public void createdungeonblockingelement() {
@@ -186,15 +196,17 @@ public class Map {
 			int x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
 			int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
 			int element= randomGenerator.nextInt(3);
-			tilelayout[x][y].block();
-			if (element==0) {
-				tilelayout[x][y].updatetileimage(altar_img);
-			}
-			if (element==1) {
-				tilelayout[x][y].updatetileimage(hole_img);
-			}
-			if (element==2) {
-				tilelayout[x][y].updatetileimage(web_img);
+			if (!tilelayout[x][y].isbloqued()) {
+				tilelayout[x][y].block();
+				if (element==0) {
+					tilelayout[x][y].updatetileimage(altar_img);
+				}
+				if (element==1) {
+					tilelayout[x][y].updatetileimage(hole_img);
+				}
+				if (element==2) {
+					tilelayout[x][y].updatetileimage(web_img);
+				}
 			}
 		}
 		public void createcementery() {

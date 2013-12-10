@@ -47,7 +47,7 @@ public class WrapperEngine {
 	public final static String APP_NAME="Rogue explorer testing game (libgdx)";
 	public final static int NUMBER_OF_WALLS=300;
 	public final static int NUMBER_OF_LAKES=300;
-	public final static int NUMBER_OF_BLOCKING_OBJECTS=1000;
+	public final static int NUMBER_OF_BLOCKING_OBJECTS=8000;
 	public final static int EXPERIENCE_NEXT_LEVEL_LIMIT=1000;
 	public final static int NUMBER_OF_ENEMIES_PER_LOOP=20;
 	public final static int NUMBER_OF_OBJECTS_PER_LOOP=20;
