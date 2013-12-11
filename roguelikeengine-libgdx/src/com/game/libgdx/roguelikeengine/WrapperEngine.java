@@ -87,6 +87,9 @@ public class WrapperEngine {
         maplayers[0].createrandommap();
         maplayers[1].createrandomdungeon();
         maplayers[2].createrandomdungeon();
+        maplayers[0].isdungeon(false);
+        maplayers[1].isdungeon(true);
+        maplayers[2].isdungeon(true);
         
         // setup initial layer
         layer=0;
@@ -147,8 +150,16 @@ public class WrapperEngine {
 		int inlayer = randomGenerator.nextInt(WrapperEngine.NUMBER_OF_MAP_LAYERS);
 		if (!maplayers[inlayer].gettiles()[inx][iny].isbloqued() && !maplayers[outlayer].gettiles()[outx][outy].isbloqued() && inlayer!=outlayer) {
 			// if constraints are right
-			maplayers[inlayer].createAccess(inx,iny,outx,outy,outlayer); // first socket
-			maplayers[outlayer].createAccess(outx,outy,inx,iny,inlayer); // and the reverse
+			if (maplayers[inlayer].isdungeon()) {
+				maplayers[inlayer].createAccessDungeon(inx,iny,outx,outy,outlayer); // first socket
+			} else {
+				maplayers[inlayer].createAccessOutside(inx,iny,outx,outy,outlayer); // first socket
+			}
+			if (maplayers[outlayer].isdungeon()) {
+				maplayers[outlayer].createAccessDungeon(outx,outy,inx,iny,inlayer); // and the reverse
+			} else {
+				maplayers[outlayer].createAccessOutside(outx,outy,inx,iny,inlayer); // and the reverse
+			}
 			System.out.println("AP created on layer "+inlayer+":"+inx+"|"+iny+"|"+outx+"|"+outy+"|"+outlayer);
 			return 1; // sockets created
 		} else {

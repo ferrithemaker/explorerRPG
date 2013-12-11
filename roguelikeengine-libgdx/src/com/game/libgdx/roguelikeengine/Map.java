@@ -35,10 +35,12 @@ public class Map {
     private Sprite blockedtile,freetile,rocks_img,fire_img,boulder_img,bones_img,cross_img,freedungeontile,door_img,web_img,altar_img,hole_img;
     private Sprite waterUL_img,waterUR_img, waterDL_img, waterDR_img, water_img;
     private Sprite upperwall_img,frontwall_img;
+    private Sprite stairdungeon_img,stairoutside_img;
     private Sprite rip_img,ripd_img,tree_img,treed_img,cofin_img,cofind_img;
     private int firstXtile; // defines current section of the map that is shown on screen
 	private int firstYtile; // defines current section of the map that is shown on screen
 	private ArrayList<AccessToLayer> accesspoints;
+	private boolean isDungeon;
 
 	
 	public Map() {
@@ -68,6 +70,8 @@ public class Map {
 		ripd_img = new Sprite(new Texture(Gdx.files.internal("ripd.png")));
 		tree_img= new Sprite(new Texture(Gdx.files.internal("tree.png")));
 		treed_img = new Sprite(new Texture(Gdx.files.internal("treed.png")));
+		stairdungeon_img= new Sprite(new Texture(Gdx.files.internal("stairdungeon.png")));
+		stairoutside_img = new Sprite(new Texture(Gdx.files.internal("stairgreen.png")));
 		// first tile position must be multiple of tile_size
 		firstXtile=0;
 		firstYtile=0;
@@ -103,10 +107,15 @@ public class Map {
 			createcementery();
 		}
 		
-		public void createAccess(int inx,int iny, int outx, int outy,int layerout) {
+		public void createAccessDungeon(int inx,int iny, int outx, int outy,int layerout) {
 			// data must be prevalidated, this method don't check it
 			accesspoints.add(new AccessToLayer(inx,iny,outx,outy,layerout));
-			tilelayout[inx][iny].updatetileimage(door_img);
+			tilelayout[inx][iny].updatetileimage(stairdungeon_img);
+		}
+		public void createAccessOutside(int inx,int iny, int outx, int outy,int layerout) {
+			// data must be prevalidated, this method don't check it
+			accesspoints.add(new AccessToLayer(inx,iny,outx,outy,layerout));
+			tilelayout[inx][iny].updatetileimage(stairoutside_img);
 		}
 		
 		public ArrayList<AccessToLayer> getAPs() {
@@ -136,7 +145,7 @@ public class Map {
 		}
 		public void createrandomhwall() {
 			Random randomGenerator = new Random();
-			int lenght = randomGenerator.nextInt(WrapperEngine.MAX_WALL_LENGTH);
+			int lenght = randomGenerator.nextInt(WrapperEngine.MAX_WALL_LENGTH-2)+2;
 			int start = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES-WrapperEngine.MAX_WALL_LENGTH);
 			int height = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES-1);
 			for (int xpos=start;xpos<start+lenght;xpos++) {
@@ -148,7 +157,7 @@ public class Map {
 		}
 		public void createrandomvwall() {
 			Random randomGenerator = new Random();
-			int lenght = randomGenerator.nextInt(WrapperEngine.MAX_WALL_LENGTH-1)+1;
+			int lenght = randomGenerator.nextInt(WrapperEngine.MAX_WALL_LENGTH-2)+2;
 			int start = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES-WrapperEngine.MAX_WALL_LENGTH);
 			int width = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
 			for (int ypos=start;ypos<start+lenght;ypos++) {
@@ -239,9 +248,15 @@ public class Map {
 			for (int x=0;x<11;x=x+2) {
 				for (int y=0;y<11;y=y+2) {
 					int chances = randomGenerator.nextInt(2);
+					int image = randomGenerator.nextInt(2);
 					if (chances==0) {
 						tilelayout[x][y].block();
-						tilelayout[x][y].updatetileimage(cross_img);
+						if (image==0) {
+							tilelayout[x][y].updatetileimage(cross_img);
+						}
+						if (image==1) {
+							tilelayout[x][y].updatetileimage(rip_img);
+						}
 					}
 				}
 			}
@@ -257,6 +272,9 @@ public class Map {
 		public int getfirstytile() {
 			return firstYtile;
 		}
+		public boolean isdungeon() {
+			return isDungeon;
+		}
 		
 				
 		// sets / updates
@@ -265,6 +283,9 @@ public class Map {
 		}
 		public void setfirstytile(int value) {
 			firstYtile=value;
+		}
+		public void isdungeon(boolean value) {
+			isDungeon=value;
 		}
 		
 		public boolean istileempty(int x, int y) {
