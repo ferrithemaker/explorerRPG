@@ -35,6 +35,7 @@ public class Map {
     private Sprite blockedtile,freetile,rocks_img,fire_img,boulder_img,bones_img,cross_img,freedungeontile,door_img,web_img,altar_img,hole_img;
     private Sprite waterUL_img,waterUR_img, waterDL_img, waterDR_img, water_img;
     private Sprite upperwall_img,frontwall_img;
+    private Sprite rip_img,ripd_img,tree_img,treed_img,cofin_img,cofind_img;
     private int firstXtile; // defines current section of the map that is shown on screen
 	private int firstYtile; // defines current section of the map that is shown on screen
 	private ArrayList<AccessToLayer> accesspoints;
@@ -61,6 +62,12 @@ public class Map {
 		waterUL_img = new Sprite(new Texture(Gdx.files.internal("waterUL.png")));
 		upperwall_img= new Sprite(new Texture(Gdx.files.internal("upperwall.png")));
 		frontwall_img = new Sprite(new Texture(Gdx.files.internal("frontwall.png")));
+		cofin_img = new Sprite(new Texture(Gdx.files.internal("cofin.png")));
+		cofind_img = new Sprite(new Texture(Gdx.files.internal("cofind.png")));
+		rip_img= new Sprite(new Texture(Gdx.files.internal("rip.png")));
+		ripd_img = new Sprite(new Texture(Gdx.files.internal("ripd.png")));
+		tree_img= new Sprite(new Texture(Gdx.files.internal("tree.png")));
+		treed_img = new Sprite(new Texture(Gdx.files.internal("treed.png")));
 		// first tile position must be multiple of tile_size
 		firstXtile=0;
 		firstYtile=0;
@@ -154,10 +161,10 @@ public class Map {
 		}
 		public void createrandomlake() {
 			Random randomGenerator = new Random();
-			int lenght = (randomGenerator.nextInt(WrapperEngine.MAX_LAKE_SIZE-1)+1);
+			int lenght = (randomGenerator.nextInt(WrapperEngine.MAX_LAKE_SIZE-2)+2);
 			int start_x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES-WrapperEngine.MAX_LAKE_SIZE);
 			int start_y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES-WrapperEngine.MAX_LAKE_SIZE);
-			int width = (randomGenerator.nextInt(WrapperEngine.MAX_LAKE_SIZE-1)+1);
+			int width = (randomGenerator.nextInt(WrapperEngine.MAX_LAKE_SIZE-2)+2);
 			for (int xpos=start_x;xpos<start_x+lenght;xpos++) {
 				for (int ypos=start_y;ypos<start_y+width;ypos++) {
 					tilelayout[xpos][ypos].block();
@@ -174,7 +181,7 @@ public class Map {
 			Random randomGenerator = new Random();
 			int x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
 			int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
-			int element= randomGenerator.nextInt(4);
+			int element= randomGenerator.nextInt(7);
 			if (!tilelayout[x][y].isbloqued()) {
 				tilelayout[x][y].block();
 				if (element==0) {
@@ -187,6 +194,15 @@ public class Map {
 					tilelayout[x][y].updatetileimage(bones_img);
 				}
 				if (element==3) {
+					tilelayout[x][y].updatetileimage(rip_img);
+				}
+				if (element==4) {
+					tilelayout[x][y].updatetileimage(cofin_img);
+				}
+				if (element==5) {
+					tilelayout[x][y].updatetileimage(tree_img);
+				}
+				if (element==6) {
 					tilelayout[x][y].updatetileimage(fire_img);
 				}
 			}
@@ -195,7 +211,7 @@ public class Map {
 			Random randomGenerator = new Random();
 			int x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
 			int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
-			int element= randomGenerator.nextInt(3);
+			int element= randomGenerator.nextInt(6);
 			if (!tilelayout[x][y].isbloqued()) {
 				tilelayout[x][y].block();
 				if (element==0) {
@@ -206,6 +222,15 @@ public class Map {
 				}
 				if (element==2) {
 					tilelayout[x][y].updatetileimage(web_img);
+				}
+				if (element==3) {
+					tilelayout[x][y].updatetileimage(cofind_img);
+				}
+				if (element==4) {
+					tilelayout[x][y].updatetileimage(ripd_img);
+				}
+				if (element==5) {
+					tilelayout[x][y].updatetileimage(treed_img);
 				}
 			}
 		}
