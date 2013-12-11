@@ -790,6 +790,11 @@ public class GameplayScreen implements Screen {
     	}
     }
     void fight() {
+    	if (!BackgroundMusic.playingfight) {
+    		BackgroundMusic.stopall();
+    		BackgroundMusic.startfight();
+    		BackgroundMusic.playingfight=true;
+    	}
     	object_inv_mode=0;
 		consumable_inv_mode=0;
 		object_drop_mode=0;
@@ -809,11 +814,21 @@ public class GameplayScreen implements Screen {
 						fightstate="You get the amulet, you win the game!!";
 				} else {
 					fightstate="Great! You win the battle!!";
+					BackgroundMusic.stopall();
+		    		if (activemap.isdungeon()) {
+		    			BackgroundMusic.startdungeon();
+		    		} else {
+		    			BackgroundMusic.startoutside();
+		    		}
+		    		BackgroundMusic.playingfight=false;
 				}
 				
 				game.removeenemy(actualenemy);
 			} 
 			if (resultoffight=="HERODEAD") {
+				BackgroundMusic.stopall();
+	    		BackgroundMusic.startoutside();
+	    		BackgroundMusic.playingfight=false;
 				game.herodies();
 				fightstate="You lose the battle, you are in the graveyard!";
 			}

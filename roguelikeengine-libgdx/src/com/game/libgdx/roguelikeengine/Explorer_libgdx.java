@@ -29,17 +29,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Explorer_libgdx extends Game {
 	private SpriteBatch batch;
+	private BackgroundMusic initMusic;
 	
 	
 	
 	@Override
 	public void create() {
-		// load music
-		Music music = Gdx.audio.newMusic(Gdx.files.internal("CavernsOfMadness.ogg"));
-		music.setLooping(true);
-		music.setVolume(0.3f);
-		music.play();
-		// load splashscreen
+		BackgroundMusic.setup();
+		BackgroundMusic.startoutside();
 		setScreen(new SplashScreen(this));
 	}
 

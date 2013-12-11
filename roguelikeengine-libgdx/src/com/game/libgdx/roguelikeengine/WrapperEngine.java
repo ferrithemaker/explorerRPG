@@ -183,6 +183,14 @@ public class WrapperEngine {
 		activemap=maplayers[this.layer];
 		activemap.setfirstxtile(numberofXscreens*ON_SCREEN_TILES_X);
 		activemap.setfirstytile(numberofYscreens*ON_SCREEN_TILES_Y);
+		if (activemap.isdungeon()) {
+			BackgroundMusic.stopall();
+			BackgroundMusic.startdungeon();
+		} else {
+			BackgroundMusic.stopall();
+			BackgroundMusic.startoutside();
+		}
+		
 	}
 		
 	// HERO CLASS WRAPPER

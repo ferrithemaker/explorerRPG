@@ -15,22 +15,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 All images are taken from http://opengameart.org/ and http://animatedbattlers.wordpress.com , released under GPL / Creative Commons and copyrighted by their owners. Most modified by me.
 
-Music from: https://soundcloud.com/desperate-measurez/
+Music from: https://soundcloud.com/desperate-measurez/ 
+and
+http://www.tannerhelland.com/music-directory/
 
 ------------------
 
-This is an under development (first stages) rogue style 2D RPG Engine build with LIBGDX (only classes, not development UI).
+This is an under development (first stages) rogue style 2D RPG game with LIBGDX (only classes, not development UI).
 
-LIBGDX (http://libgdx.badlogicgames.com/) is a must. LIBGDX allows java cross-platform developments (html,ios,android and desktop)
-
-To test the engine, there are also a simple testing game class called Explorer.
+LIBGDX (http://libgdx.badlogicgames.com/) is a must. LIBGDX allows java cross-platform developments (html,iOS,android and desktop)
 
 You can see a demo video at: http://www.youtube.com/watch?v=ZWgQhCEKEgY
 
 
 ------------------
 
-There are 4 projects on GIT (the pre-libgdx one, and the 3 libgdx based (main, desktop and android). All preliminary tests are based on libdgx desktop version.
+There are 4 projects on GIT (the pre-libgdx one, and the 3 libgdx based (main, desktop and android). All preliminary tests and development are based on libdgx desktop version.
 
 For more information about running the project, refer to libgdx documentation.
 
@@ -38,4 +38,4 @@ Thanks!
 
 To run jar file: (you must need Java JRE)
 
-java -jar testingGame.jar or double click in some OS.
+java -jar testingGamexxx.jar or double click in some OS.
