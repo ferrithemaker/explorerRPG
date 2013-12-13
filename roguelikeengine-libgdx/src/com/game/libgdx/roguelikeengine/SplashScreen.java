@@ -34,16 +34,19 @@ public class SplashScreen implements Screen {
 	private PopupInfoText screentext;
 	private BitmapFont messagefont;
 	private String text;
+	private float fadein;
 	
 	public SplashScreen(Explorer_libgdx g)
     {
             theGame = g;
+            fadein=0;
     }
 	
 	@Override
     public void show()
     {
     	//layout=new Layout();
+		
 		FileHandle fontFile = Gdx.files.internal("diabloheavy.ttf");
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
     	spriteBatch = new SpriteBatch();
@@ -62,7 +65,10 @@ public class SplashScreen implements Screen {
     {
             Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
             spriteBatch.begin();
-            screentext.drawScreen(spriteBatch, messagefont, text);
+            fadein=fadein+0.001f;
+            if (fadein>1.0f) { fadein=1.0f; }
+            spriteBatch.setColor(1.0f, 1.0f, 1.0f, fadein);
+            screentext.drawScreen(spriteBatch, messagefont, text,fadein);
             spriteBatch.end();
             
             if(Gdx.input.justTouched())

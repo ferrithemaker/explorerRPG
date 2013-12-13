@@ -199,7 +199,7 @@ public class GameplayScreen implements Screen {
         
         // draw fight result
         if (just_fight==1) {
-        	screentext.drawScreen(batch, messagefont,fightstate);	
+        	screentext.drawScreen(batch, messagefont,fightstate,1.0f);	
         }
         
 
@@ -209,7 +209,7 @@ public class GameplayScreen implements Screen {
         }
         
 		// draw version build
-        genericfont.draw(batch, "Development build 65", 10, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-620);
+        genericfont.draw(batch, "Development build 67", 10, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-620);
 
         
         // draw object inventory
@@ -432,23 +432,23 @@ public class GameplayScreen implements Screen {
 		if (prota.gethead().getname()!=null) {
 	 		batch.draw(prota.gethead().getsprite(),970,545);
 	 		//genericfont.draw(batch,prota.gethead().getname(), 930,619);
-	 		genericfont.draw(batch,"At:+"+prota.gethead().getattack()+" Df:+"+prota.gethead().getdefense()+" Dur:"+prota.gethead().getdurability(), 930,535);
+	 		genericfont.draw(batch,"A:+"+prota.gethead().getattack()+" D:+"+prota.gethead().getdefense()+" Dur:"+prota.gethead().getdurability(), 927,535);
         } else {
         	//genericfont.draw(batch,"Head: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-170);
 
         }
         if (prota.getlefthand().getname()!=null) {
-        	batch.draw(prota.getlefthand().getsprite(),1058,448);
+        	batch.draw(prota.getlefthand().getsprite(),1050,448);
         	//genericfont.draw(batch,prota.getlefthand().getname(), 1018,532 );
-        	genericfont.draw(batch,"At:+"+prota.getlefthand().getattack()+" Df:+"+prota.getlefthand().getdefense()+" Dur:"+prota.getlefthand().getdurability(), 1018,428 );
+        	genericfont.draw(batch,"A:+"+prota.getlefthand().getattack()+" D:+"+prota.getlefthand().getdefense()+" Dur:"+prota.getlefthand().getdurability(), 1010,428 );
         } else {
         	//genericfont.draw(batch,"Left hand: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-190);
 
         }
         if (prota.getrighthand().getname()!=null) {
-        	batch.draw(prota.getrighthand().getsprite(),882,448);
+        	batch.draw(prota.getrighthand().getsprite(),872,448);
         	//genericfont.draw(batch,prota.getrighthand().getname(), 842,532);
-        	genericfont.draw(batch,"At:+"+prota.getrighthand().getattack()+" Df:+"+prota.getrighthand().getdefense()+" Dur:"+prota.getrighthand().getdurability(), 842,428);
+        	genericfont.draw(batch,"A:+"+prota.getrighthand().getattack()+" D:+"+prota.getrighthand().getdefense()+" Dur:"+prota.getrighthand().getdurability(), 849,428);
         } else {
         	//genericfont.draw(batch,"Right hand: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-210);
 
@@ -456,7 +456,7 @@ public class GameplayScreen implements Screen {
         if (prota.getbody().getname()!=null) {
         	batch.draw(prota.getbody().getsprite(),971,448);
         	//genericfont.draw(batch,prota.getbody().getname(),931,532);
-        	genericfont.draw(batch,"At:+"+prota.getbody().getattack()+" Df:+"+prota.getbody().getdefense()+" Dur:"+prota.getbody().getdurability(),931,442);
+        	genericfont.draw(batch,"A:+"+prota.getbody().getattack()+" D:+"+prota.getbody().getdefense()+" Dur:"+prota.getbody().getdurability(),931,442);
         } else {
         	//genericfont.draw(batch,"Body: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-230);
 
@@ -464,7 +464,7 @@ public class GameplayScreen implements Screen {
         if (prota.getfoot().getname()!=null) {
         	batch.draw(prota.getfoot().getsprite(),971,350);
         	//genericfont.draw(batch,prota.getfoot().getname(),931,425);
-        	genericfont.draw(batch,"At:+"+prota.getfoot().getattack()+" Df:+"+prota.getfoot().getdefense()+" Dur:"+prota.getfoot().getdurability(),931,330);
+        	genericfont.draw(batch,"A:+"+prota.getfoot().getattack()+" D:+"+prota.getfoot().getdefense()+" Dur:"+prota.getfoot().getdurability(),931,330);
         } else {
         	//genericfont.draw(batch,"Foot: nothing", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25,(GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-250);
         }

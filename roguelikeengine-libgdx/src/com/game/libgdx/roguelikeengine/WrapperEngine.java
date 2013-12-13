@@ -55,7 +55,7 @@ public class WrapperEngine {
 	
 	// dynamic layers 
 	public final static int NUMBER_OF_MAP_LAYERS=3;
-	public final static int NUMBER_OF_ACCESSPOINTS=30;
+	public final static int NUMBER_OF_ACCESSPOINTS=300;
 	
 	
 	// android specific constants
