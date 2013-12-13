@@ -57,6 +57,8 @@ public class WrapperEngine {
 	public final static int NUMBER_OF_MAP_LAYERS=3;
 	public final static int NUMBER_OF_ACCESSPOINTS=300;
 	
+	// keyboard delay in milis
+	public final static int KEYBOARD_MILIS_DELAY=50;
 	
 	// android specific constants
 	public final static int ANDROID_MENU_BAR_SIZE=43;
