@@ -288,6 +288,7 @@ public class GameplayScreen implements Screen {
 		genericfont.draw(batch, "Eye mode:"+eye_mode, 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-120);
 		genericfont.draw(batch, "Drop mode:"+object_drop_mode, 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-140);
 		genericfont.draw(batch, "Layer:"+game.getlayer(), 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-180);
+		genericfont.draw(batch, "Framerate:"+(int)(1/Gdx.graphics.getDeltaTime())+" FPS", 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-200);
 
 		int i=0;
 		for (AccessToLayer atl: maplayers[game.getlayer()].getAPs()) {
@@ -987,7 +988,7 @@ public class GameplayScreen implements Screen {
 	@Override
 	public void dispose() {
 		if(batch != null) batch.dispose();
-		//texture.dispose();
+		Gdx.app.exit();
 	}
 
 	public Map getmaplayer(int value) {
