@@ -29,7 +29,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Explorer_libgdx extends Game {
 	private SpriteBatch batch;
-	private BackgroundMusic initMusic;
 	
 	
 	

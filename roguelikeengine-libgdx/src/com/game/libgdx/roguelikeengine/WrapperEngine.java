@@ -58,7 +58,7 @@ public class WrapperEngine {
 	public final static int NUMBER_OF_ACCESSPOINTS=300;
 	
 	// keyboard delay in milis
-	public final static int KEYBOARD_MILIS_DELAY=50;
+	public final static int KEYBOARD_MILLIS_DELAY=50;
 	
 	// android specific constants
 	public final static int ANDROID_MENU_BAR_SIZE=43;
@@ -124,6 +124,16 @@ public class WrapperEngine {
         while(activemap.gettiles()[x][y].isbloqued()) {
         	prota.setrelativeytile(++y);
         }
+	}
+	
+	
+	public void delay(int time) {
+		try {
+			Thread.sleep(time);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	// MAP CLASS WRAPPER

@@ -480,8 +480,7 @@ public class GameplayScreen implements Screen {
 	}
 	void frameratecontrol() {
 		//  delay for each frame  -   time it took for one frame 
-		long time = System.currentTimeMillis(); 
-		time = (1000 / WrapperEngine.FPS) - (System.currentTimeMillis() - time); 
+		long time = (1000 / WrapperEngine.FPS); 
         
         if (time > 0) 
         { 
@@ -525,22 +524,21 @@ public class GameplayScreen implements Screen {
         	
     }
 
-	/**
-	 * @throws InterruptedException 
-	 * 
-	 */
 	protected void handlekeyboardinput() throws InterruptedException {
-		if (Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) { goright(); Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);} 
-        if (Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) { goleft(); Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);}
-        if (Gdx.input.isKeyPressed(Keys.DPAD_UP)) { goup(); Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);} 
-        if (Gdx.input.isKeyPressed(Keys.DPAD_DOWN)) { godown();Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);}
-        if (Gdx.input.isKeyPressed(Keys.D)) { look(); Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY); }
-        if (Gdx.input.isKeyPressed(Keys.H)) { fight(); Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);}
-        if (Gdx.input.isKeyPressed(Keys.G)) { take(); Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);}
-        if (Gdx.input.isKeyPressed(Keys.Q)) { drop();Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);}
-        if (Gdx.input.isKeyPressed(Keys.Z)) { dispose();Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);}
+		if (Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) { goright(); game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);} 
+        if (Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) { goleft(); game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);}
+        if (Gdx.input.isKeyPressed(Keys.DPAD_UP)) { goup(); game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);} 
+        if (Gdx.input.isKeyPressed(Keys.DPAD_DOWN)) { godown();game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);}
+        if (Gdx.input.isKeyPressed(Keys.D)) { look(); game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY); }
+        if (Gdx.input.isKeyPressed(Keys.H)) { fight(); game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);}
+        if (Gdx.input.isKeyPressed(Keys.G)) { take(); game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);}
+        if (Gdx.input.isKeyPressed(Keys.Q)) { drop();game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);}
+        if (Gdx.input.isKeyPressed(Keys.Z)) { dispose();}
         if (Gdx.input.isKeyPressed(Keys.P)) {
-        	if (debug_mode==0) { debug_mode=1; } else { debug_mode=0; Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);}
+        	if (debug_mode==0) { debug_mode=1; } else { 
+        		debug_mode=0; 
+        		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
+        	}
         }
         
         if (Gdx.input.isKeyPressed(Keys.O)) 
@@ -550,7 +548,7 @@ public class GameplayScreen implements Screen {
     		consumable_inv_mode=0;
     		object_drop_mode=0;
     		just_fight=0;
-    		Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.C)) 
         { 
@@ -559,142 +557,142 @@ public class GameplayScreen implements Screen {
     		consumable_inv_mode=1;
     		object_drop_mode=0;
     		just_fight=0;
-    		Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         // OBJECT INVENTORY ACTIONS
         if (Gdx.input.isKeyPressed(Keys.NUM_1) && object_inv_mode==1) {
         	getobject(objinv.get_object(1),1);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.NUM_2) && object_inv_mode==1) {
         	getobject(objinv.get_object(2),2);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.NUM_3) && object_inv_mode==1) {
         	getobject(objinv.get_object(3),3);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.NUM_4) && object_inv_mode==1) {
         	getobject(objinv.get_object(4),4);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.NUM_5) && object_inv_mode==1) {
         	getobject(objinv.get_object(5),5);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.NUM_6) && object_inv_mode==1) {
         	getobject(objinv.get_object(6),6);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.NUM_7) && object_inv_mode==1) {
         	getobject(objinv.get_object(7),7);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.NUM_8) && object_inv_mode==1) {
         	getobject(objinv.get_object(8),8);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.NUM_9) && object_inv_mode==1) {
         	getobject(objinv.get_object(9),9);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.NUM_0) && object_inv_mode==1) {
         	getobject(objinv.get_object(0),0);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         
         // OBJECT DROP INVENTORY ACTIONS
         if (Gdx.input.isKeyPressed(Keys.NUM_1) && object_drop_mode==1) {
         	objinv.delete_object(1);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.NUM_2) && object_drop_mode==1) {
         	objinv.delete_object(2);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.NUM_3) && object_drop_mode==1) {
         	objinv.delete_object(3);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.NUM_4) && object_drop_mode==1) {
         	objinv.delete_object(4);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.NUM_5) && object_drop_mode==1) {
         	objinv.delete_object(5);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.NUM_6) && object_drop_mode==1) {
         	objinv.delete_object(6);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.NUM_7) && object_drop_mode==1) {
         	objinv.delete_object(7);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.NUM_8) && object_drop_mode==1) {
         	objinv.delete_object(8);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.NUM_9) && object_drop_mode==1) {
         	objinv.delete_object(9);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.NUM_0) && object_drop_mode==1) {
         	objinv.delete_object(0);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         // CONSUMABLE INVENTORY ACTIONS
         if (Gdx.input.isKeyPressed(Keys.NUM_1) && consumable_inv_mode==1) {
         	getconsumable(consinv.get_consumable(1));
         	consinv.delete_consumable(1);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.NUM_2) && consumable_inv_mode==1) {
         	getconsumable(consinv.get_consumable(2));
         	consinv.delete_consumable(2);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.NUM_3) && consumable_inv_mode==1) {
         	getconsumable(consinv.get_consumable(3));
         	consinv.delete_consumable(3);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.NUM_4) && consumable_inv_mode==1) {
         	getconsumable(consinv.get_consumable(4));
         	consinv.delete_consumable(4);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         
         if (Gdx.input.isKeyPressed(Keys.NUM_5) && consumable_inv_mode==1) {
         	getconsumable(consinv.get_consumable(5));
         	consinv.delete_consumable(5);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.NUM_6) && consumable_inv_mode==1) {
         	getconsumable(consinv.get_consumable(6));
         	consinv.delete_consumable(6);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.NUM_7) && consumable_inv_mode==1) {
         	getconsumable(consinv.get_consumable(7));
         	consinv.delete_consumable(7);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.NUM_8) && consumable_inv_mode==1) {
         	getconsumable(consinv.get_consumable(8));
         	consinv.delete_consumable(8);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.NUM_9) && consumable_inv_mode==1) {
         	getconsumable(consinv.get_consumable(9));
         	consinv.delete_consumable(9);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         if (Gdx.input.isKeyPressed(Keys.NUM_0) && consumable_inv_mode==1) {
         	getconsumable(consinv.get_consumable(0));
         	consinv.delete_consumable(0);
-        	Thread.sleep(WrapperEngine.KEYBOARD_MILIS_DELAY);
+    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
 	}
 
