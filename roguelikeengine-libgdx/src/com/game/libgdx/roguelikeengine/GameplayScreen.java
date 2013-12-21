@@ -24,6 +24,7 @@ import java.lang.Thread;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL10;
@@ -38,7 +39,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
 
 
-public class GameplayScreen implements Screen {
+public class GameplayScreen extends InputAdapter implements Screen  {
 	public static GameplayScreen instance = null;
 	
 	private SpriteBatch batch;
@@ -122,6 +123,7 @@ public class GameplayScreen implements Screen {
 	 * 
 	 */
 	protected void init() {
+		Gdx.input.setInputProcessor(this);
 		batch = new SpriteBatch();
 		// fonts setup
 		FileHandle fontFile = Gdx.files.internal("diabloheavy.ttf");
@@ -523,177 +525,159 @@ public class GameplayScreen implements Screen {
         //game.update();
         	
     }
-
-	protected void handlekeyboardinput() throws InterruptedException {
-		if (Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) { goright(); game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);} 
-        if (Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) { goleft(); game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);}
-        if (Gdx.input.isKeyPressed(Keys.DPAD_UP)) { goup(); game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);} 
-        if (Gdx.input.isKeyPressed(Keys.DPAD_DOWN)) { godown();game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);}
-        if (Gdx.input.isKeyPressed(Keys.D)) { look(); game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY); }
-        if (Gdx.input.isKeyPressed(Keys.H)) { fight(); game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);}
-        if (Gdx.input.isKeyPressed(Keys.G)) { take(); game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);}
-        if (Gdx.input.isKeyPressed(Keys.Q)) { drop();game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);}
-        if (Gdx.input.isKeyPressed(Keys.Z)) { dispose();}
-        if (Gdx.input.isKeyPressed(Keys.P)) {
-        	if (debug_mode==0) { debug_mode=1; } else { 
-        		debug_mode=0; 
-        		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
-        	}
-        }
-        
-        if (Gdx.input.isKeyPressed(Keys.O)) 
-        { 
-        	// ENABLE OBJECT INVENTORY MODE
+	
+	// Keyboard event handler
+	
+	@Override
+	public boolean keyUp (int keycode) {
+		if (keycode==Keys.P) { // debug mode
+			if (debug_mode==0) { debug_mode=1; } else { 
+				debug_mode=0; 
+			}
+		}
+		if (keycode==Keys.L) {
+			look();
+		}
+		if (keycode==Keys.H) {
+			fight();
+		}
+		if (keycode==Keys.G) {
+			take();
+		}
+		if (keycode==Keys.D) {
+			drop();
+		}
+		if (keycode==Keys.Z) {
+			dispose();
+		}
+		if (keycode==Keys.O) {
+			// ENABLE OBJECT INVENTORY MODE
         	object_inv_mode=1;
     		consumable_inv_mode=0;
     		object_drop_mode=0;
     		just_fight=0;
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
-        }
-        if (Gdx.input.isKeyPressed(Keys.C)) 
-        { 
-        	// ENABLE CONSUMABLE INVENTORY MODE
+		}
+		if (keycode==Keys.C) {
+			// ENABLE CONSUMABLE INVENTORY MODE
         	object_inv_mode=0;
     		consumable_inv_mode=1;
     		object_drop_mode=0;
     		just_fight=0;
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
-        }
-        // OBJECT INVENTORY ACTIONS
-        if (Gdx.input.isKeyPressed(Keys.NUM_1) && object_inv_mode==1) {
+		}
+		
+		// OBJECT INVENTORY ACTIONS
+        if (keycode==Keys.NUM_1 && object_inv_mode==1) {
         	getobject(objinv.get_object(1),1);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_2) && object_inv_mode==1) {
+        if (keycode==Keys.NUM_2 && object_inv_mode==1) {
         	getobject(objinv.get_object(2),2);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_3) && object_inv_mode==1) {
+        if (keycode==Keys.NUM_3 && object_inv_mode==1) {
         	getobject(objinv.get_object(3),3);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_4) && object_inv_mode==1) {
+        if (keycode==Keys.NUM_4 && object_inv_mode==1) {
         	getobject(objinv.get_object(4),4);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_5) && object_inv_mode==1) {
+        if (keycode==Keys.NUM_5 && object_inv_mode==1) {
         	getobject(objinv.get_object(5),5);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_6) && object_inv_mode==1) {
+        if (keycode==Keys.NUM_6 && object_inv_mode==1) {
         	getobject(objinv.get_object(6),6);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_7) && object_inv_mode==1) {
+        if (keycode==Keys.NUM_7 && object_inv_mode==1) {
         	getobject(objinv.get_object(7),7);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_8) && object_inv_mode==1) {
+        if (keycode==Keys.NUM_8 && object_inv_mode==1) {
         	getobject(objinv.get_object(8),8);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_9) && object_inv_mode==1) {
+        if (keycode==Keys.NUM_9 && object_inv_mode==1) {
         	getobject(objinv.get_object(9),9);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_0) && object_inv_mode==1) {
+        if (keycode==Keys.NUM_0 && object_inv_mode==1) {
         	getobject(objinv.get_object(0),0);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         
         // OBJECT DROP INVENTORY ACTIONS
-        if (Gdx.input.isKeyPressed(Keys.NUM_1) && object_drop_mode==1) {
+        if (keycode==Keys.NUM_1 && object_drop_mode==1) {
         	objinv.delete_object(1);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_2) && object_drop_mode==1) {
+        if (keycode==Keys.NUM_2 && object_drop_mode==1) {
         	objinv.delete_object(2);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_3) && object_drop_mode==1) {
+        if (keycode==Keys.NUM_3 && object_drop_mode==1) {
         	objinv.delete_object(3);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_4) && object_drop_mode==1) {
+        if (keycode==Keys.NUM_4 && object_drop_mode==1) {
         	objinv.delete_object(4);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_5) && object_drop_mode==1) {
+        if (keycode==Keys.NUM_5 && object_drop_mode==1) {
         	objinv.delete_object(5);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_6) && object_drop_mode==1) {
+        if (keycode==Keys.NUM_6 && object_drop_mode==1) {
         	objinv.delete_object(6);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_7) && object_drop_mode==1) {
+        if (keycode==Keys.NUM_7 && object_drop_mode==1) {
         	objinv.delete_object(7);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_8) && object_drop_mode==1) {
+        if (keycode==Keys.NUM_8 && object_drop_mode==1) {
         	objinv.delete_object(8);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_9) && object_drop_mode==1) {
+        if (keycode==Keys.NUM_9 && object_drop_mode==1) {
         	objinv.delete_object(9);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_0) && object_drop_mode==1) {
+        if (keycode==Keys.NUM_0 && object_drop_mode==1) {
         	objinv.delete_object(0);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         // CONSUMABLE INVENTORY ACTIONS
-        if (Gdx.input.isKeyPressed(Keys.NUM_1) && consumable_inv_mode==1) {
+        if (keycode==Keys.NUM_1 && consumable_inv_mode==1) {
         	getconsumable(consinv.get_consumable(1));
         	consinv.delete_consumable(1);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_2) && consumable_inv_mode==1) {
+        if (keycode==Keys.NUM_2 && consumable_inv_mode==1) {
         	getconsumable(consinv.get_consumable(2));
         	consinv.delete_consumable(2);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_3) && consumable_inv_mode==1) {
+        if (keycode==Keys.NUM_3 && consumable_inv_mode==1) {
         	getconsumable(consinv.get_consumable(3));
         	consinv.delete_consumable(3);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_4) && consumable_inv_mode==1) {
+        if (keycode==Keys.NUM_4 && consumable_inv_mode==1) {
         	getconsumable(consinv.get_consumable(4));
         	consinv.delete_consumable(4);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
         
-        if (Gdx.input.isKeyPressed(Keys.NUM_5) && consumable_inv_mode==1) {
+        if (keycode==Keys.NUM_5 && consumable_inv_mode==1) {
         	getconsumable(consinv.get_consumable(5));
         	consinv.delete_consumable(5);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_6) && consumable_inv_mode==1) {
+        if (keycode==Keys.NUM_6 && consumable_inv_mode==1) {
         	getconsumable(consinv.get_consumable(6));
         	consinv.delete_consumable(6);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_7) && consumable_inv_mode==1) {
+        if (keycode==Keys.NUM_7 && consumable_inv_mode==1) {
         	getconsumable(consinv.get_consumable(7));
         	consinv.delete_consumable(7);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_8) && consumable_inv_mode==1) {
+        if (keycode==Keys.NUM_8 && consumable_inv_mode==1) {
         	getconsumable(consinv.get_consumable(8));
         	consinv.delete_consumable(8);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_9) && consumable_inv_mode==1) {
+        if (keycode==Keys.NUM_9 && consumable_inv_mode==1) {
         	getconsumable(consinv.get_consumable(9));
         	consinv.delete_consumable(9);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
-        if (Gdx.input.isKeyPressed(Keys.NUM_0) && consumable_inv_mode==1) {
+        if (keycode==Keys.NUM_0 && consumable_inv_mode==1) {
         	getconsumable(consinv.get_consumable(0));
         	consinv.delete_consumable(0);
-    		game.delay(WrapperEngine.KEYBOARD_MILLIS_DELAY);
         }
+		return false;
+	}
+
+	protected void handlekeyboardinput() {
+		if (Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) { goright(); } 
+        if (Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) { goleft(); }
+        if (Gdx.input.isKeyPressed(Keys.DPAD_UP)) { goup(); } 
+        if (Gdx.input.isKeyPressed(Keys.DPAD_DOWN)) { godown();}
 	}
 
 	/**

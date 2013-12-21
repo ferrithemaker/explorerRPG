@@ -127,9 +127,9 @@ public class WrapperEngine {
 	}
 	
 	
-	public void delay(int time) {
+	public void delay(int timemillis) {
 		try {
-			Thread.sleep(time);
+			Thread.sleep(timemillis);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
