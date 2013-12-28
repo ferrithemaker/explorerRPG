@@ -26,10 +26,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class Tile {
 	private boolean bloqued;
 	private Sprite tileimg;
+	private boolean showimage;
 
-	public Tile(boolean status,Sprite sprite) {
+	public Tile(boolean status) {
 		this.bloqued=status;
-		this.tileimg=sprite;
+		this.showimage=false;
 		
 	}
 	public boolean isbloqued() {
@@ -44,11 +45,17 @@ public class Tile {
 	public void unblock() {
 		this.bloqued=false;
 	}
-	public void updatetileimage(Sprite sprite) {
+	public void settileimage(Sprite sprite) {
 		this.tileimg=sprite;
+		this.showimage=true;
 	}
 	public Sprite gettileimage() {
 		return this.tileimg;
 	}
-	
+	public boolean getshowimage() {
+		return showimage;
+	}
+	public void setshowimage(boolean value) {
+		this.showimage=value;
+	}
 }

@@ -23,6 +23,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 
@@ -48,7 +49,9 @@ public class Enemy {
 		this.resist=baseresist;
 		this.absolute_x=x;
 		this.absolute_y=y;
-		this.enemyimg = new Sprite(new Texture(Gdx.files.internal(file)));
+		Texture enemytexture = new Texture(Gdx.files.internal(file)); 
+		enemytexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		this.enemyimg = new Sprite(enemytexture);
 	}
 	
 	public Enemy() {

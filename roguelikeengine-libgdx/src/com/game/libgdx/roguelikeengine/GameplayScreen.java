@@ -31,6 +31,7 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Color;
 //import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
@@ -162,13 +163,9 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	@Override
 	public void render(float delta) {
 		
-		// update method
-		try {
-			update();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		update();
+		
 		frameratecontrol();
 		// draw
 		Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -188,8 +185,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         //layercontrol();
         activemap=maplayers[game.getlayer()];
         
-     	
-        // draw background tiles 
+     	// dwaw background
+        drawbackground();
+        
+        // draw static blocked tiles 
         drawtiles();
         
         // draw enemies
@@ -219,7 +218,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         }
         
 		// draw version build
-        genericfont.draw(batch, "Development build 67", 10, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-620);
+        genericfont.draw(batch, "Development build 68", 10, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-620);
 
         
         // draw object inventory
@@ -273,6 +272,19 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 
         	}
         }
+	}
+	
+	protected void drawbackground() {
+        for (int xpos=0;xpos<WrapperEngine.ON_SCREEN_TILES_X;xpos++) {
+        	for (int ypos=0;ypos<WrapperEngine.ON_SCREEN_TILES_Y;ypos++) {
+        				if (activemap.isdungeon()) {
+        					batch.draw(activemap.getfreedungeontile(),xpos*WrapperEngine.TILE_X_SIZE,ypos*WrapperEngine.TILE_Y_SIZE);
+        				} else {
+        					batch.draw(activemap.getfreetile(),xpos*WrapperEngine.TILE_X_SIZE,ypos*WrapperEngine.TILE_Y_SIZE);
+        				}
+        	}
+        }
+		
 	}
 
 	/**
@@ -347,7 +359,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         	if (bguy.enemyonscreen(maplayers[game.getlayer()].getfirstxtile(), maplayers[game.getlayer()].getfirstytile())==true) {
         		// draw enemy image if the layer is correct
         		if (bguy.getlayer()==game.getlayer()) {
-        			batch.draw(bguy.getsprite(),getrelativextileposition(bguy),getrelativeytileposition(bguy));
+        			Sprite enemysprite=bguy.getsprite();
+        			enemysprite.setPosition(getrelativextileposition(bguy), getrelativeytileposition(bguy));
+        			//batch.draw(bguy.getsprite(),getrelativextileposition(bguy),getrelativeytileposition(bguy));
+        			enemysprite.draw(batch);
         		}
         	}
         }
@@ -397,7 +412,9 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         for (int xpos=maplayers[game.getlayer()].getfirstxtile();xpos<(maplayers[game.getlayer()].getfirstxtile()+WrapperEngine.ON_SCREEN_TILES_X);xpos++) {
         	int relativey=0;
         	for (int ypos=maplayers[game.getlayer()].getfirstytile();ypos<(maplayers[game.getlayer()].getfirstytile()+WrapperEngine.ON_SCREEN_TILES_Y);ypos++) {
-        			batch.draw(activemap.gettiles()[xpos][ypos].gettileimage(),relativex*WrapperEngine.TILE_X_SIZE,relativey*WrapperEngine.TILE_Y_SIZE);
+        			if (activemap.gettiles()[xpos][ypos].getshowimage()) {
+        				batch.draw(activemap.gettiles()[xpos][ypos].gettileimage(),relativex*WrapperEngine.TILE_X_SIZE,relativey*WrapperEngine.TILE_Y_SIZE);
+        			}
         			relativey++;
         	}
         	relativex++;
@@ -494,7 +511,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         } 
 	}
 	
-	void update() throws InterruptedException 
+	void update()
     { 
 		// random elements generator
     	Random randomGenerator = new Random();
@@ -522,7 +539,6 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	// key events control
     	handlekeyboardinput();
         
-        //game.update();
         	
     }
 	

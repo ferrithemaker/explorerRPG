@@ -35,8 +35,9 @@ public class Map {
     private Sprite blockedtile,freetile,rocks_img,fire_img,boulder_img,bones_img,cross_img,freedungeontile,door_img,web_img,altar_img,hole_img;
     private Sprite waterUL_img,waterUR_img, waterDL_img, waterDR_img, water_img;
     private Sprite upperwall_img,frontwall_img;
-    private Sprite stairdungeon_img,stairoutside_img;
-    private Sprite rip_img,ripd_img,tree_img,treed_img,cofin_img,cofind_img;
+    private Sprite stair_img;
+    private Sprite statue1_img,statue2_img,statue3_img;
+    private Sprite rip_img,tree_img,cofin_img;
     private int firstXtile; // defines current section of the map that is shown on screen
 	private int firstYtile; // defines current section of the map that is shown on screen
 	private ArrayList<AccessToLayer> accesspoints;
@@ -65,13 +66,12 @@ public class Map {
 		upperwall_img= new Sprite(new Texture(Gdx.files.internal("upperwall.png")));
 		frontwall_img = new Sprite(new Texture(Gdx.files.internal("frontwall.png")));
 		cofin_img = new Sprite(new Texture(Gdx.files.internal("cofin.png")));
-		cofind_img = new Sprite(new Texture(Gdx.files.internal("cofind.png")));
 		rip_img= new Sprite(new Texture(Gdx.files.internal("rip.png")));
-		ripd_img = new Sprite(new Texture(Gdx.files.internal("ripd.png")));
 		tree_img= new Sprite(new Texture(Gdx.files.internal("tree.png")));
-		treed_img = new Sprite(new Texture(Gdx.files.internal("treed.png")));
-		stairdungeon_img= new Sprite(new Texture(Gdx.files.internal("stairdungeon.png")));
-		stairoutside_img = new Sprite(new Texture(Gdx.files.internal("stairgreen.png")));
+		stair_img= new Sprite(new Texture(Gdx.files.internal("stair.png")));
+		statue1_img= new Sprite(new Texture(Gdx.files.internal("statue.png")));
+		statue2_img= new Sprite(new Texture(Gdx.files.internal("statue2.png")));
+		statue3_img= new Sprite(new Texture(Gdx.files.internal("statue3.png")));
 		// first tile position must be multiple of tile_size
 		firstXtile=0;
 		firstYtile=0;
@@ -86,7 +86,7 @@ public class Map {
 			// fill with freetiles
 			 for (int xpos=0;xpos<WrapperEngine.TOTAL_X_TILES;xpos++) {
 		        	for (int ypos=0;ypos<WrapperEngine.TOTAL_Y_TILES;ypos++) {
-		        		tilelayout[xpos][ypos]= new Tile(false,freetile);
+		        		tilelayout[xpos][ypos]= new Tile(false);
 		        	}
 		        }
 			
@@ -110,12 +110,12 @@ public class Map {
 		public void createAccessDungeon(int inx,int iny, int outx, int outy,int layerout) {
 			// data must be prevalidated, this method don't check it
 			accesspoints.add(new AccessToLayer(inx,iny,outx,outy,layerout));
-			tilelayout[inx][iny].updatetileimage(stairdungeon_img);
+			tilelayout[inx][iny].settileimage(stair_img);
 		}
 		public void createAccessOutside(int inx,int iny, int outx, int outy,int layerout) {
 			// data must be prevalidated, this method don't check it
 			accesspoints.add(new AccessToLayer(inx,iny,outx,outy,layerout));
-			tilelayout[inx][iny].updatetileimage(stairoutside_img);
+			tilelayout[inx][iny].settileimage(stair_img);
 		}
 		
 		public ArrayList<AccessToLayer> getAPs() {
@@ -126,7 +126,7 @@ public class Map {
 			// fill with freetiles
 			 for (int xpos=0;xpos<WrapperEngine.TOTAL_X_TILES;xpos++) {
 		        	for (int ypos=0;ypos<WrapperEngine.TOTAL_Y_TILES;ypos++) {
-		        		tilelayout[xpos][ypos]= new Tile(false,freedungeontile);
+		        		tilelayout[xpos][ypos]= new Tile(false);
 		        	}
 		        }
 			// create random walls
@@ -150,9 +150,9 @@ public class Map {
 			int height = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES-1);
 			for (int xpos=start;xpos<start+lenght;xpos++) {
 	        	tilelayout[xpos][height+1].block();
-	        	tilelayout[xpos][height+1].updatetileimage(upperwall_img);
+	        	tilelayout[xpos][height+1].settileimage(upperwall_img);
 	        	tilelayout[xpos][height].block();
-	        	tilelayout[xpos][height].updatetileimage(frontwall_img);
+	        	tilelayout[xpos][height].settileimage(frontwall_img);
 	        }
 		}
 		public void createrandomvwall() {
@@ -162,9 +162,9 @@ public class Map {
 			int width = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
 			for (int ypos=start;ypos<start+lenght;ypos++) {
 	        	tilelayout[width][ypos].block();
-	        	tilelayout[width][ypos].updatetileimage(upperwall_img);	
+	        	tilelayout[width][ypos].settileimage(upperwall_img);	
 	        }
-			tilelayout[width][start].updatetileimage(frontwall_img);
+			tilelayout[width][start].settileimage(frontwall_img);
 			tilelayout[width][start].block();
 			
 		}
@@ -177,16 +177,56 @@ public class Map {
 			for (int xpos=start_x;xpos<start_x+lenght;xpos++) {
 				for (int ypos=start_y;ypos<start_y+width;ypos++) {
 					tilelayout[xpos][ypos].block();
-					tilelayout[xpos][ypos].updatetileimage(water_img);
+					tilelayout[xpos][ypos].settileimage(water_img);
 				}
 	        }
 			// lake corners
-			tilelayout[start_x][start_y].updatetileimage(waterDL_img);
-			tilelayout[start_x+lenght-1][start_y].updatetileimage(waterDR_img);
-			tilelayout[start_x][start_y+width-1].updatetileimage(waterUL_img);
-			tilelayout[start_x+lenght-1][start_y+width-1].updatetileimage(waterUR_img);
+			tilelayout[start_x][start_y].settileimage(waterDL_img);
+			tilelayout[start_x+lenght-1][start_y].settileimage(waterDR_img);
+			tilelayout[start_x][start_y+width-1].settileimage(waterUL_img);
+			tilelayout[start_x+lenght-1][start_y+width-1].settileimage(waterUR_img);
 		}
 		public void createblockingelement() {
+			Random randomGenerator = new Random();
+			int x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
+			int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
+			int element= randomGenerator.nextInt(8);
+			if (!tilelayout[x][y].isbloqued()) {
+				tilelayout[x][y].block();
+				if (element==0) {
+					tilelayout[x][y].settileimage(rocks_img);
+				}
+				if (element==1) {
+					tilelayout[x][y].settileimage(boulder_img);
+				}
+				if (element==2) {
+					tilelayout[x][y].settileimage(bones_img);
+				}
+				if (element==3) {
+					tilelayout[x][y].settileimage(rip_img);
+				}
+				if (element==4) {
+					tilelayout[x][y].settileimage(cofin_img);
+				}
+				if (element==5) {
+					tilelayout[x][y].settileimage(tree_img);
+				}
+				if (element==6) {
+					tilelayout[x][y].settileimage(fire_img);
+				}
+				if (element==7) {
+					tilelayout[x][y].settileimage(statue1_img);
+				}
+				/*
+				if (element==8) {
+					tilelayout[x][y].settileimage(statue2_img);
+				}
+				if (element==9) {
+					tilelayout[x][y].settileimage(statue3_img);
+				}*/
+			}
+		}
+		public void createdungeonblockingelement() {
 			Random randomGenerator = new Random();
 			int x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
 			int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
@@ -194,53 +234,33 @@ public class Map {
 			if (!tilelayout[x][y].isbloqued()) {
 				tilelayout[x][y].block();
 				if (element==0) {
-					tilelayout[x][y].updatetileimage(rocks_img);
+					tilelayout[x][y].settileimage(altar_img);
 				}
 				if (element==1) {
-					tilelayout[x][y].updatetileimage(boulder_img);
+					tilelayout[x][y].settileimage(hole_img);
 				}
 				if (element==2) {
-					tilelayout[x][y].updatetileimage(bones_img);
+					tilelayout[x][y].settileimage(web_img);
 				}
 				if (element==3) {
-					tilelayout[x][y].updatetileimage(rip_img);
+					tilelayout[x][y].settileimage(cofin_img);
 				}
 				if (element==4) {
-					tilelayout[x][y].updatetileimage(cofin_img);
+					tilelayout[x][y].settileimage(rip_img);
 				}
 				if (element==5) {
-					tilelayout[x][y].updatetileimage(tree_img);
+					tilelayout[x][y].settileimage(tree_img);
 				}
 				if (element==6) {
-					tilelayout[x][y].updatetileimage(fire_img);
+					tilelayout[x][y].settileimage(statue1_img);
 				}
-			}
-		}
-		public void createdungeonblockingelement() {
-			Random randomGenerator = new Random();
-			int x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
-			int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
-			int element= randomGenerator.nextInt(6);
-			if (!tilelayout[x][y].isbloqued()) {
-				tilelayout[x][y].block();
-				if (element==0) {
-					tilelayout[x][y].updatetileimage(altar_img);
+				/*
+				if (element==7) {
+					tilelayout[x][y].settileimage(statue2_img);
 				}
-				if (element==1) {
-					tilelayout[x][y].updatetileimage(hole_img);
-				}
-				if (element==2) {
-					tilelayout[x][y].updatetileimage(web_img);
-				}
-				if (element==3) {
-					tilelayout[x][y].updatetileimage(cofind_img);
-				}
-				if (element==4) {
-					tilelayout[x][y].updatetileimage(ripd_img);
-				}
-				if (element==5) {
-					tilelayout[x][y].updatetileimage(treed_img);
-				}
+				if (element==8) {
+					tilelayout[x][y].settileimage(statue3_img);
+				}*/
 			}
 		}
 		public void createcementery() {
@@ -252,10 +272,10 @@ public class Map {
 					if (chances==0) {
 						tilelayout[x][y].block();
 						if (image==0) {
-							tilelayout[x][y].updatetileimage(cross_img);
+							tilelayout[x][y].settileimage(cross_img);
 						}
 						if (image==1) {
-							tilelayout[x][y].updatetileimage(rip_img);
+							tilelayout[x][y].settileimage(rip_img);
 						}
 					}
 				}
@@ -274,6 +294,12 @@ public class Map {
 		}
 		public boolean isdungeon() {
 			return isDungeon;
+		}
+		public Sprite getfreetile() {
+			return freetile;
+		}
+		public Sprite getfreedungeontile() {
+			return freedungeontile;
 		}
 		
 				
