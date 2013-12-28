@@ -67,10 +67,12 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     private int realYcoord;
     
     Enemy actualenemy; // enemy that i'm over
+    Buddy actualbuddy;
     Object actualobject; 
     Consumable actualconsumable;
-    String fightstate="";
+    String interactionoutput="";
     ArrayList<Enemy> badguys;
+    ArrayList<Buddy> goodguys;
     ArrayList<Object> availableobjects;
     ArrayList<Consumable> availableconsumables;
     
@@ -80,7 +82,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     private PopupInfoText screentext;
     
     // fight status
-    int just_fight=0;
+    int just_interact=0;
     
     
     
@@ -143,10 +145,12 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         layout=new Layout();
         prota = game.gethero();
         badguys= game.getenemies();
+        goodguys= game.getbuddies();
         availableobjects=game.getobjects();
         availableconsumables=game.getconsumables();
         
         // empty enemy object that hold enemy. Same as object and consumable.
+        actualbuddy= new Buddy();
         actualenemy= new Enemy();
         actualobject= new Object();
         actualconsumable= new Consumable();
@@ -154,8 +158,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         objinv= new Object_inventory();
         consinv= new Consumable_inventory();
 		
+        // create testing buddy
+        game.createbuddy(0,"Priest", 0,0,"buddy1.png","Hi, my friend. I hope you enjoy your trip!");
         
-		// create a fight message info screen 
+		// create a message info screen 
 		screentext=new PopupInfoText(100,(WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-400,"text_background.png",1000,300);
 		screentext.settextoffset(50, 50);
 	}
@@ -193,6 +199,9 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         
         // draw enemies
         drawenemies();
+        
+        // draw buddies
+        drawbuddies();
 
         // draw consumables
         drawconsumables();
@@ -207,8 +216,8 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         
         
         // draw fight result
-        if (just_fight==1) {
-        	screentext.drawScreen(batch, messagefont,fightstate,1.0f);	
+        if (just_interact==1) {
+        	screentext.drawScreen(batch, messagefont,interactionoutput,1.0f);	
         }
         
 
@@ -218,7 +227,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         }
         
 		// draw version build
-        genericfont.draw(batch, "Development build 68", 10, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-620);
+        genericfont.draw(batch, "Development build 69", 10, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-620);
 
         
         // draw object inventory
@@ -360,9 +369,27 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         		// draw enemy image if the layer is correct
         		if (bguy.getlayer()==game.getlayer()) {
         			Sprite enemysprite=bguy.getsprite();
-        			enemysprite.setPosition(getrelativextileposition(bguy), getrelativeytileposition(bguy));
+        			enemysprite.setPosition(getrelativeenemyxtileposition(bguy), getrelativeenemyytileposition(bguy));
         			//batch.draw(bguy.getsprite(),getrelativextileposition(bguy),getrelativeytileposition(bguy));
         			enemysprite.draw(batch);
+        		}
+        	}
+        }
+	}
+	
+	protected void drawbuddies() {
+		ListIterator<Buddy> bgiterator = goodguys.listIterator();
+        while (bgiterator.hasNext()) {
+        	//System.out.println("entra");
+        	Buddy bguy=bgiterator.next();
+        	//System.out.println(bguy.getabsolutex());
+        	if (bguy.buddyonscreen(maplayers[game.getlayer()].getfirstxtile(), maplayers[game.getlayer()].getfirstytile())==true) {
+        		// draw buddie image if the layer is correct
+        		if (bguy.getlayer()==game.getlayer()) {
+        			Sprite buddysprite=bguy.getsprite();
+        			buddysprite.setPosition(getrelativebuddyxtileposition(bguy), getrelativebuddyytileposition(bguy));
+        			//batch.draw(bguy.getsprite(),getrelativextileposition(bguy),getrelativeytileposition(bguy));
+        			buddysprite.draw(batch);
         		}
         	}
         }
@@ -372,16 +399,24 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	 * @param bguy
 	 * @return
 	 */
-	public int getrelativeytileposition(Enemy bguy) {
+	public int getrelativeenemyytileposition(Enemy bguy) {
 		return (bguy.getabsolutey()-maplayers[game.getlayer()].getfirstytile())*WrapperEngine.TILE_Y_SIZE;
+	}
+	
+	public int getrelativebuddyytileposition(Buddy gguy) {
+		return (gguy.getabsolutey()-maplayers[game.getlayer()].getfirstytile())*WrapperEngine.TILE_Y_SIZE;
 	}
 
 	/**
 	 * @param bguy
 	 * @return
 	 */
-	public int getrelativextileposition(Enemy bguy) {
+	public int getrelativeenemyxtileposition(Enemy bguy) {
 		return (bguy.getabsolutex()-maplayers[game.getlayer()].getfirstxtile())*WrapperEngine.TILE_X_SIZE;
+	}
+	
+	public int getrelativebuddyxtileposition(Buddy gguy) {
+		return (gguy.getabsolutex()-maplayers[game.getlayer()].getfirstxtile())*WrapperEngine.TILE_X_SIZE;
 	}
 	
 	public int getabsolutextile(Hero hero) {
@@ -557,6 +592,9 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		if (keycode==Keys.H) {
 			fight();
 		}
+		if (keycode==Keys.T) {
+			talk();
+		}
 		if (keycode==Keys.G) {
 			take();
 		}
@@ -571,14 +609,14 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         	object_inv_mode=1;
     		consumable_inv_mode=0;
     		object_drop_mode=0;
-    		just_fight=0;
+    		just_interact=0;
 		}
 		if (keycode==Keys.C) {
 			// ENABLE CONSUMABLE INVENTORY MODE
         	object_inv_mode=0;
     		consumable_inv_mode=1;
     		object_drop_mode=0;
-    		just_fight=0;
+    		just_interact=0;
 		}
 		
 		// OBJECT INVENTORY ACTIONS
@@ -738,6 +776,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     		if (realXcoord>192 && realXcoord<256 && realYcoord>640 && realYcoord<704) {
     			look();
     		}
+    		// TALK BUTTON! 
+    		if (realXcoord>256 && realXcoord<320 && realYcoord>640 && realYcoord<704) {
+    			talk();
+    		}
     		// CONSUMABLE INVENTORY ACTIONS
     		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
     			if (realXcoord>1152 && realXcoord<1216 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==0) {
@@ -831,11 +873,6 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	}
     }
     void fight() {
-    	if (!BackgroundMusic.playingfight) {
-    		BackgroundMusic.stopall();
-    		BackgroundMusic.startfight();
-    		BackgroundMusic.playingfight=true;
-    	}
     	object_inv_mode=0;
 		consumable_inv_mode=0;
 		object_drop_mode=0;
@@ -843,6 +880,11 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		String resultoffight;
     	actualenemy=game.overenemy(); // get the enemy (if exist)
 		if (actualenemy.getname()!=null) {
+			if (!BackgroundMusic.playingfight) {
+	    		BackgroundMusic.stopall();
+	    		BackgroundMusic.startfight();
+	    		BackgroundMusic.playingfight=true;
+	    	}
 			//resultoffight=prota.fight(actualenemy);
 			resultoffight=prota.hit(actualenemy);
 			//System.out.println("FIGHT!");
@@ -852,9 +894,9 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 				prota.updateexperience(100);
 				//System.out.println("YOU WIN!");
 				if (actualenemy.getname()=="megaboss") {
-						fightstate="You get the amulet, you win the game!!";
+						interactionoutput="You get the amulet, you win the game!!";
 				} else {
-					fightstate="Great! You win the battle!!";
+					interactionoutput="Great! You win the battle!!";
 					BackgroundMusic.stopall();
 		    		if (activemap.isdungeon()) {
 		    			BackgroundMusic.startdungeon();
@@ -871,12 +913,12 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	    		BackgroundMusic.startoutside();
 	    		BackgroundMusic.playingfight=false;
 				game.herodies();
-				fightstate="You lose the battle, you are in the graveyard!";
+				interactionoutput="You lose the battle, you are in the graveyard!";
 			}
 			if (resultoffight!="ENEMYDEAD" && resultoffight!="HERODEAD") {
-				fightstate=resultoffight;
+				interactionoutput=resultoffight;
 			}
-		just_fight=1;
+		just_interact=1;
 		}
     }
     void goup() {
@@ -884,7 +926,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	object_drop_mode=0;
 		consumable_inv_mode=0;
 		eye_mode=0;
-		just_fight=0;
+		just_interact=0;
     	actualenemy=null;
     	actualconsumable=null;
     	actualobject=null;
@@ -896,7 +938,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	object_drop_mode=0;
 		consumable_inv_mode=0;
 		eye_mode=0;
-		just_fight=0;
+		just_interact=0;
     	actualenemy=null;
     	actualconsumable=null;
     	actualobject=null;
@@ -908,7 +950,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	object_drop_mode=0;
 		consumable_inv_mode=0;
 		eye_mode=0;
-		just_fight=0;
+		just_interact=0;
     	actualenemy=null;
     	actualconsumable=null;
     	actualobject=null;
@@ -917,7 +959,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     }
     void goright() {
     	eye_mode=0;
-    	just_fight=0;
+    	just_interact=0;
 		object_inv_mode=0;
 		object_drop_mode=0;
 		consumable_inv_mode=0;
@@ -932,17 +974,33 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	object_inv_mode=0;
     	object_drop_mode=0;
 		consumable_inv_mode=0;
-		just_fight=0;
+		just_interact=0;
     	actualenemy=game.overenemy(); // get the enemy (if exist)
     	actualconsumable=game.overconsumable(); // get the consumable (if exist)
     	actualobject=game.overobject(); // get the object (if exist)
+    }
+    void talk() {
+    	eye_mode=0;
+    	object_inv_mode=0;
+		consumable_inv_mode=0;
+		object_drop_mode=0;
+		actualenemy=game.overenemy(); // get the enemy (if exist)
+		actualbuddy=game.overbuddy(); // get the buddy (if exist)
+		if (actualenemy.getname()!=null) {
+			interactionoutput=actualenemy.talk();
+			just_interact=1;
+		}
+		if (actualbuddy.getname()!=null) {
+			interactionoutput=actualbuddy.talk();
+			just_interact=1;
+		}
     }
     void take() {
     	eye_mode=0;
     	object_inv_mode=0;
 		consumable_inv_mode=0;
 		object_drop_mode=0;
-		just_fight=0;
+		just_interact=0;
     	// get consumable into inventory
 		actualconsumable=game.overconsumable(); // get the consumable (if exist)
 		if (actualconsumable.getname()!=null) {
@@ -968,7 +1026,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	object_inv_mode=0;
 		consumable_inv_mode=0;
 		object_drop_mode=1;
-		just_fight=0;
+		just_interact=0;
 	}
     // Original class methods
 	@Override

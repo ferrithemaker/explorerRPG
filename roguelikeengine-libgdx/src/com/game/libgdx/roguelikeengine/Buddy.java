@@ -19,7 +19,6 @@ package com.game.libgdx.roguelikeengine;
 
 
 
-import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -27,128 +26,60 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 
-public class Enemy {
-	private int agility;
-	private int force;
-	private int resist;
-	private int maxlife;
-	private int life;
+public class Buddy {
 	private int absolute_x;
 	private int absolute_y;
 	private String name;
-	private Sprite enemyimg;
+	private Sprite buddyimg;
 	private int layer;
+	private String speech;
 	
-	public Enemy(int layer,String name,int baseagility,int basestrength, int baseresist, int basehp, int x,int y,String file) {
+	public Buddy(int layer,String name, int x,int y,String file,String speech) {
 		// initial set-up
 		this.layer=layer;
-		this.agility=baseagility;
-		this.force=basestrength;
-		this.life=this.maxlife=basehp;
 		this.name=name;
-		this.resist=baseresist;
 		this.absolute_x=x;
 		this.absolute_y=y;
+		this.speech=speech;
 		Texture enemytexture = new Texture(Gdx.files.internal(file)); 
 		enemytexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		this.enemyimg = new Sprite(enemytexture);
+		this.buddyimg = new Sprite(enemytexture);
 	}
 	
-	public Enemy() {
+	public Buddy() {
 		// void constructor
 	}
 	
 	public String talk() {
-		Random randomGenerator = new Random();
-		int x = randomGenerator.nextInt(5);
-		switch (x) {
-		case 0:
-			return "Grrrrrrrrrrrrrrrrr";
-		case 1:
-			return "You will die!";
-		case 2:
-			return "Go away little bastard";
-		case 3:
-			return "Run out of here!";
-		case 4:
-			return "You wanna fight?";
-		default:
-			return "Grrrrrrrrrrrr";
-		}
-		
+		return this.speech;
 	}
 	
 	// gets	
+	public Sprite getsprite() {
+		return this.buddyimg;
+	}
 	public int getabsolutex() {
 		return this.absolute_x;
 	}
 	public int getabsolutey() {
 		return this.absolute_y;
 	}
-	public int getforce() {
-		return this.force;
-	}
-	public int getresist() {
-		return this.resist;
-	}
-	public int gethp() {
-		return this.life;
-	}
-	public Sprite getsprite() {
-		return this.enemyimg;
-	}
+	
 	public String getname() {
 		return this.name;
 	}
-	public int getagility() {
-		return this.agility;
-	}
+	
 	public int getlayer() {
 		return layer;
 	}
-	public int percentlife() {
-		return (this.maxlife / this.life) * 100;
-	}
-	public int chancetowin(Hero hero) {
-		int chance = 0;
-		
-		// if weakened, just return 0
-		if(percentlife() < 20) return chance;
-		
-		if(hero.getagility() < this.agility) {
-			chance += 10;
-		}
-		
-		if(hero.getresist() < this.resist) {
-			chance += 10;
-		}
-		
-		if(hero.getforce() < this.force) {
-			chance += 10;
-		}
-		
-		if(hero.gethp() < this.life) {
-			chance += 10;
-		}
-		
-		// a bit of bravery
-		chance += new Random().nextInt(10);
-		
-		return chance;
-	}
-	
-	// sets / updates
-	public void updatehp(int value) {
-		this.life=Math.max(0, this.life-value);
-	}
 
 	// control methods
-	public boolean enemyonscreen(int xinitpos,int yinitpos) {
+	public boolean buddyonscreen(int xinitpos,int yinitpos) {
 		return absolute_x >= xinitpos && absolute_x < xinitpos + WrapperEngine.ON_SCREEN_TILES_X &&
 			   absolute_y >= yinitpos && absolute_y < yinitpos + WrapperEngine.ON_SCREEN_TILES_Y;
 	}
 	
-	public boolean overenemy(int x,int y) {
+	public boolean overbuddy(int x,int y) {
 		return (this.absolute_x==x && this.absolute_y==y);
 	}
 }

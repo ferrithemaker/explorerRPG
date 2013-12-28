@@ -66,6 +66,7 @@ public class WrapperEngine {
 	
 	// variables
     private Enemy_array badguys;
+    private Buddy_array goodguys;
     private Object_array availableobjects;
     private Consumable_array availableconsumables;
     private Hero prota;
@@ -102,6 +103,9 @@ public class WrapperEngine {
         
         // create initial empty enemy array
         badguys= new Enemy_array();
+        
+        // create initial empty buddy array
+        goodguys= new Buddy_array();
 		
         // create initial empty object array
         availableobjects=new Object_array();
@@ -313,6 +317,36 @@ public class WrapperEngine {
 	public void createenemy(int layer,String name,int ag,int str, int res, int lf, int x,int y,String file) {
 		badguys.add_enemy(new Enemy(layer,name,ag,str,res,lf,x,y,file));
 	}
+	
+	// BUDDY CLASS WRAPPER
+	
+	public ArrayList<Buddy> getbuddies() {
+		return goodguys.getlist();
+	}
+	public Buddy overbuddy() {
+		 return goodguys.overbuddy(prota.getrelativextile()+maplayers[layer].getfirstxtile(),prota.getrelativeytile()+maplayers[layer].getfirstytile());
+	}
+	public void removebuddy(Buddy obj) {
+		goodguys.remove_buddy(obj);
+	}
+	public void createrandombuddy() { // create a random enemy
+		int i;
+		for (i=0;i<NUMBER_OF_ENEMIES_PER_LOOP;i++) {
+			Random randomGenerator = new Random();
+			// generates random position
+			int x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
+			int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
+			int randomlayer=randomGenerator.nextInt(WrapperEngine.NUMBER_OF_MAP_LAYERS);
+			int buddytype = randomGenerator.nextInt(6); // random enemy choose
+			if (!maplayers[randomlayer].gettiles()[x][y].isbloqued()) { // if there is empty space
+				// random buddy creation
+			}
+		}
+	}
+	public void createbuddy(int layer,String name, int x,int y,String file,String speech) {
+		goodguys.add_buddy(new Buddy(layer,name,x,y,file,speech));
+	}
+	
 	
 	// OBJECT CLASSES WRAPPER
 	public ArrayList<Object> getobjects() {

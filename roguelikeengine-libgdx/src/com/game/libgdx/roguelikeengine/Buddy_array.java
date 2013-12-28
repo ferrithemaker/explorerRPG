@@ -21,48 +21,38 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
-public class Enemy_array {
+public class Buddy_array {
 	public static int LOGIC_RANGE = 10;
 	
-	private ArrayList<Enemy> Enemylist;
+	private ArrayList<Buddy> Buddylist;
 	
-	public Enemy_array() {
-		Enemylist = new ArrayList<Enemy>();
+	public Buddy_array() {
+		Buddylist = new ArrayList<Buddy>();
 	}
 	
-	public ArrayList<Enemy> getlist() {
-		return Enemylist;
+	public ArrayList<Buddy> getlist() {
+		return Buddylist;
 	}
 	
-	public int add_enemy(Enemy enemy) {
-		Enemylist.add(enemy);
+	public int add_buddy(Buddy buddy) {
+		Buddylist.add(buddy);
 		return 0;
 	}
 	
-	public int remove_enemy(Enemy enemy) {
-		Enemylist.remove(enemy);
+	public int remove_buddy(Buddy buddy) {
+		Buddylist.remove(buddy);
 		return 0;
 	}
 	
-	public Enemy overenemy(int x, int y) {
-		Enemy rightbguy = new Enemy(); // null enemy
-		ListIterator<Enemy> bgiterator = Enemylist.listIterator();
+	public Buddy overbuddy(int x, int y) {
+		Buddy rightbguy = new Buddy(); // null enemy
+		ListIterator<Buddy> bgiterator = Buddylist.listIterator();
         while (bgiterator.hasNext()) {
-        	Enemy bguy=bgiterator.next();
-        	if (bguy.overenemy(x,y)==true) {
-        		    		rightbguy=bguy;
+        	Buddy bguy=bgiterator.next();
+        	if (bguy.overbuddy(x,y)==true) {
+        		rightbguy=bguy;
         	}
         }
         return rightbguy;
 	}
-	
-	/*public LinkedList<Enemy> onscreenonly(int x, int y) {
-		LinkedList<Enemy> result = new LinkedList<Enemy>();
-		
-		for(Enemy enemy : this.Enemylist) {
-			if(enemy.enemyonscreen(x, y)) result.add(enemy);
-		}
-		
-		return result;
-	}*/
 }
