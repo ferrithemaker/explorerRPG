@@ -29,6 +29,7 @@ public class Layout {
     private Sprite arrowup_img;
     private Sprite arrowleft_img;
     private Sprite arrowright_img;
+    private Sprite androidcommands_img;
 	// screen methods
     public Layout() {
     	// tiles
@@ -38,6 +39,7 @@ public class Layout {
 		arrowup_img= new Sprite(new Texture(Gdx.files.internal("UI/arrowup.png")),64,64);
 		arrowleft_img= new Sprite(new Texture(Gdx.files.internal("UI/arrowleft.png")),64,64);
 		arrowright_img= new Sprite(new Texture(Gdx.files.internal("UI/arrowright.png")),64,64);
+		androidcommands_img= new Sprite(new Texture(Gdx.files.internal("UI/androidcommands.png")),128,256);
 		
     }
 	public Sprite getmenubackground() {
@@ -57,6 +59,9 @@ public class Layout {
 	}
 	public Sprite getarrowright() {
 		return arrowright_img;
+	}
+	public Sprite getandroidcommands() {
+		return androidcommands_img;
 	}
 
 }
