@@ -25,17 +25,38 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class Layout {
 	private Sprite menu_img;
     private Sprite actionmenu_img;
+    private Sprite arrowdown_img;
+    private Sprite arrowup_img;
+    private Sprite arrowleft_img;
+    private Sprite arrowright_img;
 	// screen methods
     public Layout() {
     	// tiles
-		menu_img = new Sprite(new Texture(Gdx.files.internal("charactermenu.png")),WrapperEngine.OPTION_MENU_X_SIZE,WrapperEngine.WINDOWHEIGHT);
-		actionmenu_img= new Sprite(new Texture(Gdx.files.internal("actionmenu.png")),WrapperEngine.ON_SCREEN_TILES_X*WrapperEngine.TILE_X_SIZE,64);
+		menu_img = new Sprite(new Texture(Gdx.files.internal("UI/charactermenu.png")),WrapperEngine.OPTION_MENU_X_SIZE,WrapperEngine.WINDOWHEIGHT);
+		actionmenu_img= new Sprite(new Texture(Gdx.files.internal("UI/actionmenu.png")),WrapperEngine.ON_SCREEN_TILES_X*WrapperEngine.TILE_X_SIZE,64);
+		arrowdown_img= new Sprite(new Texture(Gdx.files.internal("UI/arrowdown.png")),64,64);
+		arrowup_img= new Sprite(new Texture(Gdx.files.internal("UI/arrowup.png")),64,64);
+		arrowleft_img= new Sprite(new Texture(Gdx.files.internal("UI/arrowleft.png")),64,64);
+		arrowright_img= new Sprite(new Texture(Gdx.files.internal("UI/arrowright.png")),64,64);
+		
     }
 	public Sprite getmenubackground() {
 		return menu_img;
 	}
 	public Sprite getactionmenu() {
 		return actionmenu_img;
+	}
+	public Sprite getarrowdown() {
+		return arrowdown_img;
+	}
+	public Sprite getarrowup() {
+		return arrowup_img;
+	}
+	public Sprite getarrowleft() {
+		return arrowleft_img;
+	}
+	public Sprite getarrowright() {
+		return arrowright_img;
 	}
 
 }

@@ -129,7 +129,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		Gdx.input.setInputProcessor(this);
 		batch = new SpriteBatch();
 		// fonts setup
-		FileHandle fontFile = Gdx.files.internal("diabloheavy.ttf");
+		FileHandle fontFile = Gdx.files.internal("fonts/diabloheavy.ttf");
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
 		//genericfont = new BitmapFont();
 		//messagefont = new BitmapFont();
@@ -162,7 +162,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         game.createbuddy(0,"Priest", 0,0,"buddy1.png","Hi, my friend. I hope you enjoy your trip!");
         
 		// create a message info screen 
-		screentext=new PopupInfoText(100,(WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-400,"text_background.png",1000,300);
+		screentext=new PopupInfoText(100,(WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-400,"UI/text_background.png",1000,300);
 		screentext.settextoffset(50, 50);
 	}
 
@@ -178,15 +178,14 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 	    batch.begin();
 	    
+	    // generic desktop interface
 	    drawinterface();
-	 	
+	     	
 	 	// draw equipment
 	 	drawequipment();
         
         // overenemy description
-        drawdescriptions();
-        
-        
+        drawdescriptions();     
 
         //layercontrol();
         activemap=maplayers[game.getlayer()];
@@ -211,10 +210,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         
         // draw hero
         batch.draw(prota.getsprite(), prota.getrelativextile()*WrapperEngine.TILE_X_SIZE, prota.getrelativeytile()*WrapperEngine.TILE_Y_SIZE);
-	
-        
-        
-        
+	  
         // draw fight result
         if (just_interact==1) {
         	screentext.drawScreen(batch, messagefont,interactionoutput,1.0f);	
@@ -233,7 +229,26 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         // draw object inventory
         drawinventory();
         
+        //draw android UI
+        
+        if (WrapperEngine.OUTPUT_OS=="android") {
+	    	drawandroidinterface();
+	    	debug_mode=1; // only for UI testing
+	    }
+        
         batch.end();
+	}
+	
+	protected void drawandroidinterface() {
+		// draw android controls
+		layout.getarrowdown().setPosition((WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+200,00);
+		layout.getarrowdown().draw(batch, 0.2f);
+		layout.getarrowup().setPosition((WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+200,120);
+		layout.getarrowup().draw(batch, 0.2f);
+		layout.getarrowleft().setPosition((WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+140,60);
+		layout.getarrowleft().draw(batch, 0.2f);
+		layout.getarrowright().setPosition((WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+260,60);
+		layout.getarrowright().draw(batch, 0.2f);
 	}
 
 	/**
@@ -564,7 +579,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	// get relative mouse coord instead of real ones
     	realXcoord=(int)((float)Gdx.input.getX()*(float)((float)WrapperEngine.WINDOWWIDTH/(float)Gdx.graphics.getWidth()));
 		realYcoord=(int)((float)Gdx.input.getY()*(float)((float)WrapperEngine.WINDOWHEIGHT/(float)Gdx.graphics.getHeight()))*-1+(WrapperEngine.WINDOWHEIGHT);
-    	if (WrapperEngine.ANDROID_MENU_BAR_ENABLE) { // I don't like this hardcoded way to do things
+    	if (WrapperEngine.OUTPUT_OS=="android") { 
     		realYcoord=realYcoord+WrapperEngine.ANDROID_MENU_BAR_SIZE;
     	}
     	// mouse events control
@@ -737,7 +752,90 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	/**
 	 * 
 	 */
+	@SuppressWarnings("unused")
 	protected void handlemouseinput() {
+		if (WrapperEngine.OUTPUT_OS=="desktop") { handlemousedesktopinput(); }
+		if (WrapperEngine.OUTPUT_OS=="android") { handletouchandroidinput(); }
+		
+	}
+	protected void handletouchandroidinput() {
+		if (Gdx.input.isTouched()) {
+			// EXIT BUTTON!
+    		if (realXcoord>512 && realXcoord<576 && realYcoord>640 && realYcoord<704) {
+    			dispose();
+    		}
+    		// HIT BUTTON!
+    		if (realXcoord>0 && realXcoord<64 && realYcoord>640 && realYcoord<704) {
+    			fight();
+    		}
+    		// directions
+    		// LEFT BUTTON!
+    		if (realXcoord>576 && realXcoord<640 && realYcoord>640 && realYcoord<704) {
+    			goleft();
+    		}
+    		// RIGHT BUTTON!
+    		if (realXcoord>768 && realXcoord<832 && realYcoord>640 && realYcoord<704) {
+    			goright();
+    		}
+    		// UP BUTTON!
+    		if (realXcoord>704 && realXcoord<768 && realYcoord>640 && realYcoord<704) {
+    			goup();
+    		}
+    		// DOWN BUTTON!
+    		if (realXcoord>640 && realXcoord<704 && realYcoord>640 && realYcoord<704) {
+    			godown();
+    		}
+    		// TAKE BUTTON!
+    		if (realXcoord>64 && realXcoord<128 && realYcoord>640 && realYcoord<704) {
+    			take();
+    		}
+    		// DROP BUTTON!
+    		if (realXcoord>128 && realXcoord<192 && realYcoord>640 &&  realYcoord<704) {
+    			drop();
+    		}
+    		// LOOK BUTTON! 
+    		if (realXcoord>192 && realXcoord<256 && realYcoord>640 && realYcoord<704) {
+    			look();
+    		}
+    		// TALK BUTTON! 
+    		if (realXcoord>256 && realXcoord<320 && realYcoord>640 && realYcoord<704) {
+    			talk();
+    		}
+    		// CONSUMABLE INVENTORY ACTIONS
+    		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
+    			if (realXcoord>1152 && realXcoord<1216 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==0) {
+    				getconsumable(consinv.get_consumable(i));
+    				consinv.delete_consumable(i);
+    			}
+            }
+    		// OBJECT INVENTORY ACTIONS
+    		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
+    			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && object_drop_mode==0 && eye_mode==0) {
+    				getobject(objinv.get_object(i),i);
+    			}
+            }
+    		// OBJECT INVENTORY DROP
+    		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
+    			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && object_drop_mode==1  && eye_mode==0) {
+    				objinv.delete_object(i);
+    			}
+            }
+    		// EYEMODE OBJECT INVENTORY
+    		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
+    			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==1) {
+    				actualobject=objinv.get_object(i);
+    			}
+            }
+    		// EYEMODE CONSUMABLE INVENTORY
+    		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
+    			if (realXcoord>1152 && realXcoord<1216 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==1) {
+    				actualconsumable=consinv.get_consumable(i);
+    			}
+            }	
+			
+		}
+	}
+	protected void handlemousedesktopinput() {
 		if (Gdx.input.isTouched()) {
     		// EXIT BUTTON!
     		if (realXcoord>512 && realXcoord<576 && realYcoord>640 && realYcoord<704) {
@@ -813,7 +911,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
             }	
     		
     	}
-	}    
+	}
     void getobject(Object obj,int pos) {
     	if (obj!=null) {
 			// if object exists

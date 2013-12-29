@@ -10,9 +10,9 @@ public class BackgroundMusic {
 	static Music musicfight;
 	static Boolean playingfight;
 	static void  setup() {
-		musicoutside = Gdx.audio.newMusic(Gdx.files.internal("FromHere.ogg"));
-		musicdungeon = Gdx.audio.newMusic(Gdx.files.internal("Deeper.ogg"));
-		musicfight = Gdx.audio.newMusic(Gdx.files.internal("Defiance.ogg"));
+		musicoutside = Gdx.audio.newMusic(Gdx.files.internal("music/FromHere.ogg"));
+		musicdungeon = Gdx.audio.newMusic(Gdx.files.internal("music/Deeper.ogg"));
+		musicfight = Gdx.audio.newMusic(Gdx.files.internal("music/Defiance.ogg"));
 		playingfight=false;
 	}
 	static void startoutside() {

@@ -32,6 +32,8 @@ You can see a demo video at: http://www.youtube.com/watch?v=ZWgQhCEKEgY
 
 There are 4 projects on GIT (the pre-libgdx one, and the 3 libgdx based (main, desktop and android). All preliminary tests and development are based on libdgx desktop version.
 
+If you want to change the target device (android / desktop) you must change the OUTPUT_OS constant on the WrapperEngine class.
+
 For more information about running the project, refer to libgdx documentation.
 
 Thanks!

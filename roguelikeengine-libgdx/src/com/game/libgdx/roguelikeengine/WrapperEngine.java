@@ -53,6 +53,9 @@ public class WrapperEngine {
 	public final static int NUMBER_OF_OBJECTS_PER_LOOP=20;
 	public final static int NUMBER_OF_CONSUMABLES_PER_LOOP=20;
 	
+	// output OS
+	public final static String OUTPUT_OS="android"; // desktop OR android 
+	
 	// dynamic layers 
 	public final static int NUMBER_OF_MAP_LAYERS=3;
 	public final static int NUMBER_OF_ACCESSPOINTS=300;
@@ -62,7 +65,6 @@ public class WrapperEngine {
 	
 	// android specific constants
 	public final static int ANDROID_MENU_BAR_SIZE=43;
-	public final static boolean ANDROID_MENU_BAR_ENABLE=false;
 	
 	// variables
     private Enemy_array badguys;

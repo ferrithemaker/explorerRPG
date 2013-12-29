@@ -47,7 +47,7 @@ public class SplashScreen implements Screen {
     {
     	//layout=new Layout();
 		
-		FileHandle fontFile = Gdx.files.internal("diabloheavy.ttf");
+		FileHandle fontFile = Gdx.files.internal("fonts/diabloheavy.ttf");
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
     	spriteBatch = new SpriteBatch();
     	//messagefont = new BitmapFont();
@@ -56,7 +56,7 @@ public class SplashScreen implements Screen {
 		//messagefont.setScale(3f); 
 		text="WELCOME TO EXPLORER TEST GAME.\nYou awake in the andor graveyard, \ntrapped in the great gardens of andor.\nThe only way to leave \nis using the amulet of willing.\nYou must recover it defeating megaboss.\nTo defeat megaboss, you must upgrade\nyour character killing monsters,\ntaking objects and drinking potions.\n\nGood luck.";
     	// create a fight message info screen 
-    	screentext=new PopupInfoText(0,0,"splashscreen.png",1280,704);
+    	screentext=new PopupInfoText(0,0,"UI/splashscreen.png",1280,704);
     	screentext.settextoffset(100, 150);
     }
 
