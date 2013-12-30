@@ -54,7 +54,7 @@ public class WrapperEngine {
 	public final static int NUMBER_OF_CONSUMABLES_PER_LOOP=20;
 	
 	// output OS
-	public final static String OUTPUT_OS="android"; // desktop OR android 
+	public final static String OUTPUT_OS="desktop"; // desktop OR android 
 	
 	// dynamic layers 
 	public final static int NUMBER_OF_MAP_LAYERS=3;

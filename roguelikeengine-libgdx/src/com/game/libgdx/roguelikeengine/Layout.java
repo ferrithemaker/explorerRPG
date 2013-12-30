@@ -25,21 +25,15 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class Layout {
 	private Sprite menu_img;
     private Sprite actionmenu_img;
-    private Sprite arrowdown_img;
-    private Sprite arrowup_img;
-    private Sprite arrowleft_img;
-    private Sprite arrowright_img;
     private Sprite androidcommands_img;
+    private Sprite androiddirections_img;
 	// screen methods
     public Layout() {
     	// tiles
 		menu_img = new Sprite(new Texture(Gdx.files.internal("UI/charactermenu.png")),WrapperEngine.OPTION_MENU_X_SIZE,WrapperEngine.WINDOWHEIGHT);
 		actionmenu_img= new Sprite(new Texture(Gdx.files.internal("UI/actionmenu.png")),WrapperEngine.ON_SCREEN_TILES_X*WrapperEngine.TILE_X_SIZE,64);
-		arrowdown_img= new Sprite(new Texture(Gdx.files.internal("UI/arrowdown.png")),64,64);
-		arrowup_img= new Sprite(new Texture(Gdx.files.internal("UI/arrowup.png")),64,64);
-		arrowleft_img= new Sprite(new Texture(Gdx.files.internal("UI/arrowleft.png")),64,64);
-		arrowright_img= new Sprite(new Texture(Gdx.files.internal("UI/arrowright.png")),64,64);
 		androidcommands_img= new Sprite(new Texture(Gdx.files.internal("UI/androidcommands.png")),128,256);
+		androiddirections_img= new Sprite(new Texture(Gdx.files.internal("UI/androiddirections.png")),256,256);
 		
     }
 	public Sprite getmenubackground() {
@@ -48,20 +42,11 @@ public class Layout {
 	public Sprite getactionmenu() {
 		return actionmenu_img;
 	}
-	public Sprite getarrowdown() {
-		return arrowdown_img;
-	}
-	public Sprite getarrowup() {
-		return arrowup_img;
-	}
-	public Sprite getarrowleft() {
-		return arrowleft_img;
-	}
-	public Sprite getarrowright() {
-		return arrowright_img;
-	}
 	public Sprite getandroidcommands() {
 		return androidcommands_img;
+	}
+	public Sprite getandroiddirections() {
+		return androiddirections_img;
 	}
 
 }

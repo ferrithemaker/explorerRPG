@@ -223,7 +223,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         }
         
 		// draw version build
-        genericfont.draw(batch, "Development build 69", 10, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-620);
+        genericfont.draw(batch, "Development build 70", 10, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-620);
 
         
         // draw object inventory
@@ -241,14 +241,8 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	
 	protected void drawandroidinterface() {
 		// draw android controls
-		layout.getarrowdown().setPosition((WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+200,00);
-		layout.getarrowdown().draw(batch, 0.2f);
-		layout.getarrowup().setPosition((WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+200,120);
-		layout.getarrowup().draw(batch, 0.2f);
-		layout.getarrowleft().setPosition((WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+140,60);
-		layout.getarrowleft().draw(batch, 0.2f);
-		layout.getarrowright().setPosition((WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+260,60);
-		layout.getarrowright().draw(batch, 0.2f);
+		layout.getandroiddirections().setPosition((WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+70,0);
+		layout.getandroiddirections().draw(batch, 0.3f);
 		layout.getandroidcommands().setPosition(60,60);
 		layout.getandroidcommands().draw(batch, 0.3f);
 	}
@@ -767,40 +761,40 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     			dispose();
     		}
     		// HIT BUTTON!
-    		if (realXcoord>70 && realXcoord<172 && realYcoord>640 && realYcoord<704) {
+    		if (realXcoord>70 && realXcoord<172 && realYcoord>314 && realYcoord<349) {
     			fight();
     		}
     		// directions
     		// LEFT BUTTON!
-    		if (realXcoord>984 && realXcoord<1033 && realYcoord>91 && realYcoord<169) {
+    		if (realXcoord>912 && realXcoord<977 && realYcoord>119 && realYcoord<226) {
     			goleft();
     		}
     		// RIGHT BUTTON!
-    		if (realXcoord>1101 && realXcoord<1138 && realYcoord>91 && realYcoord<169) {
+    		if (realXcoord>1089 && realXcoord<1152 && realYcoord>119 && realYcoord<226) {
     			goright();
     		}
     		// UP BUTTON!
-    		if (realXcoord>1033 && realXcoord<1101 && realYcoord>169 && realYcoord<213) {
+    		if (realXcoord>977 && realXcoord<1089 && realYcoord>226 && realYcoord<281) {
     			goup();
     		}
     		// DOWN BUTTON!
-    		if (realXcoord>1033 && realXcoord<1101 && realYcoord>60 && realYcoord<91) {
+    		if (realXcoord>977 && realXcoord<1089 && realYcoord>61 && realYcoord<119) {
     			godown();
     		}
     		// TAKE BUTTON!
-    		if (realXcoord>70 && realXcoord<172 && realYcoord>640 && realYcoord<704) {
+    		if (realXcoord>70 && realXcoord<172 && realYcoord>268 && realYcoord<298) {
     			take();
     		}
     		// DROP BUTTON!
-    		if (realXcoord>70 && realXcoord<172 && realYcoord>640 &&  realYcoord<704) {
+    		if (realXcoord>70 && realXcoord<172 && realYcoord>216 &&  realYcoord<247) {
     			drop();
     		}
     		// LOOK BUTTON! 
-    		if (realXcoord>70 && realXcoord<172 && realYcoord>640 && realYcoord<704) {
+    		if (realXcoord>70 && realXcoord<172 && realYcoord>166 && realYcoord<195) {
     			look();
     		}
     		// TALK BUTTON! 
-    		if (realXcoord>70 && realXcoord<172 && realYcoord>640 && realYcoord<704) {
+    		if (realXcoord>70 && realXcoord<172 && realYcoord>117 && realYcoord<148) {
     			talk();
     		}
     		// CONSUMABLE INVENTORY ACTIONS
