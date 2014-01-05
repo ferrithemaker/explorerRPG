@@ -221,6 +221,14 @@ public class WrapperEngine {
 		return prota;
 	}
 	
+	public int heroabsolutex() {
+		return prota.getrelativextile()+activemap.getfirstxtile();
+	}
+	
+	public int heroabsolutey() {
+		return prota.getrelativeytile()+activemap.getfirstytile();
+	}
+	
 	public void herodies() {
 		maplayers[layer].setfirstxtile(0);
 		maplayers[layer].setfirstytile(0);

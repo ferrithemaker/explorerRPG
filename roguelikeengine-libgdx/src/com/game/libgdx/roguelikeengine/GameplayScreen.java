@@ -440,8 +440,8 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	
 	// layer control
 	public void APCheck() {
-		System.out.println("Hero Absolute x:"+(prota.getrelativextile()+maplayers[game.getlayer()].getfirstxtile()));
- 		System.out.println("Hero Absolute y:"+(prota.getrelativeytile()+maplayers[game.getlayer()].getfirstytile()));
+		System.out.println("Hero Absolute x:"+(game.heroabsolutex()));
+ 		System.out.println("Hero Absolute y:"+(game.heroabsolutey()));
 		for (AccessToLayer atl: maplayers[game.getlayer()].getAPs()) {
 			//System.out.println("Door on layer"+game.getlayer()+":"+atl.getOutcommingX()+","+atl.getOutcommingY());
 			if ((prota.getrelativextile()+maplayers[game.getlayer()].getfirstxtile())==atl.getIncommingX() && (prota.getrelativeytile()+maplayers[game.getlayer()].getfirstytile())==atl.getIncommingY()) {
@@ -1020,7 +1020,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	    		BackgroundMusic.startoutside();
 	    		BackgroundMusic.playingfight=false;
 				game.herodies();
-				interactionoutput="You lose the battle, you are in the graveyard!";
+				interactionoutput="You lose the battle, you awake in a strange place!";
 			}
 			if (resultoffight!="ENEMYDEAD" && resultoffight!="HERODEAD") {
 				interactionoutput=resultoffight;
