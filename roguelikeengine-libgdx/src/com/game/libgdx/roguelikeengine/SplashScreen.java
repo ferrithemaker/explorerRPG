@@ -54,7 +54,7 @@ public class SplashScreen implements Screen {
     	messagefont = generator.generateFont(40); // px
     	messagefont.setColor(Color.YELLOW);
 		//messagefont.setScale(3f); 
-		text="WELCOME TO EXPLORER TEST GAME.\nYou awake in the andor graveyard, \ntrapped in the great gardens of andor.\nThe only way to leave \nis using the amulet of willing.\nYou must recover it defeating megaboss.\nTo defeat megaboss, you must upgrade\nyour character killing monsters,\ntaking objects and drinking potions.\n\nGood luck.";
+		text="WELCOME TO EXPLORER TEST GAME.\nYou awake in the land of andor, \ntrapped in the great gardens of andor.\nThe only way to leave \nis using the amulet of willing.\nYou must recover it defeating megaboss.\nTo defeat megaboss, you must upgrade\nyour character killing monsters,\ntaking objects and drinking potions.\n\nGood luck.";
     	// create a fight message info screen 
     	screentext=new PopupInfoText(0,0,"UI/splashscreen.png",1280,704);
     	screentext.settextoffset(100, 150);

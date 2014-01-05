@@ -28,6 +28,7 @@ import java.util.Random;
 
 public class WrapperEngine {
 	// constants
+	public final static int BUILD_NUMBER=83;
 	public final static int ON_SCREEN_TILES_X=13;
 	public final static int ON_SCREEN_TILES_Y=10;
 	public final static int X_SCREENS=30;
@@ -46,12 +47,16 @@ public class WrapperEngine {
 	public final static int INVENTORY_SIZE=10;
 	public final static String APP_NAME="Rogue explorer testing game (libgdx)";
 	public final static int NUMBER_OF_WALLS=300;
+	public final static int NUMBER_OF_WALLS_DUNGEON=1000;
 	public final static int NUMBER_OF_LAKES=300;
 	public final static int NUMBER_OF_BLOCKING_OBJECTS=8000;
 	public final static int EXPERIENCE_NEXT_LEVEL_LIMIT=1000;
 	public final static int NUMBER_OF_ENEMIES_PER_LOOP=20;
-	public final static int NUMBER_OF_OBJECTS_PER_LOOP=20;
-	public final static int NUMBER_OF_CONSUMABLES_PER_LOOP=20;
+	public final static int NUMBER_OF_OBJECTS_PER_LOOP=1; // DON'T CHANGE!
+	public final static int NUMBER_OF_CONSUMABLES_PER_LOOP=1; // DON'T CHANGE!
+	public final static int MAX_ENEMIES=1000;
+	public final static int MAX_OBJECTS=1000;
+	public final static int MAX_CONSUMABLES=1000;
 	
 	// output OS
 	public final static String OUTPUT_OS="desktop"; // desktop OR android 
@@ -287,6 +292,7 @@ public class WrapperEngine {
 	}
 	public void createrandomenemy() { // create a random enemy
 		int i;
+		if (badguys.getlist().size()<MAX_ENEMIES) {
 		for (i=0;i<NUMBER_OF_ENEMIES_PER_LOOP;i++) {
 			Random randomGenerator = new Random();
 			// generates random position
@@ -314,6 +320,7 @@ public class WrapperEngine {
 					badguys.add_enemy(new Enemy(randomlayer,"warlock",8,5,5,25,x,y,"warlock.png"));
 				}
 			}
+		}
 		}
 	}
 	public void createenemy(int layer,String name,int ag,int str, int res, int lf, int x,int y,String file) {
@@ -360,14 +367,21 @@ public class WrapperEngine {
 	public void removeobject(Object obj) {
 		availableobjects.remove_object(obj);
 	}
-	public void createrandomobject() {	// should return something to indicate something was generated?
+	
+	public void createrandomobject(boolean randpos,int lay,int xpos,int ypos) {	// should return something to indicate something was generated?
 		int i;
+		int x=xpos;
+		int y=ypos;
+		int randomlayer=lay;
+		if (availableobjects.getlist().size()<MAX_OBJECTS) {
 		for (i=0;i<NUMBER_OF_OBJECTS_PER_LOOP;i++) {
 			Random randomGenerator = new Random();
-			// generates random position
-			int x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
-			int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
-			int randomlayer=randomGenerator.nextInt(WrapperEngine.NUMBER_OF_MAP_LAYERS);
+			// generates random position if needed
+			if (randpos) {
+				x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
+				y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
+				randomlayer=randomGenerator.nextInt(WrapperEngine.NUMBER_OF_MAP_LAYERS);
+			}
 			int chances = randomGenerator.nextInt(100);
 			int objecttype = randomGenerator.nextInt(11);
 			if (!maplayers[randomlayer].gettiles()[x][y].isbloqued()) { // if there is empty space
@@ -428,6 +442,7 @@ public class WrapperEngine {
 				}
 			}
 		}
+		}
 	}
 	
 	public void createobject(int layer,String name,String position,int attack, int defense, int durability,int x,int y,String file) {
@@ -447,14 +462,21 @@ public class WrapperEngine {
 	public void addconsumable(Consumable c) {
 		availableconsumables.add_consumable(c);
 	}
-	public void createrandomconsumable() {
+	public void createrandomconsumable(boolean randpos,int lay, int xpos, int ypos) {
 		int i;
+		int x=xpos;
+		int y=ypos;
+		int randomlayer=lay;
+		if (availableconsumables.getlist().size()<MAX_CONSUMABLES) {
 		for (i=0;i<NUMBER_OF_CONSUMABLES_PER_LOOP;i++) {
 			Random randomGenerator = new Random();
 			// generates random position
-			int x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
-			int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
-			int randomlayer=randomGenerator.nextInt(WrapperEngine.NUMBER_OF_MAP_LAYERS);
+			if (randpos) {
+				x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
+				y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
+				randomlayer=randomGenerator.nextInt(WrapperEngine.NUMBER_OF_MAP_LAYERS);
+			}
+			
 			int potiontype = randomGenerator.nextInt(3);
 			if (!maplayers[randomlayer].gettiles()[x][y].isbloqued()) { // if there is empty space
 				if (potiontype==0) {
@@ -467,6 +489,7 @@ public class WrapperEngine {
 					availableconsumables.add_consumable(new Consumable(randomlayer,"Yellow potion",2,1,0,0,x,y,"potionyellow.png"));		
 				}
 			}
+		}
 		}
     }
 	public void createconsumable(int layer,String name, int p_agility, int p_life,int force, int resist,int x,int y,String file) {

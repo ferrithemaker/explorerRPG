@@ -223,7 +223,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         }
         
 		// draw version build
-        genericfont.draw(batch, "Development build 70", 10, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-620);
+        genericfont.draw(batch, "Development build "+WrapperEngine.BUILD_NUMBER, 10, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-620);
 
         
         // draw object inventory
@@ -566,11 +566,11 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     		game.createrandomenemy();
     	}
     	if (number==1) { // create consumable
-    		game.createrandomconsumable();
+    		game.createrandomconsumable(true,0,0,0);
     		
     	}
     	if (number==2) { // create object
-    		game.createrandomobject();
+    		game.createrandomobject(true,0,0,0);
     	}
     	// get relative mouse coord instead of real ones
     	realXcoord=(int)((float)Gdx.input.getX()*(float)((float)WrapperEngine.WINDOWWIDTH/(float)Gdx.graphics.getWidth()));
@@ -998,6 +998,19 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		    			BackgroundMusic.startoutside();
 		    		}
 		    		BackgroundMusic.playingfight=false;
+		    		// enemies drop objects
+		    		Random randomGenerator = new Random();
+		    		int type = randomGenerator.nextInt(8); // 25% chances to drop object / consumable
+		    		switch (type) {
+		    		case 0:
+		    			game.createrandomconsumable(false, game.getlayer() ,prota.getrelativextile()+maplayers[game.getlayer()].getfirstxtile(), prota.getrelativeytile()+maplayers[game.getlayer()].getfirstytile());
+		    			break;
+		    		case 1:
+		    			game.createrandomobject(false, game.getlayer() ,prota.getrelativextile()+maplayers[game.getlayer()].getfirstxtile(), prota.getrelativeytile()+maplayers[game.getlayer()].getfirstytile());
+		    			break;
+		    		}
+		    		
+		    		
 				}
 				
 				game.removeenemy(actualenemy);

@@ -104,7 +104,7 @@ public class Map {
 			for (int num=0; num<WrapperEngine.NUMBER_OF_BLOCKING_OBJECTS;num++) {
 				createblockingelement();
 			}			
-			createcementery();
+			//createcementery();
 		}
 		
 		public void createAccessDungeon(int inx,int iny, int outx, int outy,int layerout) {
@@ -130,11 +130,7 @@ public class Map {
 		        	}
 		        }
 			// create random walls
-			for (int num=0; num<(int)(WrapperEngine.NUMBER_OF_WALLS);num++) {
-				createrandomvwall();
-				createrandomhwall();
-				createrandomvwall();
-				createrandomhwall();
+			for (int num=0; num<(int)(WrapperEngine.NUMBER_OF_WALLS_DUNGEON/2);num++) {
 				createrandomvwall();
 				createrandomhwall();
 			}
@@ -148,25 +144,29 @@ public class Map {
 			int lenght = randomGenerator.nextInt(WrapperEngine.MAX_WALL_LENGTH-2)+2;
 			int start = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES-WrapperEngine.MAX_WALL_LENGTH);
 			int height = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES-1);
-			for (int xpos=start;xpos<start+lenght;xpos++) {
-	        	tilelayout[xpos][height+1].block();
-	        	tilelayout[xpos][height+1].settileimage(upperwall_img);
-	        	tilelayout[xpos][height].block();
-	        	tilelayout[xpos][height].settileimage(frontwall_img);
-	        }
+			if (areaisempty(start,height,lenght,2)) {
+				for (int xpos=start;xpos<start+lenght;xpos++) {
+					tilelayout[xpos][height+1].block();
+					tilelayout[xpos][height+1].settileimage(upperwall_img);
+					tilelayout[xpos][height].block();
+					tilelayout[xpos][height].settileimage(frontwall_img);
+				}
+			}
 		}
+		
 		public void createrandomvwall() {
 			Random randomGenerator = new Random();
 			int lenght = randomGenerator.nextInt(WrapperEngine.MAX_WALL_LENGTH-2)+2;
 			int start = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES-WrapperEngine.MAX_WALL_LENGTH);
 			int width = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
-			for (int ypos=start;ypos<start+lenght;ypos++) {
-	        	tilelayout[width][ypos].block();
-	        	tilelayout[width][ypos].settileimage(upperwall_img);	
-	        }
+			if (areaisempty(width,start,1,lenght)) {
+				for (int ypos=start;ypos<start+lenght;ypos++) {
+					tilelayout[width][ypos].block();
+					tilelayout[width][ypos].settileimage(upperwall_img);	
+				}
 			tilelayout[width][start].settileimage(frontwall_img);
 			tilelayout[width][start].block();
-			
+			}
 		}
 		public void createrandomlake() {
 			Random randomGenerator = new Random();
@@ -174,18 +174,21 @@ public class Map {
 			int start_x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES-WrapperEngine.MAX_LAKE_SIZE);
 			int start_y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES-WrapperEngine.MAX_LAKE_SIZE);
 			int width = (randomGenerator.nextInt(WrapperEngine.MAX_LAKE_SIZE-2)+2);
-			for (int xpos=start_x;xpos<start_x+lenght;xpos++) {
-				for (int ypos=start_y;ypos<start_y+width;ypos++) {
-					tilelayout[xpos][ypos].block();
-					tilelayout[xpos][ypos].settileimage(water_img);
+			if (areaisempty(start_x,start_y,lenght,width)) {
+				for (int xpos=start_x;xpos<start_x+lenght;xpos++) {
+					for (int ypos=start_y;ypos<start_y+width;ypos++) {
+						tilelayout[xpos][ypos].block();
+						tilelayout[xpos][ypos].settileimage(water_img);
+					}
 				}
-	        }
 			// lake corners
 			tilelayout[start_x][start_y].settileimage(waterDL_img);
 			tilelayout[start_x+lenght-1][start_y].settileimage(waterDR_img);
 			tilelayout[start_x][start_y+width-1].settileimage(waterUL_img);
 			tilelayout[start_x+lenght-1][start_y+width-1].settileimage(waterUR_img);
+			}
 		}
+		
 		public void createblockingelement() {
 			Random randomGenerator = new Random();
 			int x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
@@ -262,6 +265,16 @@ public class Map {
 					tilelayout[x][y].settileimage(statue3_img);
 				}*/
 			}
+		}
+		
+		public boolean areaisempty(int xorig,int yorig,int lenght, int width) {
+			boolean result=true;
+			for (int x=xorig;x<xorig+lenght;x++) {
+				for (int y=yorig;y<yorig+width;y++) {
+					if (tilelayout[x][y].isbloqued()) { result=false; }  
+				}
+			}
+			return result;
 		}
 		public void createcementery() {
 			Random randomGenerator = new Random();
