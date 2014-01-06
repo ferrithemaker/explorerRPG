@@ -276,6 +276,15 @@ public class Map {
 			}
 			return result;
 		}
+		
+		public void blocktile(int x, int y) {
+			tilelayout[x][y].block();
+		}
+		
+		public void unblocktile(int x, int y) {
+			tilelayout[x][y].unblock();
+		}
+		
 		public void createcementery() {
 			Random randomGenerator = new Random();
 			for (int x=0;x<11;x=x+2) {

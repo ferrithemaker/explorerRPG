@@ -55,6 +55,26 @@ public class Enemy_array {
         }
         return rightbguy;
 	}
+	public Enemy nextotoenemy(int x, int y) {
+		Enemy rightbguy = new Enemy(); // null enemy
+		ListIterator<Enemy> bgiterator = Enemylist.listIterator();
+		while (bgiterator.hasNext()) {
+        	Enemy bguy=bgiterator.next();
+        	if (bguy.overenemy(x+1,y)==true) {
+        		rightbguy=bguy;
+        	}
+        	if (bguy.overenemy(x-1,y)==true) {
+	    		rightbguy=bguy;
+        	}
+        	if (bguy.overenemy(x,y+1)==true) {
+	    		rightbguy=bguy;
+        	}
+        	if (bguy.overenemy(x,y-1)==true) {
+	    		rightbguy=bguy;
+        	}
+        }
+        return rightbguy;
+	}
 	
 	/*public LinkedList<Enemy> onscreenonly(int x, int y) {
 		LinkedList<Enemy> result = new LinkedList<Enemy>();

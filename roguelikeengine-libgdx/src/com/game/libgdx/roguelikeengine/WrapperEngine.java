@@ -28,7 +28,7 @@ import java.util.Random;
 
 public class WrapperEngine {
 	// constants
-	public final static int BUILD_NUMBER=83;
+	public final static int BUILD_NUMBER=85;
 	public final static int ON_SCREEN_TILES_X=13;
 	public final static int ON_SCREEN_TILES_Y=10;
 	public final static int X_SCREENS=30;
@@ -295,6 +295,9 @@ public class WrapperEngine {
 	public Enemy overenemy() {
 		 return badguys.overenemy(prota.getrelativextile()+maplayers[layer].getfirstxtile(),prota.getrelativeytile()+maplayers[layer].getfirstytile());
 	}
+	public Enemy nexttoenemy() {
+		return badguys.nextotoenemy(prota.getrelativextile()+maplayers[layer].getfirstxtile(),prota.getrelativeytile()+maplayers[layer].getfirstytile());
+	}
 	public void removeenemy(Enemy obj) {
 		badguys.remove_enemy(obj);
 	}
@@ -308,6 +311,7 @@ public class WrapperEngine {
 			int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
 			int randomlayer=randomGenerator.nextInt(WrapperEngine.NUMBER_OF_MAP_LAYERS);
 			int enemytype = randomGenerator.nextInt(6); // random enemy choose
+			
 			if (!maplayers[randomlayer].gettiles()[x][y].isbloqued()) { // if there is empty space
 				if (enemytype==0) {
 					badguys.add_enemy(new Enemy(randomlayer,"vortex",2,5,3,20,x,y,"vortex2.png"));
@@ -328,6 +332,8 @@ public class WrapperEngine {
 					badguys.add_enemy(new Enemy(randomlayer,"warlock",8,5,5,25,x,y,"warlock.png"));
 				}
 			}
+			// block the enemy tile
+			maplayers[randomlayer].blocktile(x, y);
 		}
 		}
 	}

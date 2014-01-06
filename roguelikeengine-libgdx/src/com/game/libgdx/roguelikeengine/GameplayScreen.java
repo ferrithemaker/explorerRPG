@@ -972,7 +972,8 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		object_drop_mode=0;
     	//boolean resultoffight=false;
 		String resultoffight;
-    	actualenemy=game.overenemy(); // get the enemy (if exist)
+    	//actualenemy=game.overenemy(); // get the enemy (if exist)
+		actualenemy=game.nexttoenemy(); // get the enemy (if exist)
 		if (actualenemy.getname()!=null) {
 			if (!BackgroundMusic.playingfight) {
 	    		BackgroundMusic.stopall();
@@ -998,6 +999,8 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		    			BackgroundMusic.startoutside();
 		    		}
 		    		BackgroundMusic.playingfight=false;
+		    		// unblock enemy tile
+		    		maplayers[game.getlayer()].unblocktile(actualenemy.getabsolutex(), actualenemy.getabsolutey());
 		    		// enemies drop objects
 		    		Random randomGenerator = new Random();
 		    		int type = randomGenerator.nextInt(4); // 50% chances to drop object / consumable
@@ -1008,11 +1011,8 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		    		case 1:
 		    			game.createrandomobject(false, game.getlayer() ,prota.getrelativextile()+maplayers[game.getlayer()].getfirstxtile(), prota.getrelativeytile()+maplayers[game.getlayer()].getfirstytile(),1);
 		    			break;
-		    		}
-		    		
-		    		
+		    		}   		
 				}
-				
 				game.removeenemy(actualenemy);
 			} 
 			if (resultoffight=="HERODEAD") {
