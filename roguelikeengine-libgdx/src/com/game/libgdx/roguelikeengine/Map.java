@@ -285,6 +285,24 @@ public class Map {
 			tilelayout[x][y].unblock();
 		}
 		
+		public Tile getfirstavailabletilearround(int x,int y) {
+			Tile freetile = null;
+			if (!tilelayout[x-1][y].isbloqued() && x>0) {
+				freetile=tilelayout[x-1][y];
+			}
+			if (!tilelayout[x+1][y].isbloqued() && x<WrapperEngine.TOTAL_X_TILES) {
+				freetile=tilelayout[x+1][y];
+			}
+			if (!tilelayout[x][y+1].isbloqued() && y<WrapperEngine.TOTAL_Y_TILES) {
+				freetile=tilelayout[x][y+1];
+			}
+			if (!tilelayout[x][y-1].isbloqued() && y>0) {
+				freetile=tilelayout[x][y-1];
+			}
+			return freetile;
+			
+		}
+		
 		public void createcementery() {
 			Random randomGenerator = new Random();
 			for (int x=0;x<11;x=x+2) {
