@@ -566,11 +566,11 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     		game.createrandomenemy();
     	}
     	if (number==1) { // create consumable
-    		game.createrandomconsumable(true,0,0,0);
+    		game.createrandomconsumable(true,0,0,0,WrapperEngine.NUMBER_OF_CONSUMABLES_PER_LOOP);
     		
     	}
     	if (number==2) { // create object
-    		game.createrandomobject(true,0,0,0);
+    		game.createrandomobject(true,0,0,0,WrapperEngine.NUMBER_OF_OBJECTS_PER_LOOP);
     	}
     	// get relative mouse coord instead of real ones
     	realXcoord=(int)((float)Gdx.input.getX()*(float)((float)WrapperEngine.WINDOWWIDTH/(float)Gdx.graphics.getWidth()));
@@ -1000,13 +1000,13 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		    		BackgroundMusic.playingfight=false;
 		    		// enemies drop objects
 		    		Random randomGenerator = new Random();
-		    		int type = randomGenerator.nextInt(8); // 25% chances to drop object / consumable
+		    		int type = randomGenerator.nextInt(4); // 50% chances to drop object / consumable
 		    		switch (type) {
 		    		case 0:
-		    			game.createrandomconsumable(false, game.getlayer() ,prota.getrelativextile()+maplayers[game.getlayer()].getfirstxtile(), prota.getrelativeytile()+maplayers[game.getlayer()].getfirstytile());
+		    			game.createrandomconsumable(false, game.getlayer() ,prota.getrelativextile()+maplayers[game.getlayer()].getfirstxtile(), prota.getrelativeytile()+maplayers[game.getlayer()].getfirstytile(),1);
 		    			break;
 		    		case 1:
-		    			game.createrandomobject(false, game.getlayer() ,prota.getrelativextile()+maplayers[game.getlayer()].getfirstxtile(), prota.getrelativeytile()+maplayers[game.getlayer()].getfirstytile());
+		    			game.createrandomobject(false, game.getlayer() ,prota.getrelativextile()+maplayers[game.getlayer()].getfirstxtile(), prota.getrelativeytile()+maplayers[game.getlayer()].getfirstytile(),1);
 		    			break;
 		    		}
 		    		
@@ -1020,7 +1020,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	    		BackgroundMusic.startoutside();
 	    		BackgroundMusic.playingfight=false;
 				game.herodies();
-				interactionoutput="You lose the battle, you awake in a strange place!";
+				interactionoutput="You lose the battle,\nyou awake in a strange place!";
 			}
 			if (resultoffight!="ENEMYDEAD" && resultoffight!="HERODEAD") {
 				interactionoutput=resultoffight;

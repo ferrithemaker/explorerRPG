@@ -52,8 +52,8 @@ public class WrapperEngine {
 	public final static int NUMBER_OF_BLOCKING_OBJECTS=8000;
 	public final static int EXPERIENCE_NEXT_LEVEL_LIMIT=1000;
 	public final static int NUMBER_OF_ENEMIES_PER_LOOP=20;
-	public final static int NUMBER_OF_OBJECTS_PER_LOOP=1; // DON'T CHANGE!
-	public final static int NUMBER_OF_CONSUMABLES_PER_LOOP=1; // DON'T CHANGE!
+	public final static int NUMBER_OF_OBJECTS_PER_LOOP=5;
+	public final static int NUMBER_OF_CONSUMABLES_PER_LOOP=5;
 	public final static int MAX_ENEMIES=1000;
 	public final static int MAX_OBJECTS=1000;
 	public final static int MAX_CONSUMABLES=1000;
@@ -376,13 +376,21 @@ public class WrapperEngine {
 		availableobjects.remove_object(obj);
 	}
 	
-	public void createrandomobject(boolean randpos,int lay,int xpos,int ypos) {	// should return something to indicate something was generated?
+	/**
+	 * 
+	 * @param randpos is really random? (boolean)
+	 * @param lay if not random, define layer
+	 * @param xpos if not random, define x
+	 * @param ypos if not random, define y
+	 * @param loops if not random, define number of elements per loop
+	 */
+	public void createrandomobject(boolean randpos,int lay,int xpos,int ypos,int loops) {	// should return something to indicate something was generated?
 		int i;
 		int x=xpos;
 		int y=ypos;
 		int randomlayer=lay;
-		if (availableobjects.getlist().size()<MAX_OBJECTS) {
-		for (i=0;i<NUMBER_OF_OBJECTS_PER_LOOP;i++) {
+		if (availableobjects.getlist().size()<MAX_OBJECTS || !randpos) {
+		for (i=0;i<loops;i++) {
 			Random randomGenerator = new Random();
 			// generates random position if needed
 			if (randpos) {
@@ -470,13 +478,21 @@ public class WrapperEngine {
 	public void addconsumable(Consumable c) {
 		availableconsumables.add_consumable(c);
 	}
-	public void createrandomconsumable(boolean randpos,int lay, int xpos, int ypos) {
+	/**
+	 * 
+	 * @param randpos is really random? (boolean)
+	 * @param lay if not random, define layer
+	 * @param xpos if not random, define x
+	 * @param ypos if not random, define y
+	 * @param loops if not random, define number of elements per loop
+	 */
+	public void createrandomconsumable(boolean randpos,int lay, int xpos, int ypos, int loops) {
 		int i;
 		int x=xpos;
 		int y=ypos;
 		int randomlayer=lay;
-		if (availableconsumables.getlist().size()<MAX_CONSUMABLES) {
-		for (i=0;i<NUMBER_OF_CONSUMABLES_PER_LOOP;i++) {
+		if (availableconsumables.getlist().size()<MAX_CONSUMABLES || !randpos) {
+		for (i=0;i<loops;i++) {
 			Random randomGenerator = new Random();
 			// generates random position
 			if (randpos) {
