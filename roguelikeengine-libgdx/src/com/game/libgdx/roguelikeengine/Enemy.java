@@ -38,6 +38,7 @@ public class Enemy {
 	private String name;
 	private Sprite enemyimg;
 	private int layer;
+	private boolean active; // if Enemy is chasing hero
 	
 	public Enemy(int layer,String name,int baseagility,int basestrength, int baseresist, int basehp, int x,int y,String file) {
 		// initial set-up
@@ -52,11 +53,13 @@ public class Enemy {
 		Texture enemytexture = new Texture(Gdx.files.internal(file)); 
 		enemytexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		this.enemyimg = new Sprite(enemytexture);
+		this.active=false;
 	}
 	
 	public Enemy() {
 		// void constructor
 	}
+	
 	
 	public String talk() {
 		Random randomGenerator = new Random();
@@ -79,6 +82,10 @@ public class Enemy {
 	}
 	
 	// gets	
+	public boolean isactive() {
+		return active;
+	}
+	
 	public int getabsolutex() {
 		return this.absolute_x;
 	}
@@ -138,14 +145,30 @@ public class Enemy {
 	}
 	
 	// sets / updates
+	public void activate() {
+		active=true;	
+	}
+	
+	public void deactivate() {
+		active=false;
+	}
+	
+	public void setabsolutex(int value) {
+		absolute_x=value;
+	}
+	
+	public void setabsolutey(int value) {
+		absolute_y=value;
+	}
+	
 	public void updatehp(int value) {
 		this.life=Math.max(0, this.life-value);
 	}
 
 	// control methods
-	public boolean enemyonscreen(int xinitpos,int yinitpos) {
-		return absolute_x >= xinitpos && absolute_x < xinitpos + WrapperEngine.ON_SCREEN_TILES_X &&
-			   absolute_y >= yinitpos && absolute_y < yinitpos + WrapperEngine.ON_SCREEN_TILES_Y;
+	public boolean enemyonscreen(int xabsolutepos,int yabsolutepos) {
+		return absolute_x >= xabsolutepos && absolute_x < xabsolutepos + WrapperEngine.ON_SCREEN_TILES_X &&
+			   absolute_y >= yabsolutepos && absolute_y < yabsolutepos + WrapperEngine.ON_SCREEN_TILES_Y;
 	}
 	
 	public boolean overenemy(int x,int y) {

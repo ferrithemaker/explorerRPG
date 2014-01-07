@@ -1041,6 +1041,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	actualobject=null;
     	layerAccessCheck(); // layer control
     	game.heroup();
+    	// activate enemies
+    	
+    	// moving active enemies
+    	
     }
     void godown() {
     	object_inv_mode=0;
@@ -1053,6 +1057,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	actualobject=null;
     	layerAccessCheck(); // layer control
     	game.herodown();
+    	// moving active enemies
     }
     void goleft() {
     	object_inv_mode=0;
@@ -1065,6 +1070,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	actualobject=null;
     	layerAccessCheck(); // layer control
     	game.heroleft();
+    	// moving active enemies
     }
     void goright() {
     	eye_mode=0;
@@ -1077,6 +1083,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		actualobject=null;
 		layerAccessCheck(); // layer control
 		game.heroright();
+		// moving active enemies
     }
     void look() {
     	eye_mode=1;

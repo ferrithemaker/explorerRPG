@@ -301,6 +301,9 @@ public class WrapperEngine {
 	public void removeenemy(Enemy obj) {
 		badguys.remove_enemy(obj);
 	}
+	public void activateenemies(int absx,int absy) {
+		
+	}
 	public void createrandomenemy() { // create a random enemy
 		int i;
 		if (badguys.getlist().size()<MAX_ENEMIES) {
