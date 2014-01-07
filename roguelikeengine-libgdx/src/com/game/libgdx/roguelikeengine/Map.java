@@ -118,7 +118,7 @@ public class Map {
 			tilelayout[inx][iny].settileimage(stair_img);
 		}
 		
-		public ArrayList<AccessToLayer> getAPs() {
+		public ArrayList<AccessToLayer> getLayerAccess() {
 			return accesspoints;
 		}
 		

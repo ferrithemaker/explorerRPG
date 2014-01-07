@@ -121,7 +121,7 @@ public class WrapperEngine {
         availableconsumables=new Consumable_array();
         
         //createAllAP
-        createAllAP();
+        createAllAccessLayers();
         
         insurevalidplayerposition();
 	}
@@ -152,10 +152,10 @@ public class WrapperEngine {
 		return maplayers[value];
 	}
 	
-	public void createAllAP() {
+	public void createAllAccessLayers() {
 		int creationok;
 		while (numberOfAP!=WrapperEngine.NUMBER_OF_ACCESSPOINTS) {
-			creationok=createAP();
+			creationok=createLayerAccess();
 			if (creationok==1) { 
 				numberOfAP++; 
 				//System.out.println("AP created");
@@ -163,7 +163,7 @@ public class WrapperEngine {
 		}
 	}
 	
-	public int createAP() {
+	public int createLayerAccess() {
 		Random randomGenerator = new Random();
 		int inx = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
 		int iny = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);

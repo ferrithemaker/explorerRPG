@@ -325,7 +325,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		genericfont.draw(batch, "Framerate:"+(int)(1/Gdx.graphics.getDeltaTime())+" FPS", 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-200);
 
 		int i=0;
-		for (AccessToLayer atl: maplayers[game.getlayer()].getAPs()) {
+		for (AccessToLayer atl: maplayers[game.getlayer()].getLayerAccess()) {
 			i++;
 			genericfont.draw(batch, "Door on layer "+game.getlayer()+" to layer "+atl.getIncommingLayer()+" at "+atl.getIncommingX()+","+atl.getIncommingY(), 440, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-(20*i));			
 		}
@@ -439,18 +439,20 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	}
 	
 	// layer control
-	public void APCheck() {
-		System.out.println("Hero Absolute x:"+(game.heroabsolutex()));
- 		System.out.println("Hero Absolute y:"+(game.heroabsolutey()));
-		for (AccessToLayer atl: maplayers[game.getlayer()].getAPs()) {
+	public void layerAccessCheck() {
+		//System.out.println("Hero Absolute x:"+(game.heroabsolutex()));
+ 		//System.out.println("Hero Absolute y:"+(game.heroabsolutey()));
+		for (AccessToLayer atl: maplayers[game.getlayer()].getLayerAccess()) {
 			//System.out.println("Door on layer"+game.getlayer()+":"+atl.getOutcommingX()+","+atl.getOutcommingY());
 			if ((prota.getrelativextile()+maplayers[game.getlayer()].getfirstxtile())==atl.getIncommingX() && (prota.getrelativeytile()+maplayers[game.getlayer()].getfirstytile())==atl.getIncommingY()) {
 	     		game.changelayer(atl,prota.getrelativextile(),prota.getrelativeytile()); //changelayer
-	     		System.out.println("Over the DOOR!");
+	     		// update hero position next to the access
+	     		prota.setrelativextile((atl.getOutcommingX()) % WrapperEngine.ON_SCREEN_TILES_X);
+	     		prota.setrelativeytile((atl.getOutcommingY()) % WrapperEngine.ON_SCREEN_TILES_Y);
+	     		//System.out.println("Over the DOOR!");
 	     		//prota.setabsolutextile(atl.getIncommingX());
 			}
-		}
-		
+		}		
 	}
 	
 	protected void drawtiles() {
@@ -1037,7 +1039,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	actualenemy=null;
     	actualconsumable=null;
     	actualobject=null;
-    	APCheck();
+    	layerAccessCheck(); // layer control
     	game.heroup();
     }
     void godown() {
@@ -1049,7 +1051,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	actualenemy=null;
     	actualconsumable=null;
     	actualobject=null;
-    	APCheck();
+    	layerAccessCheck(); // layer control
     	game.herodown();
     }
     void goleft() {
@@ -1061,7 +1063,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	actualenemy=null;
     	actualconsumable=null;
     	actualobject=null;
-    	APCheck();
+    	layerAccessCheck(); // layer control
     	game.heroleft();
     }
     void goright() {
@@ -1073,7 +1075,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		actualenemy=null;
 		actualconsumable=null;
 		actualobject=null;
-		APCheck();
+		layerAccessCheck(); // layer control
 		game.heroright();
     }
     void look() {
