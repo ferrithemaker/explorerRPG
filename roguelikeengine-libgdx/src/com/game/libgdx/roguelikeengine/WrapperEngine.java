@@ -302,7 +302,87 @@ public class WrapperEngine {
 		badguys.remove_enemy(obj);
 	}
 	public void activateenemies(int absx,int absy) {
-		
+		ArrayList<Enemy> enemylist=badguys.getlist();
+		for (Enemy enemy: enemylist ) {
+			if (enemy.enemyonscreen(absx, absy)) { enemy.activate(); }
+		}
+	}
+	public void moveenemies() {
+		// absolute position of hero
+		int heroabsx=activemap.getfirstxtile()+prota.getrelativextile();
+		int heroabsy=activemap.getfirstytile()+prota.getrelativeytile();
+		int enemyabsx;
+		int enemyabsy;
+		boolean moved;
+		ArrayList<Enemy> enemylist=badguys.getlist();
+		for (Enemy enemy: enemylist ) {
+			moved=false;
+			enemyabsx=enemy.getabsolutex();
+			enemyabsy=enemy.getabsolutey();
+			// go right
+			if (heroabsx>enemyabsx && enemyabsx<TOTAL_X_TILES-1 && moved==false && (enemyabsx+1!=heroabsx || enemyabsy!=heroabsy)) { // boundary control
+				if (activemap.gettiles()[enemyabsx+1][enemyabsy].isbloqued()==false) {
+					if (enemy.isactive()) { 
+						// unblock last current position
+						activemap.gettiles()[enemyabsx][enemyabsy].unblock();
+						// block current position
+						activemap.gettiles()[enemyabsx+1][enemyabsy].block();
+						// move
+						enemy.setabsolutex(enemyabsx+1); 
+						moved=true; }
+				}
+			}
+			// go left
+			if (heroabsx<enemyabsx && enemyabsx>0 && moved==false && (enemyabsx-1!=heroabsx || enemyabsy!=heroabsy)) { // boundary control
+				if (activemap.gettiles()[enemyabsx-1][enemyabsy].isbloqued()==false) {
+					if (enemy.isactive()) { 
+						// unblock last current position
+						activemap.gettiles()[enemyabsx][enemyabsy].unblock();
+						// block current position
+						activemap.gettiles()[enemyabsx-1][enemyabsy].block();
+						// move
+						enemy.setabsolutex(enemyabsx-1); 
+						moved=true; 
+						}
+				}
+			}
+			// go up
+			if (heroabsy>enemyabsy && enemyabsy<TOTAL_Y_TILES-1 && moved==false && (enemyabsx!=heroabsx || enemyabsy+1!=heroabsy)) { // boundary control
+				if (activemap.gettiles()[enemyabsx][enemyabsy+1].isbloqued()==false) {
+					if (enemy.isactive()) { 
+						// unblock last current position
+						activemap.gettiles()[enemyabsx][enemyabsy].unblock();
+						// block current position
+						activemap.gettiles()[enemyabsx][enemyabsy+1].block();
+						// move
+						enemy.setabsolutey(enemyabsy+1); 
+						moved=true;
+						}
+				}
+			}
+			// go down
+			if (heroabsy<enemyabsy && enemyabsy>0 && moved==false && (enemyabsx!=heroabsx || enemyabsy-1!=heroabsy)) { // boundary control
+				if (activemap.gettiles()[enemyabsx][enemyabsy-1].isbloqued()==false) {
+					if (enemy.isactive()) { 
+						// unblock last current position
+						activemap.gettiles()[enemyabsx][enemyabsy].unblock();
+						// block current position
+						activemap.gettiles()[enemyabsx][enemyabsy-1].block();
+						// move
+						enemy.setabsolutey(enemyabsy-1);
+						moved=true; 
+						}
+				}
+			}
+		}
+	}
+	public int enemiesonscreen(int absx,int absy) {
+		int x=0;
+		ArrayList<Enemy> enemylist=badguys.getlist();
+		for (Enemy enemy: enemylist ) {
+			if (enemy.enemyonscreen(absx, absy)) { x++; }
+		}
+		return x;
 	}
 	public void createrandomenemy() { // create a random enemy
 		int i;

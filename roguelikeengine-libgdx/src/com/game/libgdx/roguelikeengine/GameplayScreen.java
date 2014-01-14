@@ -196,9 +196,6 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         // draw static blocked tiles 
         drawtiles();
         
-        // draw enemies
-        drawenemies();
-        
         // draw buddies
         drawbuddies();
 
@@ -211,6 +208,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         // draw hero
         batch.draw(prota.getsprite(), prota.getrelativextile()*WrapperEngine.TILE_X_SIZE, prota.getrelativeytile()*WrapperEngine.TILE_Y_SIZE);
 	  
+        // draw enemies
+        drawenemies();
+        
+        
         // draw fight result
         if (just_interact==1) {
         	screentext.drawScreen(batch, messagefont,interactionoutput,1.0f);	
@@ -323,6 +324,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		genericfont.draw(batch, "Drop mode:"+object_drop_mode, 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-140);
 		genericfont.draw(batch, "Layer:"+game.getlayer(), 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-180);
 		genericfont.draw(batch, "Framerate:"+(int)(1/Gdx.graphics.getDeltaTime())+" FPS", 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-200);
+		genericfont.draw(batch, "Enemies on screen:"+game.enemiesonscreen(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile()), 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-220);
 
 		int i=0;
 		for (AccessToLayer atl: maplayers[game.getlayer()].getLayerAccess()) {
@@ -1042,8 +1044,9 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	layerAccessCheck(); // layer control
     	game.heroup();
     	// activate enemies
-    	
+    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
     	// moving active enemies
+    	game.moveenemies();
     	
     }
     void godown() {
@@ -1057,7 +1060,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	actualobject=null;
     	layerAccessCheck(); // layer control
     	game.herodown();
+    	// activate enemies
+    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
     	// moving active enemies
+    	game.moveenemies();
     }
     void goleft() {
     	object_inv_mode=0;
@@ -1070,7 +1076,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	actualobject=null;
     	layerAccessCheck(); // layer control
     	game.heroleft();
+    	// activate enemies
+    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
     	// moving active enemies
+    	game.moveenemies();
     }
     void goright() {
     	eye_mode=0;
@@ -1083,7 +1092,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		actualobject=null;
 		layerAccessCheck(); // layer control
 		game.heroright();
-		// moving active enemies
+		// activate enemies
+    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
+    	// moving active enemies
+    	game.moveenemies();
     }
     void look() {
     	eye_mode=1;
