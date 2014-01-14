@@ -304,7 +304,7 @@ public class WrapperEngine {
 	public void activateenemies(int absx,int absy) {
 		ArrayList<Enemy> enemylist=badguys.getlist();
 		for (Enemy enemy: enemylist ) {
-			if (enemy.enemyonscreen(absx, absy)) { enemy.activate(); }
+			if (enemy.enemyonscreen(absx, absy,layer)) { enemy.activate(); }
 		}
 	}
 	public void moveenemies() {
@@ -376,11 +376,11 @@ public class WrapperEngine {
 			}
 		}
 	}
-	public int enemiesonscreen(int absx,int absy) {
+	public int numberofenemiesonscreen(int absx,int absy) {
 		int x=0;
 		ArrayList<Enemy> enemylist=badguys.getlist();
 		for (Enemy enemy: enemylist ) {
-			if (enemy.enemyonscreen(absx, absy)) { x++; }
+			if (enemy.enemyonscreen(absx, absy,layer)) { x++; }
 		}
 		return x;
 	}

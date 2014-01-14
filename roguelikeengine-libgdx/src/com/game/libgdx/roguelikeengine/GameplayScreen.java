@@ -324,7 +324,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		genericfont.draw(batch, "Drop mode:"+object_drop_mode, 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-140);
 		genericfont.draw(batch, "Layer:"+game.getlayer(), 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-180);
 		genericfont.draw(batch, "Framerate:"+(int)(1/Gdx.graphics.getDeltaTime())+" FPS", 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-200);
-		genericfont.draw(batch, "Enemies on screen:"+game.enemiesonscreen(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile()), 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-220);
+		genericfont.draw(batch, "Enemies on screen:"+game.numberofenemiesonscreen(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile()), 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-220);
 
 		int i=0;
 		for (AccessToLayer atl: maplayers[game.getlayer()].getLayerAccess()) {
@@ -378,14 +378,11 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         	//System.out.println("entra");
         	Enemy bguy=bgiterator.next();
         	//System.out.println(bguy.getabsolutex());
-        	if (bguy.enemyonscreen(maplayers[game.getlayer()].getfirstxtile(), maplayers[game.getlayer()].getfirstytile())==true) {
-        		// draw enemy image if the layer is correct
-        		if (bguy.getlayer()==game.getlayer()) {
+        	if (bguy.enemyonscreen(maplayers[game.getlayer()].getfirstxtile(), maplayers[game.getlayer()].getfirstytile(),game.getlayer())==true) { // draw enemy image if the layer & position is correct
         			Sprite enemysprite=bguy.getsprite();
         			enemysprite.setPosition(getrelativeenemyxtileposition(bguy), getrelativeenemyytileposition(bguy));
         			//batch.draw(bguy.getsprite(),getrelativextileposition(bguy),getrelativeytileposition(bguy));
         			enemysprite.draw(batch);
-        		}
         	}
         }
 	}

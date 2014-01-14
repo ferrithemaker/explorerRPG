@@ -166,9 +166,10 @@ public class Enemy {
 	}
 
 	// control methods
-	public boolean enemyonscreen(int xabsolutepos,int yabsolutepos) {
+	public boolean enemyonscreen(int xabsolutepos,int yabsolutepos,int layer) {
 		return absolute_x >= xabsolutepos && absolute_x < xabsolutepos + WrapperEngine.ON_SCREEN_TILES_X &&
-			   absolute_y >= yabsolutepos && absolute_y < yabsolutepos + WrapperEngine.ON_SCREEN_TILES_Y;
+			   absolute_y >= yabsolutepos && absolute_y < yabsolutepos + WrapperEngine.ON_SCREEN_TILES_Y &&
+			   layer==this.layer;
 	}
 	
 	public boolean overenemy(int x,int y) {
