@@ -118,6 +118,9 @@ public class Hero {
 	public Sprite getimage() {
 		return new Sprite(texture);
 	}
+	public float percentlife() {
+		return ((float)(float) this.life / (float)this.maxlife ) * 100;
+	}
 
 
 	// hero sets / updates

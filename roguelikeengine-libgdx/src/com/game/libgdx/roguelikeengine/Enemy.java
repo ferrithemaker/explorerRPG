@@ -113,8 +113,8 @@ public class Enemy {
 	public int getlayer() {
 		return layer;
 	}
-	public int percentlife() {
-		return (this.maxlife / this.life) * 100;
+	public float percentlife() {
+		return ((float)(float) this.life / (float)this.maxlife ) * 100;
 	}
 	public int chancetowin(Hero hero) {
 		int chance = 0;

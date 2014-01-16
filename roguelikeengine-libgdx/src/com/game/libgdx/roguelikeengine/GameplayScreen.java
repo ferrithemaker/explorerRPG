@@ -23,12 +23,14 @@ import java.util.Random;
 import java.lang.Thread;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 //import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -83,6 +85,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     
     // fight status
     int just_interact=0;
+    
     
     
     
@@ -206,7 +209,8 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         drawobjects();
         
         // draw hero
-        batch.draw(prota.getsprite(), prota.getrelativextile()*WrapperEngine.TILE_X_SIZE, prota.getrelativeytile()*WrapperEngine.TILE_Y_SIZE);
+        drawhero();
+        
 	  
         // draw enemies
         drawenemies();
@@ -383,8 +387,28 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         			enemysprite.setPosition(getrelativeenemyxtileposition(bguy), getrelativeenemyytileposition(bguy));
         			//batch.draw(bguy.getsprite(),getrelativextileposition(bguy),getrelativeytileposition(bguy));
         			enemysprite.draw(batch);
+        			Sprite energybar=layout.getenergybar();
+        			Sprite redbar=layout.getredbar();
+        			energybar.setPosition(getrelativeenemyxtileposition(bguy)+2, getrelativeenemyytileposition(bguy)+2);
+        			energybar.draw(batch);
+        			for (int i=0;i<(int)(bguy.percentlife()/10);i++) {
+        				redbar.setPosition(getrelativeenemyxtileposition(bguy)+2+(i*6), getrelativeenemyytileposition(bguy)+2);
+        				redbar.draw(batch);
+        			}
         	}
         }
+	}
+	
+	protected void drawhero() {
+		batch.draw(prota.getsprite(), prota.getrelativextile()*WrapperEngine.TILE_X_SIZE, prota.getrelativeytile()*WrapperEngine.TILE_Y_SIZE);
+		Sprite energybar=layout.getenergybar();
+		Sprite redbar=layout.getredbar();
+		energybar.setPosition(prota.getrelativextile()*WrapperEngine.TILE_X_SIZE+2, prota.getrelativeytile()*WrapperEngine.TILE_Y_SIZE+2);
+		energybar.draw(batch);
+		for (int i=0;i<(int)(prota.percentlife()/10);i++) {
+			redbar.setPosition(prota.getrelativextile()*WrapperEngine.TILE_X_SIZE+2+(i*6),prota.getrelativeytile()*WrapperEngine.TILE_Y_SIZE+2);
+			redbar.draw(batch);
+		}
 	}
 	
 	protected void drawbuddies() {
