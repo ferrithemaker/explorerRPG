@@ -162,10 +162,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         consinv= new Consumable_inventory();
 		
         // create testing buddy
-        game.createbuddy(0,"Priest", 0,0,"buddy1.png","Hi, my friend. I hope you enjoy your trip!");
+        game.createbuddy(0,"Priest", 0,0,"buddy1.png","Hi, my friend.\nI hope you enjoy your trip!");
         
 		// create a message info screen 
-		screentext=new PopupInfoText(100,(WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-400,"UI/text_background.png",1000,300);
+		screentext=new PopupInfoText(100,(WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-450,"UI/text_popup.png",830,350);
 		screentext.settextoffset(50, 50);
 	}
 
@@ -216,9 +216,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         drawenemies();
         
         
-        // draw fight result
+        // draw interaction result
         if (just_interact==1) {
-        	screentext.drawScreen(batch, messagefont,interactionoutput,1.0f);	
+        	screentext.settextoffset(30, 50);
+        	screentext.drawScreen(batch, messagefont,interactionoutput,0.5f);	
         }
         
 

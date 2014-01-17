@@ -280,7 +280,7 @@ public class Hero {
 			return "HERODEAD";
 		}
 
-		return this.name+" deal "+herohit+" damage points to "+enemy.getname()+"\nand "+enemy.getname()+" deal "+enemyhit+" damage points to "+this.name;
+		return this.name+" deal "+herohit+" damage points\nto "+enemy.getname()+"\nand "+enemy.getname()+" deal "+enemyhit+" damage points\nto "+this.name;
 
 	}
 

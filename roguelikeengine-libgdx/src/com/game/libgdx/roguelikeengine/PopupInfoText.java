@@ -61,8 +61,11 @@ public class PopupInfoText {
 		return this.y;
 	}
 	public void drawScreen(SpriteBatch batch, BitmapFont font,String text,float fadein) {
-		batch.draw(this.background,x,y);
- 		int linepos=0;
+		this.background.setPosition(x,y);
+		this.background.draw(batch,fadein);
+		//batch.draw(this.background,x,y,0.3f);
+ 		
+		int linepos=0;
  		//font.draw(batch,this.text, x,y);
  		for (String line : text.split("\n")) {
  			font.setColor(1.0f, 1.0f, 0.0f, fadein);
