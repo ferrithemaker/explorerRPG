@@ -43,6 +43,26 @@ public class Buddy_array {
 		Buddylist.remove(buddy);
 		return 0;
 	}
+	public Buddy nextotobuddy(int x, int y) {
+		Buddy rightbguy = new Buddy(); // null buddy
+		ListIterator<Buddy> bgiterator = Buddylist.listIterator();
+		while (bgiterator.hasNext()) {
+        	Buddy bguy=bgiterator.next();
+        	if (bguy.overbuddy(x+1,y)==true) {
+        		rightbguy=bguy;
+        	}
+        	if (bguy.overbuddy(x-1,y)==true) {
+	    		rightbguy=bguy;
+        	}
+        	if (bguy.overbuddy(x,y+1)==true) {
+	    		rightbguy=bguy;
+        	}
+        	if (bguy.overbuddy(x,y-1)==true) {
+	    		rightbguy=bguy;
+        	}
+        }
+        return rightbguy;
+	}
 	
 	public Buddy overbuddy(int x, int y) {
 		Buddy rightbguy = new Buddy(); // null enemy

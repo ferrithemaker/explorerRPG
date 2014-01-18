@@ -422,6 +422,8 @@ public class WrapperEngine {
 	}
 	public void createenemy(int layer,String name,int ag,int str, int res, int lf, int x,int y,String file) {
 		badguys.add_enemy(new Enemy(layer,name,ag,str,res,lf,x,y,file));
+		// block tile
+		maplayers[layer].blocktile(x, y);
 	}
 	
 	// BUDDY CLASS WRAPPER
@@ -434,6 +436,9 @@ public class WrapperEngine {
 	}
 	public void removebuddy(Buddy obj) {
 		goodguys.remove_buddy(obj);
+	}
+	public Buddy nexttobuddy() {
+		return goodguys.nextotobuddy(prota.getrelativextile()+maplayers[layer].getfirstxtile(),prota.getrelativeytile()+maplayers[layer].getfirstytile());
 	}
 	public void createrandombuddy() { // create a random enemy
 		int i;
@@ -451,6 +456,8 @@ public class WrapperEngine {
 	}
 	public void createbuddy(int layer,String name, int x,int y,String file,String speech) {
 		goodguys.add_buddy(new Buddy(layer,name,x,y,file,speech));
+		// block tile
+		maplayers[layer].blocktile(x, y);
 	}
 	
 	

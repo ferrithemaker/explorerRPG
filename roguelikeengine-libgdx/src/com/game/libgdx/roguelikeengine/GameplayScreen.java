@@ -161,8 +161,8 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         objinv= new Object_inventory();
         consinv= new Consumable_inventory();
 		
-        // create testing buddy
-        game.createbuddy(0,"Priest", 0,0,"buddy1.png","Hi, my friend.\nI hope you enjoy your trip!");
+        // create welcoming buddy
+        game.createbuddy(0,"Priest", 8,8,"buddy1.png","Hi, my friend.\nI hope you enjoy your trip!\nBe aware of the monsters.");
         
 		// create a message info screen 
 		screentext=new PopupInfoText(100,(WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-450,"UI/text_popup.png",830,350);
@@ -196,25 +196,23 @@ public class GameplayScreen extends InputAdapter implements Screen  {
      	// dwaw background
         drawbackground();
         
+        // draw buddies
+        drawbuddies();
+        
         // draw static blocked tiles 
         drawtiles();
         
-        // draw buddies
-        drawbuddies();
-
         // draw consumables
         drawconsumables();
         
         // draw objects
         drawobjects();
         
-        // draw hero
-        drawhero();
-        
-	  
         // draw enemies
         drawenemies();
-        
+       
+        // draw hero
+        drawhero(); 
         
         // draw interaction result
         if (just_interact==1) {
@@ -1134,8 +1132,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	object_inv_mode=0;
 		consumable_inv_mode=0;
 		object_drop_mode=0;
-		actualenemy=game.overenemy(); // get the enemy (if exist)
-		actualbuddy=game.overbuddy(); // get the buddy (if exist)
+		//actualenemy=game.overenemy(); // get the enemy (if exist)
+		actualenemy=game.nexttoenemy(); // get the enemy (if exist)
+		//actualbuddy=game.overbuddy(); // get the buddy (if exist)
+		actualbuddy=game.nexttobuddy(); // get the enemy (if exist)
 		if (actualenemy.getname()!=null) {
 			interactionoutput=actualenemy.talk();
 			just_interact=1;
