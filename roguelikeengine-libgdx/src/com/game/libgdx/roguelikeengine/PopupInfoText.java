@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -60,16 +61,15 @@ public class PopupInfoText {
 	public int get_y() {
 		return this.y;
 	}
-	public void drawScreen(SpriteBatch batch, BitmapFont font,String text,float fadein) {
+	public void drawScreen(SpriteBatch batch, BitmapFont font,String text,float fadein,int linedist,Color color) {
 		this.background.setPosition(x,y);
 		this.background.draw(batch,fadein);
 		//batch.draw(this.background,x,y,0.3f);
- 		
 		int linepos=0;
  		//font.draw(batch,this.text, x,y);
  		for (String line : text.split("\n")) {
- 			font.setColor(1.0f, 1.0f, 0.0f, fadein);
- 			font.draw(batch,line, x+(textoffsetx),(y+ysize)-((textoffsety)+(linepos*40)));
+ 			font.setColor(color.r, color.g, color.b, fadein);
+ 			font.draw(batch,line, x+(textoffsetx),(y+ysize)-((textoffsety)+(linepos*linedist)));
     		linepos++;
     	}
 	}

@@ -51,13 +51,11 @@ public class Credits implements Screen {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
     	spriteBatch = new SpriteBatch();
     	//messagefont = new BitmapFont();
-    	messagefont = generator.generateFont(26); // px
-    	messagefont.setColor(Color.YELLOW);
-		//messagefont.setScale(3f); 
-		text="EXPLORER RPG CREDITS.\nConcept & Programming: Ferran Fabregas\nUI design: Manuela Sanfelix & Ferran Fabregas\nTiles and sprites taken from http://opengameart.org/\n& http://animatedbattlers.wordpress.com\nReleased under GPL / Creative Commons and copyrighted\nby their owners\nMusic from https://soundcloud.com/desperate-measurez/ \n& http://www.tannerhelland.com/music-directory/\nFonts taken from http://www.fonts101.com/\nThanks to: Joshua Byrom (programming) and Joseph Elliott.\nGame released under the terms of GNU GPL.";
+    	messagefont = generator.generateFont(20); // px
+		text="CREDITS\nConcept & Programming: Ferran Fabregas\nUI design: Manuela Sanfelix & Ferran Fabregas\nTiles and sprites taken from http://opengameart.org/\n& http://animatedbattlers.wordpress.com\nReleased under GPL / Creative Commons and copyrighted\nby their owners\nMusic from https://soundcloud.com/desperate-measurez/ \n& http://www.tannerhelland.com/music-directory/\nFonts taken from http://www.fonts101.com/ & http://www.flamingtext.com/\nThanks to: Joshua Byrom (programming) and Joseph Elliott.\nGame released under the terms of GNU GPL.";
     	// create a fight message info screen 
-    	screentext=new PopupInfoText(0,0,"UI/splashscreen.png",1280,704);
-    	screentext.settextoffset(100, 150);
+    	screentext=new PopupInfoText(0,0,"UI/credits.png",1280,704);
+    	screentext.settextoffset(100, 250);
     }
 
     @Override
@@ -65,10 +63,10 @@ public class Credits implements Screen {
     {
             Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
             spriteBatch.begin();
-            fadein=fadein+0.001f;
+            fadein=fadein+0.003f;
             if (fadein>1.0f) { fadein=1.0f; }
-            spriteBatch.setColor(1.0f, 1.0f, 1.0f, fadein);
-            screentext.drawScreen(spriteBatch, messagefont, text,fadein);
+            //spriteBatch.setColor(1.0f, 1.0f, 1.0f, fadein);
+            screentext.drawScreen(spriteBatch, messagefont, text,fadein,30,Color.WHITE);
             spriteBatch.end();
             
             if(Gdx.input.justTouched())

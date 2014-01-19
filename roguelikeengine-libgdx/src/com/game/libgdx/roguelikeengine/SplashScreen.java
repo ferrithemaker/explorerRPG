@@ -52,9 +52,7 @@ public class SplashScreen implements Screen {
     	spriteBatch = new SpriteBatch();
     	//messagefont = new BitmapFont();
     	messagefont = generator.generateFont(40); // px
-    	messagefont.setColor(Color.YELLOW);
-		//messagefont.setScale(3f); 
-		text="WELCOME TO EXPLORER TEST GAME.\nYou awake in the land of andor, \ntrapped in the great gardens of andor.\nThe only way to leave \nis using the amulet of willing.\nYou must recover it defeating megaboss.\nTo defeat megaboss, you must upgrade\nyour character killing monsters,\ntaking objects and drinking potions.\n\nGood luck.";
+		text="WELCOME TO THE EXPLORER GAME.\nYou awake in the land of andor, \ntrapped in the great gardens of andor.\nThe only way to leave \nis using the amulet of willing.\nYou must recover it defeating megaboss.\nTo defeat megaboss, you must upgrade\nyour character killing monsters,\ntaking objects and drinking potions.\n\nGood luck.";
     	// create a fight message info screen 
     	screentext=new PopupInfoText(0,0,"UI/splashscreen.png",1280,704);
     	screentext.settextoffset(100, 150);
@@ -68,7 +66,7 @@ public class SplashScreen implements Screen {
             fadein=fadein+0.001f;
             if (fadein>1.0f) { fadein=1.0f; }
             spriteBatch.setColor(1.0f, 1.0f, 1.0f, fadein);
-            screentext.drawScreen(spriteBatch, messagefont, text,fadein);
+            screentext.drawScreen(spriteBatch, messagefont, text,fadein,40,Color.YELLOW);
             spriteBatch.end();
             
             if(Gdx.input.justTouched())

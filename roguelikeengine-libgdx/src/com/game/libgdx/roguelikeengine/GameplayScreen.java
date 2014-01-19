@@ -217,7 +217,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         // draw interaction result
         if (just_interact==1) {
         	screentext.settextoffset(30, 50);
-        	screentext.drawScreen(batch, messagefont,interactionoutput,0.5f);	
+        	screentext.drawScreen(batch, messagefont,interactionoutput,0.5f,40,Color.YELLOW);	
         }
         
 
