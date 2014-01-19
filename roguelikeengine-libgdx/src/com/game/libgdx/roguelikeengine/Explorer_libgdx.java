@@ -36,7 +36,7 @@ public class Explorer_libgdx extends Game {
 	public void create() {
 		BackgroundMusic.setup();
 		BackgroundMusic.startoutside();
-		setScreen(new SplashScreen(this));
+		setScreen(new Credits(this));
 	}
 
 	@Override
