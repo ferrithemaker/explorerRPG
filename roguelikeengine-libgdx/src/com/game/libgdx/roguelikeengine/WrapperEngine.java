@@ -485,11 +485,12 @@ public class WrapperEngine {
 			}
 		}
 	}
-	public void createbuddy(int layer,String name, int x,int y,String file,String speech) {
+	public Buddy createbuddy(int layer,String name, int x,int y,String file,String speech) {
 		Buddy buddy = null;
 		goodguys.add_buddy((buddy = new Buddy(layer,name,x,y,file,speech)));
 		// block tile
 		maplayers[layer].blocktile(x, y, buddy);
+		return buddy;
 	}
 	
 	

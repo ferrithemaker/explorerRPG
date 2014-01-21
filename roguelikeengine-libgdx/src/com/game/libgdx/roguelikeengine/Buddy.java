@@ -69,6 +69,12 @@ public class Buddy implements TileOccupier {
 		return this.name;
 	}
 	
+	public void healHero(Hero hero, int amount) {
+		hero.updatehp(amount);
+		
+		GameplayScreen.instance.alert("You were healed for " + amount + " by a " + getname());
+	}
+	
 	public int getlayer() {
 		return layer;
 	}
@@ -85,6 +91,6 @@ public class Buddy implements TileOccupier {
 
 	@Override
 	public String getdescription() {
-		return "a friendly " + getname();
+		return "a friendly " + getname() + ", try talking to him.";
 	}
 }
