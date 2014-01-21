@@ -249,7 +249,7 @@ public class WrapperEngine {
 			prota.down(activemap);
 			return true;
 		} else {
-			GameplayScreen.instance.alert("The way is blocked by " + tile.getblocker().getdescription());
+			GameplayScreen.instance.alert("[" + this.layer + "] The way is blocked by " + tile.getblocker().getdescription());
 		}
 		
 		return false;
@@ -266,7 +266,7 @@ public class WrapperEngine {
 			prota.up(activemap);
 			return true;
 		} else {
-			GameplayScreen.instance.alert("The way is blocked by " + tile.getblocker().getdescription());
+			GameplayScreen.instance.alert("[" + this.layer + "] The way is blocked by " + tile.getblocker().getdescription());
 		}
 		
 		return false;
@@ -283,7 +283,7 @@ public class WrapperEngine {
 			prota.right(activemap);
 			return true;
 		} else {
-			GameplayScreen.instance.alert("The way is blocked by " + tile.getblocker().getdescription());
+			GameplayScreen.instance.alert("[" + this.layer + "] The way is blocked by " + tile.getblocker().getdescription());
 		}
 		
 		return false;
@@ -300,7 +300,7 @@ public class WrapperEngine {
 			prota.left(activemap);
 			return true;
 		} else {
-			GameplayScreen.instance.alert("The way is blocked by " + tile.getblocker().getdescription());
+			GameplayScreen.instance.alert("[" + this.layer + "] The way is blocked by " + tile.getblocker().getdescription());
 		}
 		
 		return false;
@@ -336,6 +336,11 @@ public class WrapperEngine {
 		ArrayList<Enemy> enemylist=badguys.getlist();
 		for (Enemy enemy: enemylist ) {
 			moved=false;
+			
+			if(enemy.getlayer() != this.layer) {
+				continue;
+			}
+			
 			enemyabsx=enemy.getabsolutex();
 			enemyabsy=enemy.getabsolutey();
 			// go right

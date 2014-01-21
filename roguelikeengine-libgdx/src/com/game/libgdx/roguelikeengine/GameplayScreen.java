@@ -1068,11 +1068,11 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	actualconsumable=null;
     	actualobject=null;
     	if(game.heroup()) {
+	    	layerAccessCheck(); // layer control
 	    	// activate enemies
 	    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
 	    	// moving active enemies
 	    	game.moveenemies();
-	    	layerAccessCheck(); // layer control
     	}
     	
     }
@@ -1086,11 +1086,11 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	actualconsumable=null;
     	actualobject=null;
     	if(game.herodown()) {
+	    	layerAccessCheck(); // layer control
 	    	// activate enemies
 	    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
 	    	// moving active enemies
 	    	game.moveenemies();
-	    	layerAccessCheck(); // layer control
     	}
     }
     
@@ -1104,11 +1104,11 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	actualconsumable=null;
     	actualobject=null;
     	if(game.heroleft()) {
+	    	layerAccessCheck(); // layer control
 	    	// activate enemies
 	    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
 	    	// moving active enemies
 	    	game.moveenemies();
-	    	layerAccessCheck(); // layer control
     	}
     }
     void goright() {
@@ -1121,11 +1121,11 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		actualconsumable=null;
 		actualobject=null;
 		if(game.heroright()) {
+	    	layerAccessCheck(); // layer control
 			// activate enemies
 	    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
 	    	// moving active enemies
 	    	game.moveenemies();
-			layerAccessCheck(); // layer control
 		}
     }
     void look() {

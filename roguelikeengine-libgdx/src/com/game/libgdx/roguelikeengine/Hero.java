@@ -56,7 +56,7 @@ public class Hero implements TileOccupier {
 
 		// initial set-up
 		this.agility=4; 
-		this.force=57; // offense
+		this.force=5; // offense
 		this.resist=3; // defense
 		this.life=this.maxlife=100; // hp
 		this.exp=1; // experience
