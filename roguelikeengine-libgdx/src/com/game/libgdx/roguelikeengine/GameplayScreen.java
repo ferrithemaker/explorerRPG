@@ -159,11 +159,25 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         consinv= new Consumable_inventory();
 		
         // create welcoming buddy
-        game.createbuddy(0,"Priest", 8,8,"buddy1.png","Hi, my friend.\nI hope you enjoy your trip!\nBe aware of the monsters.");
+        final Buddy priest = game.createbuddy(0,"Priest", 8,8,"buddy1.png","Hi, my friend.\nI hope you enjoy your trip!\nBe aware of the monsters.\nDo you require healing?\n\t Accept_Healing \t No");
         
 		// create a message info screen 
 		screentext=new PopupInfoText(100,(WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-450,"UI/text_popup.png",830,350);
 		screentext.settextoffset(50, 50);
+		
+		screentext.addWordClickListener("Accept_Healing", new WordClickAction() {
+			@Override
+			public void onClicked(String word) {
+				priest.healHero(prota, 10);
+			}
+		});
+		
+		screentext.addWordClickListener("No", new WordClickAction() {
+			@Override
+			public void onClicked(String word) {
+				just_interact = 0;
+			}
+		});
 	}
 
 	@Override
@@ -214,8 +228,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         
         // draw interaction result
         if (just_interact==1) {
-        	screentext.settextoffset(30, 50);
-        	screentext.drawScreen(batch, messagefont,interactionoutput,0.5f,40,Color.YELLOW);	
+        	drawInteractionText();	
         }
         
 
@@ -239,6 +252,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	    }
         
         batch.end();
+	}
+
+	protected void drawInteractionText() {
+		screentext.drawScreen(batch, messagefont,interactionoutput,0.5f,40,Color.YELLOW);
 	}
 	
 	protected void drawandroidinterface() {
@@ -607,6 +624,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	}
     	// mouse events control
     	handlemouseinput(); 
+    	
     	// end mouse events control
     	
     	// key events control
@@ -1211,6 +1229,11 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 
 	public Map getmaplayer(int value) {
 		return maplayers[value];
+	}
+	
+	@Override 
+	public boolean touchUp(int x, int y, int pointer, int button) {
+		return screentext.onMouseClicked();  // should work on touchUp and mouseUp
 	}
 	
 }

@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -27,7 +28,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
 
-public class Credits implements Screen {
+public class Credits extends InputAdapter implements Screen {
 	
 	private Explorer_libgdx theGame;
 	private SpriteBatch spriteBatch;
@@ -52,10 +53,20 @@ public class Credits implements Screen {
     	spriteBatch = new SpriteBatch();
     	//messagefont = new BitmapFont();
     	messagefont = generator.generateFont(20); // px
-		text="CREDITS\nConcept & Programming: Ferran Fabregas\nUI design: Manuela Sanfelix & Ferran Fabregas\nTiles and sprites taken from http://opengameart.org/\n& http://animatedbattlers.wordpress.com\nReleased under GPL / Creative Commons and copyrighted\nby their owners\nMusic from https://soundcloud.com/desperate-measurez/ \n& http://www.tannerhelland.com/music-directory/\nFonts taken from http://www.fonts101.com/ & http://www.flamingtext.com/\nThanks to: Joshua Byrom (programming) and Joseph Elliott.\nGame released under the terms of GNU GPL.";
+		text="CREDITS\nConcept & Programming: Ferran Fabregas\nUI design: Manuela Sanfelix & Ferran Fabregas\nTiles and sprites taken from http://opengameart.org/\n& http://animatedbattlers.wordpress.com\nReleased under GPL / Creative Commons and copyrighted\nby their owners\nMusic from https://soundcloud.com/desperate-measurez/ \n& http://www.tannerhelland.com/music-directory/\nFonts taken from http://www.fonts101.com/ & http://www.flamingtext.com/\nThanks to: Joshua_Byrom (programming) and Joseph Elliott.\nGame released under the terms of GNU GPL.";
     	// create a fight message info screen 
     	screentext=new PopupInfoText(0,0,"UI/credits.png",1280,704);
     	screentext.settextoffset(100, 250);
+    	
+    	screentext.addWordClickListener("Joshua_Byrom", new WordClickAction() {
+			@Override
+			public void onClicked(String word) {
+				Gdx.net.openURI("http://www.joshbyrom.com");
+			}
+		});
+    	
+
+		Gdx.input.setInputProcessor(this);
     }
 
     @Override
@@ -69,8 +80,14 @@ public class Credits implements Screen {
             screentext.drawScreen(spriteBatch, messagefont, text,fadein,30,Color.WHITE);
             spriteBatch.end();
             
-            if(Gdx.input.justTouched())
+            if(Gdx.input.justTouched() && !screentext.mouseOverElement()) {
                     theGame.setScreen(new SplashScreen(theGame));
+            }
+    }
+    
+    @Override
+    public boolean touchUp(int x, int y, int point, int button) {
+    	return screentext.onMouseClicked();
     }
     
      
