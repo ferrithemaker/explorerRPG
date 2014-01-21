@@ -219,3 +219,6 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+.class
+.jar
