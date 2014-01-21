@@ -26,7 +26,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 
-public class Buddy {
+public class Buddy implements TileOccupier {
 	private int absolute_x;
 	private int absolute_y;
 	private String name;
@@ -81,5 +81,10 @@ public class Buddy {
 	
 	public boolean overbuddy(int x,int y) {
 		return (this.absolute_x==x && this.absolute_y==y);
+	}
+
+	@Override
+	public String getdescription() {
+		return "a friendly " + getname();
 	}
 }

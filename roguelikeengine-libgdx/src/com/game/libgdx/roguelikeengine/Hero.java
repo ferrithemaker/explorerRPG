@@ -20,6 +20,7 @@ package com.game.libgdx.roguelikeengine;
 
 
 import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -28,13 +29,14 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 
 
-public class Hero {
+public class Hero implements TileOccupier {
 	private int agility;
 	private int force;
 	private int relative_x_tile;	
 	private int relative_y_tile;
 	private String name;
 	private int life;
+	private int lifePerStep = 1;
 	private int maxlife;
 	private int level=1;
 	private int exp;
@@ -216,31 +218,43 @@ public class Hero {
 	}
 
 	// hero position updates
-	public void up() {
+	public void up(Map map) {
 		if (this.relative_y_tile>0) {
 			this.setrelativeytile(this.relative_y_tile - 1);
 			sprite_goup();
+		} else {
+			scrollup();
+			map.scrollup();
 		}
 	}
-	public void down() {
+	public void down(Map map) {
 		if (this.relative_y_tile<WrapperEngine.ON_SCREEN_TILES_Y-1) {
 			this.setrelativeytile(this.relative_y_tile + 1);
 			sprite_godown();
+		} else {
+			scrolldown();
+			map.scrolldown();
 		}
 	}
-	public void left() {
+	public void left(Map map) {
 		if (this.relative_x_tile>0) {
 			this.setrelativextile(this.relative_x_tile - 1);
 			sprite_goleft();
+		} else {
+			scrollleft();
+			map.scrollleft();
 		}
 	}
-	public void right() {
+	public void right(Map map) {
 		if (this.relative_x_tile<WrapperEngine.ON_SCREEN_TILES_X-1) {
 			this.setrelativextile(this.relative_x_tile + 1);
 			sprite_goright();
-
+		} else {
+			scrollright();
+			map.scrollright();
 		}
 	}
+	
 	public void scrollup() {
 		this.setrelativeytile(WrapperEngine.ON_SCREEN_TILES_Y-1);
 	}
@@ -250,7 +264,7 @@ public class Hero {
 	public void scrollleft() {
 		this.setrelativextile(WrapperEngine.ON_SCREEN_TILES_X-1);
 	}
-	public void scrollrigth() {
+	public void scrollright() {
 		this.setrelativextile(0);
 	}
 
@@ -384,4 +398,26 @@ public class Hero {
         return new Sprite(texture,getxspriteposition(),getyspriteposition(),WrapperEngine.TILE_X_SIZE,WrapperEngine.TILE_Y_SIZE);
 	}
 	// *** END hero sprite management. you MUST modify it with your own sprite behavior
+
+	@Override
+	public String getdescription() {
+		return "The Hero of our tale.";
+	}
+	
+	public int getabsolutex(Map map) {
+		return map.getfirstxtile() + this.relative_x_tile;
+	}
+	public int getabsolutey(Map map) {
+		return map.getfirstytile() + this.relative_y_tile;
+	}
+	
+	public Tile gettile(Map map) {
+		return map.gettileat(getabsolutex(map), getabsolutey(map));
+	}
+	
+	protected void onStep() {
+		
+		this.updatehp(lifePerStep);
+	}
+	
 }

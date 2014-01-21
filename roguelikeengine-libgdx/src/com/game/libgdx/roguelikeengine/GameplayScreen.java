@@ -23,15 +23,12 @@ import java.util.Random;
 import java.lang.Thread;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-//import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -199,9 +196,6 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         // draw buddies
         drawbuddies();
         
-        // draw static blocked tiles 
-        drawtiles();
-        
         // draw consumables
         drawconsumables();
         
@@ -210,7 +204,11 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         
         // draw enemies
         drawenemies();
-       
+
+        
+        // draw static blocked tiles 
+        drawtiles();
+        
         // draw hero
         drawhero(); 
         
@@ -235,7 +233,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         
         //draw android UI
         
-        if (WrapperEngine.OUTPUT_OS=="android") {
+        if (WrapperEngine.OUTPUT_OS.equals("android")) {
 	    	drawandroidinterface();
 	    	//debug_mode=1; // only for UI testing
 	    }
@@ -377,11 +375,16 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	 */
 	protected void drawenemies() {
 		ListIterator<Enemy> bgiterator = badguys.listIterator();
+		
+		int column = maplayers[game.getlayer()].getfirstxtile();
+		int row = maplayers[game.getlayer()].getfirstytile();
+		int layer = game.getlayer();
+		
         while (bgiterator.hasNext()) {
         	//System.out.println("entra");
         	Enemy bguy=bgiterator.next();
         	//System.out.println(bguy.getabsolutex());
-        	if (bguy.enemyonscreen(maplayers[game.getlayer()].getfirstxtile(), maplayers[game.getlayer()].getfirstytile(),game.getlayer())==true) { // draw enemy image if the layer & position is correct
+        	if (bguy.enemyonscreen(column, row, layer)) { // draw enemy image if the layer & position is correct
         			Sprite enemysprite=bguy.getsprite();
         			enemysprite.setPosition(getrelativeenemyxtileposition(bguy), getrelativeenemyytileposition(bguy));
         			//batch.draw(bguy.getsprite(),getrelativextileposition(bguy),getrelativeytileposition(bguy));
@@ -599,7 +602,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	// get relative mouse coord instead of real ones
     	realXcoord=(int)((float)Gdx.input.getX()*(float)((float)WrapperEngine.WINDOWWIDTH/(float)Gdx.graphics.getWidth()));
 		realYcoord=(int)((float)Gdx.input.getY()*(float)((float)WrapperEngine.WINDOWHEIGHT/(float)Gdx.graphics.getHeight()))*-1+(WrapperEngine.WINDOWHEIGHT);
-    	if (WrapperEngine.OUTPUT_OS=="android") { 
+    	if (WrapperEngine.OUTPUT_OS.equals("android")) { 
     		realYcoord=realYcoord+WrapperEngine.ANDROID_MENU_BAR_SIZE;
     	}
     	// mouse events control
@@ -1030,10 +1033,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		    		int type = randomGenerator.nextInt(4); // 50% chances to drop object / consumable
 		    		switch (type) {
 		    		case 0:
-		    			game.createrandomconsumable(false, game.getlayer() ,prota.getrelativextile()+maplayers[game.getlayer()].getfirstxtile(), prota.getrelativeytile()+maplayers[game.getlayer()].getfirstytile(),1);
+		    			game.createrandomconsumable(false, game.getlayer(), actualenemy.getabsolutex(), actualenemy.getabsolutey(),1);
 		    			break;
 		    		case 1:
-		    			game.createrandomobject(false, game.getlayer() ,prota.getrelativextile()+maplayers[game.getlayer()].getfirstxtile(), prota.getrelativeytile()+maplayers[game.getlayer()].getfirstytile(),1);
+		    			game.createrandomobject(false, game.getlayer(), actualenemy.getabsolutex(), actualenemy.getabsolutey(),1);
 		    			break;
 		    		}   		
 				}
@@ -1061,12 +1064,13 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	actualenemy=null;
     	actualconsumable=null;
     	actualobject=null;
-    	layerAccessCheck(); // layer control
-    	game.heroup();
-    	// activate enemies
-    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
-    	// moving active enemies
-    	game.moveenemies();
+    	if(game.heroup()) {
+	    	layerAccessCheck(); // layer control
+	    	// activate enemies
+	    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
+	    	// moving active enemies
+	    	game.moveenemies();
+    	}
     	
     }
     void godown() {
@@ -1078,13 +1082,15 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	actualenemy=null;
     	actualconsumable=null;
     	actualobject=null;
-    	layerAccessCheck(); // layer control
-    	game.herodown();
-    	// activate enemies
-    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
-    	// moving active enemies
-    	game.moveenemies();
+    	if(game.herodown()) {
+	    	layerAccessCheck(); // layer control
+	    	// activate enemies
+	    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
+	    	// moving active enemies
+	    	game.moveenemies();
+    	}
     }
+    
     void goleft() {
     	object_inv_mode=0;
     	object_drop_mode=0;
@@ -1094,12 +1100,13 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	actualenemy=null;
     	actualconsumable=null;
     	actualobject=null;
-    	layerAccessCheck(); // layer control
-    	game.heroleft();
-    	// activate enemies
-    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
-    	// moving active enemies
-    	game.moveenemies();
+    	if(game.heroleft()) {
+	    	layerAccessCheck(); // layer control
+	    	// activate enemies
+	    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
+	    	// moving active enemies
+	    	game.moveenemies();
+    	}
     }
     void goright() {
     	eye_mode=0;
@@ -1110,12 +1117,13 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		actualenemy=null;
 		actualconsumable=null;
 		actualobject=null;
-		layerAccessCheck(); // layer control
-		game.heroright();
-		// activate enemies
-    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
-    	// moving active enemies
-    	game.moveenemies();
+		if(game.heroright()) {
+	    	layerAccessCheck(); // layer control
+			// activate enemies
+	    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
+	    	// moving active enemies
+	    	game.moveenemies();
+		}
     }
     void look() {
     	eye_mode=1;
@@ -1144,6 +1152,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 			interactionoutput=actualbuddy.talk();
 			just_interact=1;
 		}
+    }
+    void alert(String message) {
+    	interactionoutput=message;
+		just_interact=1;
     }
     void take() {
     	eye_mode=0;

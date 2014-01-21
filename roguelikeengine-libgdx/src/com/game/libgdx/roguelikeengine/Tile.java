@@ -28,22 +28,37 @@ public class Tile {
 	private Sprite tileimg;
 	private boolean showimage;
 
-	public Tile(boolean status) {
+	private TileOccupier blocker;
+	
+	private int column;
+	private int row;
+	
+	public Tile(int column, int row, boolean status) {
 		this.bloqued=status;
 		this.showimage=false;
 		
+		this.column = column;
+		this.row = row;
 	}
+	
 	public boolean isbloqued() {
 		return this.bloqued;
 	}
 	public boolean isempty() {
 		return !isbloqued();
 	}
-	public void block() {
+	public void block(TileOccupier blocker) {
 		this.bloqued=true;
+		this.blocker = blocker;
 	}
+	
+	public TileOccupier getblocker() {
+		return this.blocker;
+	}
+	
 	public void unblock() {
 		this.bloqued=false;
+		this.blocker = null;
 	}
 	public void settileimage(Sprite sprite) {
 		this.tileimg=sprite;
@@ -58,4 +73,7 @@ public class Tile {
 	public void setshowimage(boolean value) {
 		this.showimage=value;
 	}
+	
+	public int getcolumn() { return column; }
+	public int getrow() { return row; }
 }

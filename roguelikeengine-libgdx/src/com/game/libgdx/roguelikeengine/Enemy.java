@@ -27,7 +27,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 
-public class Enemy {
+public class Enemy implements TileOccupier {
 	private int agility;
 	private int force;
 	private int resist;
@@ -66,17 +66,17 @@ public class Enemy {
 		int x = randomGenerator.nextInt(5);
 		switch (x) {
 		case 0:
-			return "Grrrrrrrrrrrrrrrrr";
+			return getname() + ": Grrrrrrrrrrrrrrrrr";
 		case 1:
-			return "You will die!";
+			return getname() + ": You will die!";
 		case 2:
-			return "Go away little bastard";
+			return getname() + ": Go away little bastard";
 		case 3:
-			return "Run out of here!";
+			return getname() + ": Run out of here!";
 		case 4:
-			return "You wanna fight?";
+			return getname() + ": You wanna fight?";
 		default:
-			return "Grrrrrrrrrrrr";
+			return getname() + ": Grrrrrrrrrrrr";
 		}
 		
 	}
@@ -174,5 +174,10 @@ public class Enemy {
 	
 	public boolean overenemy(int x,int y) {
 		return (this.absolute_x==x && this.absolute_y==y);
+	}
+
+	@Override
+	public String getdescription() {
+		return "a " + getname();
 	}
 }

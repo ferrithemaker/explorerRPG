@@ -238,53 +238,76 @@ public class WrapperEngine {
 	}
 	
 	// hero updates
-	public void heroup() {
+	public boolean heroup() {
+		Tile tile = activemap.getup(prota.gettile(activemap));
 		
-		if (maplayers[layer].getfirstytile()+prota.getrelativeytile()<WrapperEngine.TOTAL_Y_TILES-1) {
-			if (prota.getrelativeytile()==WrapperEngine.ON_SCREEN_TILES_Y-1 && activemap.gettiles()[maplayers[layer].getfirstxtile()+prota.getrelativextile()][1+maplayers[layer].getfirstytile()+prota.getrelativeytile()].isbloqued()==false) {		
-				if (maplayers[layer].getfirstytile()<WrapperEngine.TOTAL_Y_TILES-WrapperEngine.ON_SCREEN_TILES_Y) { prota.scrolldown();  maplayers[layer].setfirstytile(maplayers[layer].getfirstytile() + WrapperEngine.ON_SCREEN_TILES_Y); }
-			} else {
-				if (activemap.gettiles()[maplayers[layer].getfirstxtile()+prota.getrelativextile()][1+maplayers[layer].getfirstytile()+prota.getrelativeytile()].isbloqued()==false) {
-					prota.down();
-				}
-			}
+		if(tile == null) {
+			return false; // edge of map
 		}
+		
+		if (!tile.isbloqued()) {
+			prota.down(activemap);
+			prota.onStep();
+			return true;
+		} else {
+			GameplayScreen.instance.alert("The way is blocked by " + tile.getblocker().getdescription());
+		}
+		
+		return false;
 	}
 		
-	public void herodown() {
-		if (maplayers[layer].getfirstytile()+prota.getrelativeytile()>0) {
-			if (prota.getrelativeytile()==0 && activemap.gettiles()[maplayers[layer].getfirstxtile()+prota.getrelativextile()][maplayers[layer].getfirstytile()+prota.getrelativeytile()-1].isbloqued()==false) {		
-				if (maplayers[layer].getfirstytile()>0) { prota.scrollup(); maplayers[layer].setfirstytile(maplayers[layer].getfirstytile() - WrapperEngine.ON_SCREEN_TILES_Y); }
-			} else {
-				if (activemap.gettiles()[maplayers[layer].getfirstxtile()+prota.getrelativextile()][maplayers[layer].getfirstytile()+prota.getrelativeytile()-1].isbloqued()==false) {
-					prota.up();
-				}	
-			}
+	public boolean herodown() {
+		Tile tile = activemap.getdown(prota.gettile(activemap));
+		
+		if(tile == null) {
+			return false; // edge of map
 		}
+
+		if (!tile.isbloqued()) {
+			prota.up(activemap);
+			prota.onStep();
+			return true;
+		} else {
+			GameplayScreen.instance.alert("The way is blocked by " + tile.getblocker().getdescription());
+		}
+		
+		return false;
 	}
 		
-	public void heroright() {
-		if (maplayers[layer].getfirstxtile()+prota.getrelativextile()<WrapperEngine.TOTAL_X_TILES-1) {
-			if (prota.getrelativextile()==WrapperEngine.ON_SCREEN_TILES_X-1 && activemap.gettiles()[1+maplayers[layer].getfirstxtile()+prota.getrelativextile()][maplayers[layer].getfirstytile()+prota.getrelativeytile()].isbloqued()==false) {
-				if (maplayers[layer].getfirstxtile()<WrapperEngine.TOTAL_X_TILES-WrapperEngine.ON_SCREEN_TILES_X) { prota.scrollrigth(); maplayers[layer].setfirstxtile(maplayers[layer].getfirstxtile() + WrapperEngine.ON_SCREEN_TILES_X); }
-			} else {
-				if (activemap.gettiles()[1+maplayers[layer].getfirstxtile()+prota.getrelativextile()][maplayers[layer].getfirstytile()+prota.getrelativeytile()].isbloqued()==false) {
-					prota.right();
-				}
-			}
+	public boolean heroright() {
+		Tile tile = activemap.getright(prota.gettile(activemap));
+		
+		if(tile == null) {
+			return false; // edge of map
 		}
+		
+		if (!tile.isbloqued()) {
+			prota.right(activemap);
+			prota.onStep();
+			return true;
+		} else {
+			GameplayScreen.instance.alert("The way is blocked by " + tile.getblocker().getdescription());
+		}
+		
+		return false;
 	}
 		
-	public void heroleft() {
-		if (maplayers[layer].getfirstxtile()+prota.getrelativextile()>0) {
-			if (prota.getrelativextile()==0 && activemap.gettiles()[maplayers[layer].getfirstxtile()+prota.getrelativextile()-1][maplayers[layer].getfirstytile()+prota.getrelativeytile()].isbloqued()==false) {
-				if (maplayers[layer].getfirstxtile()>0) { prota.scrollleft(); maplayers[layer].setfirstxtile(maplayers[layer].getfirstxtile() - WrapperEngine.ON_SCREEN_TILES_X); }
-			} else {
-				if (activemap.gettiles()[maplayers[layer].getfirstxtile()+prota.getrelativextile()-1][maplayers[layer].getfirstytile()+prota.getrelativeytile()].isbloqued()==false) {
-					prota.left();
-				}
-			}
+	public boolean heroleft() {
+		Tile tile = activemap.getleft(prota.gettile(activemap));
+		
+		if(tile == null) {
+			return false; // edge of map
 		}
+		
+		if (!tile.isbloqued()) {
+			prota.left(activemap);
+			prota.onStep();
+			return true;
+		} else {
+			GameplayScreen.instance.alert("The way is blocked by " + tile.getblocker().getdescription());
+		}
+		
+		return false;
 	}
 	
 	
@@ -317,6 +340,11 @@ public class WrapperEngine {
 		ArrayList<Enemy> enemylist=badguys.getlist();
 		for (Enemy enemy: enemylist ) {
 			moved=false;
+			
+			if(enemy.getlayer() != this.layer) {
+				continue;
+			}
+			
 			enemyabsx=enemy.getabsolutex();
 			enemyabsy=enemy.getabsolutey();
 			// go right
@@ -326,7 +354,7 @@ public class WrapperEngine {
 						// unblock last current position
 						activemap.gettiles()[enemyabsx][enemyabsy].unblock();
 						// block current position
-						activemap.gettiles()[enemyabsx+1][enemyabsy].block();
+						activemap.gettiles()[enemyabsx+1][enemyabsy].block(enemy);
 						// move
 						enemy.setabsolutex(enemyabsx+1); 
 						moved=true; }
@@ -339,7 +367,7 @@ public class WrapperEngine {
 						// unblock last current position
 						activemap.gettiles()[enemyabsx][enemyabsy].unblock();
 						// block current position
-						activemap.gettiles()[enemyabsx-1][enemyabsy].block();
+						activemap.gettiles()[enemyabsx-1][enemyabsy].block(enemy);
 						// move
 						enemy.setabsolutex(enemyabsx-1); 
 						moved=true; 
@@ -353,7 +381,7 @@ public class WrapperEngine {
 						// unblock last current position
 						activemap.gettiles()[enemyabsx][enemyabsy].unblock();
 						// block current position
-						activemap.gettiles()[enemyabsx][enemyabsy+1].block();
+						activemap.gettiles()[enemyabsx][enemyabsy+1].block(enemy);
 						// move
 						enemy.setabsolutey(enemyabsy+1); 
 						moved=true;
@@ -367,7 +395,7 @@ public class WrapperEngine {
 						// unblock last current position
 						activemap.gettiles()[enemyabsx][enemyabsy].unblock();
 						// block current position
-						activemap.gettiles()[enemyabsx][enemyabsy-1].block();
+						activemap.gettiles()[enemyabsx][enemyabsy-1].block(enemy);
 						// move
 						enemy.setabsolutey(enemyabsy-1);
 						moved=true; 
@@ -395,35 +423,38 @@ public class WrapperEngine {
 			int randomlayer=randomGenerator.nextInt(WrapperEngine.NUMBER_OF_MAP_LAYERS);
 			int enemytype = randomGenerator.nextInt(6); // random enemy choose
 			
+			Enemy enemy = null;
 			if (!maplayers[randomlayer].gettiles()[x][y].isbloqued()) { // if there is empty space
 				if (enemytype==0) {
-					badguys.add_enemy(new Enemy(randomlayer,"vortex",2,5,3,20,x,y,"vortex2.png"));
+					badguys.add_enemy((enemy = new Enemy(randomlayer,"vortex",2,5,3,20,x,y,"vortex2.png")));
 				}
 				if (enemytype==1) {
-					badguys.add_enemy(new Enemy(randomlayer,"catharg",3,6,4,40,x,y,"cetharg.png"));
+					badguys.add_enemy((enemy = new Enemy(randomlayer,"catharg",3,6,4,40,x,y,"cetharg.png")));
 				}
 				if (enemytype==2) {
-					badguys.add_enemy(new Enemy(randomlayer,"assassin",3,8,1,30,x,y,"assassin.png"));
+					badguys.add_enemy((enemy = new Enemy(randomlayer,"assassin",3,8,1,30,x,y,"assassin.png")));
 				}
 				if (enemytype==3) {
-					badguys.add_enemy(new Enemy(randomlayer,"giant rat",1,8,8,40,x,y,"giantrat2.png"));
+					badguys.add_enemy((enemy = new Enemy(randomlayer,"giant rat",1,8,8,40,x,y,"giantrat2.png")));
 				}
 				if (enemytype==4) {
-					badguys.add_enemy(new Enemy(randomlayer,"medusa",5,4,5,30,x,y,"medusa.png"));
+					badguys.add_enemy((enemy = new Enemy(randomlayer,"medusa",5,4,5,30,x,y,"medusa.png")));
 				}
 				if (enemytype==5) {
-					badguys.add_enemy(new Enemy(randomlayer,"warlock",8,5,5,25,x,y,"warlock.png"));
+					badguys.add_enemy((enemy = new Enemy(randomlayer,"warlock",8,5,5,25,x,y,"warlock.png")));
 				}
 			}
+			
 			// block the enemy tile
-			maplayers[randomlayer].blocktile(x, y);
+			if(enemy != null) maplayers[randomlayer].blocktile(x, y, enemy);
 		}
 		}
 	}
 	public void createenemy(int layer,String name,int ag,int str, int res, int lf, int x,int y,String file) {
-		badguys.add_enemy(new Enemy(layer,name,ag,str,res,lf,x,y,file));
+		Enemy enemy = null;
+		badguys.add_enemy((enemy = new Enemy(layer,name,ag,str,res,lf,x,y,file)));
 		// block tile
-		maplayers[layer].blocktile(x, y);
+		maplayers[layer].blocktile(x, y, enemy);
 	}
 	
 	// BUDDY CLASS WRAPPER
@@ -448,16 +479,17 @@ public class WrapperEngine {
 			int x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
 			int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
 			int randomlayer=randomGenerator.nextInt(WrapperEngine.NUMBER_OF_MAP_LAYERS);
-			int buddytype = randomGenerator.nextInt(6); // random enemy choose
+			//int buddytype = randomGenerator.nextInt(6); // random enemy choose
 			if (!maplayers[randomlayer].gettiles()[x][y].isbloqued()) { // if there is empty space
 				// random buddy creation
 			}
 		}
 	}
 	public void createbuddy(int layer,String name, int x,int y,String file,String speech) {
-		goodguys.add_buddy(new Buddy(layer,name,x,y,file,speech));
+		Buddy buddy = null;
+		goodguys.add_buddy((buddy = new Buddy(layer,name,x,y,file,speech)));
 		// block tile
-		maplayers[layer].blocktile(x, y);
+		maplayers[layer].blocktile(x, y, buddy);
 	}
 	
 	
