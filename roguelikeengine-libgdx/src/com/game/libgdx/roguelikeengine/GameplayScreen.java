@@ -1062,11 +1062,12 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	actualconsumable=null;
     	actualobject=null;
     	layerAccessCheck(); // layer control
-    	game.heroup();
-    	// activate enemies
-    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
-    	// moving active enemies
-    	game.moveenemies();
+    	if(game.heroup()) {
+	    	// activate enemies
+	    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
+	    	// moving active enemies
+	    	game.moveenemies();
+    	}
     	
     }
     void godown() {
@@ -1079,12 +1080,14 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	actualconsumable=null;
     	actualobject=null;
     	layerAccessCheck(); // layer control
-    	game.herodown();
-    	// activate enemies
-    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
-    	// moving active enemies
-    	game.moveenemies();
+    	if(game.herodown()) {
+	    	// activate enemies
+	    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
+	    	// moving active enemies
+	    	game.moveenemies();
+    	}
     }
+    
     void goleft() {
     	object_inv_mode=0;
     	object_drop_mode=0;
@@ -1095,11 +1098,12 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	actualconsumable=null;
     	actualobject=null;
     	layerAccessCheck(); // layer control
-    	game.heroleft();
-    	// activate enemies
-    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
-    	// moving active enemies
-    	game.moveenemies();
+    	if(game.heroleft()) {
+	    	// activate enemies
+	    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
+	    	// moving active enemies
+	    	game.moveenemies();
+    	}
     }
     void goright() {
     	eye_mode=0;
@@ -1111,11 +1115,12 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		actualconsumable=null;
 		actualobject=null;
 		layerAccessCheck(); // layer control
-		game.heroright();
-		// activate enemies
-    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
-    	// moving active enemies
-    	game.moveenemies();
+		if(game.heroright()) {
+			// activate enemies
+	    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
+	    	// moving active enemies
+	    	game.moveenemies();
+		}
     }
     void look() {
     	eye_mode=1;

@@ -238,60 +238,72 @@ public class WrapperEngine {
 	}
 	
 	// hero updates
-	public void heroup() {
+	public boolean heroup() {
 		Tile tile = activemap.getup(prota.gettile(activemap));
 		
 		if(tile == null) {
-			return; // edge of map
+			return false; // edge of map
 		}
 		
 		if (!tile.isbloqued()) {
 			prota.down(activemap);
+			return true;
 		} else {
 			System.out.println("The way is blocked: " + tile.getblocker().getname());
 		}
+		
+		return false;
 	}
 		
-	public void herodown() {
+	public boolean herodown() {
 		Tile tile = activemap.getdown(prota.gettile(activemap));
 		
 		if(tile == null) {
-			return; // edge of map
+			return false; // edge of map
 		}
 
 		if (!tile.isbloqued()) {
 			prota.up(activemap);
+			return true;
 		} else {
 			System.out.println("The way is blocked: " + tile.getblocker().getname());
 		}
+		
+		return false;
 	}
 		
-	public void heroright() {
+	public boolean heroright() {
 		Tile tile = activemap.getright(prota.gettile(activemap));
 		
 		if(tile == null) {
-			return; // edge of map
+			return false; // edge of map
 		}
 		
 		if (!tile.isbloqued()) {
 			prota.right(activemap);
+			return true;
 		} else {
 			System.out.println("The way is blocked: " + tile.getblocker().getname());
 		}
+		
+		return false;
 	}
 		
-	public void heroleft() {
+	public boolean heroleft() {
 		Tile tile = activemap.getleft(prota.gettile(activemap));
 		
 		if(tile == null) {
-			return; // edge of map
+			return false; // edge of map
 		}
 		
 		if (!tile.isbloqued()) {
 			prota.left(activemap);
+			return true;
 		} else {
 			System.out.println("The way is blocked: " + tile.getblocker().getname());
 		}
+		
+		return false;
 	}
 	
 	
