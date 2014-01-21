@@ -66,17 +66,17 @@ public class Enemy implements TileOccupier {
 		int x = randomGenerator.nextInt(5);
 		switch (x) {
 		case 0:
-			return "Grrrrrrrrrrrrrrrrr";
+			return getname() + ": Grrrrrrrrrrrrrrrrr";
 		case 1:
-			return "You will die!";
+			return getname() + ": You will die!";
 		case 2:
-			return "Go away little bastard";
+			return getname() + ": Go away little bastard";
 		case 3:
-			return "Run out of here!";
+			return getname() + ": Run out of here!";
 		case 4:
-			return "You wanna fight?";
+			return getname() + ": You wanna fight?";
 		default:
-			return "Grrrrrrrrrrrr";
+			return getname() + ": Grrrrrrrrrrrr";
 		}
 		
 	}
@@ -178,6 +178,6 @@ public class Enemy implements TileOccupier {
 
 	@Override
 	public String getdescription() {
-		return "a [" + layer + "] " + getname();
+		return "a " + getname();
 	}
 }

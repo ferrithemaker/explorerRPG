@@ -36,6 +36,7 @@ public class Hero implements TileOccupier {
 	private int relative_y_tile;
 	private String name;
 	private int life;
+	private int lifePerStep = 1;
 	private int maxlife;
 	private int level=1;
 	private int exp;
@@ -413,4 +414,10 @@ public class Hero implements TileOccupier {
 	public Tile gettile(Map map) {
 		return map.gettileat(getabsolutex(map), getabsolutey(map));
 	}
+	
+	protected void onStep() {
+		
+		this.updatehp(lifePerStep);
+	}
+	
 }

@@ -1036,10 +1036,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		    		int type = randomGenerator.nextInt(4); // 50% chances to drop object / consumable
 		    		switch (type) {
 		    		case 0:
-		    			game.createrandomconsumable(false, game.getlayer() ,prota.getrelativextile()+maplayers[game.getlayer()].getfirstxtile(), prota.getrelativeytile()+maplayers[game.getlayer()].getfirstytile(),1);
+		    			game.createrandomconsumable(false, game.getlayer(), actualenemy.getabsolutex(), actualenemy.getabsolutey(),1);
 		    			break;
 		    		case 1:
-		    			game.createrandomobject(false, game.getlayer() ,prota.getrelativextile()+maplayers[game.getlayer()].getfirstxtile(), prota.getrelativeytile()+maplayers[game.getlayer()].getfirstytile(),1);
+		    			game.createrandomobject(false, game.getlayer(), actualenemy.getabsolutex(), actualenemy.getabsolutey(),1);
 		    			break;
 		    		}   		
 				}

@@ -247,9 +247,10 @@ public class WrapperEngine {
 		
 		if (!tile.isbloqued()) {
 			prota.down(activemap);
+			prota.onStep();
 			return true;
 		} else {
-			GameplayScreen.instance.alert("[" + this.layer + "] The way is blocked by " + tile.getblocker().getdescription());
+			GameplayScreen.instance.alert("The way is blocked by " + tile.getblocker().getdescription());
 		}
 		
 		return false;
@@ -264,9 +265,10 @@ public class WrapperEngine {
 
 		if (!tile.isbloqued()) {
 			prota.up(activemap);
+			prota.onStep();
 			return true;
 		} else {
-			GameplayScreen.instance.alert("[" + this.layer + "] The way is blocked by " + tile.getblocker().getdescription());
+			GameplayScreen.instance.alert("The way is blocked by " + tile.getblocker().getdescription());
 		}
 		
 		return false;
@@ -281,9 +283,10 @@ public class WrapperEngine {
 		
 		if (!tile.isbloqued()) {
 			prota.right(activemap);
+			prota.onStep();
 			return true;
 		} else {
-			GameplayScreen.instance.alert("[" + this.layer + "] The way is blocked by " + tile.getblocker().getdescription());
+			GameplayScreen.instance.alert("The way is blocked by " + tile.getblocker().getdescription());
 		}
 		
 		return false;
@@ -298,9 +301,10 @@ public class WrapperEngine {
 		
 		if (!tile.isbloqued()) {
 			prota.left(activemap);
+			prota.onStep();
 			return true;
 		} else {
-			GameplayScreen.instance.alert("[" + this.layer + "] The way is blocked by " + tile.getblocker().getdescription());
+			GameplayScreen.instance.alert("The way is blocked by " + tile.getblocker().getdescription());
 		}
 		
 		return false;
