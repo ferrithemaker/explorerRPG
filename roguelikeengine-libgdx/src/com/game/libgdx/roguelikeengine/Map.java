@@ -4,6 +4,7 @@ package com.game.libgdx.roguelikeengine;
 
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Random;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -86,7 +87,7 @@ public class Map {
 			// fill with freetiles
 			 for (int xpos=0;xpos<WrapperEngine.TOTAL_X_TILES;xpos++) {
 		        	for (int ypos=0;ypos<WrapperEngine.TOTAL_Y_TILES;ypos++) {
-		        		tilelayout[xpos][ypos]= new Tile(false);
+		        		tilelayout[xpos][ypos]= new Tile(xpos, ypos, false);
 		        	}
 		        }
 			
@@ -126,7 +127,7 @@ public class Map {
 			// fill with freetiles
 			 for (int xpos=0;xpos<WrapperEngine.TOTAL_X_TILES;xpos++) {
 		        	for (int ypos=0;ypos<WrapperEngine.TOTAL_Y_TILES;ypos++) {
-		        		tilelayout[xpos][ypos]= new Tile(false);
+		        		tilelayout[xpos][ypos]= new Tile(xpos, ypos, false);
 		        	}
 		        }
 			// create random walls
@@ -139,16 +140,28 @@ public class Map {
 				createdungeonblockingelement();
 			}
 		}
+		
 		public void createrandomhwall() {
 			Random randomGenerator = new Random();
 			int lenght = randomGenerator.nextInt(WrapperEngine.MAX_WALL_LENGTH-2)+2;
 			int start = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES-WrapperEngine.MAX_WALL_LENGTH);
 			int height = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES-1);
+			
+			TileOccupier to = new TileOccupier() {
+				public String getname() {
+					return "wall";
+				}
+
+				public String getdescription() {
+					return "a wall";
+				}
+			};
+			
 			if (areaisempty(start,height,lenght,2)) {
 				for (int xpos=start;xpos<start+lenght;xpos++) {
-					tilelayout[xpos][height+1].block();
+					tilelayout[xpos][height+1].block(to);
 					tilelayout[xpos][height+1].settileimage(upperwall_img);
-					tilelayout[xpos][height].block();
+					tilelayout[xpos][height].block(to);
 					tilelayout[xpos][height].settileimage(frontwall_img);
 				}
 			}
@@ -159,13 +172,24 @@ public class Map {
 			int lenght = randomGenerator.nextInt(WrapperEngine.MAX_WALL_LENGTH-2)+2;
 			int start = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES-WrapperEngine.MAX_WALL_LENGTH);
 			int width = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
+			
+			TileOccupier to = new TileOccupier() {
+				public String getname() {
+					return "wall";
+				}
+				
+				public String getdescription() {
+					return "a wall";
+				}
+			};
+			
 			if (areaisempty(width,start,1,lenght)) {
 				for (int ypos=start;ypos<start+lenght;ypos++) {
-					tilelayout[width][ypos].block();
+					tilelayout[width][ypos].block(to);
 					tilelayout[width][ypos].settileimage(upperwall_img);	
 				}
-			tilelayout[width][start].settileimage(frontwall_img);
-			tilelayout[width][start].block();
+				tilelayout[width][start].settileimage(frontwall_img);
+				tilelayout[width][start].block(to);
 			}
 		}
 		public void createrandomlake() {
@@ -174,18 +198,29 @@ public class Map {
 			int start_x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES-WrapperEngine.MAX_LAKE_SIZE);
 			int start_y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES-WrapperEngine.MAX_LAKE_SIZE);
 			int width = (randomGenerator.nextInt(WrapperEngine.MAX_LAKE_SIZE-2)+2);
+			
+			TileOccupier to = new TileOccupier() {
+				public String getname() {
+					return "lake";
+				}
+				
+				public String getdescription() {
+					return "a lake";
+				}
+			};
+			
 			if (areaisempty(start_x,start_y,lenght,width)) {
 				for (int xpos=start_x;xpos<start_x+lenght;xpos++) {
 					for (int ypos=start_y;ypos<start_y+width;ypos++) {
-						tilelayout[xpos][ypos].block();
+						tilelayout[xpos][ypos].block(to);
 						tilelayout[xpos][ypos].settileimage(water_img);
 					}
 				}
-			// lake corners
-			tilelayout[start_x][start_y].settileimage(waterDL_img);
-			tilelayout[start_x+lenght-1][start_y].settileimage(waterDR_img);
-			tilelayout[start_x][start_y+width-1].settileimage(waterUL_img);
-			tilelayout[start_x+lenght-1][start_y+width-1].settileimage(waterUR_img);
+				// lake corners
+				tilelayout[start_x][start_y].settileimage(waterDL_img);
+				tilelayout[start_x+lenght-1][start_y].settileimage(waterDR_img);
+				tilelayout[start_x][start_y+width-1].settileimage(waterUL_img);
+				tilelayout[start_x+lenght-1][start_y+width-1].settileimage(waterUR_img);
 			}
 		}
 		
@@ -195,30 +230,103 @@ public class Map {
 			int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
 			int element= randomGenerator.nextInt(8);
 			if (!tilelayout[x][y].isbloqued()) {
-				tilelayout[x][y].block();
+				TileOccupier to = null;
+				
 				if (element==0) {
 					tilelayout[x][y].settileimage(rocks_img);
+					to = new TileOccupier() {
+						public String getname() {
+							return "rocks";
+						}
+						
+						public String getdescription() {
+							return "some rock";
+						}
+					};
 				}
 				if (element==1) {
 					tilelayout[x][y].settileimage(boulder_img);
+					to = new TileOccupier() {
+						public String getname() {
+							return "boulder";
+						}
+						
+						public String getdescription() {
+							return "a huge rock";
+						}
+					};
 				}
 				if (element==2) {
 					tilelayout[x][y].settileimage(bones_img);
+					to = new TileOccupier() {
+						public String getname() {
+							return "skeletal remains";
+						}
+						
+						public String getdescription() {
+							return "the bones of an unfortunate adventurer";
+						}
+					};
 				}
 				if (element==3) {
 					tilelayout[x][y].settileimage(rip_img);
+					to = new TileOccupier() {
+						public String getname() {
+							return "grave";
+						}
+						
+						public String getdescription() {
+							return "a grave site";
+						}
+					};
 				}
 				if (element==4) {
 					tilelayout[x][y].settileimage(cofin_img);
+					to = new TileOccupier() {
+						public String getname() {
+							return "coffin";
+						}
+						
+						public String getdescription() {
+							return "a coffin";
+						}
+					};
 				}
 				if (element==5) {
 					tilelayout[x][y].settileimage(tree_img);
+					to = new TileOccupier() {
+						public String getname() {
+							return "tree";
+						}
+						
+						public String getdescription() {
+							return "a tree";
+						}
+					};
 				}
 				if (element==6) {
 					tilelayout[x][y].settileimage(fire_img);
+					to = new TileOccupier() {
+						public String getname() {
+							return "fire";
+						}
+						
+						public String getdescription() {
+							return "a fire";
+						}
+					};
 				}
 				if (element==7) {
 					tilelayout[x][y].settileimage(statue1_img);
+					to = new TileOccupier() {
+						public String getname() {
+							return "statue";
+						}
+						
+						public String getdescription() {
+							return "a statue";
+						}
+					};
 				}
 				/*
 				if (element==8) {
@@ -227,6 +335,8 @@ public class Map {
 				if (element==9) {
 					tilelayout[x][y].settileimage(statue3_img);
 				}*/
+				
+				if(to != null) tilelayout[x][y].block(to);
 			}
 		}
 		public void createdungeonblockingelement() {
@@ -235,27 +345,91 @@ public class Map {
 			int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
 			int element= randomGenerator.nextInt(7);
 			if (!tilelayout[x][y].isbloqued()) {
-				tilelayout[x][y].block();
+				TileOccupier to = null;
+				
 				if (element==0) {
 					tilelayout[x][y].settileimage(altar_img);
+					to = new TileOccupier() {
+						public String getname() {
+							return "altar";
+						}
+						
+						public String getdescription() {
+							return "an altar";
+						}
+					};
 				}
 				if (element==1) {
 					tilelayout[x][y].settileimage(hole_img);
+					to = new TileOccupier() {
+						public String getname() {
+							return "hole";
+						}
+						
+						public String getdescription() {
+							return "a hole";
+						}
+					};
 				}
 				if (element==2) {
 					tilelayout[x][y].settileimage(web_img);
+					to = new TileOccupier() {
+						public String getname() {
+							return "web";
+						}
+						
+						public String getdescription() {
+							return "a web";
+						}
+					};
 				}
 				if (element==3) {
 					tilelayout[x][y].settileimage(cofin_img);
+					to = new TileOccupier() {
+						public String getname() {
+							return "coffin";
+						}
+						
+						public String getdescription() {
+							return "a coffin";
+						}
+					};
 				}
 				if (element==4) {
 					tilelayout[x][y].settileimage(rip_img);
+					to = new TileOccupier() {
+						public String getname() {
+							return "RIP";
+						}
+						
+						public String getdescription() {
+							return "a final resting place";
+						}
+					};
 				}
 				if (element==5) {
 					tilelayout[x][y].settileimage(tree_img);
+					to = new TileOccupier() {
+						public String getname() {
+							return "tree";
+						}
+						
+						public String getdescription() {
+							return "it's a tree";
+						}
+					};
 				}
 				if (element==6) {
 					tilelayout[x][y].settileimage(statue1_img);
+					to = new TileOccupier() {
+						public String getname() {
+							return "statue";
+						}
+						
+						public String getdescription() {
+							return "a statue";
+						}
+					};
 				}
 				/*
 				if (element==7) {
@@ -264,6 +438,8 @@ public class Map {
 				if (element==8) {
 					tilelayout[x][y].settileimage(statue3_img);
 				}*/
+
+				if(to != null) tilelayout[x][y].block(to);
 			}
 		}
 		
@@ -277,8 +453,8 @@ public class Map {
 			return result;
 		}
 		
-		public void blocktile(int x, int y) {
-			tilelayout[x][y].block();
+		public void blocktile(int x, int y, TileOccupier to) {
+			tilelayout[x][y].block(to);
 		}
 		
 		public void unblocktile(int x, int y) {
@@ -310,7 +486,16 @@ public class Map {
 					int chances = randomGenerator.nextInt(2);
 					int image = randomGenerator.nextInt(2);
 					if (chances==0) {
-						tilelayout[x][y].block();
+						tilelayout[x][y].block(new TileOccupier() {
+							public String getname() {
+								return "cemetary";
+							}
+							
+							public String getdescription() {
+								return "a cemetary";
+							}
+						});
+						
 						if (image==0) {
 							tilelayout[x][y].settileimage(cross_img);
 						}
@@ -350,6 +535,23 @@ public class Map {
 		public void setfirstytile(int value) {
 			firstYtile=value;
 		}
+		
+		public void scrollright() {
+			firstXtile = Math.min(tilelayout.length - WrapperEngine.ON_SCREEN_TILES_X, firstXtile + WrapperEngine.ON_SCREEN_TILES_X);
+		}
+		
+		public void scrollleft() {
+			firstXtile = Math.max(firstXtile - WrapperEngine.ON_SCREEN_TILES_X, 0);
+		}
+		
+		public void scrolldown() {
+			firstYtile = Math.min(tilelayout[firstXtile].length - WrapperEngine.ON_SCREEN_TILES_Y, firstYtile + WrapperEngine.ON_SCREEN_TILES_Y);
+		}
+		
+		public void scrollup() {
+			firstYtile = Math.max(firstYtile - WrapperEngine.ON_SCREEN_TILES_Y, 0);
+		}
+		
 		public void isdungeon(boolean value) {
 			isDungeon=value;
 		}
@@ -360,6 +562,67 @@ public class Map {
 			} catch(ArrayIndexOutOfBoundsException e) {
 				return false;
 			}
+		}
+		
+		public Tile gettileat(int column, int row) {
+			if(column < 0 || column > tilelayout.length || row < 0 || row > tilelayout[column].length) return null;
+			else return tilelayout[column][row];
+		}
+		
+		public Tile getleft(Tile tile) { return getleft(tile.getcolumn(), tile.getrow()); }
+		public Tile getleft(int column, int row) {
+			if(column <= 0) return null;
+			else return tilelayout[column-1][row];
+		}
+		
+		public Tile getright(Tile tile) { return getright(tile.getcolumn(), tile.getrow()); }
+		public Tile getright(int column, int row) {
+			if(column >= tilelayout.length-1) return null;
+			else return tilelayout[column+1][row];
+		}
+		
+		public Tile getup(Tile tile) { return getup(tile.getcolumn(), tile.getrow()); }
+		public Tile getup(int column, int row) {
+			if(row >= tilelayout[column].length-1) return null;
+			else return tilelayout[column][row + 1];
+		}
+		
+		public Tile getdown(Tile tile) { return getdown(tile.getcolumn(), tile.getrow()); }
+		public Tile getdown(int column, int row) {
+			if(row <= 0) return null;
+			else return tilelayout[column][row - 1];
+		}
+		
+		
+		public LinkedList<TileOccupier> getoccupiersinrange(int column, int row, int xRange, int yRange) {
+			LinkedList<TileOccupier> result = new LinkedList<TileOccupier>();
+		
+			int halfXRange = xRange / 2;
+			int halfYRange = yRange / 2;
+			
+			int sx = column - halfXRange;
+			int ex = column + halfXRange;
+			
+			int sy = row - halfYRange;
+			int ey = row + halfYRange;
+			
+			Tile tile = null;
+			TileOccupier to = null;
+			for(int i = sx; i <= ex; ++i) {
+				if(i < 0 || i > tilelayout.length) continue;
+				
+				for(int j = sy; j <= ey; ++j) {
+					if(j < 0 || j > tilelayout[i].length) continue;
+					
+					tile = tilelayout[i][j];
+					to = tile.getblocker();
+					
+					if(to != null) result.push(to);
+				}
+			}
+			
+			
+			return result;
 		}
 		
 }

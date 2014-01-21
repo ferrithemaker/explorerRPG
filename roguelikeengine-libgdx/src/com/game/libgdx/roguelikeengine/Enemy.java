@@ -27,7 +27,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 
-public class Enemy {
+public class Enemy implements TileOccupier {
 	private int agility;
 	private int force;
 	private int resist;
@@ -174,5 +174,10 @@ public class Enemy {
 	
 	public boolean overenemy(int x,int y) {
 		return (this.absolute_x==x && this.absolute_y==y);
+	}
+
+	@Override
+	public String getdescription() {
+		return "a " + getname();
 	}
 }
