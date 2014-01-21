@@ -53,7 +53,7 @@ public class Credits extends InputAdapter implements Screen {
     	spriteBatch = new SpriteBatch();
     	//messagefont = new BitmapFont();
     	messagefont = generator.generateFont(20); // px
-		text="CREDITS\nConcept & Programming: Ferran Fabregas\nUI design: Manuela Sanfelix & Ferran Fabregas\nTiles and sprites taken from http://opengameart.org/\n& http://animatedbattlers.wordpress.com\nReleased under GPL / Creative Commons and copyrighted\nby their owners\nMusic from https://soundcloud.com/desperate-measurez/ \n& http://www.tannerhelland.com/music-directory/\nFonts taken from http://www.fonts101.com/ & http://www.flamingtext.com/\nThanks to: Joshua_Byrom (programming) and Joseph Elliott.\nGame released under the terms of GNU GPL.";
+		text="CREDITS\nConcept & Programming: Ferran_Fabregas\nUI design: Manuela Sanfelix & Ferran_Fabregas\nTiles and sprites taken from http://opengameart.org/\n& http://animatedbattlers.wordpress.com\nReleased under GPL / Creative_Commons and copyrighted\nby their owners\nMusic from https://soundcloud.com/desperate-measurez/ \n& http://www.tannerhelland.com/music-directory/\nFonts taken from http://www.fonts101.com/ & http://www.flamingtext.com/\nThanks to: Joshua_Byrom (programming) and Joseph Elliott.\nGame released under the terms of GNU GPL .";
     	// create a fight message info screen 
     	screentext=new PopupInfoText(0,0,"UI/credits.png",1280,704);
     	screentext.settextoffset(100, 250);
@@ -64,8 +64,67 @@ public class Credits extends InputAdapter implements Screen {
 				Gdx.net.openURI("http://www.joshbyrom.com");
 			}
 		});
+    	screentext.addWordClickListener("Ferran_Fabregas", new WordClickAction() {
+			@Override
+			public void onClicked(String word) {
+				Gdx.net.openURI("http://www.ferranfabregas.info");
+			}
+		}); 	
+    	screentext.addWordClickListener("http://opengameart.org/", new WordClickAction() {
+			@Override
+			public void onClicked(String word) {
+				Gdx.net.openURI("http://www.opengameart.org");
+			}
+		}); 	
+    	screentext.addWordClickListener("http://animatedbattlers.wordpress.com", new WordClickAction() {
+    		@Override
+    		public void onClicked(String word) {
+    			Gdx.net.openURI("http://animatedbattlers.wordpress.com");
+    		}
+    	});
+    	screentext.addWordClickListener("https://soundcloud.com/desperate-measurez/", new WordClickAction() {
+    		@Override
+    		public void onClicked(String word) {
+    			Gdx.net.openURI("https://soundcloud.com/desperate-measurez/");
+    		}
+    	});
+    	screentext.addWordClickListener("http://www.tannerhelland.com/music-directory/", new WordClickAction() {
+    		@Override
+    		public void onClicked(String word) {
+    			Gdx.net.openURI("http://www.tannerhelland.com/music-directory/");
+    		}
+    	});
+    	screentext.addWordClickListener("http://www.fonts101.com/", new WordClickAction() {
+    		@Override
+    		public void onClicked(String word) {
+    			Gdx.net.openURI("http://www.fonts101.com/");
+    		}
+    	});
+    	screentext.addWordClickListener("http://www.flamingtext.com/", new WordClickAction() {
+    		@Override
+    		public void onClicked(String word) {
+    			Gdx.net.openURI("http://www.flamingtext.com/");
+    		}
+    	});
+    	screentext.addWordClickListener("GPL", new WordClickAction() {
+    		@Override
+    		public void onClicked(String word) {
+    			Gdx.net.openURI("http://www.gnu.org/licenses/gpl.txt");
+    		}
+    	});
+    	screentext.addWordClickListener("GNU", new WordClickAction() {
+    		@Override
+    		public void onClicked(String word) {
+    			Gdx.net.openURI("http://www.gnu.org");
+    		}
+    	});
     	
-
+    	screentext.addWordClickListener("Creative_Commons", new WordClickAction() {
+    		@Override
+    		public void onClicked(String word) {
+    			Gdx.net.openURI("http://creativecommons.org/");
+    		}
+    	});
 		Gdx.input.setInputProcessor(this);
     }
 
