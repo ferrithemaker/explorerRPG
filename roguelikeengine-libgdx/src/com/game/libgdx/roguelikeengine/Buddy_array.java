@@ -18,7 +18,6 @@ package com.game.libgdx.roguelikeengine;
 */
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.ListIterator;
 
 public class Buddy_array {

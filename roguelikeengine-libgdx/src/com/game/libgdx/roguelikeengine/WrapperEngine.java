@@ -479,7 +479,7 @@ public class WrapperEngine {
 			int x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
 			int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
 			int randomlayer=randomGenerator.nextInt(WrapperEngine.NUMBER_OF_MAP_LAYERS);
-			int buddytype = randomGenerator.nextInt(6); // random enemy choose
+			//int buddytype = randomGenerator.nextInt(6); // random enemy choose
 			if (!maplayers[randomlayer].gettiles()[x][y].isbloqued()) { // if there is empty space
 				// random buddy creation
 			}

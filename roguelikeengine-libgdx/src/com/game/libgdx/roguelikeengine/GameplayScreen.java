@@ -23,15 +23,12 @@ import java.util.Random;
 import java.lang.Thread;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-//import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -236,7 +233,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         
         //draw android UI
         
-        if (WrapperEngine.OUTPUT_OS=="android") {
+        if (WrapperEngine.OUTPUT_OS.equals("android")) {
 	    	drawandroidinterface();
 	    	//debug_mode=1; // only for UI testing
 	    }
@@ -605,7 +602,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	// get relative mouse coord instead of real ones
     	realXcoord=(int)((float)Gdx.input.getX()*(float)((float)WrapperEngine.WINDOWWIDTH/(float)Gdx.graphics.getWidth()));
 		realYcoord=(int)((float)Gdx.input.getY()*(float)((float)WrapperEngine.WINDOWHEIGHT/(float)Gdx.graphics.getHeight()))*-1+(WrapperEngine.WINDOWHEIGHT);
-    	if (WrapperEngine.OUTPUT_OS=="android") { 
+    	if (WrapperEngine.OUTPUT_OS.equals("android")) { 
     		realYcoord=realYcoord+WrapperEngine.ANDROID_MENU_BAR_SIZE;
     	}
     	// mouse events control
