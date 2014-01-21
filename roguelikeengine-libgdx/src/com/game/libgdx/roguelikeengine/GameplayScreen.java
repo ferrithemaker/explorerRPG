@@ -1150,6 +1150,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 			just_interact=1;
 		}
     }
+    void alert(String message) {
+    	interactionoutput=message;
+		just_interact=1;
+    }
     void take() {
     	eye_mode=0;
     	object_inv_mode=0;

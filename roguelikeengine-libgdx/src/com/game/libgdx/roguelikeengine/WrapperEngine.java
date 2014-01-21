@@ -249,7 +249,7 @@ public class WrapperEngine {
 			prota.down(activemap);
 			return true;
 		} else {
-			System.out.println("The way is blocked: " + tile.getblocker().getname());
+			GameplayScreen.instance.alert("The way is blocked by " + tile.getblocker().getdescription());
 		}
 		
 		return false;
@@ -266,7 +266,7 @@ public class WrapperEngine {
 			prota.up(activemap);
 			return true;
 		} else {
-			System.out.println("The way is blocked: " + tile.getblocker().getname());
+			GameplayScreen.instance.alert("The way is blocked by " + tile.getblocker().getdescription());
 		}
 		
 		return false;
@@ -283,7 +283,7 @@ public class WrapperEngine {
 			prota.right(activemap);
 			return true;
 		} else {
-			System.out.println("The way is blocked: " + tile.getblocker().getname());
+			GameplayScreen.instance.alert("The way is blocked by " + tile.getblocker().getdescription());
 		}
 		
 		return false;
@@ -300,7 +300,7 @@ public class WrapperEngine {
 			prota.left(activemap);
 			return true;
 		} else {
-			System.out.println("The way is blocked: " + tile.getblocker().getname());
+			GameplayScreen.instance.alert("The way is blocked by " + tile.getblocker().getdescription());
 		}
 		
 		return false;
