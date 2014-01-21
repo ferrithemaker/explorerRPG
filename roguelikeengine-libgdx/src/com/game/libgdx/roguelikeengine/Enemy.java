@@ -178,6 +178,6 @@ public class Enemy implements TileOccupier {
 
 	@Override
 	public String getdescription() {
-		return "a " + getname();
+		return "a [" + layer + "] " + getname();
 	}
 }

@@ -199,9 +199,6 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         // draw buddies
         drawbuddies();
         
-        // draw static blocked tiles 
-        drawtiles();
-        
         // draw consumables
         drawconsumables();
         
@@ -210,7 +207,11 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         
         // draw enemies
         drawenemies();
-       
+
+        
+        // draw static blocked tiles 
+        drawtiles();
+        
         // draw hero
         drawhero(); 
         
@@ -377,11 +378,16 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	 */
 	protected void drawenemies() {
 		ListIterator<Enemy> bgiterator = badguys.listIterator();
+		
+		int column = maplayers[game.getlayer()].getfirstxtile();
+		int row = maplayers[game.getlayer()].getfirstytile();
+		int layer = game.getlayer();
+		
         while (bgiterator.hasNext()) {
         	//System.out.println("entra");
         	Enemy bguy=bgiterator.next();
         	//System.out.println(bguy.getabsolutex());
-        	if (bguy.enemyonscreen(maplayers[game.getlayer()].getfirstxtile(), maplayers[game.getlayer()].getfirstytile(),game.getlayer())==true) { // draw enemy image if the layer & position is correct
+        	if (bguy.enemyonscreen(column, row, layer)) { // draw enemy image if the layer & position is correct
         			Sprite enemysprite=bguy.getsprite();
         			enemysprite.setPosition(getrelativeenemyxtileposition(bguy), getrelativeenemyytileposition(bguy));
         			//batch.draw(bguy.getsprite(),getrelativextileposition(bguy),getrelativeytileposition(bguy));
@@ -1061,12 +1067,12 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	actualenemy=null;
     	actualconsumable=null;
     	actualobject=null;
-    	layerAccessCheck(); // layer control
     	if(game.heroup()) {
 	    	// activate enemies
 	    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
 	    	// moving active enemies
 	    	game.moveenemies();
+	    	layerAccessCheck(); // layer control
     	}
     	
     }
@@ -1079,12 +1085,12 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	actualenemy=null;
     	actualconsumable=null;
     	actualobject=null;
-    	layerAccessCheck(); // layer control
     	if(game.herodown()) {
 	    	// activate enemies
 	    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
 	    	// moving active enemies
 	    	game.moveenemies();
+	    	layerAccessCheck(); // layer control
     	}
     }
     
@@ -1097,12 +1103,12 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	actualenemy=null;
     	actualconsumable=null;
     	actualobject=null;
-    	layerAccessCheck(); // layer control
     	if(game.heroleft()) {
 	    	// activate enemies
 	    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
 	    	// moving active enemies
 	    	game.moveenemies();
+	    	layerAccessCheck(); // layer control
     	}
     }
     void goright() {
@@ -1114,12 +1120,12 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		actualenemy=null;
 		actualconsumable=null;
 		actualobject=null;
-		layerAccessCheck(); // layer control
 		if(game.heroright()) {
 			// activate enemies
 	    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
 	    	// moving active enemies
 	    	game.moveenemies();
+			layerAccessCheck(); // layer control
 		}
     }
     void look() {
