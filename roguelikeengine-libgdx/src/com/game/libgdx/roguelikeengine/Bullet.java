@@ -46,6 +46,8 @@ public abstract class Bullet {
 			System.out.println("Bullet fired outside map!");
 			finished = true;
 		}
+		
+		this.layer = map.layer;
 	}
 	
 	public void update() {

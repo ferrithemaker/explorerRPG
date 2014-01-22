@@ -1298,23 +1298,36 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	}
 	
 	public void updateBullets() {
-		LinkedList<Bullet> toRemove = new LinkedList<Bullet>();
-		
-		for(Bullet bullet : bullets) {
-			bullet.update();
+		if(bullets.size() > 0) {
+			LinkedList<Bullet> toRemove = new LinkedList<Bullet>();
 			
-			if(bullet.isFinished()) {
-				toRemove.push(bullet);
+			for(Bullet bullet : bullets) {
+				bullet.update();
+				
+				if(bullet.isFinished()) {
+					toRemove.push(bullet);
+				}
 			}
-		}
-		
-		for(Bullet bullet : toRemove) {
-			bullets.remove(bullet);
+			
+			for(Bullet bullet : toRemove) {
+				bullets.remove(bullet);
+			}
+			
+			if(bullets.size() <= 0) {
+		    	
+			}
 		}
 	}
 	
 	void magic() {
 		Bullet bullet = prota.fireBullet();
 		if(bullet != null) bullets.push(bullet);
+	}
+	
+	public void enemyTurn() {
+		// activate enemies
+    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
+    	// moving active enemies
+    	game.moveenemies();
 	}
 }

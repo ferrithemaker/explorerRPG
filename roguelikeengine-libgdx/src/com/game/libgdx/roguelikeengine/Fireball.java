@@ -77,6 +77,10 @@ public class Fireball extends Bullet {
 		}
 
 		finished = true;
+		
+		if(source instanceof Hero) {
+			GameplayScreen.instance.enemyTurn();
+		}
 	}
 
 }
