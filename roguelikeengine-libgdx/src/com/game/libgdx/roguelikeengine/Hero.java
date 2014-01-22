@@ -30,6 +30,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 
 public class Hero implements TileOccupier {
+	public static int NORTH = 0;
+	public static int SOUTH = 1;
+	public static int EAST = 2;
+	public static int WEST = 3;
+	
 	private int agility;
 	private int force;
 	private int relative_x_tile;	
@@ -50,7 +55,7 @@ public class Hero implements TileOccupier {
 	private Object body;
 	private Object foot;
 
-	
+	protected int direction = EAST;
 
 	public Hero(WrapperEngine engine, String name, String file) {
 		
@@ -318,6 +323,7 @@ public class Hero implements TileOccupier {
 			current_sprite_position=10;
 			break;
 		}
+		direction = NORTH;	// libgdx y is inverted
 	}
 	private void sprite_goup() {
 		switch(current_sprite_position) {
@@ -334,6 +340,7 @@ public class Hero implements TileOccupier {
 			current_sprite_position=1;
 			break;
 		}	
+		direction = SOUTH;
 	}
 	private void sprite_goleft() {
 		switch(current_sprite_position) {
@@ -350,6 +357,7 @@ public class Hero implements TileOccupier {
 			current_sprite_position=4;
 			break;
 		}
+		direction = WEST;
 	}
 	private void sprite_goright() {
 		switch(current_sprite_position) {
@@ -366,6 +374,7 @@ public class Hero implements TileOccupier {
 			current_sprite_position=7;
 			break;
 		}
+		direction = EAST;
 	}
 	public int getyspriteposition() {
 		if (current_sprite_position==1 || current_sprite_position==2 || current_sprite_position==3) {

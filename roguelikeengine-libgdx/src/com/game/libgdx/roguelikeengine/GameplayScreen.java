@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Random;
 import java.lang.Thread;
@@ -60,7 +61,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     int debug_mode=0;
     int consumable_inv_mode=0;
     
-   
+    private LinkedList<Bullet> bullets = new LinkedList<Bullet>();
     
     private int realXcoord;
     private int realYcoord;
@@ -603,6 +604,8 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	
 	void update()
     { 
+		updateBullets();
+		
 		// random elements generator
     	Random randomGenerator = new Random();
     	int number=randomGenerator.nextInt(6); // 50% chances to create something
@@ -1236,4 +1239,12 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		return screentext.onMouseClicked();  // should work on touchUp and mouseUp
 	}
 	
+	public void updateBullets() {
+		LinkedList<Bullet> toRemove = new LinkedList<Bullet>();
+		
+		
+		for(Bullet bullet : toRemove) {
+			bullets.remove(bullet);
+		}
+	}
 }
