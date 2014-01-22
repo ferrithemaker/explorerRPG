@@ -53,7 +53,7 @@ public class Credits extends InputAdapter implements Screen {
     	spriteBatch = new SpriteBatch();
     	//messagefont = new BitmapFont();
     	messagefont = generator.generateFont(20); // px
-		text="CREDITS\nConcept & Programming: Ferran_Fabregas\nUI design: Manuela Sanfelix & Ferran_Fabregas\nTiles and sprites taken from http://opengameart.org/\n& http://animatedbattlers.wordpress.com\nReleased under GPL / Creative_Commons and copyrighted\nby their owners\nMusic from https://soundcloud.com/desperate-measurez/ \n& http://www.tannerhelland.com/music-directory/\nFonts taken from http://www.fonts101.com/ & http://www.flamingtext.com/\nThanks to: Joshua_Byrom (programming) and Joseph Elliott.\nGame released under the terms of GNU GPL .";
+		text="CREDITS\nConcept & Programming: Ferran_Fabregas\nUI design: Manuela Sanfelix & Ferran_Fabregas\nTiles and sprites taken from http://opengameart.org/\n& http://animatedbattlers.wordpress.com\nReleased under GPL / Creative_Commons and copyrighted\nby their owners\nMusic from https://soundcloud.com/desperate-measurez/ \n& http://www.tannerhelland.com/music-directory/\nSound FX: http://www.freesound.org/\nFonts taken from http://www.fonts101.com/ & http://www.flamingtext.com/\nThanks to: Joshua_Byrom (programming) and Joseph Elliott.\nGame released under the terms of GNU GPL .";
     	// create a fight message info screen 
     	screentext=new PopupInfoText(0,0,"UI/credits.png",1280,704);
     	screentext.settextoffset(100, 250);
@@ -112,6 +112,12 @@ public class Credits extends InputAdapter implements Screen {
     			Gdx.net.openURI("http://www.gnu.org/licenses/gpl.txt");
     		}
     	});
+    	screentext.addWordClickListener("http://www.freesound.org/", new WordClickAction() {
+        	@Override
+        	public void onClicked(String word) {
+        		Gdx.net.openURI("http://www.freesound.org/");
+        	}
+        });	
     	screentext.addWordClickListener("GNU", new WordClickAction() {
     		@Override
     		public void onClicked(String word) {

@@ -26,6 +26,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Color;
@@ -43,6 +44,11 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	public static GameplayScreen instance = null;
 	
 	private SpriteBatch batch;
+	// sound effects
+	private Sound die;
+	private Sound pickup;
+	private Sound fight;
+	private Sound drink;
 	//private Texture texture;
 	private BitmapFont genericfont;
 	private BitmapFont messagefont;
@@ -131,6 +137,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		// fonts setup
 		FileHandle fontFile = Gdx.files.internal("fonts/diabloheavy.ttf");
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
+		
+		// set sound effects
+		setupsoundeffects();
+		
 		//genericfont = new BitmapFont();
 		//messagefont = new BitmapFont();
 		messagefont = generator.generateFont(30); // px
@@ -252,6 +262,13 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	    }
         
         batch.end();
+	}
+	
+	protected void setupsoundeffects() {
+		die = Gdx.audio.newSound(Gdx.files.internal("soundeffects/die.ogg"));
+		fight = Gdx.audio.newSound(Gdx.files.internal("soundeffects/fight.wav"));
+		pickup = Gdx.audio.newSound(Gdx.files.internal("soundeffects/pickup.wav"));
+		drink = Gdx.audio.newSound(Gdx.files.internal("soundeffects/drink.wav"));
 	}
 
 	protected void drawInteractionText() {
@@ -956,6 +973,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     void getobject(Object obj,int pos) {
     	if (obj!=null) {
 			// if object exists
+    		pickup.play();
 			if (obj.getposition()=="head") {
 				if (prota.gethead().getname()==null) {
 					prota.sethead(obj);
@@ -1009,6 +1027,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 			// if consumable exists
 			prota.updateagility(obj.getpowerupagility());
 			prota.updatehp(obj.getpoweruplife());
+			drink.play();
     	}
     }
     void fight() {
@@ -1020,6 +1039,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	//actualenemy=game.overenemy(); // get the enemy (if exist)
 		actualenemy=game.nexttoenemy(); // get the enemy (if exist)
 		if (actualenemy.getname()!=null) {
+			fight.play();
 			if (!BackgroundMusic.playingfight) {
 	    		BackgroundMusic.stopall();
 	    		BackgroundMusic.startfight();
@@ -1038,6 +1058,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 				} else {
 					interactionoutput="Great! You win the battle!!";
 					BackgroundMusic.stopall();
+					die.play();
 		    		if (activemap.isdungeon()) {
 		    			BackgroundMusic.startdungeon();
 		    		} else {
@@ -1065,6 +1086,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	    		BackgroundMusic.startoutside();
 	    		BackgroundMusic.playingfight=false;
 				game.herodies();
+				die.play();
 				interactionoutput="You lose the battle,\nyou awake in a strange place!";
 			}
 			if (resultoffight!="ENEMYDEAD" && resultoffight!="HERODEAD") {
@@ -1186,7 +1208,8 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		if (actualconsumable.getname()!=null) {
 			// if consumable exists
 			if (consinv.getfreeslot()!=-1) {
-				consinv.set_consumable(consinv.getfreeslot(), actualconsumable);	
+				consinv.set_consumable(consinv.getfreeslot(), actualconsumable);
+				pickup.play();
 				game.removeconsumable(actualconsumable);
 			}
 		}
@@ -1196,6 +1219,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 			if (objinv.getfreeslot()!=-1) {
 				objinv.set_object(objinv.getfreeslot(), actualobject);
 				game.removeobject(actualobject);
+				pickup.play();
 			}
 		}
     }
