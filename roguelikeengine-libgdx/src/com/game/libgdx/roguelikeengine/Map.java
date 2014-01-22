@@ -44,8 +44,10 @@ public class Map {
 	private ArrayList<AccessToLayer> accesspoints;
 	private boolean isDungeon;
 
+	protected int layer = 0;
 	
-	public Map() {
+	public Map(int layer) {
+		this.layer = layer;
 		
 		blockedtile = new Sprite(new Texture(Gdx.files.internal("wall.png")));
 		freetile= new Sprite(new Texture(Gdx.files.internal("herba.png")));
@@ -147,21 +149,14 @@ public class Map {
 			int start = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES-WrapperEngine.MAX_WALL_LENGTH);
 			int height = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES-1);
 			
-			TileOccupier to = new TileOccupier() {
-				public String getname() {
-					return "wall";
-				}
-
-				public String getdescription() {
-					return "a wall";
-				}
-			};
-			
 			if (areaisempty(start,height,lenght,2)) {
 				for (int xpos=start;xpos<start+lenght;xpos++) {
+					TileOccupier to = new ObjectTileOccupier(layer, "wall", "a wall", xpos, height);
+					TileOccupier to2 = new ObjectTileOccupier(layer, "wall", "a wall", xpos, height + 1);
+					
 					tilelayout[xpos][height+1].block(to);
 					tilelayout[xpos][height+1].settileimage(upperwall_img);
-					tilelayout[xpos][height].block(to);
+					tilelayout[xpos][height].block(to2);
 					tilelayout[xpos][height].settileimage(frontwall_img);
 				}
 			}
@@ -173,21 +168,14 @@ public class Map {
 			int start = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES-WrapperEngine.MAX_WALL_LENGTH);
 			int width = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
 			
-			TileOccupier to = new TileOccupier() {
-				public String getname() {
-					return "wall";
-				}
-				
-				public String getdescription() {
-					return "a wall";
-				}
-			};
-			
 			if (areaisempty(width,start,1,lenght)) {
 				for (int ypos=start;ypos<start+lenght;ypos++) {
+					TileOccupier to = new ObjectTileOccupier(layer, "wall", "a wall", width, ypos);
 					tilelayout[width][ypos].block(to);
 					tilelayout[width][ypos].settileimage(upperwall_img);	
 				}
+
+				TileOccupier to = new ObjectTileOccupier(layer, "wall", "a wall", width, start);
 				tilelayout[width][start].settileimage(frontwall_img);
 				tilelayout[width][start].block(to);
 			}
@@ -199,19 +187,11 @@ public class Map {
 			int start_y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES-WrapperEngine.MAX_LAKE_SIZE);
 			int width = (randomGenerator.nextInt(WrapperEngine.MAX_LAKE_SIZE-2)+2);
 			
-			TileOccupier to = new TileOccupier() {
-				public String getname() {
-					return "lake";
-				}
-				
-				public String getdescription() {
-					return "a lake";
-				}
-			};
-			
 			if (areaisempty(start_x,start_y,lenght,width)) {
 				for (int xpos=start_x;xpos<start_x+lenght;xpos++) {
 					for (int ypos=start_y;ypos<start_y+width;ypos++) {
+
+						TileOccupier to = new ObjectTileOccupier(layer, "lake", "a lake", xpos, ypos);
 						tilelayout[xpos][ypos].block(to);
 						tilelayout[xpos][ypos].settileimage(water_img);
 					}
@@ -226,8 +206,8 @@ public class Map {
 		
 		public void createblockingelement() {
 			Random randomGenerator = new Random();
-			int x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
-			int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
+			final int x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
+			final int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
 			int element= randomGenerator.nextInt(8);
 			if (!tilelayout[x][y].isbloqued()) {
 				TileOccupier to = null;
@@ -242,6 +222,18 @@ public class Map {
 						public String getdescription() {
 							return "some rock";
 						}
+						
+						public int getabsolutecolumn(Map map) {
+							return x;
+						}
+
+						public int getabsoluterow(Map map) {
+							return y;
+						}
+
+						public int getlayer() {
+							return layer;
+						}
 					};
 				}
 				if (element==1) {
@@ -253,6 +245,18 @@ public class Map {
 						
 						public String getdescription() {
 							return "a huge rock";
+						}
+						
+						public int getabsolutecolumn(Map map) {
+							return x;
+						}
+
+						public int getabsoluterow(Map map) {
+							return y;
+						}
+
+						public int getlayer() {
+							return layer;
 						}
 					};
 				}
@@ -266,6 +270,18 @@ public class Map {
 						public String getdescription() {
 							return "the bones of an unfortunate adventurer";
 						}
+						
+						public int getabsolutecolumn(Map map) {
+							return x;
+						}
+
+						public int getabsoluterow(Map map) {
+							return y;
+						}
+
+						public int getlayer() {
+							return layer;
+						}
 					};
 				}
 				if (element==3) {
@@ -277,6 +293,18 @@ public class Map {
 						
 						public String getdescription() {
 							return "a grave site";
+						}
+						
+						public int getabsolutecolumn(Map map) {
+							return x;
+						}
+
+						public int getabsoluterow(Map map) {
+							return y;
+						}
+
+						public int getlayer() {
+							return layer;
 						}
 					};
 				}
@@ -290,6 +318,18 @@ public class Map {
 						public String getdescription() {
 							return "a coffin";
 						}
+						
+						public int getabsolutecolumn(Map map) {
+							return x;
+						}
+
+						public int getabsoluterow(Map map) {
+							return y;
+						}
+
+						public int getlayer() {
+							return layer;
+						}
 					};
 				}
 				if (element==5) {
@@ -301,6 +341,18 @@ public class Map {
 						
 						public String getdescription() {
 							return "a tree";
+						}
+						
+						public int getabsolutecolumn(Map map) {
+							return x;
+						}
+
+						public int getabsoluterow(Map map) {
+							return y;
+						}
+
+						public int getlayer() {
+							return layer;
 						}
 					};
 				}
@@ -314,6 +366,18 @@ public class Map {
 						public String getdescription() {
 							return "a fire";
 						}
+						
+						public int getabsolutecolumn(Map map) {
+							return x;
+						}
+
+						public int getabsoluterow(Map map) {
+							return y;
+						}
+
+						public int getlayer() {
+							return layer;
+						}
 					};
 				}
 				if (element==7) {
@@ -325,6 +389,18 @@ public class Map {
 						
 						public String getdescription() {
 							return "a statue";
+						}
+						
+						public int getabsolutecolumn(Map map) {
+							return x;
+						}
+
+						public int getabsoluterow(Map map) {
+							return y;
+						}
+
+						public int getlayer() {
+							return layer;
 						}
 					};
 				}
@@ -341,8 +417,8 @@ public class Map {
 		}
 		public void createdungeonblockingelement() {
 			Random randomGenerator = new Random();
-			int x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
-			int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
+			final int x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
+			final int y = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
 			int element= randomGenerator.nextInt(7);
 			if (!tilelayout[x][y].isbloqued()) {
 				TileOccupier to = null;
@@ -357,6 +433,18 @@ public class Map {
 						public String getdescription() {
 							return "an altar";
 						}
+						
+						public int getabsolutecolumn(Map map) {
+							return x;
+						}
+
+						public int getabsoluterow(Map map) {
+							return y;
+						}
+
+						public int getlayer() {
+							return layer;
+						}
 					};
 				}
 				if (element==1) {
@@ -368,6 +456,18 @@ public class Map {
 						
 						public String getdescription() {
 							return "a hole";
+						}
+						
+						public int getabsolutecolumn(Map map) {
+							return x;
+						}
+
+						public int getabsoluterow(Map map) {
+							return y;
+						}
+
+						public int getlayer() {
+							return layer;
 						}
 					};
 				}
@@ -381,6 +481,18 @@ public class Map {
 						public String getdescription() {
 							return "a web";
 						}
+						
+						public int getabsolutecolumn(Map map) {
+							return x;
+						}
+
+						public int getabsoluterow(Map map) {
+							return y;
+						}
+
+						public int getlayer() {
+							return layer;
+						}
 					};
 				}
 				if (element==3) {
@@ -392,6 +504,18 @@ public class Map {
 						
 						public String getdescription() {
 							return "a coffin";
+						}
+						
+						public int getabsolutecolumn(Map map) {
+							return x;
+						}
+
+						public int getabsoluterow(Map map) {
+							return y;
+						}
+
+						public int getlayer() {
+							return layer;
 						}
 					};
 				}
@@ -405,6 +529,18 @@ public class Map {
 						public String getdescription() {
 							return "a final resting place";
 						}
+						
+						public int getabsolutecolumn(Map map) {
+							return x;
+						}
+
+						public int getabsoluterow(Map map) {
+							return y;
+						}
+
+						public int getlayer() {
+							return layer;
+						}
 					};
 				}
 				if (element==5) {
@@ -417,6 +553,18 @@ public class Map {
 						public String getdescription() {
 							return "it's a tree";
 						}
+						
+						public int getabsolutecolumn(Map map) {
+							return x;
+						}
+
+						public int getabsoluterow(Map map) {
+							return y;
+						}
+
+						public int getlayer() {
+							return layer;
+						}
 					};
 				}
 				if (element==6) {
@@ -428,6 +576,18 @@ public class Map {
 						
 						public String getdescription() {
 							return "a statue";
+						}
+						
+						public int getabsolutecolumn(Map map) {
+							return x;
+						}
+
+						public int getabsoluterow(Map map) {
+							return y;
+						}
+
+						public int getlayer() {
+							return layer;
 						}
 					};
 				}
@@ -486,15 +646,7 @@ public class Map {
 					int chances = randomGenerator.nextInt(2);
 					int image = randomGenerator.nextInt(2);
 					if (chances==0) {
-						tilelayout[x][y].block(new TileOccupier() {
-							public String getname() {
-								return "cemetary";
-							}
-							
-							public String getdescription() {
-								return "a cemetary";
-							}
-						});
+						tilelayout[x][y].block(new ObjectTileOccupier(layer, "cemetary", "a cemetary", x, y));
 						
 						if (image==0) {
 							tilelayout[x][y].settileimage(cross_img);
@@ -506,6 +658,7 @@ public class Map {
 				}
 			}
 		}
+		
 		// **** END MAP CREATION
 		// gets
 		public Tile[][] gettiles() {
@@ -625,4 +778,5 @@ public class Map {
 			return result;
 		}
 		
+		public int getlayer() { return layer; }
 }

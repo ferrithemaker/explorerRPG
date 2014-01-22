@@ -180,4 +180,14 @@ public class Enemy implements TileOccupier {
 	public String getdescription() {
 		return "a " + getname();
 	}
+
+	@Override
+	public int getabsolutecolumn(Map map) {
+		return this.getabsolutex();
+	}
+
+	@Override
+	public int getabsoluterow(Map map) {
+		return this.getabsolutey();
+	}
 }

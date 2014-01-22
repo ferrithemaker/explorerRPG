@@ -25,6 +25,7 @@ import java.lang.Thread;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
@@ -62,6 +63,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     int consumable_inv_mode=0;
     
     private LinkedList<Bullet> bullets = new LinkedList<Bullet>();
+    protected boolean stopsOnFire = true;
     
     private int realXcoord;
     private int realYcoord;
@@ -217,6 +219,8 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         // draw objects
         drawobjects();
         
+        drawBullets();
+        
         // draw enemies
         drawenemies();
 
@@ -281,9 +285,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	 	//genericfont.draw(batch,"Hi "+prota.getname()+"!", (GameEngine.TILE_X_SIZE*GameEngine.ON_SCREEN_TILES_X)+25, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-30);
 	 	genericfont.draw(batch,"Experience: "+prota.getexperience(), (WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+25, (WrapperEngine.WINDOWHEIGHT)-20);
 	 	genericfont.draw(batch,"Life Points: "+prota.gethp(), (WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+25, (WrapperEngine.WINDOWHEIGHT)-40);
-	 	genericfont.draw(batch,"Resistance: "+prota.getresist(), (WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+25,(WrapperEngine.WINDOWHEIGHT)-60);
-	 	genericfont.draw(batch,"Agility: "+prota.getagility(), (WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+25,(WrapperEngine.WINDOWHEIGHT)-80);
-	 	genericfont.draw(batch,"Force: "+prota.getforce(), (WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+25,(WrapperEngine.WINDOWHEIGHT)-100);
+	 	genericfont.draw(batch,"Magic Points: "+prota.getmagic(), (WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+25, (WrapperEngine.WINDOWHEIGHT)-60);
+	 	genericfont.draw(batch,"Resistance: "+prota.getresist(), (WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+25,(WrapperEngine.WINDOWHEIGHT)-80);
+	 	genericfont.draw(batch,"Agility: "+prota.getagility(), (WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+25,(WrapperEngine.WINDOWHEIGHT)-100);
+	 	genericfont.draw(batch,"Force: "+prota.getforce(), (WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+25,(WrapperEngine.WINDOWHEIGHT)-120);
 	}
 
 	/**
@@ -387,6 +392,12 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         	}
         }
 	}
+	
+	protected void drawBullets() {
+		for(Bullet bullet : bullets) {
+			bullet.render(batch, activemap.getlayer());
+		}
+	}
 
 	/**
 	 * 
@@ -428,6 +439,15 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		for (int i=0;i<(int)(prota.percentlife()/10);i++) {
 			redbar.setPosition(prota.getrelativextile()*WrapperEngine.TILE_X_SIZE+2+(i*6),prota.getrelativeytile()*WrapperEngine.TILE_Y_SIZE+2);
 			redbar.draw(batch);
+		}
+		
+		Sprite magicbar=layout.getmagicbar();
+		Sprite bluebar=layout.getbluebar();
+		magicbar.setPosition(prota.getrelativextile()*WrapperEngine.TILE_X_SIZE+2, prota.getrelativeytile()*WrapperEngine.TILE_Y_SIZE-4);
+		magicbar.draw(batch);
+		for (int i=0;i<(int)(prota.percentmagic()/10);i++) {
+			bluebar.setPosition(prota.getrelativextile()*WrapperEngine.TILE_X_SIZE+2+(i*6),prota.getrelativeytile()*WrapperEngine.TILE_Y_SIZE-4);
+			bluebar.draw(batch);
 		}
 	}
 	
@@ -640,6 +660,8 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	
 	@Override
 	public boolean keyUp (int keycode) {
+	    if(stopsOnFire && bullets.size() > 0) return false;
+	    
 		if (keycode==Keys.P) { // debug mode
 			if (debug_mode==0) { debug_mode=1; } else { 
 				debug_mode=0; 
@@ -650,6 +672,9 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		}
 		if (keycode==Keys.H) {
 			fight();
+		}
+		if (keycode==Keys.E) {
+			magic();
 		}
 		if (keycode==Keys.T) {
 			talk();
@@ -787,10 +812,29 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	}
 
 	protected void handlekeyboardinput() {
-		if (Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) { goright(); } 
-        if (Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) { goleft(); }
-        if (Gdx.input.isKeyPressed(Keys.DPAD_UP)) { goup(); } 
-        if (Gdx.input.isKeyPressed(Keys.DPAD_DOWN)) { godown();}
+	    if(stopsOnFire && bullets.size() > 0) return;
+	    
+		boolean shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
+		
+		if (Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) { 
+			if(shift) prota.changeDirection(Directions.EAST);
+			else goright(); 
+		} 
+        
+		if (Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) { 
+			if(shift) prota.changeDirection(Directions.WEST);
+			else goleft(); 
+		}
+		
+        if (Gdx.input.isKeyPressed(Keys.DPAD_UP)) { 
+        	if(shift) prota.changeDirection(Directions.SOUTH);
+			else goup(); 
+        } 
+        
+        if (Gdx.input.isKeyPressed(Keys.DPAD_DOWN)) { 
+        	if(shift) prota.changeDirection(Directions.NORTH);
+			else godown();
+        }
 	}
 
 	/**
@@ -798,11 +842,15 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	 */
 	@SuppressWarnings("unused")
 	protected void handlemouseinput() {
+	    if(stopsOnFire && bullets.size() > 0) return;
+	    
 		if (WrapperEngine.OUTPUT_OS=="desktop") { handlemousedesktopinput(); }
 		if (WrapperEngine.OUTPUT_OS=="android") { handletouchandroidinput(); }
 		
 	}
 	protected void handletouchandroidinput() {
+	    if(stopsOnFire && bullets.size() > 0) return;
+	    
 		if (Gdx.input.isTouched()) {
 			// EXIT BUTTON!
     		if (realXcoord>512 && realXcoord<576 && realYcoord>640 && realYcoord<704) {
@@ -879,7 +927,11 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 			
 		}
 	}
+	
+	
 	protected void handlemousedesktopinput() {
+	    if(stopsOnFire && bullets.size() > 0) return;
+	    
 		if (Gdx.input.isTouched()) {
     		// EXIT BUTTON!
     		if (realXcoord>512 && realXcoord<576 && realYcoord>640 && realYcoord<704) {
@@ -1014,6 +1066,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 			prota.updatehp(obj.getpoweruplife());
     	}
     }
+    
     void fight() {
     	object_inv_mode=0;
 		consumable_inv_mode=0;
@@ -1034,34 +1087,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 			// if hero wins
 			if (resultoffight=="ENEMYDEAD") {
 				// if you win
-				prota.updateexperience(100);
-				//System.out.println("YOU WIN!");
-				if (actualenemy.getname()=="megaboss") {
-						interactionoutput="You get the amulet, you win the game!!";
-				} else {
-					interactionoutput="Great! You win the battle!!";
-					BackgroundMusic.stopall();
-		    		if (activemap.isdungeon()) {
-		    			BackgroundMusic.startdungeon();
-		    		} else {
-		    			BackgroundMusic.startoutside();
-		    		}
-		    		BackgroundMusic.playingfight=false;
-		    		// unblock enemy tile
-		    		maplayers[game.getlayer()].unblocktile(actualenemy.getabsolutex(), actualenemy.getabsolutey());
-		    		// enemies drop objects
-		    		Random randomGenerator = new Random();
-		    		int type = randomGenerator.nextInt(4); // 50% chances to drop object / consumable
-		    		switch (type) {
-		    		case 0:
-		    			game.createrandomconsumable(false, game.getlayer(), actualenemy.getabsolutex(), actualenemy.getabsolutey(),1);
-		    			break;
-		    		case 1:
-		    			game.createrandomobject(false, game.getlayer(), actualenemy.getabsolutex(), actualenemy.getabsolutey(),1);
-		    			break;
-		    		}   		
-				}
-				game.removeenemy(actualenemy);
+				killEnemy();
 			} 
 			if (resultoffight=="HERODEAD") {
 				BackgroundMusic.stopall();
@@ -1076,6 +1102,38 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		just_interact=1;
 		}
     }
+
+	protected void killEnemy() {
+		prota.updateexperience(100);
+		//System.out.println("YOU WIN!");
+		if (actualenemy.getname()=="megaboss") {
+				interactionoutput="You get the amulet, you win the game!!";
+		} else {
+			interactionoutput="Great! You win the battle!!";
+			BackgroundMusic.stopall();
+			if (activemap.isdungeon()) {
+				BackgroundMusic.startdungeon();
+			} else {
+				BackgroundMusic.startoutside();
+			}
+			BackgroundMusic.playingfight=false;
+			// unblock enemy tile
+			maplayers[game.getlayer()].unblocktile(actualenemy.getabsolutex(), actualenemy.getabsolutey());
+			// enemies drop objects
+			Random randomGenerator = new Random();
+			int type = randomGenerator.nextInt(4); // 50% chances to drop object / consumable
+			switch (type) {
+			case 0:
+				game.createrandomconsumable(false, game.getlayer(), actualenemy.getabsolutex(), actualenemy.getabsolutey(),1);
+				break;
+			case 1:
+				game.createrandomobject(false, game.getlayer(), actualenemy.getabsolutex(), actualenemy.getabsolutey(),1);
+				break;
+			}   		
+		}
+		game.removeenemy(actualenemy);
+	}
+	
     void goup() {
     	object_inv_mode=0;
     	object_drop_mode=0;
@@ -1242,9 +1300,21 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	public void updateBullets() {
 		LinkedList<Bullet> toRemove = new LinkedList<Bullet>();
 		
+		for(Bullet bullet : bullets) {
+			bullet.update();
+			
+			if(bullet.isFinished()) {
+				toRemove.push(bullet);
+			}
+		}
 		
 		for(Bullet bullet : toRemove) {
 			bullets.remove(bullet);
 		}
+	}
+	
+	void magic() {
+		Bullet bullet = prota.fireBullet();
+		if(bullet != null) bullets.push(bullet);
 	}
 }
