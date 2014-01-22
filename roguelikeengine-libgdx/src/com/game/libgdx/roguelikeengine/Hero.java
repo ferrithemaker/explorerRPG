@@ -38,6 +38,10 @@ public class Hero implements TileOccupier {
 	private int life;
 	private int lifePerStep = 1;
 	private int maxlife;
+	private int maxMagic;
+	private int magic;
+	private int magicPerStep = 1;
+	private int magicCost = 11;
 	private int level=1;
 	private int exp;
 	private int resist;
@@ -50,16 +54,18 @@ public class Hero implements TileOccupier {
 	private Object body;
 	private Object foot;
 
-	
+	protected Directions direction = Directions.EAST;
+	protected WrapperEngine engine;
 
 	public Hero(WrapperEngine engine, String name, String file) {
-		
+		this.engine = engine;
 
 		// initial set-up
 		this.agility=4; 
 		this.force=5; // offense
 		this.resist=3; // defense
 		this.life=this.maxlife=100; // hp
+		this.magic=this.maxMagic=100;
 		this.exp=1; // experience
 		this.relative_y_tile=1;
 		this.relative_x_tile=1;
@@ -92,6 +98,9 @@ public class Hero implements TileOccupier {
 	}
 	public int gethp() {
 		return this.life;
+	}
+	public int getmagic() {
+		return this.magic;
 	}
 	public int getlevel() {
 		return this.level;
@@ -207,6 +216,9 @@ public class Hero implements TileOccupier {
 	public void updatehp(int value) {
 		this.life=Math.min(this.maxlife, this.life+value);
 	}
+	public void updatemagic(int value) {
+		this.magic=Math.max(0, Math.min(this.maxMagic, this.magic+value));
+	}
 	public void updatelevel() {
 		this.level++;
 	}
@@ -221,7 +233,7 @@ public class Hero implements TileOccupier {
 	public void up(Map map) {
 		if (this.relative_y_tile>0) {
 			this.setrelativeytile(this.relative_y_tile - 1);
-			sprite_goup();
+			changeDirection(Directions.NORTH);
 		} else {
 			scrollup();
 			map.scrollup();
@@ -230,7 +242,7 @@ public class Hero implements TileOccupier {
 	public void down(Map map) {
 		if (this.relative_y_tile<WrapperEngine.ON_SCREEN_TILES_Y-1) {
 			this.setrelativeytile(this.relative_y_tile + 1);
-			sprite_godown();
+			changeDirection(Directions.SOUTH);
 		} else {
 			scrolldown();
 			map.scrolldown();
@@ -239,7 +251,7 @@ public class Hero implements TileOccupier {
 	public void left(Map map) {
 		if (this.relative_x_tile>0) {
 			this.setrelativextile(this.relative_x_tile - 1);
-			sprite_goleft();
+			changeDirection(Directions.WEST);
 		} else {
 			scrollleft();
 			map.scrollleft();
@@ -248,7 +260,7 @@ public class Hero implements TileOccupier {
 	public void right(Map map) {
 		if (this.relative_x_tile<WrapperEngine.ON_SCREEN_TILES_X-1) {
 			this.setrelativextile(this.relative_x_tile + 1);
-			sprite_goright();
+			changeDirection(Directions.EAST);
 		} else {
 			scrollright();
 			map.scrollright();
@@ -318,6 +330,7 @@ public class Hero implements TileOccupier {
 			current_sprite_position=10;
 			break;
 		}
+		direction = Directions.NORTH;	// libgdx y is inverted
 	}
 	private void sprite_goup() {
 		switch(current_sprite_position) {
@@ -334,6 +347,7 @@ public class Hero implements TileOccupier {
 			current_sprite_position=1;
 			break;
 		}	
+		direction = Directions.SOUTH;
 	}
 	private void sprite_goleft() {
 		switch(current_sprite_position) {
@@ -350,6 +364,7 @@ public class Hero implements TileOccupier {
 			current_sprite_position=4;
 			break;
 		}
+		direction = Directions.WEST;
 	}
 	private void sprite_goright() {
 		switch(current_sprite_position) {
@@ -366,6 +381,7 @@ public class Hero implements TileOccupier {
 			current_sprite_position=7;
 			break;
 		}
+		direction = Directions.EAST;
 	}
 	public int getyspriteposition() {
 		if (current_sprite_position==1 || current_sprite_position==2 || current_sprite_position==3) {
@@ -416,8 +432,54 @@ public class Hero implements TileOccupier {
 	}
 	
 	protected void onStep() {
-		
+		this.updatemagic(magicPerStep);
 		this.updatehp(lifePerStep);
 	}
 	
+	public Bullet fireBullet() {
+		Bullet result = null;
+		if(this.magic >= this.magicCost) {
+			result = new Fireball(engine.getactivemap(), this, this.direction);
+			this.magic -= this.magicCost;
+		}
+		
+		return result;
+	}
+	
+	public void changeDirection(Directions direction) {
+		switch (direction) {
+		case NORTH:
+			this.sprite_goup();
+			break;
+		case SOUTH:
+			this.sprite_godown();
+			break;
+		case EAST:
+			this.sprite_goright();
+			break;
+		case WEST:
+		default:
+			this.sprite_goleft();
+		}
+		
+		this.direction = direction;
+	}
+
+	@Override
+	public int getabsolutecolumn(Map map) {
+		return this.getabsolutex(map);
+	}
+
+	@Override
+	public int getabsoluterow(Map map) {
+		return this.getabsolutey(map);
+	}
+	
+	public int getlayer() {
+		return engine.getlayer();
+	}
+
+	public float percentmagic() {
+		return ((float)(float) this.magic / (float)this.maxMagic ) * 100;
+	}
 }

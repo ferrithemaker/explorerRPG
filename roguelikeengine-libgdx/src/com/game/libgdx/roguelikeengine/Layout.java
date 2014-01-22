@@ -29,6 +29,9 @@ public class Layout {
     private Sprite androiddirections_img;
     private Sprite energybar_img;
     private Sprite redbar_img;
+    
+    private Sprite magicbar_img;
+    private Sprite bluebar_img;
 	// screen methods
     public Layout() {
     	// tiles
@@ -38,7 +41,8 @@ public class Layout {
 		androiddirections_img= new Sprite(new Texture(Gdx.files.internal("UI/androiddirections.png")),256,256);
 		energybar_img= new Sprite(new Texture(Gdx.files.internal("UI/energybar.png")),60,5);
 		redbar_img= new Sprite(new Texture(Gdx.files.internal("UI/redbar.png")),6,5);
-		
+		magicbar_img= new Sprite(new Texture(Gdx.files.internal("UI/energybar.png")),60,5);
+		bluebar_img= new Sprite(new Texture(Gdx.files.internal("UI/bluebar.png")),6,5);
     }
 	public Sprite getmenubackground() {
 		return menu_img;
@@ -58,5 +62,10 @@ public class Layout {
 	public Sprite getredbar() {
 		return redbar_img;
 	}
-
+	public Sprite getmagicbar() {
+		return magicbar_img;
+	}
+	public Sprite getbluebar() {
+		return bluebar_img;
+	}
 }

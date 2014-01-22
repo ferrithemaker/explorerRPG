@@ -93,4 +93,14 @@ public class Buddy implements TileOccupier {
 	public String getdescription() {
 		return "a friendly " + getname() + ", try talking to him.";
 	}
+
+	@Override
+	public int getabsolutecolumn(Map map) {
+		return this.getabsolutex();
+	}
+
+	@Override
+	public int getabsoluterow(Map map) {
+		return this.getabsolutey();
+	}
 }

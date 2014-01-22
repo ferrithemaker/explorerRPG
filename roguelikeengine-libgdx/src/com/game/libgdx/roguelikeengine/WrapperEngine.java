@@ -91,9 +91,9 @@ public class WrapperEngine {
         prota=new Hero(this, "ferriman","holder_sprite.png");
 		
         // create Maps
-        maplayers[0]= new Map();
-        maplayers[1]= new Map();
-        maplayers[2]= new Map();
+        maplayers[0]= new Map(0);
+        maplayers[1]= new Map(1);
+        maplayers[2]= new Map(2);
         maplayers[0].createrandommap();
         maplayers[1].createrandomdungeon();
         maplayers[2].createrandomdungeon();
@@ -197,6 +197,7 @@ public class WrapperEngine {
 	public int getlayer() { // this is the actual layer
 		return layer; // this variable has the actual layer
 	}
+	
 	public void changelayer(AccessToLayer atl,int rx,int ry) {
 		int numberofXscreens;
 		int numberofYscreens;
@@ -647,5 +648,9 @@ public class WrapperEngine {
     }
 	public void createconsumable(int layer,String name, int p_agility, int p_life,int force, int resist,int x,int y,String file) {
         availableconsumables.add_consumable(new Consumable(layer,name,p_agility,p_life,force,resist,x,y,file));
+	}
+
+	public Map getactivemap() {
+		return activemap;
 	}
 }
