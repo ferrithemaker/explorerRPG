@@ -43,32 +43,32 @@ public class Enemy_array {
 		return 0;
 	}
 	
-	public Enemy overenemy(int x, int y) {
+	public Enemy overenemy(int x, int y, int layer) {
 		Enemy rightbguy = new Enemy(); // null enemy
 		ListIterator<Enemy> bgiterator = Enemylist.listIterator();
         while (bgiterator.hasNext()) {
         	Enemy bguy=bgiterator.next();
-        	if (bguy.overenemy(x,y)==true) {
+        	if (bguy.overenemy(x,y,layer)==true) {
         		    		rightbguy=bguy;
         	}
         }
         return rightbguy;
 	}
-	public Enemy nextotoenemy(int x, int y) {
+	public Enemy nextotoenemy(int x, int y,int layer) {
 		Enemy rightbguy = new Enemy(); // null enemy
 		ListIterator<Enemy> bgiterator = Enemylist.listIterator();
 		while (bgiterator.hasNext()) {
         	Enemy bguy=bgiterator.next();
-        	if (bguy.overenemy(x+1,y)==true) {
+        	if (bguy.overenemy(x+1,y,layer)==true) {
         		rightbguy=bguy;
         	}
-        	if (bguy.overenemy(x-1,y)==true) {
+        	if (bguy.overenemy(x-1,y,layer)==true) {
 	    		rightbguy=bguy;
         	}
-        	if (bguy.overenemy(x,y+1)==true) {
+        	if (bguy.overenemy(x,y+1,layer)==true) {
 	    		rightbguy=bguy;
         	}
-        	if (bguy.overenemy(x,y-1)==true) {
+        	if (bguy.overenemy(x,y-1,layer)==true) {
 	    		rightbguy=bguy;
         	}
         }
