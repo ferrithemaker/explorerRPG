@@ -33,6 +33,8 @@ public class Tile {
 	private int column;
 	private int row;
 	
+	private boolean canpcg = true;
+	
 	public Tile(int column, int row, boolean status) {
 		this.bloqued=status;
 		this.showimage=false;
@@ -76,4 +78,12 @@ public class Tile {
 	
 	public int getcolumn() { return column; }
 	public int getrow() { return row; }
+
+	public boolean canPCG() {
+		return canpcg;
+	}
+
+	public void setPCG(boolean canpcg) {
+		this.canpcg = canpcg;
+	}
 }

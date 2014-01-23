@@ -71,6 +71,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     private LinkedList<Bullet> bullets = new LinkedList<Bullet>();
     protected boolean stopsOnFire = true;
     
+    protected boolean animateHeroInPlace = true;
+    protected int animateHeroDelay = 3;
+    protected int animateHeroDuration = 0;
+    
     private int realXcoord;
     private int realYcoord;
     
@@ -150,8 +154,15 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	messagefont.setColor(Color.YELLOW);
     	genericfont = generator.generateFont(14); // px
     	genericfont.setColor(Color.WHITE);
+    	
+    	// create a message info screen 
+    	screentext=new PopupInfoText(100,(WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-450,"UI/text_popup.png",830,350);
+    	screentext.settextoffset(50, 50);
+    	
 		// create tile layout
         game = new WrapperEngine();
+        game.init();
+        
         maplayers[0]=game.getmaplayer(0);
         maplayers[1]=game.getmaplayer(1);
         maplayers[2]=game.getmaplayer(2);
@@ -172,11 +183,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         consinv= new Consumable_inventory();
 		
         // create welcoming buddy
-        final Buddy priest = game.createbuddy(0,"Priest", 8,8,"buddy1.png","Hi, my friend.\nI hope you enjoy your trip!\nBe aware of the monsters.\nDo you require healing?\n\t Accept_Healing \t No");
-        
-		// create a message info screen 
-		screentext=new PopupInfoText(100,(WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-450,"UI/text_popup.png",830,350);
-		screentext.settextoffset(50, 50);
+        final Buddy priest = game.createbuddy(0,"Priest", 19,24,"buddy1.png","Hi, my friend.\nI hope you enjoy your trip!\nBe aware of the monsters.\nDo you require healing?\n\t Accept_Healing \t No");
 		
 		screentext.addWordClickListener("Accept_Healing", new WordClickAction() {
 			@Override
@@ -192,11 +199,15 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 			}
 		});
 	}
+	
+	public Buddy createpriest(int column, int row, String dialog) {
+		System.out.println(game);
+		Buddy priest = game.createbuddy(0,"Priest", column,row,"buddy1.png", dialog);
+        return priest;
+	}
 
 	@Override
 	public void render(float delta) {
-		
-		
 		update();
 		
 		frameratecontrol();
@@ -219,6 +230,9 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         
      	// dwaw background
         drawbackground();
+
+        // draw static blocked tiles 
+        drawtiles();
         
         // draw buddies
         drawbuddies();
@@ -233,10 +247,6 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         
         // draw enemies
         drawenemies();
-
-        
-        // draw static blocked tiles 
-        drawtiles();
         
         // draw hero
         drawhero(); 
@@ -670,7 +680,14 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	// key events control
     	handlekeyboardinput();
         
+        if(animateHeroInPlace) {
+        	animateHeroDuration += 1;
         	
+        	if(animateHeroDuration >= animateHeroDelay) {
+        		prota.changeDirection(prota.getDirection());
+        		animateHeroDuration = 0;
+        	}
+        }
     }
 	
 	// Keyboard event handler
@@ -1107,7 +1124,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 			// if hero wins
 			if (resultoffight=="ENEMYDEAD") {
 				// if you win
-				killEnemy();
+				killEnemy(actualenemy);
 			} 
 			if (resultoffight=="HERODEAD") {
 				BackgroundMusic.stopall();
@@ -1124,10 +1141,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		}
     }
 
-	protected void killEnemy() {
+	protected void killEnemy(Enemy enemy) {
 		prota.updateexperience(100);
 		//System.out.println("YOU WIN!");
-		if (actualenemy.getname()=="megaboss") {
+		if (enemy.getname()=="megaboss") {
 				interactionoutput="You get the amulet, you win the game!!";
 		} else {
 			interactionoutput="Great! You win the battle!!";
@@ -1139,20 +1156,20 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 			}
 			BackgroundMusic.playingfight=false;
 			// unblock enemy tile
-			maplayers[game.getlayer()].unblocktile(actualenemy.getabsolutex(), actualenemy.getabsolutey());
+			maplayers[game.getlayer()].unblocktile(enemy.getabsolutex(), enemy.getabsolutey());
 			// enemies drop objects
 			Random randomGenerator = new Random();
 			int type = randomGenerator.nextInt(4); // 50% chances to drop object / consumable
 			switch (type) {
 			case 0:
-				game.createrandomconsumable(false, game.getlayer(), actualenemy.getabsolutex(), actualenemy.getabsolutey(),1);
+				game.createrandomconsumable(false, game.getlayer(), enemy.getabsolutex(), enemy.getabsolutey(),1);
 				break;
 			case 1:
-				game.createrandomobject(false, game.getlayer(), actualenemy.getabsolutex(), actualenemy.getabsolutey(),1);
+				game.createrandomobject(false, game.getlayer(), enemy.getabsolutex(), enemy.getabsolutey(),1);
 				break;
 			}   		
 		}
-		game.removeenemy(actualenemy);
+		game.removeenemy(enemy);
 	}
 	
     void goup() {
@@ -1253,7 +1270,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 			just_interact=1;
 		}
     }
-    void alert(String message) {
+    public void alert(String message) {
     	interactionoutput=message;
 		just_interact=1;
     }
@@ -1335,10 +1352,6 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 			for(Bullet bullet : toRemove) {
 				bullets.remove(bullet);
 			}
-			
-			if(bullets.size() <= 0) {
-		    	
-			}
 		}
 	}
 	
@@ -1352,5 +1365,13 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
     	// moving active enemies
     	game.moveenemies();
+	}
+
+	public PopupInfoText getScreentext() {
+		return screentext;
+	}
+
+	public void setScreentext(PopupInfoText screentext) {
+		this.screentext = screentext;
 	}
 }
