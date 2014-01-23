@@ -482,4 +482,6 @@ public class Hero implements TileOccupier {
 	public float percentmagic() {
 		return ((float)(float) this.magic / (float)this.maxMagic ) * 100;
 	}
+	
+	public Directions getDirection() { return direction; }
 }

@@ -73,7 +73,12 @@ public class Fireball extends Bullet {
 	public void onHit(TileOccupier source, TileOccupier hit) {
 		if(hit instanceof Enemy) {
 			GameplayScreen.instance.alert(source.getname() + " cast Fireball on " + hit.getname() + " for " + damage + " damage!");
-			((Enemy) hit).updatehp(damage);
+			Enemy enemy = ((Enemy) hit);
+			enemy.updatehp(damage);
+			
+			if(enemy.gethp() <= 0) {
+				GameplayScreen.instance.killEnemy(enemy);
+			}
 		}
 
 		finished = true;

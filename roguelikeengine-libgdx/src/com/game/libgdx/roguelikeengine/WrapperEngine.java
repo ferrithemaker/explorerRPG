@@ -22,6 +22,8 @@ package com.game.libgdx.roguelikeengine;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.game.libgdx.roguelikeengine.rooms.Chapel;
+
 
 
 // Map class is a wrapper class for all other basic classes
@@ -85,30 +87,10 @@ public class WrapperEngine {
 
     
 	// START METHOD INITIALIZES ALL CLASSES OF THE GAME
-	public WrapperEngine () {  
-			
-		// create hero
-        prota=new Hero(this, "ferriman","holder_sprite.png");
-		
-        // create Maps
-        maplayers[0]= new Map(0);
-        maplayers[1]= new Map(1);
-        maplayers[2]= new Map(2);
-        maplayers[0].createrandommap();
-        maplayers[1].createrandomdungeon();
-        maplayers[2].createrandomdungeon();
-        maplayers[0].isdungeon(false);
-        maplayers[1].isdungeon(true);
-        maplayers[2].isdungeon(true);
-        
-        // setup initial layer
+	public WrapperEngine () {   
+		// setup initial layer
         layer=0;
-        
-        numberOfAP=0; // current number of AP
-
-        activemap=maplayers[0];
-        
-        // create initial empty enemy array
+		// create initial empty enemy array
         badguys= new Enemy_array();
         
         // create initial empty buddy array
@@ -119,6 +101,31 @@ public class WrapperEngine {
         
         // create initial empty consumable array
         availableconsumables=new Consumable_array();
+	}
+	
+	public void init() {
+		// create hero
+        prota=new Hero(this, "ferriman","holder_sprite.png");
+		
+        // create Maps
+        maplayers[0]= new Map(0).init();
+        maplayers[1]= new Map(1).init();
+        maplayers[2]= new Map(2).init();
+        
+
+		System.out.println(new Chapel().tryPlace(maplayers[0], 9, 2));
+
+        maplayers[0].createrandommap();
+        maplayers[1].createrandomdungeon();
+        maplayers[2].createrandomdungeon();
+        maplayers[0].isdungeon(false);
+        maplayers[1].isdungeon(true);
+        maplayers[2].isdungeon(true);
+        
+        numberOfAP=0; // current number of AP
+
+        activemap=maplayers[0];
+        
         
         //createAllAP
         createAllAccessLayers();
