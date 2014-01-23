@@ -324,10 +324,10 @@ public class WrapperEngine {
 		return badguys.getlist();
 	}
 	public Enemy overenemy() {
-		 return badguys.overenemy(prota.getrelativextile()+maplayers[layer].getfirstxtile(),prota.getrelativeytile()+maplayers[layer].getfirstytile());
+		 return badguys.overenemy(prota.getrelativextile()+maplayers[layer].getfirstxtile(),prota.getrelativeytile()+maplayers[layer].getfirstytile(),layer);
 	}
 	public Enemy nexttoenemy() {
-		return badguys.nextotoenemy(prota.getrelativextile()+maplayers[layer].getfirstxtile(),prota.getrelativeytile()+maplayers[layer].getfirstytile());
+		return badguys.nextotoenemy(prota.getrelativextile()+maplayers[layer].getfirstxtile(),prota.getrelativeytile()+maplayers[layer].getfirstytile(),layer);
 	}
 	public void removeenemy(Enemy obj) {
 		badguys.remove_enemy(obj);

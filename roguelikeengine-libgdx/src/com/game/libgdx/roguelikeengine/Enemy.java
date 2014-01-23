@@ -172,8 +172,8 @@ public class Enemy implements TileOccupier {
 			   layer==this.layer;
 	}
 	
-	public boolean overenemy(int x,int y) {
-		return (this.absolute_x==x && this.absolute_y==y);
+	public boolean overenemy(int x,int y,int layer) {
+		return (this.absolute_x==x && this.absolute_y==y && this.layer==layer);
 	}
 
 	@Override
