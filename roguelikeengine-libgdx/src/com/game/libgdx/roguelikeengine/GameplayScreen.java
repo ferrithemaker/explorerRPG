@@ -51,6 +51,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	private Sound pickup;
 	private Sound fight;
 	private Sound drink;
+	private Sound fireball;
 	//private Texture texture;
 	private BitmapFont genericfont;
 	private BitmapFont messagefont;
@@ -284,6 +285,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		fight = Gdx.audio.newSound(Gdx.files.internal("soundeffects/fight.wav"));
 		pickup = Gdx.audio.newSound(Gdx.files.internal("soundeffects/pickup.wav"));
 		drink = Gdx.audio.newSound(Gdx.files.internal("soundeffects/drink.wav"));
+		fireball = Gdx.audio.newSound(Gdx.files.internal("soundeffects/fireball.wav"));
 	}
 
 	protected void drawInteractionText() {
@@ -1361,7 +1363,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	
 	void magic() {
 		Bullet bullet = prota.fireBullet();
-		if(bullet != null) bullets.push(bullet);
+		if(bullet != null) { 
+			bullets.push(bullet); 
+			fireball.play(); 
+		}
 	}
 	
 	public void enemyTurn() {
