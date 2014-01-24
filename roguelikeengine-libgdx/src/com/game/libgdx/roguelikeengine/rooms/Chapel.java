@@ -1,12 +1,18 @@
 package com.game.libgdx.roguelikeengine.rooms;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.game.libgdx.roguelikeengine.GameplayScreen;
 import com.game.libgdx.roguelikeengine.Map;
 import com.game.libgdx.roguelikeengine.WordClickAction;
 
 public class Chapel extends Room {
 	public Chapel() {
-		super("chapel", ImageToRoomUtil.getRoomData("rooms/chapel.png"), "rooms/chapel_floor.png", "rooms/chapel_wall.png", "rooms/chapel_wall_top.png");
+		super("chapel", ImageToRoomUtil.getRoomData("rooms/chapel.png"), "rooms/chapel_floor.png", "rooms/chapel_wall.png", "rooms/chapel_wall_top.png",
+				new Decoration(new Sprite(new Texture("cross.png")), Color.RED).asWall(),
+				new Decoration(new Sprite(new Texture("decor/brick_breakup.png")), Color.GREEN).asChance(0.5).asFloor(),
+				new Decoration(new Sprite(new Texture("decor/plant.png")), Color.GRAY).asChance(.7));
 	}
 
 	@Override

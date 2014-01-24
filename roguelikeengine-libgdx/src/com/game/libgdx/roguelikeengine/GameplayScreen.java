@@ -574,11 +574,18 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	
 	protected void drawtiles() {
 		int relativex=0;
+		Tile tile = null;
         for (int xpos=maplayers[game.getlayer()].getfirstxtile();xpos<(maplayers[game.getlayer()].getfirstxtile()+WrapperEngine.ON_SCREEN_TILES_X);xpos++) {
         	int relativey=0;
         	for (int ypos=maplayers[game.getlayer()].getfirstytile();ypos<(maplayers[game.getlayer()].getfirstytile()+WrapperEngine.ON_SCREEN_TILES_Y);ypos++) {
-        			if (activemap.gettiles()[xpos][ypos].getshowimage()) {
-        				batch.draw(activemap.gettiles()[xpos][ypos].gettileimage(),relativex*WrapperEngine.TILE_X_SIZE,relativey*WrapperEngine.TILE_Y_SIZE);
+        			tile=activemap.gettiles()[xpos][ypos];
+        			if (tile.getshowimage()) {
+        				if(tile.gettileimage() != null) {
+        					batch.draw(tile.gettileimage(),relativex*WrapperEngine.TILE_X_SIZE,relativey*WrapperEngine.TILE_Y_SIZE);
+        				}
+        				if(tile.gettiledecoration() != null) {
+        					batch.draw(tile.gettiledecoration(),relativex*WrapperEngine.TILE_X_SIZE,relativey*WrapperEngine.TILE_Y_SIZE);
+        				}
         			}
         			relativey++;
         	}
