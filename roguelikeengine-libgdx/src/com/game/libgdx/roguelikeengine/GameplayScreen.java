@@ -929,6 +929,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     		if (realXcoord>70 && realXcoord<172 && realYcoord>117 && realYcoord<148) {
     			talk();
     		}
+    		// MAGIC BUTTON! 
+    		if (realXcoord>70 && realXcoord<172 && realYcoord>68 && realYcoord<99) {
+    			magic();
+    		}
     		// CONSUMABLE INVENTORY ACTIONS
     		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
     			if (realXcoord>1152 && realXcoord<1216 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==0) {

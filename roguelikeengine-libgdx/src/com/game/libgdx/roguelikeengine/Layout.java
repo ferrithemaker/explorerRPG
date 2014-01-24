@@ -37,7 +37,7 @@ public class Layout {
     	// tiles
 		menu_img = new Sprite(new Texture(Gdx.files.internal("UI/charactermenu.png")),WrapperEngine.OPTION_MENU_X_SIZE,WrapperEngine.WINDOWHEIGHT);
 		actionmenu_img= new Sprite(new Texture(Gdx.files.internal("UI/actionmenu.png")),WrapperEngine.ON_SCREEN_TILES_X*WrapperEngine.TILE_X_SIZE,64);
-		androidcommands_img= new Sprite(new Texture(Gdx.files.internal("UI/androidcommands.png")),128,256);
+		androidcommands_img= new Sprite(new Texture(Gdx.files.internal("UI/androidcommands.png")),128,320);
 		androiddirections_img= new Sprite(new Texture(Gdx.files.internal("UI/androiddirections.png")),256,256);
 		energybar_img= new Sprite(new Texture(Gdx.files.internal("UI/energybar.png")),60,5);
 		redbar_img= new Sprite(new Texture(Gdx.files.internal("UI/redbar.png")),6,5);
