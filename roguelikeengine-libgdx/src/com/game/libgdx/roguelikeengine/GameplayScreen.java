@@ -70,7 +70,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     int consumable_inv_mode=0;
     
     private LinkedList<Bullet> bullets = new LinkedList<Bullet>();
-    protected boolean stopsOnFire = true;
+   
     
     protected boolean animateHeroInPlace = true;
     protected int animateHeroDelay = 3;
@@ -696,7 +696,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	
 	@Override
 	public boolean keyUp (int keycode) {
-	    if(stopsOnFire && bullets.size() > 0) return false;
+	    if(WrapperEngine.STOPSONFIRE && bullets.size() > 0) return false;
 	    
 		if (keycode==Keys.P) { // debug mode
 			if (debug_mode==0) { debug_mode=1; } else { 
@@ -848,7 +848,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	}
 
 	protected void handlekeyboardinput() {
-	    if(stopsOnFire && bullets.size() > 0) return;
+	    if(WrapperEngine.STOPSONFIRE && bullets.size() > 0) return;
 	    
 		boolean shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
 		
@@ -878,14 +878,14 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	 */
 	@SuppressWarnings("unused")
 	protected void handlemouseinput() {
-	    if(stopsOnFire && bullets.size() > 0) return;
+	    if(WrapperEngine.STOPSONFIRE && bullets.size() > 0) return;
 	    
 		if (WrapperEngine.OUTPUT_OS=="desktop") { handlemousedesktopinput(); }
 		if (WrapperEngine.OUTPUT_OS=="android") { handletouchandroidinput(); }
 		
 	}
 	protected void handletouchandroidinput() {
-	    if(stopsOnFire && bullets.size() > 0) return;
+	    if(WrapperEngine.STOPSONFIRE && bullets.size() > 0) return;
 	    
 		if (Gdx.input.isTouched()) {
 			// EXIT BUTTON!
@@ -966,7 +966,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	
 	
 	protected void handlemousedesktopinput() {
-	    if(stopsOnFire && bullets.size() > 0) return;
+	    if(WrapperEngine.STOPSONFIRE && bullets.size() > 0) return;
 	    
 		if (Gdx.input.isTouched()) {
     		// EXIT BUTTON!
