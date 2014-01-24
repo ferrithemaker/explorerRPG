@@ -32,11 +32,11 @@ public abstract class Bullet {
 		
 		switch(this.direction.getOverallDirection()) {
 		case NORTH_OR_SOUTH:
-			tilesBeforeFinished = WrapperEngine.ON_SCREEN_TILES_Y;
+			tilesBeforeFinished = WrapperEngine.ON_SCREEN_TILES_Y-1;
 			break;
 		case EAST_OR_WEST:
 		default:
-			tilesBeforeFinished = WrapperEngine.ON_SCREEN_TILES_X;
+			tilesBeforeFinished = WrapperEngine.ON_SCREEN_TILES_X-1;
 			break;
 		}
 		
@@ -91,8 +91,8 @@ public abstract class Bullet {
 		if(now == null) {
 			this.finished = true;
 		} else if(now != last) {	// new tile
-			if(now.getcolumn() < map.getfirstxtile() || now.getcolumn() > map.getfirstxtile() + WrapperEngine.ON_SCREEN_TILES_X ||
-			   now.getrow() < map.getfirstytile() || now.getrow() > map.getfirstytile() + WrapperEngine.ON_SCREEN_TILES_Y) {
+			if(now.getcolumn() < map.getfirstxtile() || now.getcolumn() > map.getfirstxtile() + WrapperEngine.ON_SCREEN_TILES_X-1 ||
+			   now.getrow() < map.getfirstytile() || now.getrow() > map.getfirstytile() + WrapperEngine.ON_SCREEN_TILES_Y-1) {
 				this.finished = true;
 			}
 			
