@@ -30,7 +30,7 @@ public class Buddy implements TileOccupier {
 	private int absolute_x;
 	private int absolute_y;
 	private String name;
-	private Sprite buddyimg;
+	protected Sprite buddyimg;
 	private int layer;
 	private String speech;
 	
@@ -103,4 +103,6 @@ public class Buddy implements TileOccupier {
 	public int getabsoluterow(Map map) {
 		return this.getabsolutey();
 	}
+	
+	public void update() {}
 }

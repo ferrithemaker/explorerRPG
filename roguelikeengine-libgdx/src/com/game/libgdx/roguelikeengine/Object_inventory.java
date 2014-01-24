@@ -34,9 +34,25 @@ public class Object_inventory {
 	public Object get_object(int pos) {
 		return inventory[pos];
 	}
+	
 	public void delete_object(int pos) {
 		inventory[pos]=null;
 	}
+	
+	public void delete_object(Object obj) {
+		int found = -1;
+		for(int i = 0; i < inventory.length; ++i) {
+			if(obj.equals(inventory[i])) {
+				found = i;
+				break;
+			}
+		}
+		
+		if(found >= 0) {
+			delete_object(found);
+		}
+	}
+	
 	public int getfreeslot() { // return first avialable slot on inventory, if return firstfreeposition=-1 there is no free slots.
 		int firstfreeposition=-1;
 		for (int i=WrapperEngine.INVENTORY_SIZE-1;i>=0;i--) {
@@ -46,4 +62,6 @@ public class Object_inventory {
 		}
 		return firstfreeposition;
 	}
+	
+	public Object[] getinventory() { return inventory; }
 }

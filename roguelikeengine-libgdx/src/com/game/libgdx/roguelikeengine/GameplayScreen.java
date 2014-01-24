@@ -89,7 +89,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     ArrayList<Object> availableobjects;
     ArrayList<Consumable> availableconsumables;
     
-    Object_inventory objinv;
+    private Object_inventory objinv;
     Consumable_inventory consinv;
     
     private PopupInfoText screentext;
@@ -180,7 +180,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         actualobject= new Object();
         actualconsumable= new Consumable();
         
-        objinv= new Object_inventory();
+        objinv = new Object_inventory();
         consinv= new Consumable_inventory();
 		
         // create welcoming buddy
@@ -199,10 +199,35 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 				just_interact = 0;
 			}
 		});
+		
+		screentext.addWordClickListener("treasure_chest!", new WordClickAction() {
+
+			@Override
+			public void onClicked(String word) {
+				alert("Would you like to open it? \n \t Open_Chest \n \t Not_Right_Now");
+			}
+		});
+		
+		screentext.addWordClickListener("Open_Chest", new WordClickAction() {
+
+			@Override
+			public void onClicked(String word) {
+				if(!Chest.interacting.open(game.getactivemap(), game.gethero())) {
+					if(!game.gethero().hasKey()) alert("You need a key to open that!");
+				};
+			}
+		});
+		
+		screentext.addWordClickListener("Not_Right_Now", new WordClickAction() {
+
+			@Override
+			public void onClicked(String word) {
+				just_interact = 0;
+			}
+		});
 	}
 	
 	public Buddy createpriest(int column, int row, String dialog) {
-		System.out.println(game);
 		Buddy priest = game.createbuddy(0,"Priest", column,row,"buddy1.png", dialog);
         return priest;
 	}
@@ -325,9 +350,9 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	 */
 	protected void drawinventory() {
 		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
-        	if (objinv.get_object(i)!=null) {
+        	if (getobjinv().get_object(i)!=null) {
         		//genericfont.draw(batch,"Obj slot "+i+":"+objinv.get_object(i).getname(), 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(360+(i*20)));
-                batch.draw(objinv.get_object(i).getsprite(), 1216,640-(i*64));
+                batch.draw(getobjinv().get_object(i).getsprite(), 1216,640-(i*64));
 
         	} else {
         		//genericfont.draw(batch,"Obj slot "+i+": available", 1000, (GameEngine.TILE_Y_SIZE*GameEngine.ON_SCREEN_TILES_Y)-(360+(i*20)));
@@ -654,6 +679,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	void update()
     { 
 		updateBullets();
+		updateChests();
 		
 		// random elements generator
     	Random randomGenerator = new Random();
@@ -741,66 +767,66 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		
 		// OBJECT INVENTORY ACTIONS
         if (keycode==Keys.NUM_1 && object_inv_mode==1) {
-        	getobject(objinv.get_object(1),1);
+        	getobject(getobjinv().get_object(1),1);
         }
         if (keycode==Keys.NUM_2 && object_inv_mode==1) {
-        	getobject(objinv.get_object(2),2);
+        	getobject(getobjinv().get_object(2),2);
         }
         if (keycode==Keys.NUM_3 && object_inv_mode==1) {
-        	getobject(objinv.get_object(3),3);
+        	getobject(getobjinv().get_object(3),3);
         }
         if (keycode==Keys.NUM_4 && object_inv_mode==1) {
-        	getobject(objinv.get_object(4),4);
+        	getobject(getobjinv().get_object(4),4);
         }
         if (keycode==Keys.NUM_5 && object_inv_mode==1) {
-        	getobject(objinv.get_object(5),5);
+        	getobject(getobjinv().get_object(5),5);
         }
         if (keycode==Keys.NUM_6 && object_inv_mode==1) {
-        	getobject(objinv.get_object(6),6);
+        	getobject(getobjinv().get_object(6),6);
         }
         if (keycode==Keys.NUM_7 && object_inv_mode==1) {
-        	getobject(objinv.get_object(7),7);
+        	getobject(getobjinv().get_object(7),7);
         }
         if (keycode==Keys.NUM_8 && object_inv_mode==1) {
-        	getobject(objinv.get_object(8),8);
+        	getobject(getobjinv().get_object(8),8);
         }
         if (keycode==Keys.NUM_9 && object_inv_mode==1) {
-        	getobject(objinv.get_object(9),9);
+        	getobject(getobjinv().get_object(9),9);
         }
         if (keycode==Keys.NUM_0 && object_inv_mode==1) {
-        	getobject(objinv.get_object(0),0);
+        	getobject(getobjinv().get_object(0),0);
         }
         
         // OBJECT DROP INVENTORY ACTIONS
         if (keycode==Keys.NUM_1 && object_drop_mode==1) {
-        	objinv.delete_object(1);
+        	getobjinv().delete_object(1);
         }
         if (keycode==Keys.NUM_2 && object_drop_mode==1) {
-        	objinv.delete_object(2);
+        	getobjinv().delete_object(2);
         }
         if (keycode==Keys.NUM_3 && object_drop_mode==1) {
-        	objinv.delete_object(3);
+        	getobjinv().delete_object(3);
         }
         if (keycode==Keys.NUM_4 && object_drop_mode==1) {
-        	objinv.delete_object(4);
+        	getobjinv().delete_object(4);
         }
         if (keycode==Keys.NUM_5 && object_drop_mode==1) {
-        	objinv.delete_object(5);
+        	getobjinv().delete_object(5);
         }
         if (keycode==Keys.NUM_6 && object_drop_mode==1) {
-        	objinv.delete_object(6);
+        	getobjinv().delete_object(6);
         }
         if (keycode==Keys.NUM_7 && object_drop_mode==1) {
-        	objinv.delete_object(7);
+        	getobjinv().delete_object(7);
         }
         if (keycode==Keys.NUM_8 && object_drop_mode==1) {
-        	objinv.delete_object(8);
+        	getobjinv().delete_object(8);
         }
         if (keycode==Keys.NUM_9 && object_drop_mode==1) {
-        	objinv.delete_object(9);
+        	getobjinv().delete_object(9);
         }
         if (keycode==Keys.NUM_0 && object_drop_mode==1) {
-        	objinv.delete_object(0);
+        	getobjinv().delete_object(0);
         }
         // CONSUMABLE INVENTORY ACTIONS
         if (keycode==Keys.NUM_1 && consumable_inv_mode==1) {
@@ -943,19 +969,19 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     		// OBJECT INVENTORY ACTIONS
     		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
     			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && object_drop_mode==0 && eye_mode==0) {
-    				getobject(objinv.get_object(i),i);
+    				getobject(getobjinv().get_object(i),i);
     			}
             }
     		// OBJECT INVENTORY DROP
     		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
     			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && object_drop_mode==1  && eye_mode==0) {
-    				objinv.delete_object(i);
+    				getobjinv().delete_object(i);
     			}
             }
     		// EYEMODE OBJECT INVENTORY
     		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
     			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==1) {
-    				actualobject=objinv.get_object(i);
+    				actualobject=getobjinv().get_object(i);
     			}
             }
     		// EYEMODE CONSUMABLE INVENTORY
@@ -1028,19 +1054,19 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     		// OBJECT INVENTORY ACTIONS
     		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
     			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && object_drop_mode==0 && eye_mode==0) {
-    				getobject(objinv.get_object(i),i);
+    				getobject(getobjinv().get_object(i),i);
     			}
             }
     		// OBJECT INVENTORY DROP
     		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
     			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && object_drop_mode==1  && eye_mode==0) {
-    				objinv.delete_object(i);
+    				getobjinv().delete_object(i);
     			}
             }
     		// EYEMODE OBJECT INVENTORY
     		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
     			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==1) {
-    				actualobject=objinv.get_object(i);
+    				actualobject=getobjinv().get_object(i);
     			}
             }
     		// EYEMODE CONSUMABLE INVENTORY
@@ -1059,45 +1085,45 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 			if (obj.getposition()=="head") {
 				if (prota.gethead().getname()==null) {
 					prota.sethead(obj);
-					objinv.delete_object(pos);
+					getobjinv().delete_object(pos);
 				} else {
-					objinv.set_object(pos,prota.gethead());
+					getobjinv().set_object(pos,prota.gethead());
 					prota.sethead(obj);
 				}
 			}
 			if (obj.getposition()=="righthand") {
 				if (prota.getrighthand().getname()==null) {
 					prota.setrighthand(obj);
-					objinv.delete_object(pos);
+					getobjinv().delete_object(pos);
 				} else {
-					objinv.set_object(pos,prota.getrighthand());
+					getobjinv().set_object(pos,prota.getrighthand());
 					prota.setrighthand(obj);
 				}
 			}
 			if (obj.getposition()=="lefthand") {
 				if (prota.getlefthand().getname()==null) {
 					prota.setlefthand(obj);
-					objinv.delete_object(pos);
+					getobjinv().delete_object(pos);
 				} else {
-					objinv.set_object(pos,prota.getlefthand());
+					getobjinv().set_object(pos,prota.getlefthand());
 					prota.setlefthand(obj);
 				}	
 			}
 			if (obj.getposition()=="body") {
 				if (prota.getbody().getname()==null) {
 					prota.setbody(obj);
-					objinv.delete_object(pos);
+					getobjinv().delete_object(pos);
 				} else {
-					objinv.set_object(pos,prota.getbody());
+					getobjinv().set_object(pos,prota.getbody());
 					prota.setbody(obj);
 				}
 			}
 			if (obj.getposition()=="foot") {
 				if (prota.getfoot().getname()==null) {
 					prota.setfoot(obj);
-					objinv.delete_object(pos);
+					getobjinv().delete_object(pos);
 				} else {
-					objinv.set_object(pos,prota.getfoot());
+					getobjinv().set_object(pos,prota.getfoot());
 					prota.setfoot(obj);
 				}
 			}
@@ -1177,7 +1203,11 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 			case 1:
 				game.createrandomobject(false, game.getlayer(), enemy.getabsolutex(), enemy.getabsolutey(),1);
 				break;
-			}   		
+			}  
+			
+			if(Math.random() < 100 / game.KEY_DROP_RATE) {
+				game.createkeyobject(game.getlayer(), enemy.getabsolutex(), enemy.getabsolutey());
+			}
 		}
 		game.removeenemy(enemy);
 	}
@@ -1292,24 +1322,33 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		just_interact=0;
     	// get consumable into inventory
 		actualconsumable=game.overconsumable(); // get the consumable (if exist)
-		if (actualconsumable.getname()!=null) {
+		givetohero(actualconsumable);
+		
+		// get object into inventory
+		actualobject=game.overobject(); // get the consumable (if exist)
+		givetohero(actualobject);
+    }
+
+    public void givetohero(Object obj) {
+    	if (obj.getname()!=null) {
+			if (getobjinv().getfreeslot()!=-1) {
+				getobjinv().set_object(getobjinv().getfreeslot(), obj);
+				game.removeobject(obj);
+				pickup.play();
+			}
+		}	
+    }
+    
+	public void givetohero(Consumable cons) {
+		if (cons.getname()!=null) {
 			// if consumable exists
 			if (consinv.getfreeslot()!=-1) {
-				consinv.set_consumable(consinv.getfreeslot(), actualconsumable);
+				consinv.set_consumable(consinv.getfreeslot(), cons);
 				pickup.play();
 				game.removeconsumable(actualconsumable);
 			}
 		}
-		// get object into inventory
-		actualobject=game.overobject(); // get the consumable (if exist)
-		if (actualobject.getname()!=null) {
-			if (objinv.getfreeslot()!=-1) {
-				objinv.set_object(objinv.getfreeslot(), actualobject);
-				game.removeobject(actualobject);
-				pickup.play();
-			}
-		}
-    }
+	}
     
     void drop() {
 		// ENABLE CONSUMABLE INVENTORY MODE
@@ -1386,5 +1425,39 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 
 	public void setScreentext(PopupInfoText screentext) {
 		this.screentext = screentext;
+	}
+
+	public Buddy createchest(int i, int j) {
+		Buddy chest = game.createchest(game.getlayer(), i, j);
+        return chest;
+	}
+
+	public Object_inventory getobjinv() {
+		return objinv;
+	}
+	
+	public void updateChests() {
+		LinkedList<Buddy> toRemove = new LinkedList<Buddy>();
+		
+		for(Buddy buddy : this.goodguys) {
+			buddy.update();
+			
+			if(buddy instanceof Chest) {
+				if(((Chest)buddy).getShouldKill()) {
+					toRemove.push(buddy);
+				}
+			}
+		}
+		
+		for(Buddy buddy : toRemove) {
+			killBuddy(buddy);
+		}
+	}
+	
+	public WrapperEngine getgame() { return game; }
+
+	public void killBuddy(Buddy buddy) {
+		maplayers[game.getlayer()].unblocktile(buddy.getabsolutex(), buddy.getabsolutey());
+		game.removebuddy(buddy);
 	}
 }

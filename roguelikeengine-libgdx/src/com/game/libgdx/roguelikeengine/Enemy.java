@@ -190,4 +190,6 @@ public class Enemy implements TileOccupier {
 	public int getabsoluterow(Map map) {
 		return this.getabsolutey();
 	}
+
+	public void update() {}
 }
