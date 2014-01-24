@@ -26,6 +26,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class Tile {
 	private boolean bloqued;
 	private Sprite tileimg;
+	private Sprite tiledecoration;
 	private boolean showimage;
 
 	private TileOccupier blocker;
@@ -68,6 +69,13 @@ public class Tile {
 	}
 	public Sprite gettileimage() {
 		return this.tileimg;
+	}
+	public void settiledecoration(Sprite sprite) {
+		this.tiledecoration=sprite;
+		this.showimage=true;
+	}
+	public Sprite gettiledecoration() {
+		return this.tiledecoration;
 	}
 	public boolean getshowimage() {
 		return showimage;
