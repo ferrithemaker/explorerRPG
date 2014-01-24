@@ -536,7 +536,6 @@ public class WrapperEngine {
 		Random randomGenerator = new Random();
 		if (availableobjects.getlist().size()<MAX_OBJECTS || !randpos) {
 		for (i=0;i<loops;i++) {
-			Random randomGenerator = new Random();
 			// generates random position if needed
 			if (randpos) {
 				x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
