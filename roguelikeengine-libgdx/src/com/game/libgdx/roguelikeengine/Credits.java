@@ -53,7 +53,7 @@ public class Credits extends InputAdapter implements Screen {
     	spriteBatch = new SpriteBatch();
     	//messagefont = new BitmapFont();
     	messagefont = generator.generateFont(20); // px
-		text="CREDITS\nConcept & Programming: Ferran_Fabregas & Joshua_Byrom\nUI design: Manuela Sanfelix & Ferran_Fabregas\nTiles and sprites taken from http://opengameart.org/\n& http://animatedbattlers.wordpress.com\nReleased under GPL / Creative_Commons and copyrighted\nby their owners\nMusic from https://soundcloud.com/desperate-measurez/ \n& http://www.tannerhelland.com/music-directory/\nSound FX: http://www.freesound.org/\nFonts taken from http://www.fonts101.com/ & http://www.flamingtext.com/\nThanks to: Joseph Elliott.\nGame released under the terms of GNU GPL .";
+		text="CREDITS\nConcept & Programming: Ferran_Fabregas & Joshua_Byrom\nUI design: Manuela Sanfelix & Ferran_Fabregas\nTiles and sprites taken from http://opengameart.org/\n& http://animatedbattlers.wordpress.com &  http://www.pixeljoint.com \nReleased under GPL / Creative_Commons and copyrighted\nby their owners\nMusic from https://soundcloud.com/desperate-measurez/ \n& http://www.tannerhelland.com/music-directory/\nSound FX: http://www.freesound.org/\nFonts taken from http://www.fonts101.com/ & http://www.flamingtext.com/\nThanks to: Joseph Elliott.\nGame released under the terms of GNU GPL .";
     	// create a fight message info screen 
     	screentext=new PopupInfoText(0,0,"UI/credits.png",1280,704);
     	screentext.settextoffset(100, 250);
@@ -69,7 +69,14 @@ public class Credits extends InputAdapter implements Screen {
 			public void onClicked(String word) {
 				Gdx.net.openURI("http://www.ferranfabregas.info");
 			}
-		}); 	
+		});
+    	
+    	screentext.addWordClickListener("http://www.pixeljoint.com", new WordClickAction() {
+    		@Override
+    		public void onClicked(String word) {
+    			Gdx.net.openURI("http://www.pixeljoint.com");
+    		}
+    	});
     	screentext.addWordClickListener("http://opengameart.org/", new WordClickAction() {
 			@Override
 			public void onClicked(String word) {
