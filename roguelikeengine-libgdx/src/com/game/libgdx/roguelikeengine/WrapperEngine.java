@@ -59,6 +59,7 @@ public class WrapperEngine {
 	public final static int MAX_ENEMIES=1000;
 	public final static int MAX_OBJECTS=1000;
 	public final static int MAX_CONSUMABLES=1000;
+	public final static boolean STOPSONFIRE = true;
 	
 	// output OS
 	public final static String OUTPUT_OS="desktop"; // desktop OR android 
