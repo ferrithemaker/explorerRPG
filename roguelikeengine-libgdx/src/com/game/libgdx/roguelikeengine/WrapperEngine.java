@@ -60,7 +60,9 @@ public class WrapperEngine {
 	public final static int MAX_OBJECTS=1000;
 	public final static int MAX_CONSUMABLES=1000;
 	public final static boolean STOPSONFIRE = true;
-	
+	public final static int KEY_DROP_RATE = 100;	// 0 - 100 chance
+	public final static boolean CHESTS_PERSIST = false;
+	public final static int CHEST_POTION_MODIFIER = 2; // chests cost a key, so potions from chests should be stronger ?
 	// output OS
 	public final static String OUTPUT_OS="desktop"; // desktop OR android 
 	
@@ -514,6 +516,10 @@ public class WrapperEngine {
 		availableobjects.remove_object(obj);
 	}
 	
+	public void createkeyobject(int lay, int xpos, int ypos) {
+		availableobjects.add_object(new Object(lay,"key","none",0,0,0,xpos,ypos,"chests/key.png"));
+	}
+	
 	/**
 	 * 
 	 * @param randpos is really random? (boolean)
@@ -527,9 +533,9 @@ public class WrapperEngine {
 		int x=xpos;
 		int y=ypos;
 		int randomlayer=lay;
+		Random randomGenerator = new Random();
 		if (availableobjects.getlist().size()<MAX_OBJECTS || !randpos) {
 		for (i=0;i<loops;i++) {
-			Random randomGenerator = new Random();
 			// generates random position if needed
 			if (randpos) {
 				x = randomGenerator.nextInt(WrapperEngine.TOTAL_X_TILES);
@@ -660,5 +666,13 @@ public class WrapperEngine {
 
 	public Map getactivemap() {
 		return activemap;
+	}
+
+	public Buddy createchest(int layer, int i, int j) {
+		Buddy buddy = null;
+		goodguys.add_buddy((buddy = new Chest(layer, i, j)));
+		// block tile
+		maplayers[layer].blocktile(i, j, buddy);
+		return buddy;
 	}
 }

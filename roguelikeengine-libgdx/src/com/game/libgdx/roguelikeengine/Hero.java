@@ -484,4 +484,37 @@ public class Hero implements TileOccupier {
 	}
 	
 	public Directions getDirection() { return direction; }
+
+	public boolean hasKey() {
+		Object[] inv = GameplayScreen.instance.getobjinv().getinventory();
+		for(Object obj : inv) {
+			if(obj != null && obj.getname().toLowerCase().contains("key")) {
+				return true;
+			}
+		}
+
+		
+		return false;
+	}
+	
+	public boolean removeKey() {
+		Object toRemove = null;
+		
+		Object[] inv = GameplayScreen.instance.getobjinv().getinventory();
+		for(Object obj : inv) {
+			if(obj != null && obj.getname().toLowerCase().contains("key")) {
+				toRemove = obj;
+				break;
+			}
+		}
+
+		if(toRemove != null) {
+			GameplayScreen.instance.getobjinv().delete_object(toRemove);
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public void update() {}
 }
