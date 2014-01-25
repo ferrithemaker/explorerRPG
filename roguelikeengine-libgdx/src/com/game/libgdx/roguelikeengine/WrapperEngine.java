@@ -22,6 +22,8 @@ package com.game.libgdx.roguelikeengine;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.Gdx;
 import com.game.libgdx.roguelikeengine.rooms.Chapel;
 
 
@@ -64,7 +66,25 @@ public class WrapperEngine {
 	public final static boolean CHESTS_PERSIST = false;
 	public final static int CHEST_POTION_MODIFIER = 2; // chests cost a key, so potions from chests should be stronger ?
 	// output OS
-	public final static String OUTPUT_OS="desktop"; // desktop OR android 
+	public static String OUTPUT_OS="desktop"; // desktop OR android 
+	static {
+		switch(Gdx.app.getType()) {
+		case Android:
+			OUTPUT_OS="android";
+			break;
+		case Applet:
+			break;
+		case Desktop:
+			OUTPUT_OS="desktop";
+			break;
+		case WebGL:
+			break;
+		case iOS:
+			break;
+		default:
+			break;
+		}
+	}
 	
 	// dynamic layers 
 	public final static int NUMBER_OF_MAP_LAYERS=3;
