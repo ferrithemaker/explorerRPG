@@ -25,6 +25,8 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 
 public class SplashScreen implements Screen {
@@ -35,6 +37,7 @@ public class SplashScreen implements Screen {
 	private BitmapFont messagefont;
 	private String text;
 	private float fadein;
+	private Rectangle viewport;
 	
 	public SplashScreen(Explorer_libgdx g)
     {
@@ -61,7 +64,10 @@ public class SplashScreen implements Screen {
     @Override
     public void render(float delta)
     {
-            Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+    		// set viewport
+        	Gdx.gl.glViewport((int) viewport.x, (int) viewport.y,(int) viewport.width, (int) viewport.height);
+        	Gdx.gl.glClearColor(0, 0, 0, 1);
+    		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
             spriteBatch.begin();
             fadein=fadein+0.001f;
             if (fadein>1.0f) { fadein=1.0f; }
@@ -92,7 +98,29 @@ public class SplashScreen implements Screen {
     	
     }
     @Override
-    public void resize(int x,int y) {
+    public void resize(int width,int height) {
+    	// calculate new viewport
+        float aspectRatio = (float)width/(float)height;
+        float scale = 1f;
+        Vector2 crop = new Vector2(0f, 0f);
+        if(aspectRatio > WrapperEngine.ASPECT_RATIO)
+        {
+            scale = (float)height/(float)WrapperEngine.VIRTUAL_HEIGHT;
+            crop.x = (width - WrapperEngine.VIRTUAL_WIDTH*scale)/2f;
+        }
+        else if(aspectRatio < WrapperEngine.ASPECT_RATIO)
+        {
+            scale = (float)width/(float)WrapperEngine.VIRTUAL_WIDTH;
+            crop.y = (height - WrapperEngine.VIRTUAL_HEIGHT*scale)/2f;
+        }
+        else
+        {
+            scale = (float)width/(float)WrapperEngine.VIRTUAL_WIDTH;
+        }
+
+        float w = (float)WrapperEngine.VIRTUAL_WIDTH*scale;
+        float h = (float)WrapperEngine.VIRTUAL_HEIGHT*scale;
+        viewport = new Rectangle(crop.x, crop.y, w, h);
     	
     }
 

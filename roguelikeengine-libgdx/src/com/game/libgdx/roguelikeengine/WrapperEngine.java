@@ -65,6 +65,12 @@ public class WrapperEngine {
 	public final static int KEY_DROP_RATE = 100;	// 0 - 100 chance
 	public final static boolean CHESTS_PERSIST = false;
 	public final static int CHEST_POTION_MODIFIER = 2; // chests cost a key, so potions from chests should be stronger ?
+	
+	// viewport resize
+    public static final int VIRTUAL_WIDTH = WrapperEngine.WINDOWWIDTH;
+    public static final int VIRTUAL_HEIGHT = WrapperEngine.WINDOWHEIGHT;
+    public static final float ASPECT_RATIO = (float)VIRTUAL_WIDTH/(float)VIRTUAL_HEIGHT;
+	
 	// output OS
 	public static String OUTPUT_OS="desktop"; // desktop OR android 
 	static {

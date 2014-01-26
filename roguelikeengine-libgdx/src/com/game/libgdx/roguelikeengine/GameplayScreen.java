@@ -36,6 +36,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 
 
@@ -98,6 +100,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     int just_interact=0;
     
     
+    private Rectangle viewport;
     
     
     public GameplayScreen() {
@@ -237,10 +240,12 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		update();
 		
 		frameratecontrol();
-		// draw
-		Gdx.gl.glClearColor(1, 1, 1, 1);
+		// set viewport
+        Gdx.gl.glViewport((int) viewport.x, (int) viewport.y,(int) viewport.width, (int) viewport.height);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-	    batch.begin();
+		// draw
+		batch.begin();
 	    
 	    // generic desktop interface
 	    drawinterface();
@@ -704,8 +709,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	// get relative mouse coord instead of real ones
     	realXcoord=(int)((float)Gdx.input.getX()*(float)((float)WrapperEngine.WINDOWWIDTH/(float)Gdx.graphics.getWidth()));
 		realYcoord=(int)((float)Gdx.input.getY()*(float)((float)WrapperEngine.WINDOWHEIGHT/(float)Gdx.graphics.getHeight()))*-1+(WrapperEngine.WINDOWHEIGHT);
+    	//realXcoord=(int)((float)Gdx.input.getX()*(float)((float)WrapperEngine.WINDOWWIDTH/(float)viewport.x));
+    	//realYcoord=(int)((float)Gdx.input.getY()*(float)((float)WrapperEngine.WINDOWHEIGHT/(float)viewport.y))*-1+(WrapperEngine.WINDOWHEIGHT);
     	if (WrapperEngine.OUTPUT_OS.equals("android")) { 
-    		realYcoord=realYcoord+WrapperEngine.ANDROID_MENU_BAR_SIZE;
+    		//realYcoord=realYcoord+WrapperEngine.ANDROID_MENU_BAR_SIZE;
     	}
     	// mouse events control
     	handlemouseinput(); 
@@ -1368,6 +1375,28 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     // Original class methods
 	@Override
 	public void resize(int width, int height) {
+		// calculate new viewport
+        float aspectRatio = (float)width/(float)height;
+        float scale = 1f;
+        Vector2 crop = new Vector2(0f, 0f);
+        if(aspectRatio > WrapperEngine.ASPECT_RATIO)
+        {
+            scale = (float)height/(float)WrapperEngine.VIRTUAL_HEIGHT;
+            crop.x = (width - WrapperEngine.VIRTUAL_WIDTH*scale)/2f;
+        }
+        else if(aspectRatio < WrapperEngine.ASPECT_RATIO)
+        {
+            scale = (float)width/(float)WrapperEngine.VIRTUAL_WIDTH;
+            crop.y = (height - WrapperEngine.VIRTUAL_HEIGHT*scale)/2f;
+        }
+        else
+        {
+            scale = (float)width/(float)WrapperEngine.VIRTUAL_WIDTH;
+        }
+
+        float w = (float)WrapperEngine.VIRTUAL_WIDTH*scale;
+        float h = (float)WrapperEngine.VIRTUAL_HEIGHT*scale;
+        viewport = new Rectangle(crop.x, crop.y, w, h);
 	}
 
 	@Override
