@@ -75,6 +75,8 @@ public class PopupInfoText {
 	}
 	
 	public void drawScreen(SpriteBatch batch, BitmapFont font,String text,float fadein,int linedist,Color color) {
+		update_x((int) (Gdx.graphics.getWidth() * 0.5f - this.xsize * 0.5f));
+		update_y((int) (Gdx.graphics.getHeight() * 0.5f - this.ysize * 0.5f));
 		this.background.setPosition(x,y);
 		
 		mouseOverElement = "";
