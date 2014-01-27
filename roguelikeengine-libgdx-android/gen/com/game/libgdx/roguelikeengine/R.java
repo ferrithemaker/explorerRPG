@@ -19,4 +19,7 @@ public final class R {
     public static final class string {
         public static final int app_name=0x7f040000;
     }
+    public static final class style {
+        public static final int NoActionBar=0x7f050000;
+    }
 }

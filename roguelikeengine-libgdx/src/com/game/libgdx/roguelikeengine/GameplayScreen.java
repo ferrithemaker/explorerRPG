@@ -155,8 +155,8 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		Gdx.input.setInputProcessor(this);
 		batch = new SpriteBatch();
 		//buttons setup
-		button_up= new Button(WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X,100,128,64,"UI/buttonup.png");
-		button_down= new Button(WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X,32,128,64,"UI/buttondown.png");
+		button_up= new Button(.75f,.3f,128,64,"UI/buttonup.png");
+		button_down= new Button(.75f,.1f,128,64,"UI/buttondown.png");
 		
 		// fonts setup
 		FileHandle fontFile = Gdx.files.internal("fonts/diabloheavy.ttf");
@@ -337,13 +337,9 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	
 	protected void drawandroidinterface() {
 		// draw android controls
-		//layout.getandroiddirections().setPosition((WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+70,0);
-		//layout.getandroiddirections().draw(batch, 0.3f);
-		//layout.getandroidcommands().setPosition(60,60);
-		//layout.getandroidcommands().draw(batch, 0.3f);
-		button_up.getsprite().setPosition(button_up.getx(),button_up.gety());
+		button_up.getsprite().setPosition(button_up.getscreencoordinates().x, button_up.getscreencoordinates().y);
 		button_up.getsprite().draw(batch);
-		button_down.getsprite().setPosition(button_down.getx(),button_down.gety());
+		button_down.getsprite().setPosition(button_down.getscreencoordinates().x, button_down.getscreencoordinates().y);
 		button_down.getsprite().draw(batch);
 	}
 
@@ -966,12 +962,12 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     		//if (realXcoord>977 && realXcoord<1089 && realYcoord>226 && realYcoord<281) {
     		//	goup();
     		//}
-    		if (button_up.contains(realXcoord, realYcoord)) { goup(); }
+    		if (button_up.mouseover()) { goup(); }
     		// DOWN BUTTON!
     		//if (realXcoord>977 && realXcoord<1089 && realYcoord>61 && realYcoord<119) {
     		//	godown();
     		//}
-    		if (button_down.contains(realXcoord, realYcoord)) { godown(); }
+    		if (button_down.mouseover()) { godown(); }
     		// TAKE BUTTON!
     		if (realXcoord>70 && realXcoord<172 && realYcoord>268 && realYcoord<298) {
     			take();
