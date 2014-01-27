@@ -44,6 +44,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.game.libgdx.roguelikeengine.pathing.Path;
+import com.game.libgdx.roguelikeengine.pathing.Pathing;
 
 
 
@@ -99,6 +101,9 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     ArrayList<Buddy> goodguys;
     ArrayList<Object> availableobjects;
     ArrayList<Consumable> availableconsumables;
+    
+    Pathing<Hero> heroPathing;
+    Path<Hero> lastPath;
     
     private Object_inventory objinv;
     Consumable_inventory consinv;
@@ -743,6 +748,8 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         		animateHeroDuration = 0;
         	}
         }
+        
+        this.walkPath();
     }
 	
 	// Keyboard event handler
@@ -933,21 +940,51 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	protected void handlemouseinput() {
 	    if(WrapperEngine.STOPSONFIRE && bullets.size() > 0) return;
 	    
-		if (WrapperEngine.OUTPUT_OS=="desktop") { handlemousedesktopinput(); }
-		if (WrapperEngine.OUTPUT_OS=="android") { handletouchandroidinput(); }
+	    boolean captured = false;
+		if (WrapperEngine.OUTPUT_OS=="desktop") { captured = handlemousedesktopinput(); }
+		if (WrapperEngine.OUTPUT_OS=="android") { captured = handletouchandroidinput(); }
 		
+		if(!captured) captured = Gdx.input.isTouched() && screentext.onMouseClicked(); 
+		
+		if(Gdx.input.isTouched() && !captured && activemap != null) {
+			Tile clicked = activemap.getTileAt(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+			
+			if(activemap.isUnreachable(clicked)) {
+				alert("You can not reach that area from here!");
+				return;
+			}
+			
+			Tile start = prota.gettile(activemap);
+			
+			if(heroPathing == null || heroPathing.getMap() != activemap) {
+				heroPathing = new Pathing<Hero>(activemap);
+			}
+			
+			lastPath = heroPathing.getPath(start, clicked);
+			lastPath.search();
+			
+			if(!lastPath.isCompletePath()) {
+				lastPath = null;
+				// play a sound?
+			}
+		} else if(captured) {
+			lastPath = null;
+		}
 	}
-	protected void handletouchandroidinput() {
-	    if(WrapperEngine.STOPSONFIRE && bullets.size() > 0) return;
+	
+	protected boolean handletouchandroidinput() {
+	    if(WrapperEngine.STOPSONFIRE && bullets.size() > 0) return false;
 	    
 		if (Gdx.input.isTouched()) {
 			// EXIT BUTTON!
     		if (realXcoord>512 && realXcoord<576 && realYcoord>640 && realYcoord<704) {
     			dispose();
+    			return true;
     		}
     		// HIT BUTTON!
     		if (realXcoord>70 && realXcoord<172 && realYcoord>314 && realYcoord<349) {
     			fight();
+    			return true;
     		}
     		// directions
     		// LEFT BUTTON!
@@ -962,151 +999,188 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     		//if (realXcoord>977 && realXcoord<1089 && realYcoord>226 && realYcoord<281) {
     		//	goup();
     		//}
-    		if (button_up.mouseover()) { goup(); }
+    		if (button_up.mouseover()) { 
+    			goup();
+    			return true; 
+    		}
     		// DOWN BUTTON!
     		//if (realXcoord>977 && realXcoord<1089 && realYcoord>61 && realYcoord<119) {
     		//	godown();
     		//}
-    		if (button_down.mouseover()) { godown(); }
+    		if (button_down.mouseover()) { 
+    			godown();
+    			return true; 
+    		}
     		// TAKE BUTTON!
     		if (realXcoord>70 && realXcoord<172 && realYcoord>268 && realYcoord<298) {
     			take();
+    			return true;
     		}
     		// DROP BUTTON!
     		if (realXcoord>70 && realXcoord<172 && realYcoord>216 &&  realYcoord<247) {
     			drop();
+    			return true;
     		}
     		// LOOK BUTTON! 
     		if (realXcoord>70 && realXcoord<172 && realYcoord>166 && realYcoord<195) {
     			look();
+    			return true;
     		}
     		// TALK BUTTON! 
     		if (realXcoord>70 && realXcoord<172 && realYcoord>117 && realYcoord<148) {
     			talk();
+    			return true;
     		}
     		// MAGIC BUTTON! 
     		if (realXcoord>70 && realXcoord<172 && realYcoord>68 && realYcoord<99) {
     			magic();
+    			return true;
     		}
     		// CONSUMABLE INVENTORY ACTIONS
     		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
     			if (realXcoord>1152 && realXcoord<1216 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==0) {
     				getconsumable(consinv.get_consumable(i));
     				consinv.delete_consumable(i);
+        			return true;
     			}
             }
     		// OBJECT INVENTORY ACTIONS
     		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
     			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && object_drop_mode==0 && eye_mode==0) {
     				getobject(getobjinv().get_object(i),i);
+        			return true;
     			}
             }
     		// OBJECT INVENTORY DROP
     		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
     			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && object_drop_mode==1  && eye_mode==0) {
     				getobjinv().delete_object(i);
+        			return true;
     			}
             }
     		// EYEMODE OBJECT INVENTORY
     		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
     			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==1) {
     				actualobject=getobjinv().get_object(i);
+        			return true;
     			}
             }
     		// EYEMODE CONSUMABLE INVENTORY
     		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
     			if (realXcoord>1152 && realXcoord<1216 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==1) {
     				actualconsumable=consinv.get_consumable(i);
+        			return true;
     			}
             }	
 			
 		}
+		
+		return false;
 	}
 	
 	
-	protected void handlemousedesktopinput() {
-	    if(WrapperEngine.STOPSONFIRE && bullets.size() > 0) return;
+	protected boolean handlemousedesktopinput() {
+	    if(WrapperEngine.STOPSONFIRE && bullets.size() > 0) return false;
 	    
 		if (Gdx.input.isTouched()) {
     		// EXIT BUTTON!
     		if (realXcoord>512 && realXcoord<576 && realYcoord>640 && realYcoord<704) {
     			dispose();
+    			return true;
     		}
     		// HIT BUTTON!
     		if (realXcoord>0 && realXcoord<64 && realYcoord>640 && realYcoord<704) {
     			fight();
+    			return true;
     		}
     		// directions
     		// LEFT BUTTON!
     		if (realXcoord>576 && realXcoord<640 && realYcoord>640 && realYcoord<704) {
     			goleft();
+    			return true;
     		}
     		// RIGHT BUTTON!
     		if (realXcoord>768 && realXcoord<832 && realYcoord>640 && realYcoord<704) {
     			goright();
+    			return true;
     		}
     		// UP BUTTON!
     		if (realXcoord>704 && realXcoord<768 && realYcoord>640 && realYcoord<704) {
     			goup();
+    			return true;
     		}
     		// DOWN BUTTON!
     		if (realXcoord>640 && realXcoord<704 && realYcoord>640 && realYcoord<704) {
     			godown();
+    			return true;
     		}
     		// TAKE BUTTON!
     		if (realXcoord>64 && realXcoord<128 && realYcoord>640 && realYcoord<704) {
     			take();
+    			return true;
     		}
     		// DROP BUTTON!
     		if (realXcoord>128 && realXcoord<192 && realYcoord>640 &&  realYcoord<704) {
     			drop();
+    			return true;
     		}
     		// LOOK BUTTON! 
     		if (realXcoord>192 && realXcoord<256 && realYcoord>640 && realYcoord<704) {
     			look();
+    			return true;
     		}
     		// TALK BUTTON! 
     		if (realXcoord>256 && realXcoord<320 && realYcoord>640 && realYcoord<704) {
     			talk();
+    			return true;
     		}
     		// MAGIC BUTTON! 
     		if (realXcoord>320 && realXcoord<384 && realYcoord>640 && realYcoord<704) {
     			magic();
+    			return true;
     		}
     		// CONSUMABLE INVENTORY ACTIONS
     		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
     			if (realXcoord>1152 && realXcoord<1216 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==0) {
     				getconsumable(consinv.get_consumable(i));
     				consinv.delete_consumable(i);
+        			return true;
     			}
             }
     		// OBJECT INVENTORY ACTIONS
     		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
     			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && object_drop_mode==0 && eye_mode==0) {
     				getobject(getobjinv().get_object(i),i);
+        			return true;
     			}
             }
     		// OBJECT INVENTORY DROP
     		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
     			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && object_drop_mode==1  && eye_mode==0) {
     				getobjinv().delete_object(i);
+        			return true;
     			}
             }
     		// EYEMODE OBJECT INVENTORY
     		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
     			if (realXcoord>1216 && realXcoord<1280 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==1) {
     				actualobject=getobjinv().get_object(i);
+        			return true;
     			}
             }
     		// EYEMODE CONSUMABLE INVENTORY
     		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
     			if (realXcoord>1152 && realXcoord<1216 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==1) {
     				actualconsumable=consinv.get_consumable(i);
+        			return true;
     			}
             }	
     		
     	}
+		
+		return false;
 	}
+	
     void getobject(Object obj,int pos) {
     	if (obj!=null) {
 			// if object exists
@@ -1234,14 +1308,14 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 				break;
 			}  
 			
-			if(Math.random() < 100 / game.KEY_DROP_RATE) {
+			if(Math.random() < 100 / WrapperEngine.KEY_DROP_RATE) {
 				game.createkeyobject(game.getlayer(), enemy.getabsolutex(), enemy.getabsolutey());
 			}
 		}
 		game.removeenemy(enemy);
 	}
 	
-    void goup() {
+    boolean goup() {
     	object_inv_mode=0;
     	object_drop_mode=0;
 		consumable_inv_mode=0;
@@ -1256,10 +1330,11 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
 	    	// moving active enemies
 	    	game.moveenemies();
+	    	return true;
     	}
-    	
+    	return false;
     }
-    void godown() {
+    boolean godown() {
     	object_inv_mode=0;
     	object_drop_mode=0;
 		consumable_inv_mode=0;
@@ -1274,10 +1349,12 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
 	    	// moving active enemies
 	    	game.moveenemies();
+	    	return true;
     	}
+    	return false;
     }
     
-    void goleft() {
+    boolean goleft() {
     	object_inv_mode=0;
     	object_drop_mode=0;
 		consumable_inv_mode=0;
@@ -1292,9 +1369,11 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
 	    	// moving active enemies
 	    	game.moveenemies();
+	    	return true;
     	}
+    	return false;
     }
-    void goright() {
+    boolean goright() {
     	eye_mode=0;
     	just_interact=0;
 		object_inv_mode=0;
@@ -1309,7 +1388,9 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	    	game.activateenemies(maplayers[game.getlayer()].getfirstxtile(),maplayers[game.getlayer()].getfirstytile());
 	    	// moving active enemies
 	    	game.moveenemies();
-		}
+	    	return true;
+    	}
+    	return false;
     }
     void look() {
     	eye_mode=1;
@@ -1435,7 +1516,8 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	
 	@Override 
 	public boolean touchUp(int x, int y, int pointer, int button) {
-		return screentext.onMouseClicked();  // should work on touchUp and mouseUp
+		//return screentext.onMouseClicked();  // should work on touchUp and mouseUp
+		return false;
 	}
 	
 	public void updateBullets() {
@@ -1511,5 +1593,15 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	public void killBuddy(Buddy buddy) {
 		maplayers[game.getlayer()].unblocktile(buddy.getabsolutex(), buddy.getabsolutey());
 		game.removebuddy(buddy);
+	}
+	
+	public void walkPath() {
+		if(lastPath != null) {
+			heroPathing.walk(lastPath, prota);
+		}
+	}
+	
+	public void stopPathing() {
+		lastPath = null;
 	}
 }
