@@ -189,6 +189,7 @@ public class Credits extends InputAdapter implements Screen {
     @Override
     public void resize(int width,int height) {
     	// calculate new viewport
+    	
         float aspectRatio = (float)width/(float)height;
         float scale = 1f;
         Vector2 crop = new Vector2(0f, 0f);

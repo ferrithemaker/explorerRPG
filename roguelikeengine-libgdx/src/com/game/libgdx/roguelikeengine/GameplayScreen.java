@@ -32,12 +32,18 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 
 
@@ -80,6 +86,9 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     
     private int realXcoord;
     private int realYcoord;
+    
+    // buttons test
+    private Button button_up,button_down,button_left,button_right,button_talk,button_magic,button_drop,button_take;
     
     Enemy actualenemy; // enemy that i'm over
     Buddy actualbuddy;
@@ -145,6 +154,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	protected void init() {
 		Gdx.input.setInputProcessor(this);
 		batch = new SpriteBatch();
+		//buttons setup
+		button_up= new Button(WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X,100,128,64,"UI/buttonup.png");
+		button_down= new Button(WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X,32,128,64,"UI/buttondown.png");
+		
 		// fonts setup
 		FileHandle fontFile = Gdx.files.internal("fonts/diabloheavy.ttf");
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
@@ -324,10 +337,14 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	
 	protected void drawandroidinterface() {
 		// draw android controls
-		layout.getandroiddirections().setPosition((WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+70,0);
-		layout.getandroiddirections().draw(batch, 0.3f);
-		layout.getandroidcommands().setPosition(60,60);
-		layout.getandroidcommands().draw(batch, 0.3f);
+		//layout.getandroiddirections().setPosition((WrapperEngine.TILE_X_SIZE*WrapperEngine.ON_SCREEN_TILES_X)+70,0);
+		//layout.getandroiddirections().draw(batch, 0.3f);
+		//layout.getandroidcommands().setPosition(60,60);
+		//layout.getandroidcommands().draw(batch, 0.3f);
+		button_up.getsprite().setPosition(button_up.getx(),button_up.gety());
+		button_up.getsprite().draw(batch);
+		button_down.getsprite().setPosition(button_down.getx(),button_down.gety());
+		button_down.getsprite().draw(batch);
 	}
 
 	/**
@@ -938,21 +955,23 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     		}
     		// directions
     		// LEFT BUTTON!
-    		if (realXcoord>912 && realXcoord<977 && realYcoord>119 && realYcoord<226) {
-    			goleft();
-    		}
+    		//if (realXcoord>912 && realXcoord<977 && realYcoord>119 && realYcoord<226) {
+    		//	goleft();
+    		//}
     		// RIGHT BUTTON!
-    		if (realXcoord>1089 && realXcoord<1152 && realYcoord>119 && realYcoord<226) {
-    			goright();
-    		}
+    		//if (realXcoord>1089 && realXcoord<1152 && realYcoord>119 && realYcoord<226) {
+    		//	goright();
+    		//}
     		// UP BUTTON!
-    		if (realXcoord>977 && realXcoord<1089 && realYcoord>226 && realYcoord<281) {
-    			goup();
-    		}
+    		//if (realXcoord>977 && realXcoord<1089 && realYcoord>226 && realYcoord<281) {
+    		//	goup();
+    		//}
+    		if (button_up.contains(realXcoord, realYcoord)) { goup(); }
     		// DOWN BUTTON!
-    		if (realXcoord>977 && realXcoord<1089 && realYcoord>61 && realYcoord<119) {
-    			godown();
-    		}
+    		//if (realXcoord>977 && realXcoord<1089 && realYcoord>61 && realYcoord<119) {
+    		//	godown();
+    		//}
+    		if (button_down.contains(realXcoord, realYcoord)) { godown(); }
     		// TAKE BUTTON!
     		if (realXcoord>70 && realXcoord<172 && realYcoord>268 && realYcoord<298) {
     			take();
@@ -1376,6 +1395,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	@Override
 	public void resize(int width, int height) {
 		// calculate new viewport
+		
         float aspectRatio = (float)width/(float)height;
         float scale = 1f;
         Vector2 crop = new Vector2(0f, 0f);
@@ -1396,7 +1416,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 
         float w = (float)WrapperEngine.VIRTUAL_WIDTH*scale;
         float h = (float)WrapperEngine.VIRTUAL_HEIGHT*scale;
-        viewport = new Rectangle(crop.x, crop.y, w, h);
+        viewport = new Rectangle(crop.x, crop.y, w, h); 
 	}
 
 	@Override

@@ -65,6 +65,7 @@ public class SplashScreen implements Screen {
     public void render(float delta)
     {
     		// set viewport
+    		
         	Gdx.gl.glViewport((int) viewport.x, (int) viewport.y,(int) viewport.width, (int) viewport.height);
         	Gdx.gl.glClearColor(0, 0, 0, 1);
     		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -100,7 +101,8 @@ public class SplashScreen implements Screen {
     @Override
     public void resize(int width,int height) {
     	// calculate new viewport
-        float aspectRatio = (float)width/(float)height;
+        
+    	float aspectRatio = (float)width/(float)height;
         float scale = 1f;
         Vector2 crop = new Vector2(0f, 0f);
         if(aspectRatio > WrapperEngine.ASPECT_RATIO)
