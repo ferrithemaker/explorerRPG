@@ -416,7 +416,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		genericfont.draw(batch, "Screen Mouse X:"+Gdx.input.getX()+" Projected Mouse X: "+realXcoord, 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-20);
 		genericfont.draw(batch, "Screen Mouse Y:"+Gdx.input.getY()+" Projected Mouse Y: "+realYcoord, 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-40);
 		genericfont.draw(batch, "I'm at Screen X: "+ maplayers[game.getlayer()].getfirstxtile()+" Y: "+maplayers[game.getlayer()].getfirstytile(), 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-60);
-		genericfont.draw(batch, "I'm at tile X: "+ (maplayers[game.getlayer()].getfirstxtile()+prota.getrelativextile())+" Y: "+(maplayers[game.getlayer()].getfirstytile()+prota.getrelativeytile()), 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-160);
+		genericfont.draw(batch, "I'm at tile X: "+ (maplayers[game.getlayer()].getfirstxtile()+prota.getrelativextile(game.getactivemap()))+" Y: "+(maplayers[game.getlayer()].getfirstytile()+prota.getrelativeytile(game.getactivemap())), 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-160);
 
 		genericfont.draw(batch, "Real screen size X:"+Gdx.graphics.getWidth(), 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-80);
 		genericfont.draw(batch, "Real screen size Y:"+Gdx.graphics.getHeight(), 20, (WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-100);
@@ -508,22 +508,25 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	}
 	
 	protected void drawhero() {
-		batch.draw(prota.getsprite(), prota.getrelativextile()*WrapperEngine.TILE_X_SIZE, prota.getrelativeytile()*WrapperEngine.TILE_Y_SIZE);
+		int relX = prota.getrelativextile(game.getactivemap());
+		int relY = prota.getrelativeytile(game.getactivemap());
+		
+		batch.draw(prota.getsprite(), relX*WrapperEngine.TILE_X_SIZE, relY*WrapperEngine.TILE_Y_SIZE);
 		Sprite energybar=layout.getenergybar();
 		Sprite redbar=layout.getredbar();
-		energybar.setPosition(prota.getrelativextile()*WrapperEngine.TILE_X_SIZE+2, prota.getrelativeytile()*WrapperEngine.TILE_Y_SIZE+2);
+		energybar.setPosition(relX*WrapperEngine.TILE_X_SIZE+2, relY*WrapperEngine.TILE_Y_SIZE+2);
 		energybar.draw(batch);
 		for (int i=0;i<(int)(prota.percentlife()/10);i++) {
-			redbar.setPosition(prota.getrelativextile()*WrapperEngine.TILE_X_SIZE+2+(i*6),prota.getrelativeytile()*WrapperEngine.TILE_Y_SIZE+2);
+			redbar.setPosition(relX*WrapperEngine.TILE_X_SIZE+2+(i*6), relY*WrapperEngine.TILE_Y_SIZE+2);
 			redbar.draw(batch);
 		}
 		
 		Sprite magicbar=layout.getmagicbar();
 		Sprite bluebar=layout.getbluebar();
-		magicbar.setPosition(prota.getrelativextile()*WrapperEngine.TILE_X_SIZE+2, prota.getrelativeytile()*WrapperEngine.TILE_Y_SIZE-4);
+		magicbar.setPosition(relX*WrapperEngine.TILE_X_SIZE+2, relY*WrapperEngine.TILE_Y_SIZE-4);
 		magicbar.draw(batch);
 		for (int i=0;i<(int)(prota.percentmagic()/10);i++) {
-			bluebar.setPosition(prota.getrelativextile()*WrapperEngine.TILE_X_SIZE+2+(i*6),prota.getrelativeytile()*WrapperEngine.TILE_Y_SIZE-4);
+			bluebar.setPosition(relX*WrapperEngine.TILE_X_SIZE+2+(i*6), relY*WrapperEngine.TILE_Y_SIZE-4);
 			bluebar.draw(batch);
 		}
 	}
@@ -571,48 +574,61 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	}
 	
 	public int getabsolutextile(Hero hero) {
-		return hero.getrelativextile() + (maplayers[game.getlayer()] == null ? 0 : maplayers[game.getlayer()].getfirstxtile());
+		return hero.getabsolutecolumn(game.getactivemap());
 	}
 	
 	public int getabsoluteytile(Hero hero) {
-		return hero.getrelativeytile() + (maplayers[game.getlayer()] == null ? 0 :  maplayers[game.getlayer()].getfirstytile());
+		return hero.getabsoluterow(game.getactivemap());
 	}
 	
 	// layer control
 	public void layerAccessCheck() {
-		//System.out.println("Hero Absolute x:"+(game.heroabsolutex()));
- 		//System.out.println("Hero Absolute y:"+(game.heroabsolutey()));
 		for (AccessToLayer atl: maplayers[game.getlayer()].getLayerAccess()) {
-			//System.out.println("Door on layer"+game.getlayer()+":"+atl.getOutcommingX()+","+atl.getOutcommingY());
-			if ((prota.getrelativextile()+maplayers[game.getlayer()].getfirstxtile())==atl.getIncommingX() && (prota.getrelativeytile()+maplayers[game.getlayer()].getfirstytile())==atl.getIncommingY()) {
-	     		game.changelayer(atl,prota.getrelativextile(),prota.getrelativeytile()); //changelayer
+			if (prota.getabsolutecolumn(game.getactivemap())==atl.getIncommingX() && prota.getabsoluterow(game.getactivemap())==atl.getIncommingY()) {
+	     		game.changelayer(atl,prota.getrelativextile(game.getactivemap()),prota.getrelativeytile(game.getactivemap())); //changelayer
+	     		
 	     		// update hero position next to the access
-	     		prota.setrelativextile((atl.getOutcommingX()) % WrapperEngine.ON_SCREEN_TILES_X);
-	     		prota.setrelativeytile((atl.getOutcommingY()) % WrapperEngine.ON_SCREEN_TILES_Y);
-	     		//System.out.println("Over the DOOR!");
-	     		//prota.setabsolutextile(atl.getIncommingX());
+	     		prota.setrelativextile(game.getactivemap(), (atl.getOutcommingX()) % WrapperEngine.ON_SCREEN_TILES_X);
+	     		prota.setrelativeytile(game.getactivemap(), (atl.getOutcommingY()) % WrapperEngine.ON_SCREEN_TILES_Y);
+
 			}
 		}		
+		
+		centerMapOn(prota);
 	}
 	
+	private void centerMapOn(TileOccupier to) {
+		int minX = 0, maxX = WrapperEngine.TOTAL_X_TILES - WrapperEngine.ON_SCREEN_TILES_X;
+		int minY = 0, maxY = WrapperEngine.TOTAL_Y_TILES - WrapperEngine.ON_SCREEN_TILES_Y;
+		
+		int targetX = to.getabsolutecolumn(game.getactivemap()) - (WrapperEngine.ON_SCREEN_TILES_X / 2);
+		int targetY = to.getabsoluterow(game.getactivemap()) - (WrapperEngine.ON_SCREEN_TILES_Y / 2);
+		
+		game.getactivemap().setfirstxtile(Math.max(minX, Math.min(maxX, targetX)));
+		game.getactivemap().setfirstytile(Math.max(minY, Math.min(maxY, targetY)));
+	}
+
 	protected void drawtiles() {
-		int relativex=0;
+		int firstX = game.getactivemap().getfirstxtile();
+		int firstY = game.getactivemap().getfirstytile();
+		
+		int lastX = firstX + WrapperEngine.ON_SCREEN_TILES_X;
+		int lastY = firstY + WrapperEngine.ON_SCREEN_TILES_Y;
+		
 		Tile tile = null;
-        for (int xpos=maplayers[game.getlayer()].getfirstxtile();xpos<(maplayers[game.getlayer()].getfirstxtile()+WrapperEngine.ON_SCREEN_TILES_X);xpos++) {
-        	int relativey=0;
-        	for (int ypos=maplayers[game.getlayer()].getfirstytile();ypos<(maplayers[game.getlayer()].getfirstytile()+WrapperEngine.ON_SCREEN_TILES_Y);ypos++) {
-        			tile=activemap.gettiles()[xpos][ypos];
-        			if (tile.getshowimage()) {
-        				if(tile.gettileimage() != null) {
-        					batch.draw(tile.gettileimage(),relativex*WrapperEngine.TILE_X_SIZE,relativey*WrapperEngine.TILE_Y_SIZE);
-        				}
-        				if(tile.gettiledecoration() != null) {
-        					batch.draw(tile.gettiledecoration(),relativex*WrapperEngine.TILE_X_SIZE,relativey*WrapperEngine.TILE_Y_SIZE);
-        				}
+        for (int xpos=firstX, relativex=0;xpos<lastX;xpos++, relativex++) {
+        	for (int ypos=firstY, relativey=0;ypos<lastY;ypos++, relativey++) {
+        		tile=activemap.getTile(xpos, ypos);
+        			
+        		if (tile.getshowimage()) {
+        			if(tile.gettileimage() != null) {
+        				batch.draw(tile.gettileimage(),relativex*WrapperEngine.TILE_X_SIZE,relativey*WrapperEngine.TILE_Y_SIZE);
         			}
-        			relativey++;
+        			if(tile.gettiledecoration() != null) {
+        				batch.draw(tile.gettiledecoration(),relativex*WrapperEngine.TILE_X_SIZE,relativey*WrapperEngine.TILE_Y_SIZE);
+        			}
+        		}
         	}
-        	relativex++;
         }
 	}
 
@@ -947,7 +963,8 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		if(!captured) captured = Gdx.input.isTouched() && screentext.onMouseClicked(); 
 		
 		if(Gdx.input.isTouched() && !captured && activemap != null) {
-			Tile clicked = activemap.getTileAt(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+			Tile clicked = activemap.getTileAtPosition(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+			if(clicked == null) return;
 			
 			if(activemap.isUnreachable(clicked)) {
 				alert("You can not reach that area from here!");

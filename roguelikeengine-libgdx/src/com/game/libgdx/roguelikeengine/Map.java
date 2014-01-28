@@ -721,10 +721,20 @@ public class Map {
 	// sets / updates
 	public void setfirstxtile(int value) {
 		firstXtile = value;
+		
+		if(firstXtile < 0) firstXtile = 0;
+		else if(firstXtile > WrapperEngine.TOTAL_X_TILES - (WrapperEngine.ON_SCREEN_TILES_X / 2)) {
+			firstXtile = WrapperEngine.TOTAL_X_TILES - (WrapperEngine.ON_SCREEN_TILES_X / 2);
+		}
 	}
 
 	public void setfirstytile(int value) {
 		firstYtile = value;
+		
+		if(firstYtile < 0) firstYtile = 0;
+		else if(firstYtile > WrapperEngine.TOTAL_Y_TILES - (WrapperEngine.ON_SCREEN_TILES_Y / 2) - 1) {
+			firstYtile = WrapperEngine.TOTAL_Y_TILES - (WrapperEngine.ON_SCREEN_TILES_Y / 2);
+		}
 	}
 
 	public void scrollright() {
@@ -874,11 +884,15 @@ public class Map {
 		return result;
 	}
 	
-	public Tile getTileAt(float x, float y) {
+	public Tile getTileAtPosition(float x, float y) {
 		int column = this.firstXtile + (int) (x / WrapperEngine.TILE_X_SIZE);
 		int row = this.firstYtile + (int) (y / WrapperEngine.TILE_Y_SIZE);
 		
-		System.out.println(column + ", " + row);
+		return this.getTile(column, row);
+	}
+	
+	public Tile getTile(int column, int row) {
+		if(column < 0 || column >= tilelayout.length || row < 0 || row >= tilelayout[column].length) return null;
 		return tilelayout[column][row];
 	}
 
