@@ -166,10 +166,10 @@ public class WrapperEngine {
 	 *  Moves the player up one tile at a time until the player is on valid, empty land.
 	 */
 	protected void insurevalidplayerposition() {
-		int x = prota.getrelativextile();
-        int y = prota.getrelativeytile();
+		int x = prota.getrelativextile(activemap);
+        int y = prota.getrelativeytile(activemap);
         while(activemap.gettiles()[x][y].isbloqued()) {
-        	prota.setrelativeytile(++y);
+        	prota.setrelativeytile(activemap, ++y);
         }
 	}
 	
@@ -261,18 +261,18 @@ public class WrapperEngine {
 	}
 	
 	public int heroabsolutex() {
-		return prota.getrelativextile()+activemap.getfirstxtile();
+		return prota.getabsolutecolumn(activemap);
 	}
 	
 	public int heroabsolutey() {
-		return prota.getrelativeytile()+activemap.getfirstytile();
+		return prota.getabsoluterow(activemap);
 	}
 	
 	public void herodies() {
 		maplayers[layer].setfirstxtile(0);
 		maplayers[layer].setfirstytile(0);
-		prota.setrelativextile(1);
-		prota.setrelativeytile(1);
+		prota.setrelativextile(activemap, 1);
+		prota.setrelativeytile(activemap, 1);
 		prota.updatehp(50);
 	}
 	
@@ -355,10 +355,10 @@ public class WrapperEngine {
 		return badguys.getlist();
 	}
 	public Enemy overenemy() {
-		 return badguys.overenemy(prota.getrelativextile()+maplayers[layer].getfirstxtile(),prota.getrelativeytile()+maplayers[layer].getfirstytile(),layer);
+		 return badguys.overenemy(prota.getabsolutecolumn(activemap), prota.getabsoluterow(activemap),layer);
 	}
 	public Enemy nexttoenemy() {
-		return badguys.nextotoenemy(prota.getrelativextile()+maplayers[layer].getfirstxtile(),prota.getrelativeytile()+maplayers[layer].getfirstytile(),layer);
+		return badguys.nextotoenemy(prota.getabsolutecolumn(activemap), prota.getabsoluterow(activemap),layer);
 	}
 	public void removeenemy(Enemy obj) {
 		badguys.remove_enemy(obj);
@@ -371,8 +371,8 @@ public class WrapperEngine {
 	}
 	public void moveenemies() {
 		// absolute position of hero
-		int heroabsx=activemap.getfirstxtile()+prota.getrelativextile();
-		int heroabsy=activemap.getfirstytile()+prota.getrelativeytile();
+		int heroabsx=prota.getabsolutecolumn(activemap);
+		int heroabsy=prota.getabsoluterow(activemap);
 		int enemyabsx;
 		int enemyabsy;
 		boolean moved;
@@ -502,13 +502,13 @@ public class WrapperEngine {
 		return goodguys.getlist();
 	}
 	public Buddy overbuddy() {
-		 return goodguys.overbuddy(prota.getrelativextile()+maplayers[layer].getfirstxtile(),prota.getrelativeytile()+maplayers[layer].getfirstytile());
+		 return goodguys.overbuddy(prota.getabsolutecolumn(activemap), prota.getabsoluterow(activemap));
 	}
 	public void removebuddy(Buddy obj) {
 		goodguys.remove_buddy(obj);
 	}
 	public Buddy nexttobuddy() {
-		return goodguys.nextotobuddy(prota.getrelativextile()+maplayers[layer].getfirstxtile(),prota.getrelativeytile()+maplayers[layer].getfirstytile());
+		return goodguys.nextotobuddy(prota.getabsolutecolumn(activemap), prota.getabsoluterow(activemap));
 	}
 	public void createrandombuddy() { // create a random enemy
 		int i;
@@ -538,7 +538,7 @@ public class WrapperEngine {
 		return availableobjects.getlist();
 	}
 	public Object overobject() {
-		 return availableobjects.overobject(prota.getrelativextile()+maplayers[layer].getfirstxtile(),prota.getrelativeytile()+maplayers[layer].getfirstytile());
+		 return availableobjects.overobject(prota.getabsolutecolumn(activemap), prota.getabsoluterow(activemap));
 	}
 	public void removeobject(Object obj) {
 		availableobjects.remove_object(obj);
@@ -642,7 +642,7 @@ public class WrapperEngine {
 		return availableconsumables.getlist();
 	}
 	public Consumable overconsumable() {
-		 return availableconsumables.overconsumable(prota.getrelativextile()+maplayers[layer].getfirstxtile(),prota.getrelativeytile()+maplayers[layer].getfirstytile());
+		 return availableconsumables.overconsumable(prota.getabsolutecolumn(activemap), prota.getabsoluterow(activemap));
 	}
 	public void removeconsumable(Consumable c) {
 		availableconsumables.remove_consumable(c);

@@ -87,7 +87,6 @@ public class AStar<T extends MovingTileOccupier> implements Path<T> {
 		if(result.size() > 0) {
 			this.pathFound = true;
 			currentIndex = 0;
-			System.out.println("path found");
 		}
 	}
 	

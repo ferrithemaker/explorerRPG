@@ -32,8 +32,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class Hero implements MovingTileOccupier {
 	private int agility;
 	private int force;
-	private int relative_x_tile;	
-	private int relative_y_tile;
+	//private int relative_x_tile;	
+	//private int relative_y_tile;
+	
+	private int abs_x;
+	private int abs_y;
+	
 	private String name;
 	private int life;
 	private int lifePerStep = 1;
@@ -67,8 +71,12 @@ public class Hero implements MovingTileOccupier {
 		this.life=this.maxlife=100; // hp
 		this.magic=this.maxMagic=100;
 		this.exp=1; // experience
-		this.relative_y_tile=1;
-		this.relative_x_tile=1;
+		//this.relative_y_tile=1;
+		//this.relative_x_tile=1;
+		
+		this.abs_x = 1;
+		this.abs_y = 1;
+		
 		this.name=name;
 		init_sprite_pos(); // initial sprite position, every number corresponds to a sprite. Each set of sprites has different configuration
 		this.head = new Object(); // empty object
@@ -105,11 +113,11 @@ public class Hero implements MovingTileOccupier {
 	public int getlevel() {
 		return this.level;
 	}
-	public int getrelativextile() {
-		return this.relative_x_tile;
+	public int getrelativextile(Map map) {
+		return this.abs_x - map.getfirstxtile();
 	}
-	public int getrelativeytile() {
-		return this.relative_y_tile;
+	public int getrelativeytile(Map map) {
+		return this.abs_y - map.getfirstytile();
 	}
 	public Object gethead() {
 		return this.head;
@@ -197,13 +205,11 @@ public class Hero implements MovingTileOccupier {
 		}
 	}
 
-	public void setrelativextile(int value) {
-		this.relative_x_tile=value;
-		//this.engine.onplayermove();
+	public void setrelativextile(Map map, int value) {
+		this.abs_x = map.getfirstxtile() + value;
 	}
-	public void setrelativeytile(int value) {
-		this.relative_y_tile=value;
-		//this.engine.onplayermove();
+	public void setrelativeytile(Map map, int value) {
+		this.abs_y = map.getfirstytile() + value;
 	}
 	public void updateagility(int value) {
 		this.agility=this.agility+value;
@@ -231,55 +237,22 @@ public class Hero implements MovingTileOccupier {
 
 	// hero position updates
 	public void up(Map map) {
-		if (this.relative_y_tile>0) {
-			this.setrelativeytile(this.relative_y_tile - 1);
-			changeDirection(Directions.NORTH);
-		} else {
-			scrollup();
-			map.scrollup();
-		}
+		this.abs_y = Math.max(0, this.abs_y - 1);
+		changeDirection(Directions.NORTH);
 	}
 	public void down(Map map) {
-		if (this.relative_y_tile<WrapperEngine.ON_SCREEN_TILES_Y-1) {
-			this.setrelativeytile(this.relative_y_tile + 1);
-			changeDirection(Directions.SOUTH);
-		} else {
-			scrolldown();
-			map.scrolldown();
-		}
+		this.abs_y = Math.min(WrapperEngine.TOTAL_Y_TILES - 1, this.abs_y + 1);
+		changeDirection(Directions.SOUTH);
 	}
 	public void left(Map map) {
-		if (this.relative_x_tile>0) {
-			this.setrelativextile(this.relative_x_tile - 1);
-			changeDirection(Directions.WEST);
-		} else {
-			scrollleft();
-			map.scrollleft();
-		}
+		this.abs_x = Math.max(0, this.abs_x - 1);
+		changeDirection(Directions.WEST);
 	}
 	public void right(Map map) {
-		if (this.relative_x_tile<WrapperEngine.ON_SCREEN_TILES_X-1) {
-			this.setrelativextile(this.relative_x_tile + 1);
-			changeDirection(Directions.EAST);
-		} else {
-			scrollright();
-			map.scrollright();
-		}
+		this.abs_x = Math.min(WrapperEngine.TOTAL_X_TILES-1, this.abs_x + 1);
+		changeDirection(Directions.EAST);
 	}
 	
-	public void scrollup() {
-		this.setrelativeytile(WrapperEngine.ON_SCREEN_TILES_Y-1);
-	}
-	public void scrolldown() {
-		this.setrelativeytile(0);
-	}
-	public void scrollleft() {
-		this.setrelativextile(WrapperEngine.ON_SCREEN_TILES_X-1);
-	}
-	public void scrollright() {
-		this.setrelativextile(0);
-	}
-
 	// fight
 	// hero hit enemy
 	public String hit(Enemy enemy) {
@@ -421,10 +394,10 @@ public class Hero implements MovingTileOccupier {
 	}
 	
 	public int getabsolutex(Map map) {
-		return map.getfirstxtile() + this.relative_x_tile;
+		return this.abs_x;
 	}
 	public int getabsolutey(Map map) {
-		return map.getfirstytile() + this.relative_y_tile;
+		return this.abs_y;
 	}
 	
 	public Tile gettile(Map map) {
