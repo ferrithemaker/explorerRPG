@@ -94,4 +94,9 @@ public class Tile {
 	public void setPCG(boolean canpcg) {
 		this.canpcg = canpcg;
 	}
+	
+	@Override
+	public String toString() {
+		return "Tile " + column + ", " + row;
+	}
 }

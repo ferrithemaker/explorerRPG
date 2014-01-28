@@ -188,6 +188,11 @@ public class PopupInfoText {
 			return true;
 		}
 		
+		if(GameplayScreen.instance != null && GameplayScreen.instance.just_interact > 0 && this.background.getBoundingRectangle().contains(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
+			GameplayScreen.instance.just_interact = 0;
+			return true;
+		}
+		
 		return false;
 	}
 

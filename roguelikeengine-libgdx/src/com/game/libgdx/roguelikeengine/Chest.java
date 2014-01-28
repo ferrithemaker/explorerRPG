@@ -96,6 +96,13 @@ public class Chest extends Buddy {
 		return false;
 	}
 	
+	public boolean nextTo(Map map, TileOccupier to) {
+		float xDiff = getabsolutecolumn(map) - to.getabsolutecolumn(map);
+		float yDiff = getabsoluterow(map) - to.getabsoluterow(map);
+		
+		return Math.sqrt(xDiff * xDiff + yDiff * yDiff) <= 1.0f;
+	}
+	
 	@Override
 	public String getname() {
 		return opened ? "empty chest" : "chest";

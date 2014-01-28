@@ -235,6 +235,8 @@ public class WrapperEngine {
 	}
 	
 	public void changelayer(AccessToLayer atl,int rx,int ry) {
+		GameplayScreen.instance.stopPathing();
+		
 		int numberofXscreens;
 		int numberofYscreens;
 		numberofXscreens=atl.getOutcommingX()/ON_SCREEN_TILES_X;

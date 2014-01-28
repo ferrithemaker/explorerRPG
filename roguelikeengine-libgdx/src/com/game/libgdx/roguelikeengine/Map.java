@@ -2,6 +2,7 @@ package com.game.libgdx.roguelikeengine;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -127,6 +128,14 @@ public class Map {
 		// data must be prevalidated, this method don't check it
 		accesspoints.add(new AccessToLayer(inx, iny, outx, outy, layerout));
 		tilelayout[inx][iny].settileimage(stair_img);
+	}
+	
+	public boolean isAccessPoint(int column, int row) {
+		for(AccessToLayer atl : accesspoints) {
+			if(atl.getIncommingX() == column && atl.getIncommingY() == row) return true;
+		}
+		
+		return false;
 	}
 
 	public void createAccessOutside(int inx, int iny, int outx, int outy,
@@ -838,5 +847,50 @@ public class Map {
 
 	public int getlayer() {
 		return layer;
+	}
+	
+	public List<Tile> getmooreneighbors(Tile tile) {
+		List<Tile> result = new LinkedList<Tile>();
+		
+		int column = tile.getcolumn();
+		int row = tile.getrow();
+		
+		if(column - 1 >= 0) {
+			result.add(getleft(tile));
+		}
+		
+		if(column + 1 < this.tilelayout.length) {
+			result.add(getright(tile));
+		}
+		
+		if(row - 1 >= 0) {
+			result.add(getdown(tile));
+		}
+		
+		if(row + 1 < this.tilelayout[column].length) {
+			result.add(getup(tile));
+		}
+		
+		return result;
+	}
+	
+	public Tile getTileAt(float x, float y) {
+		int column = this.firstXtile + (int) (x / WrapperEngine.TILE_X_SIZE);
+		int row = this.firstYtile + (int) (y / WrapperEngine.TILE_Y_SIZE);
+		
+		System.out.println(column + ", " + row);
+		return tilelayout[column][row];
+	}
+
+	public boolean isUnreachable(Tile t) {
+		Tile left = getleft(t);
+		Tile right = getright(t);
+		Tile up = getup(t);
+		Tile down = getdown(t);
+		
+		return (left == null || left.isbloqued()) &&
+				(right == null || right.isbloqued()) &&
+				(up == null || up.isbloqued()) &&
+				(down == null || down.isbloqued());
 	}
 }

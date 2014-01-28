@@ -29,7 +29,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 
 
-public class Hero implements TileOccupier {
+public class Hero implements MovingTileOccupier {
 	private int agility;
 	private int force;
 	private int relative_x_tile;	
@@ -517,4 +517,42 @@ public class Hero implements TileOccupier {
 	}
 	
 	public void update() {}
+
+	@Override
+	public boolean goLeft(Map map) {
+		//return engine.heroleft();
+		return GameplayScreen.instance.goleft();
+	}
+
+	@Override
+	public boolean goRight(Map map) {
+		//return engine.heroright();
+		return GameplayScreen.instance.goright();
+	}
+
+	@Override
+	public boolean goUp(Map map) {
+		//return engine.herodown();
+		return GameplayScreen.instance.godown();
+	}
+
+	@Override
+	public boolean goDown(Map map) {
+		//return engine.heroup();
+		return GameplayScreen.instance.goup();
+	}
+	
+	public void moveInto(Map map, Chest chest) {
+		if(chest.getabsolutecolumn(map) < getabsolutecolumn(map)) {
+			goLeft(map);
+		} else if(chest.getabsolutecolumn(map) < getabsolutecolumn(map)) {
+			goRight(map);
+		}
+		
+		if(chest.getabsoluterow(map) < getabsoluterow(map)) {
+			goDown(map);
+		} else if(chest.getabsoluterow(map) < getabsoluterow(map)) {
+			goUp(map);
+		}
+	}
 }
