@@ -40,12 +40,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.game.libgdx.roguelikeengine.pathing.Path;
 import com.game.libgdx.roguelikeengine.pathing.Pathing;
+import com.game.libgdx.roguelikeengine.ui.BaseButton;
+import com.game.libgdx.roguelikeengine.ui.ButtonAction;
+import com.game.libgdx.roguelikeengine.ui.IButton;
+import com.game.libgdx.roguelikeengine.ui.TextButton;
 
 
 
@@ -89,9 +91,6 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     private int realXcoord;
     private int realYcoord;
     
-    // buttons test
-    private Button button_up,button_down,button_left,button_right,button_talk,button_magic,button_drop,button_take;
-    
     Enemy actualenemy; // enemy that i'm over
     Buddy actualbuddy;
     Object actualobject; 
@@ -104,6 +103,8 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     
     Pathing<Hero> heroPathing;
     Path<Hero> lastPath;
+    
+    LinkedList<IButton> buttons = new LinkedList<IButton>();
     
     private Object_inventory objinv;
     Consumable_inventory consinv;
@@ -160,8 +161,114 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		Gdx.input.setInputProcessor(this);
 		batch = new SpriteBatch();
 		//buttons setup
-		button_up= new Button(.75f,.3f,128,64,"UI/buttonup.png");
-		button_down= new Button(.75f,.1f,128,64,"UI/buttondown.png");
+		float buttonWidth = Gdx.graphics.getWidth() * 0.1f;
+		float buttonHeight = Gdx.graphics.getHeight() * 0.1f;
+		
+		buttons.add(new TextButton("Go Up",    .75f, .2f, buttonWidth, buttonHeight));
+		buttons.add(new TextButton("Go Down",  .75f, .1f, buttonWidth, buttonHeight));
+		buttons.add(new TextButton("Go Left",  .65f, .15f, buttonWidth, buttonHeight));
+		buttons.add(new TextButton("Go Right", .85f, .15f, buttonWidth, buttonHeight));
+		
+		getButton("Go Up").addActionListener(new ButtonAction() {
+			@Override
+			public void onClicked(IButton button) {
+				goup();
+			}
+
+			@Override public void onMouseEnter(IButton button) {}
+			@Override public void onMouseExit(IButton button) {}
+		});
+		getButton("Go Left").addActionListener(new ButtonAction() {
+			@Override
+			public void onClicked(IButton button) {
+				goleft();
+			}
+
+			@Override public void onMouseEnter(IButton button) {}
+			@Override public void onMouseExit(IButton button) {}
+		});
+		getButton("Go Right").addActionListener(new ButtonAction() {
+			@Override
+			public void onClicked(IButton button) {
+				goright();
+			}
+
+			@Override public void onMouseEnter(IButton button) {}
+			@Override public void onMouseExit(IButton button) {}
+		});
+		getButton("Go Down").addActionListener(new ButtonAction() {
+			@Override
+			public void onClicked(IButton button) {
+				godown();
+			}
+
+			@Override public void onMouseEnter(IButton button) {}
+			@Override public void onMouseExit(IButton button) {}
+		});
+		
+		float leftButtonStartY = 0.1f;
+		
+		buttons.add(new TextButton("Magic", .05f, leftButtonStartY, buttonWidth, buttonHeight));
+		buttons.add(new TextButton("Talk",  .05f, leftButtonStartY + (.1f * 1), buttonWidth, buttonHeight));
+		buttons.add(new TextButton("Look",  .05f, leftButtonStartY + (.1f * 2), buttonWidth, buttonHeight));
+		buttons.add(new TextButton("Drop",  .05f, leftButtonStartY + (.1f * 3), buttonWidth, buttonHeight));
+		buttons.add(new TextButton("Take",  .05f, leftButtonStartY + (.1f * 4), buttonWidth, buttonHeight));
+		buttons.add(new TextButton("Fight", .05f, leftButtonStartY + (.1f * 5), buttonWidth, buttonHeight));
+		
+		getButton("Fight").addActionListener(new ButtonAction() {
+			@Override
+			public void onClicked(IButton button) {
+				fight();
+			}
+
+			@Override public void onMouseEnter(IButton button) {}
+			@Override public void onMouseExit(IButton button) {}
+		});
+		getButton("Take").addActionListener(new ButtonAction() {
+			@Override
+			public void onClicked(IButton button) {
+				take();
+			}
+
+			@Override public void onMouseEnter(IButton button) {}
+			@Override public void onMouseExit(IButton button) {}
+		});
+		getButton("Drop").addActionListener(new ButtonAction() {
+			@Override
+			public void onClicked(IButton button) {
+				drop();
+			}
+
+			@Override public void onMouseEnter(IButton button) {}
+			@Override public void onMouseExit(IButton button) {}
+		});
+		getButton("Look").addActionListener(new ButtonAction() {
+			@Override
+			public void onClicked(IButton button) {
+				look();
+			}
+
+			@Override public void onMouseEnter(IButton button) {}
+			@Override public void onMouseExit(IButton button) {}
+		});
+		getButton("Talk").addActionListener(new ButtonAction() {
+			@Override
+			public void onClicked(IButton button) {
+				talk();
+			}
+
+			@Override public void onMouseEnter(IButton button) {}
+			@Override public void onMouseExit(IButton button) {}
+		});
+		getButton("Magic").addActionListener(new ButtonAction() {
+			@Override
+			public void onClicked(IButton button) {
+				magic();
+			}
+
+			@Override public void onMouseEnter(IButton button) {}
+			@Override public void onMouseExit(IButton button) {}
+		});
 		
 		// fonts setup
 		FileHandle fontFile = Gdx.files.internal("fonts/diabloheavy.ttf");
@@ -342,10 +449,9 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	
 	protected void drawandroidinterface() {
 		// draw android controls
-		button_up.getsprite().setPosition(button_up.getscreencoordinates().x, button_up.getscreencoordinates().y);
-		button_up.getsprite().draw(batch);
-		button_down.getsprite().setPosition(button_down.getscreencoordinates().x, button_down.getscreencoordinates().y);
-		button_down.getsprite().draw(batch);
+		for(IButton button : buttons) {
+			button.drawOnScreen(batch);
+		}
 	}
 
 	/**
@@ -724,6 +830,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	
 	void update()
     { 
+		updateButtons();
 		updateBullets();
 		updateChests();
 		
@@ -993,66 +1100,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	    if(WrapperEngine.STOPSONFIRE && bullets.size() > 0) return false;
 	    
 		if (Gdx.input.isTouched()) {
-			// EXIT BUTTON!
-    		if (realXcoord>512 && realXcoord<576 && realYcoord>640 && realYcoord<704) {
-    			dispose();
-    			return true;
-    		}
-    		// HIT BUTTON!
-    		if (realXcoord>70 && realXcoord<172 && realYcoord>314 && realYcoord<349) {
-    			fight();
-    			return true;
-    		}
-    		// directions
-    		// LEFT BUTTON!
-    		//if (realXcoord>912 && realXcoord<977 && realYcoord>119 && realYcoord<226) {
-    		//	goleft();
-    		//}
-    		// RIGHT BUTTON!
-    		//if (realXcoord>1089 && realXcoord<1152 && realYcoord>119 && realYcoord<226) {
-    		//	goright();
-    		//}
-    		// UP BUTTON!
-    		//if (realXcoord>977 && realXcoord<1089 && realYcoord>226 && realYcoord<281) {
-    		//	goup();
-    		//}
-    		if (button_up.mouseover()) { 
-    			goup();
-    			return true; 
-    		}
-    		// DOWN BUTTON!
-    		//if (realXcoord>977 && realXcoord<1089 && realYcoord>61 && realYcoord<119) {
-    		//	godown();
-    		//}
-    		if (button_down.mouseover()) { 
-    			godown();
-    			return true; 
-    		}
-    		// TAKE BUTTON!
-    		if (realXcoord>70 && realXcoord<172 && realYcoord>268 && realYcoord<298) {
-    			take();
-    			return true;
-    		}
-    		// DROP BUTTON!
-    		if (realXcoord>70 && realXcoord<172 && realYcoord>216 &&  realYcoord<247) {
-    			drop();
-    			return true;
-    		}
-    		// LOOK BUTTON! 
-    		if (realXcoord>70 && realXcoord<172 && realYcoord>166 && realYcoord<195) {
-    			look();
-    			return true;
-    		}
-    		// TALK BUTTON! 
-    		if (realXcoord>70 && realXcoord<172 && realYcoord>117 && realYcoord<148) {
-    			talk();
-    			return true;
-    		}
-    		// MAGIC BUTTON! 
-    		if (realXcoord>70 && realXcoord<172 && realYcoord>68 && realYcoord<99) {
-    			magic();
-    			return true;
-    		}
+			for(IButton button : buttons) {
+				if(button.getIsMouseover()) return true;
+			}
+			
     		// CONSUMABLE INVENTORY ACTIONS
     		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
     			if (realXcoord>1152 && realXcoord<1216 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==0) {
@@ -1620,5 +1671,23 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	
 	public void stopPathing() {
 		lastPath = null;
+	}
+	
+	public void updateButtons() {
+		for(IButton button : buttons) {
+			button.update();
+		}
+	}
+	
+	public IButton getButton(String text) {
+		for(IButton button : buttons) {
+			if(button instanceof BaseButton) {
+				if(((BaseButton)button).getText().equals(text)) {
+					return button;
+				}
+			}
+		}
+		
+		return null;
 	}
 }

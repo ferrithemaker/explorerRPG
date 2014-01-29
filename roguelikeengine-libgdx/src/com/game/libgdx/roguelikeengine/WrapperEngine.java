@@ -73,6 +73,7 @@ public class WrapperEngine {
 	
 	// output OS
 	public static String OUTPUT_OS="desktop"; // desktop OR android 
+	public static boolean debuging_android_on_windows = false;
 	static {
 		switch(Gdx.app.getType()) {
 		case Android:
@@ -89,6 +90,10 @@ public class WrapperEngine {
 			break;
 		default:
 			break;
+		}
+		
+		if(debuging_android_on_windows && OUTPUT_OS.equals("desktop")) {
+			OUTPUT_OS="android";
 		}
 	}
 	
