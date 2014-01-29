@@ -33,7 +33,7 @@ import com.game.libgdx.roguelikeengine.rooms.Chapel;
 public class WrapperEngine {
 	// constants
 	public final static int BUILD_NUMBER=95;
-	public final static int ON_SCREEN_TILES_X=13;
+	public final static int ON_SCREEN_TILES_X=13;	// TODO:: this should be based on screen size
 	public final static int ON_SCREEN_TILES_Y=10;
 	public final static int X_SCREENS=30;
 	public final static int Y_SCREENS=30;

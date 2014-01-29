@@ -160,116 +160,118 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	protected void init() {
 		Gdx.input.setInputProcessor(this);
 		batch = new SpriteBatch();
-		//buttons setup
-		float buttonWidth = Gdx.graphics.getWidth() * 0.1f;
-		float buttonHeight = Gdx.graphics.getHeight() * 0.1f;
 		
-		buttons.add(new TextButton("Go Up",    .75f, .2f, buttonWidth, buttonHeight));
-		buttons.add(new TextButton("Go Down",  .75f, .1f, buttonWidth, buttonHeight));
-		buttons.add(new TextButton("Go Left",  .65f, .15f, buttonWidth, buttonHeight));
-		buttons.add(new TextButton("Go Right", .85f, .15f, buttonWidth, buttonHeight));
-		
-		getButton("Go Up").addActionListener(new ButtonAction() {
-			@Override
-			public void onClicked(IButton button) {
-				goup();
-			}
-
-			@Override public void onMouseEnter(IButton button) {}
-			@Override public void onMouseExit(IButton button) {}
-		});
-		getButton("Go Left").addActionListener(new ButtonAction() {
-			@Override
-			public void onClicked(IButton button) {
-				goleft();
-			}
-
-			@Override public void onMouseEnter(IButton button) {}
-			@Override public void onMouseExit(IButton button) {}
-		});
-		getButton("Go Right").addActionListener(new ButtonAction() {
-			@Override
-			public void onClicked(IButton button) {
-				goright();
-			}
-
-			@Override public void onMouseEnter(IButton button) {}
-			@Override public void onMouseExit(IButton button) {}
-		});
-		getButton("Go Down").addActionListener(new ButtonAction() {
-			@Override
-			public void onClicked(IButton button) {
-				godown();
-			}
-
-			@Override public void onMouseEnter(IButton button) {}
-			@Override public void onMouseExit(IButton button) {}
-		});
-		
-		float leftButtonStartY = 0.1f;
-		
-		buttons.add(new TextButton("Magic", .05f, leftButtonStartY, buttonWidth, buttonHeight));
-		buttons.add(new TextButton("Talk",  .05f, leftButtonStartY + (.1f * 1), buttonWidth, buttonHeight));
-		buttons.add(new TextButton("Look",  .05f, leftButtonStartY + (.1f * 2), buttonWidth, buttonHeight));
-		buttons.add(new TextButton("Drop",  .05f, leftButtonStartY + (.1f * 3), buttonWidth, buttonHeight));
-		buttons.add(new TextButton("Take",  .05f, leftButtonStartY + (.1f * 4), buttonWidth, buttonHeight));
-		buttons.add(new TextButton("Fight", .05f, leftButtonStartY + (.1f * 5), buttonWidth, buttonHeight));
-		
-		getButton("Fight").addActionListener(new ButtonAction() {
-			@Override
-			public void onClicked(IButton button) {
-				fight();
-			}
-
-			@Override public void onMouseEnter(IButton button) {}
-			@Override public void onMouseExit(IButton button) {}
-		});
-		getButton("Take").addActionListener(new ButtonAction() {
-			@Override
-			public void onClicked(IButton button) {
-				take();
-			}
-
-			@Override public void onMouseEnter(IButton button) {}
-			@Override public void onMouseExit(IButton button) {}
-		});
-		getButton("Drop").addActionListener(new ButtonAction() {
-			@Override
-			public void onClicked(IButton button) {
-				drop();
-			}
-
-			@Override public void onMouseEnter(IButton button) {}
-			@Override public void onMouseExit(IButton button) {}
-		});
-		getButton("Look").addActionListener(new ButtonAction() {
-			@Override
-			public void onClicked(IButton button) {
-				look();
-			}
-
-			@Override public void onMouseEnter(IButton button) {}
-			@Override public void onMouseExit(IButton button) {}
-		});
-		getButton("Talk").addActionListener(new ButtonAction() {
-			@Override
-			public void onClicked(IButton button) {
-				talk();
-			}
-
-			@Override public void onMouseEnter(IButton button) {}
-			@Override public void onMouseExit(IButton button) {}
-		});
-		getButton("Magic").addActionListener(new ButtonAction() {
-			@Override
-			public void onClicked(IButton button) {
-				magic();
-			}
-
-			@Override public void onMouseEnter(IButton button) {}
-			@Override public void onMouseExit(IButton button) {}
-		});
-		
+		if(WrapperEngine.OUTPUT_OS.equals("android")) {
+			//buttons setup
+			float buttonWidth = Gdx.graphics.getWidth() * 0.1f;
+			float buttonHeight = Gdx.graphics.getHeight() * 0.1f;
+			
+			buttons.add(new TextButton("Go Up",    .75f, .2f, buttonWidth, buttonHeight));
+			buttons.add(new TextButton("Go Down",  .75f, .1f, buttonWidth, buttonHeight));
+			buttons.add(new TextButton("Go Left",  .65f, .15f, buttonWidth, buttonHeight));
+			buttons.add(new TextButton("Go Right", .85f, .15f, buttonWidth, buttonHeight));
+			
+			getButton("Go Up").addActionListener(new ButtonAction() {
+				@Override
+				public void onClicked(IButton button) {
+					goup();
+				}
+	
+				@Override public void onMouseEnter(IButton button) {}
+				@Override public void onMouseExit(IButton button) {}
+			});
+			getButton("Go Left").addActionListener(new ButtonAction() {
+				@Override
+				public void onClicked(IButton button) {
+					goleft();
+				}
+	
+				@Override public void onMouseEnter(IButton button) {}
+				@Override public void onMouseExit(IButton button) {}
+			});
+			getButton("Go Right").addActionListener(new ButtonAction() {
+				@Override
+				public void onClicked(IButton button) {
+					goright();
+				}
+	
+				@Override public void onMouseEnter(IButton button) {}
+				@Override public void onMouseExit(IButton button) {}
+			});
+			getButton("Go Down").addActionListener(new ButtonAction() {
+				@Override
+				public void onClicked(IButton button) {
+					godown();
+				}
+	
+				@Override public void onMouseEnter(IButton button) {}
+				@Override public void onMouseExit(IButton button) {}
+			});
+			
+			float leftButtonStartY = 0.1f;
+			
+			buttons.add(new TextButton("Magic", .05f, leftButtonStartY, buttonWidth, buttonHeight));
+			buttons.add(new TextButton("Talk",  .05f, leftButtonStartY + (.1f * 1), buttonWidth, buttonHeight));
+			buttons.add(new TextButton("Look",  .05f, leftButtonStartY + (.1f * 2), buttonWidth, buttonHeight));
+			buttons.add(new TextButton("Drop",  .05f, leftButtonStartY + (.1f * 3), buttonWidth, buttonHeight));
+			buttons.add(new TextButton("Take",  .05f, leftButtonStartY + (.1f * 4), buttonWidth, buttonHeight));
+			buttons.add(new TextButton("Fight", .05f, leftButtonStartY + (.1f * 5), buttonWidth, buttonHeight));
+			
+			getButton("Fight").addActionListener(new ButtonAction() {
+				@Override
+				public void onClicked(IButton button) {
+					fight();
+				}
+	
+				@Override public void onMouseEnter(IButton button) {}
+				@Override public void onMouseExit(IButton button) {}
+			});
+			getButton("Take").addActionListener(new ButtonAction() {
+				@Override
+				public void onClicked(IButton button) {
+					take();
+				}
+	
+				@Override public void onMouseEnter(IButton button) {}
+				@Override public void onMouseExit(IButton button) {}
+			});
+			getButton("Drop").addActionListener(new ButtonAction() {
+				@Override
+				public void onClicked(IButton button) {
+					drop();
+				}
+	
+				@Override public void onMouseEnter(IButton button) {}
+				@Override public void onMouseExit(IButton button) {}
+			});
+			getButton("Look").addActionListener(new ButtonAction() {
+				@Override
+				public void onClicked(IButton button) {
+					look();
+				}
+	
+				@Override public void onMouseEnter(IButton button) {}
+				@Override public void onMouseExit(IButton button) {}
+			});
+			getButton("Talk").addActionListener(new ButtonAction() {
+				@Override
+				public void onClicked(IButton button) {
+					talk();
+				}
+	
+				@Override public void onMouseEnter(IButton button) {}
+				@Override public void onMouseExit(IButton button) {}
+			});
+			getButton("Magic").addActionListener(new ButtonAction() {
+				@Override
+				public void onClicked(IButton button) {
+					magic();
+				}
+	
+				@Override public void onMouseEnter(IButton button) {}
+				@Override public void onMouseExit(IButton button) {}
+			});
+		}
 		// fonts setup
 		FileHandle fontFile = Gdx.files.internal("fonts/diabloheavy.ttf");
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
@@ -285,7 +287,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     	genericfont.setColor(Color.WHITE);
     	
     	// create a message info screen 
-    	screentext=new PopupInfoText(100,(WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-450,"UI/text_popup.png",830,350);
+    	screentext=new PopupInfoText(100,(WrapperEngine.TILE_Y_SIZE*WrapperEngine.ON_SCREEN_TILES_Y)-450,"UI/text_popup.png",(int)(Gdx.graphics.getWidth() * 0.75f), (int) (Gdx.graphics.getHeight() * 0.4f));
     	screentext.settextoffset(50, 50);
     	
 		// create tile layout
@@ -324,7 +326,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		screentext.addWordClickListener("No", new WordClickAction() {
 			@Override
 			public void onClicked(String word) {
-				just_interact = 0;
+				closeScreenText();
 			}
 		});
 		
@@ -350,7 +352,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 
 			@Override
 			public void onClicked(String word) {
-				just_interact = 0;
+				closeScreenText();
 			}
 		});
 	}
@@ -1066,7 +1068,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	    boolean captured = false;
 		if (WrapperEngine.OUTPUT_OS=="desktop") { captured = handlemousedesktopinput(); }
 		if (WrapperEngine.OUTPUT_OS=="android") { captured = handletouchandroidinput(); }
-		
+
 		if(!captured) captured = Gdx.input.isTouched() && screentext.onMouseClicked(); 
 		
 		if(Gdx.input.isTouched() && !captured && activemap != null) {
@@ -1689,5 +1691,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		}
 		
 		return null;
+	}
+	
+	public void closeScreenText() {
+		just_interact = 0;
+		this.screentext.handleClosed();
 	}
 }
