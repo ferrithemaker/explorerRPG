@@ -47,6 +47,8 @@ public class PopupInfoText {
 	private int textoffsetx;
 	private int textoffsety;
 	
+	private int lineCount = 0;
+	
 	protected String lastMessage = "";
 	
 	protected final String colorPattern = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$";
@@ -80,12 +82,20 @@ public class PopupInfoText {
 	}
 	
 	public void drawScreen(SpriteBatch batch, BitmapFont font,String text,float fadein,int linedist,Color color) {
+		drawScreen(batch, font, text, fadein, linedist, color, false);
+	}
+	public void drawScreen(SpriteBatch batch, BitmapFont font,String text,float fadein,int linedist,Color color, boolean resize) {
+		float scaleX = font.getScaleX();
+		float scaleY = font.getScaleY();
+		
 		update_x((int) (Gdx.graphics.getWidth() * 0.5f - this.width * 0.5f));
 		update_y((int) (Gdx.graphics.getHeight() * 0.5f - this.height * 0.5f));
 		
 		mouseOverElement = "";
-		if(!lastMessage.equals(text)){
+		if(!lastMessage.equals(text) || resize){
 			this.clearRenderWords();
+			
+			lineCount = 0;
 			
 			int linepos = 0;
 			int currentWidth = textoffsetx;
@@ -94,6 +104,8 @@ public class PopupInfoText {
 			
 	 		String[] words = null;
 	 		for (String line : text.split("\n")) {
+	 			lineCount = lineCount + 1;
+	 			
  				currentWidth = textoffsetx;
 	 			
 	 			words = line.split(" ");
@@ -117,6 +129,7 @@ public class PopupInfoText {
 	 					currentWidth = textoffsetx;
 	 					nextWidth = (int) (currentWidth + font.getBounds(word + " ").width);
 	 					linepos = linepos + 1;
+	 					lineCount = lineCount + 1;
 	 				}
 	
 	 				int wordx = currentWidth;
@@ -133,6 +146,16 @@ public class PopupInfoText {
 		}
 		
 		this.background.draw(batch, x, y, width, height);
+		
+		while(((lineCount * font.getLineHeight() + lineCount * linedist) * font.getScaleY()) > height - textoffsety) {
+			font.setScale(font.getScaleY() - 0.1f);
+		}
+		
+		if(font.getScaleY() != scaleY) {
+			drawScreen(batch, font, text, fadein, linedist, color, true);
+			font.setScale(scaleX, scaleY);
+			return;
+		}
 		
 		Set<Entry<String, LinkedList<WordRectangle>>> keys = renderWords.entrySet();
 		for(Entry<String, LinkedList<WordRectangle>> entry : keys) {
@@ -154,6 +177,7 @@ public class PopupInfoText {
 		}
 		
 		lastMessage = text;
+		font.setScale(scaleX, scaleY);
 	}
 
 	protected boolean mouseOverWord(Rectangle rect, BitmapFont font) {

@@ -279,7 +279,7 @@ public class Hero implements MovingTileOccupier {
 			return "HERODEAD";
 		}
 
-		String result = this.name+" did "+herohit+" damage points to " + enemy.getname() + " \n \n#FF0000";
+		String result = this.name+" did "+herohit+" damage points to " + enemy.getname() + " \n #FF0000";
 
 		for(String namePart : enemy.getname().split(" ")) {
 			result += "#FF0000" + namePart + " ";
