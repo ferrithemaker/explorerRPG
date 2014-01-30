@@ -48,6 +48,7 @@ import com.game.libgdx.roguelikeengine.pathing.Pathing;
 import com.game.libgdx.roguelikeengine.ui.ActionButton;
 import com.game.libgdx.roguelikeengine.ui.BaseButton;
 import com.game.libgdx.roguelikeengine.ui.ButtonAction;
+import com.game.libgdx.roguelikeengine.ui.HBox;
 import com.game.libgdx.roguelikeengine.ui.IButton;
 import com.game.libgdx.roguelikeengine.ui.TextButton;
 
@@ -274,7 +275,15 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 				@Override public void onMouseExit(IButton button) {}
 			});
 		} else {
-			buttons.add(new ActionButton(ActionButton.FIGHT, 0.1f, 0.2f, buttonWidth, buttonHeight));
+			buttons.add(new HBox(0.1f, 0.5f, Gdx.graphics.getWidth() * .4f)
+				   		.addElement(new ActionButton(ActionButton.FIGHT, buttonWidth, buttonHeight))
+				   		.addElement(new ActionButton(ActionButton.FIGHT, buttonWidth, buttonHeight))
+				   		.addElement(new ActionButton(ActionButton.FIGHT, buttonWidth, buttonHeight))
+				   		.addElement(new ActionButton(ActionButton.FIGHT, buttonWidth, buttonHeight))
+				   		.addElement(new ActionButton(ActionButton.FIGHT, buttonWidth, buttonHeight))
+				   		.addElement(new ActionButton(ActionButton.FIGHT, buttonWidth, buttonHeight))
+				   		.finalizeHBox()
+					);
 		}
 		
 		// fonts setup
@@ -1167,6 +1176,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	    if(WrapperEngine.STOPSONFIRE && bullets.size() > 0) return false;
 	    
 		if (Gdx.input.isTouched()) {
+			for(IButton button : buttons) {
+				if(button.getIsMouseover()) return true;
+			}
+			
     		// CONSUMABLE INVENTORY ACTIONS
     		for (int i=0;i<WrapperEngine.INVENTORY_SIZE;i++) {
     			if (realXcoord>1152 && realXcoord<1216 && realYcoord>640-(64*i) && realYcoord<704-(64*i) && eye_mode==0) {

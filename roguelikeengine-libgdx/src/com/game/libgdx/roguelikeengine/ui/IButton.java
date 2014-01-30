@@ -23,4 +23,10 @@ public interface IButton {
 	public void drawOnScreen(SpriteBatch batch);
 	
 	public void update();
+	
+	public void setX(float x);
+	public void setY(float y);
+	
+	public float getWidth();
+	public float getHeight();
 }

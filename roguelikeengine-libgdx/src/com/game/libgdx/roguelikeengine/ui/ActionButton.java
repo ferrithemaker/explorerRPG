@@ -1,5 +1,6 @@
 package com.game.libgdx.roguelikeengine.ui;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -36,10 +37,16 @@ public class ActionButton extends BaseButton implements ButtonAction {
 	}
 	
 	protected int action;
+	
+	public ActionButton(int action, float width, float height) {
+		this(action, 0f, 0f, width, height);
+	}
+	
 	public ActionButton(int action, float relativeX, float relativeY, float width, float height) {
 		super(relativeX, relativeY, width, height);
 		
 		this.action = action;
+		
 		this.upTexture = ActionButton.textures[action];
 		this.downTexture = ActionButton.textures[action];
 		
@@ -60,6 +67,7 @@ public class ActionButton extends BaseButton implements ButtonAction {
 
 	@Override
 	public void onClicked(IButton button) {
+		System.out.println("here");
 		switch(this.action) {
 		case LEFT:
 			GameplayScreen.instance.goleft();

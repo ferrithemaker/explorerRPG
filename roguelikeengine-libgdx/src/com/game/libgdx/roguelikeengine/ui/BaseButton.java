@@ -41,6 +41,9 @@ public abstract class BaseButton implements IVisibleButton {
 	private float textX;
 	private float textY;
 	
+	protected boolean fitOnScreen = false;
+	protected boolean wasMoved = false;
+	
 	public BaseButton(float relativeX, float relativeY, float width, float height) { this(relativeX, relativeY, width, height, true); }
 	public BaseButton(float relativeX, float relativeY, float width, float height, boolean fitOnScreen) {
 		this.relativeX = Math.max(0, Math.min(1, relativeX));
@@ -48,7 +51,17 @@ public abstract class BaseButton implements IVisibleButton {
 		
 		this.width = width;
 		this.height = height;
+		this.fitOnScreen = fitOnScreen;
 		
+		move();
+		
+		this.upTexture = new Texture("UI/ninePatchButtonUp.png");
+		this.downTexture = new Texture("UI/ninePatchButtonDown.png");
+		
+		this.ninePatcherBackground = new NinePatch(upTexture);
+	}
+	
+	public void move() {
 		float screenWidth = Gdx.graphics.getWidth();
 		float screenHeight = Gdx.graphics.getHeight();
 		
@@ -64,10 +77,19 @@ public abstract class BaseButton implements IVisibleButton {
 		}
 		
 		this.screenRectangle = new Rectangle(potentialX, potentialY, this.width, this.height);
-		this.upTexture = new Texture("UI/ninePatchButtonUp.png");
-		this.downTexture = new Texture("UI/ninePatchButtonDown.png");
-		
-		this.ninePatcherBackground = new NinePatch(upTexture);
+		this.wasMoved = false;
+	}
+	
+	@Override
+	public void setX(float x) {
+		this.relativeX = x / Gdx.graphics.getWidth();
+		this.wasMoved = true;
+	}
+	
+	@Override
+	public void setY(float y) {
+		this.relativeY = y / Gdx.graphics.getHeight();
+		this.wasMoved = true;
 	}
 	
 	@Override
@@ -94,6 +116,12 @@ public abstract class BaseButton implements IVisibleButton {
 	public float getScreenY() {
 		return this.screenRectangle.getY();
 	}
+	
+	@Override
+	public float getWidth() { return width; }
+	
+	@Override
+	public float getHeight() { return height; }
 
 	@Override
 	public boolean getIsInScreenCoordinates(float x, float y) {
@@ -140,6 +168,8 @@ public abstract class BaseButton implements IVisibleButton {
 
 	@Override
 	public void update() {
+		if(wasMoved) move();
+		
 		float mouseX = Gdx.input.getX();
 		float invertedMouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
 		boolean over = this.screenRectangle.contains(mouseX, invertedMouseY);
@@ -179,11 +209,22 @@ public abstract class BaseButton implements IVisibleButton {
 	}
 	public void stateDown() {
 		buttonState = BaseButton.BUTTON_STATE_DOWN;
-		this.ninePatcherBackground = new NinePatch(this.downTexture, backgroundColor);
+		
+		if(backgroundColor != null) {
+			this.ninePatcherBackground = new NinePatch(this.downTexture, backgroundColor);
+		} else {
+			this.ninePatcherBackground = new NinePatch(this.downTexture);
+		}
 	}
+	
 	public void stateUp() {
 		buttonState = BaseButton.BUTTON_STATE_UP;
-		this.ninePatcherBackground = new NinePatch(this.upTexture, backgroundColor);
+		
+		if(backgroundColor != null) {
+			this.ninePatcherBackground = new NinePatch(this.downTexture, backgroundColor);
+		} else {
+			this.ninePatcherBackground = new NinePatch(this.downTexture);
+		}
 	}
 
 	@Override
