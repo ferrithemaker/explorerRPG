@@ -34,19 +34,19 @@ public class WrapperEngine {
 	// constants
 	public final static int BUILD_NUMBER=95;
 	public final static int ON_SCREEN_TILES_X=13;	// TODO:: this should be based on screen size
-	public final static int ON_SCREEN_TILES_Y=10;
+	public final static int ON_SCREEN_TILES_Y=10;	// TODO:: this should be based on screen size
 	public final static int X_SCREENS=30;
 	public final static int Y_SCREENS=30;
-	public final static int TOTAL_X_TILES=X_SCREENS*ON_SCREEN_TILES_X;
-	public final static int TOTAL_Y_TILES=Y_SCREENS*ON_SCREEN_TILES_Y;
+	public final static int TOTAL_X_TILES=X_SCREENS*ON_SCREEN_TILES_X;	
+	public final static int TOTAL_Y_TILES=Y_SCREENS*ON_SCREEN_TILES_Y;	
 	public final static int TILE_X_SIZE=64;
 	public final static int TILE_Y_SIZE=64;
 	public final static int MAX_WALL_LENGTH=12;
 	public final static int MAX_LAKE_SIZE=12;
-	public final static int OPTION_MENU_X_SIZE=448;
-	public final static int ACTIONS_MENU_Y_SIZE=64;
-	public final static int WINDOWWIDTH=TILE_X_SIZE*ON_SCREEN_TILES_X+OPTION_MENU_X_SIZE;
-	public final static int WINDOWHEIGHT=TILE_Y_SIZE*ON_SCREEN_TILES_Y+ACTIONS_MENU_Y_SIZE;
+	public final static int OPTION_MENU_X_SIZE=448;	// TODO:: this should be based on screen size
+	public final static int ACTIONS_MENU_Y_SIZE=64;	// TODO:: this should be based on screen size
+	public final static int WINDOWWIDTH=TILE_X_SIZE*ON_SCREEN_TILES_X+OPTION_MENU_X_SIZE;	// TODO:: this should be based on screen size
+	public final static int WINDOWHEIGHT=TILE_Y_SIZE*ON_SCREEN_TILES_Y+ACTIONS_MENU_Y_SIZE;	// TODO:: this should be based on screen size
 	public final static int FPS=18;
 	public final static int INVENTORY_SIZE=10;
 	public final static String APP_NAME="Rogue explorer testing game (libgdx)";

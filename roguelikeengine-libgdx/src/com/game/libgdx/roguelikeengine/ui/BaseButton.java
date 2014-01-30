@@ -35,6 +35,8 @@ public abstract class BaseButton implements IVisibleButton {
 	private Color foregroundColor;
 	
 	private NinePatch ninePatcherBackground;
+	protected Texture upTexture;
+	protected Texture downTexture;
 	
 	private float textX;
 	private float textY;
@@ -62,6 +64,10 @@ public abstract class BaseButton implements IVisibleButton {
 		}
 		
 		this.screenRectangle = new Rectangle(potentialX, potentialY, this.width, this.height);
+		this.upTexture = new Texture("UI/ninePatchButtonUp.png");
+		this.downTexture = new Texture("UI/ninePatchButtonDown.png");
+		
+		this.ninePatcherBackground = new NinePatch(upTexture);
 	}
 	
 	@Override
@@ -121,7 +127,7 @@ public abstract class BaseButton implements IVisibleButton {
 
 	@Override
 	public void drawOnScreen(SpriteBatch batch) {
-		if(backgroundColor != null) {
+		if(backgroundColor != null && this.ninePatcherBackground != null) {
 			this.ninePatcherBackground.draw(batch, getScreenX(), getScreenY(), width, height);
 		}
 		
@@ -148,8 +154,7 @@ public abstract class BaseButton implements IVisibleButton {
 			timeMouseOver = 0;
 		} else if(mouseOver && !over) {
 			mouseOver = false;
-			buttonState = BaseButton.BUTTON_STATE_UP;
-			this.ninePatcherBackground = new NinePatch(new Texture("UI/ninePatchButtonUp.png"), backgroundColor);
+			stateUp();
 			
 			for(ButtonAction ba : actionListeners) {
 				ba.onMouseExit(this);
@@ -160,11 +165,9 @@ public abstract class BaseButton implements IVisibleButton {
 			timeMouseOver += 1L;
 			
 			if(Gdx.input.isTouched()) {
-				buttonState = BaseButton.BUTTON_STATE_DOWN;
-				this.ninePatcherBackground = new NinePatch(new Texture("UI/ninePatchButtonDown.png"), backgroundColor);
+				stateDown();
 			} else if(buttonState == BaseButton.BUTTON_STATE_DOWN) {
-				buttonState = BaseButton.BUTTON_STATE_UP;
-				this.ninePatcherBackground = new NinePatch(new Texture("UI/ninePatchButtonUp.png"), backgroundColor);
+				stateUp();
 				
 				for(ButtonAction ba : actionListeners) {
 					ba.onClicked(this);
@@ -173,6 +176,14 @@ public abstract class BaseButton implements IVisibleButton {
 		}
 		
 		onUpdate();
+	}
+	public void stateDown() {
+		buttonState = BaseButton.BUTTON_STATE_DOWN;
+		this.ninePatcherBackground = new NinePatch(this.downTexture, backgroundColor);
+	}
+	public void stateUp() {
+		buttonState = BaseButton.BUTTON_STATE_UP;
+		this.ninePatcherBackground = new NinePatch(this.upTexture, backgroundColor);
 	}
 
 	@Override
@@ -209,7 +220,12 @@ public abstract class BaseButton implements IVisibleButton {
 	@Override
 	public void setBackgroundColor(Color color) {
 		this.backgroundColor = color;
-		this.ninePatcherBackground = new NinePatch(new Texture("UI/ninePatchButtonUp.png"), backgroundColor);
+		
+		if(this.buttonState == BUTTON_STATE_UP) {
+			this.ninePatcherBackground = new NinePatch(upTexture, color);
+		} else {
+			this.ninePatcherBackground = new NinePatch(downTexture, color);
+		}
 	}
 	
 	@Override

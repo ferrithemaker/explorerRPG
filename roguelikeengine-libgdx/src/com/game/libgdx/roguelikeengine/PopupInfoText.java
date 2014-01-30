@@ -23,6 +23,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -30,7 +32,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 public class PopupInfoText {
 	protected HashMap<String, LinkedList<WordRectangle>> renderWords = new HashMap<String, LinkedList<WordRectangle>>();
@@ -50,6 +55,8 @@ public class PopupInfoText {
 	private int lineCount = 0;
 	
 	protected String lastMessage = "";
+	protected String instructions = (Gdx.app.getType() == ApplicationType.Android ? "Touch " : "Click ") + " to Continue";
+	protected Color instructionsColor = Color.GREEN;
 	
 	protected final String colorPattern = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$";
 	
@@ -157,6 +164,7 @@ public class PopupInfoText {
 			return;
 		}
 		
+		boolean anyClickable = false;
 		Set<Entry<String, LinkedList<WordRectangle>>> keys = renderWords.entrySet();
 		for(Entry<String, LinkedList<WordRectangle>> entry : keys) {
 			for(WordRectangle rect : entry.getValue()) {
@@ -170,10 +178,19 @@ public class PopupInfoText {
 						font.setColor(Color.CYAN);
 						font.setColor(Color.CYAN.r, Color.CYAN.g, Color.CYAN.b, fadein);
 					}
+					
+					anyClickable = true;
 				}
 				
 				font.draw(batch, entry.getKey().replace("_", " "), rect.x+x, rect.y+y);
 			}
+		}
+		
+		if(!anyClickable) {
+			Color c = font.getColor();
+			font.setColor(instructionsColor.r, instructionsColor.g, instructionsColor.b, fadein);
+			font.draw(batch, instructions, x + (width * 0.5f) - (font.getBounds(instructions).width * 0.5f), y + font.getBounds(instructions).height + Gdx.graphics.getHeight() * 0.05f);
+			font.setColor(c);
 		}
 		
 		lastMessage = text;
@@ -236,12 +253,11 @@ public class PopupInfoText {
 			return true;
 		}
 		
-		/* disabled for a bit
-		if(GameplayScreen.instance != null && GameplayScreen.instance.just_interact > 0 && this.background.getBoundingRectangle().contains(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
+		if(GameplayScreen.instance != null && GameplayScreen.instance.just_interact > 0 && new Rectangle(x, y, width, height).contains(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
 			GameplayScreen.instance.just_interact = 0;
 			return true;
 		}
-		*/
+		
 		
 		return false;
 	}
