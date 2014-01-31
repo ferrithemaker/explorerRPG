@@ -275,13 +275,23 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 				@Override public void onMouseExit(IButton button) {}
 			});
 		} else {
-			buttons.add(new HBox(0.1f, 0.5f, Gdx.graphics.getWidth() * .4f)
+			float percentOfScreen = 0.65f;
+			float actionBarWidth = (Gdx.graphics.getWidth() * percentOfScreen);
+			
+			buttonWidth = (Gdx.graphics.getWidth() * percentOfScreen) / 11;
+			
+			buttons.add(new HBox(0f, .99f, actionBarWidth)
 				   		.addElement(new ActionButton(ActionButton.FIGHT, buttonWidth, buttonHeight))
-				   		.addElement(new ActionButton(ActionButton.FIGHT, buttonWidth, buttonHeight))
-				   		.addElement(new ActionButton(ActionButton.FIGHT, buttonWidth, buttonHeight))
-				   		.addElement(new ActionButton(ActionButton.FIGHT, buttonWidth, buttonHeight))
-				   		.addElement(new ActionButton(ActionButton.FIGHT, buttonWidth, buttonHeight))
-				   		.addElement(new ActionButton(ActionButton.FIGHT, buttonWidth, buttonHeight))
+				   		.addElement(new ActionButton(ActionButton.TAKE, buttonWidth, buttonHeight))
+				   		.addElement(new ActionButton(ActionButton.DROP, buttonWidth, buttonHeight))
+				   		.addElement(new ActionButton(ActionButton.LOOK, buttonWidth, buttonHeight))
+				   		.addElement(new ActionButton(ActionButton.TALK, buttonWidth, buttonHeight))
+				   		.addElement(new ActionButton(ActionButton.MAGIC, buttonWidth, buttonHeight))
+				   		.addElement(new ActionButton(ActionButton.QUIT, buttonWidth, buttonHeight))
+				   		.addElement(new ActionButton(ActionButton.LEFT, buttonWidth, buttonHeight))
+				   		.addElement(new ActionButton(ActionButton.DOWN, buttonWidth, buttonHeight))
+				   		.addElement(new ActionButton(ActionButton.UP, buttonWidth, buttonHeight))
+				   		.addElement(new ActionButton(ActionButton.RIGHT, buttonWidth, buttonHeight))
 				   		.finalizeHBox()
 					);
 		}
@@ -1535,6 +1545,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         float w = (float)WrapperEngine.VIRTUAL_WIDTH*scale;
         float h = (float)WrapperEngine.VIRTUAL_HEIGHT*scale;
         viewport = new Rectangle(crop.x, crop.y, w, h); 
+        
+        for(IButton button : buttons) {
+        	button.handleResize();
+        }
 	}
 
 	@Override

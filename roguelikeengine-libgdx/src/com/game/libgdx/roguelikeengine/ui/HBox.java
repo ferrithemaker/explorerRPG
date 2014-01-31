@@ -57,7 +57,7 @@ public class HBox extends BaseButton {
 		this.width = maxWidth;
 		this.height = maxHeight;
 		
-		move();
+		handleResize();
 		
 		return this;
 	}
@@ -81,5 +81,14 @@ public class HBox extends BaseButton {
 		for(IButton elem : elements) {
 			elem.drawOnScreen(batch);
 		}
+	}
+	
+	@Override
+	public boolean getIsMouseover() {
+		for(IButton elem : elements) {
+			if(elem.getIsMouseover()) return true;
+		}
+		
+		return false;
 	}
 }

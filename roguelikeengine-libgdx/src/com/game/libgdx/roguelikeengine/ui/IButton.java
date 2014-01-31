@@ -29,4 +29,6 @@ public interface IButton {
 	
 	public float getWidth();
 	public float getHeight();
+	
+	public void handleResize();
 }

@@ -53,7 +53,7 @@ public abstract class BaseButton implements IVisibleButton {
 		this.height = height;
 		this.fitOnScreen = fitOnScreen;
 		
-		move();
+		handleResize();
 		
 		this.upTexture = new Texture("UI/ninePatchButtonUp.png");
 		this.downTexture = new Texture("UI/ninePatchButtonDown.png");
@@ -61,7 +61,8 @@ public abstract class BaseButton implements IVisibleButton {
 		this.ninePatcherBackground = new NinePatch(upTexture);
 	}
 	
-	public void move() {
+	@Override
+	public void handleResize() {
 		float screenWidth = Gdx.graphics.getWidth();
 		float screenHeight = Gdx.graphics.getHeight();
 		
@@ -168,7 +169,7 @@ public abstract class BaseButton implements IVisibleButton {
 
 	@Override
 	public void update() {
-		if(wasMoved) move();
+		if(wasMoved) handleResize();
 		
 		float mouseX = Gdx.input.getX();
 		float invertedMouseY = Gdx.graphics.getHeight() - Gdx.input.getY();

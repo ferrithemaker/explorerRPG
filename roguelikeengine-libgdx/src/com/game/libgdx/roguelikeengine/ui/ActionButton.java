@@ -52,7 +52,7 @@ public class ActionButton extends BaseButton implements ButtonAction {
 		
 		setBackgroundColor(Color.WHITE);
 		
-		//this.addActionListener(this);
+		this.addActionListener(this);
 	}
 
 	@Override
@@ -67,7 +67,6 @@ public class ActionButton extends BaseButton implements ButtonAction {
 
 	@Override
 	public void onClicked(IButton button) {
-		System.out.println("here");
 		switch(this.action) {
 		case LEFT:
 			GameplayScreen.instance.goleft();
