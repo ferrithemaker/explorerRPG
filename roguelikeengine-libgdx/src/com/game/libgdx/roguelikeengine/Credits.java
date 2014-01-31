@@ -58,8 +58,8 @@ public class Credits extends InputAdapter implements Screen {
     	messagefont = generator.generateFont(20); // px
 		text="CREDITS\nConcept & Programming: Ferran_Fabregas & Joshua_Byrom\nUI design: Manuela Sanfelix & Ferran_Fabregas\nTiles and sprites taken from http://opengameart.org/\n& http://animatedbattlers.wordpress.com &  http://www.pixeljoint.com \nReleased under GPL / Creative_Commons and copyrighted\nby their owners\nMusic from https://soundcloud.com/desperate-measurez/ \n& http://www.tannerhelland.com/music-directory/\nSound FX: http://www.freesound.org/\nFonts taken from http://www.fonts101.com/ & http://www.flamingtext.com/\nThanks to: Joseph Elliott.\nGame released under the terms of GNU GPL .";
     	// create a fight message info screen 
-    	screentext=new PopupInfoText(0,0,"UI/credits.png",1280,704);
-    	screentext.settextoffset(100, 250);
+    	screentext=new PopupInfoText(0,0,"UI/credits.png",Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+    	screentext.settextoffset((int)(Gdx.graphics.getHeight()*.1f), (int)(Gdx.graphics.getHeight()*.35f));
     	
     	screentext.addWordClickListener("Joshua_Byrom", new WordClickAction() {
 			@Override
