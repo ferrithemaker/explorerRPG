@@ -222,9 +222,9 @@ public abstract class BaseButton implements IVisibleButton {
 		buttonState = BaseButton.BUTTON_STATE_UP;
 		
 		if(backgroundColor != null) {
-			this.ninePatcherBackground = new NinePatch(this.downTexture, backgroundColor);
+			this.ninePatcherBackground = new NinePatch(this.upTexture, backgroundColor);
 		} else {
-			this.ninePatcherBackground = new NinePatch(this.downTexture);
+			this.ninePatcherBackground = new NinePatch(this.upTexture);
 		}
 	}
 
