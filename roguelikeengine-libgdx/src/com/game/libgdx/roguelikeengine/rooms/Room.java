@@ -102,7 +102,7 @@ public abstract class Room {
 		} else if(value == CHEST_COLOR) {
 			tile.settileimage(floor_img);
 			if(Math.random() < 0.4) {
-				GameplayScreen.instance.createchest(column, row);
+				GameplayScreen.instance.createchest(map, column, row);
 			}
 		}
 		

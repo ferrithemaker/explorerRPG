@@ -53,6 +53,9 @@ public class Object {
 	public int getabsolutex() {
 		return this.absolute_x;
 	}
+	public void setabsolutex(int x) {
+		this.absolute_x = x;
+	}
 	public String getname() {
 		return this.name;
 	}
@@ -82,6 +85,9 @@ public class Object {
 	public int getabsolutey() {
 		return this.absolute_y;
 	}
+	public void setabsolutey(int y) {
+		this.absolute_y = y;
+	}
 	public Sprite getsprite() {
 		return this.img;
 	}
@@ -102,5 +108,8 @@ public class Object {
 	}
 	public boolean overobject(int x,int y) {
 		if (this.absolute_x==x && this.absolute_y==y) { return true; } else { return false; }
+	}
+	public void setlayer(int layer2) {
+		this.layer = layer2;
 	}
 }

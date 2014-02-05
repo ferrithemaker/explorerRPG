@@ -321,6 +321,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
         maplayers[0]=game.getmaplayer(0);
         maplayers[1]=game.getmaplayer(1);
         maplayers[2]=game.getmaplayer(2);
+        
         layout=new Layout();
         prota = game.gethero();
         badguys= game.getenemies();
@@ -363,6 +364,24 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		});
 		
 		screentext.addWordClickListener("Open_Chest", new WordClickAction() {
+
+			@Override
+			public void onClicked(String word) {
+				if(!Chest.interacting.open(game.getactivemap(), game.gethero())) {
+					if(!game.gethero().hasKey()) alert("You need a key to open that!");
+				};
+			}
+		});
+		
+		screentext.addWordClickListener("locked_door!", new WordClickAction() {
+
+			@Override
+			public void onClicked(String word) {
+				alert("Would you like to open it? \n \t Open_Door \n \t Not_Right_Now");
+			}
+		});
+		
+		screentext.addWordClickListener("Open_Door", new WordClickAction() {
 
 			@Override
 			public void onClicked(String word) {
@@ -859,7 +878,7 @@ public class GameplayScreen extends InputAdapter implements Screen  {
     { 
 		updateButtons();
 		updateBullets();
-		updateChests();
+		updateLockables();
 		
 		// random elements generator
     	Random randomGenerator = new Random();
@@ -1483,30 +1502,36 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		just_interact=0;
     	// get consumable into inventory
 		actualconsumable=game.overconsumable(); // get the consumable (if exist)
-		givetohero(actualconsumable);
+		
+		Map map = game.getactivemap();
+		givetohero(actualconsumable, map.getlayer(), prota.getabsolutecolumn(map), prota.getabsoluterow(map));
 		
 		// get object into inventory
 		actualobject=game.overobject(); // get the consumable (if exist)
-		givetohero(actualobject);
+		givetohero(actualobject, map.getlayer(), prota.getabsolutecolumn(map), prota.getabsoluterow(map));
     }
 
-    public void givetohero(Object obj) {
+    public void givetohero(Object obj, int layer, int column, int row) {
     	if (obj.getname()!=null) {
 			if (getobjinv().getfreeslot()!=-1) {
 				getobjinv().set_object(getobjinv().getfreeslot(), obj);
 				game.removeobject(obj);
 				pickup.play();
+			} else if(!game.hasobject(obj)) {
+				game.addobject(obj, layer, column, row);
 			}
 		}	
     }
     
-	public void givetohero(Consumable cons) {
+	public void givetohero(Consumable cons, int layer, int column, int row) {
 		if (cons.getname()!=null) {
 			// if consumable exists
 			if (consinv.getfreeslot()!=-1) {
 				consinv.set_consumable(consinv.getfreeslot(), cons);
 				pickup.play();
 				game.removeconsumable(actualconsumable);
+			} else if(!game.hasconsumable(cons)){
+				game.addconsumable(cons, layer, column, row);
 			}
 		}
 	}
@@ -1566,7 +1591,12 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	}
 
 	public Map getmaplayer(int value) {
-		return maplayers[value];
+		Map result = maplayers[value];
+		if(result == null) { // inside init
+			result = game.getmaplayer(value);	// try wrapper's array
+		}
+		
+		return result;
 	}
 	
 	@Override 
@@ -1616,16 +1646,21 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 		this.screentext = screentext;
 	}
 
-	public Buddy createchest(int i, int j) {
-		Buddy chest = game.createchest(game.getlayer(), i, j);
+	public Buddy createchest(Map map, int i, int j) {
+		Buddy chest = game.createchest(map.getlayer(), i, j);
         return chest;
+	}
+	
+	public Buddy createdoor(Map map, int i, int j) {
+		Buddy door = game.createDoor(map.getlayer(), i, j);
+		return door;
 	}
 
 	public Object_inventory getobjinv() {
 		return objinv;
 	}
 	
-	public void updateChests() {
+	public void updateLockables() {
 		LinkedList<Buddy> toRemove = new LinkedList<Buddy>();
 		
 		for(Buddy buddy : this.goodguys) {
@@ -1633,6 +1668,12 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 			
 			if(buddy instanceof Chest) {
 				if(((Chest)buddy).getShouldKill()) {
+					toRemove.push(buddy);
+				}
+			}
+			
+			if(buddy instanceof Door) {
+				if(((Door)buddy).getShouldKill()) {
 					toRemove.push(buddy);
 				}
 			}
@@ -1653,6 +1694,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 	public void walkPath() {
 		if(lastPath != null) {
 			heroPathing.walk(lastPath, prota);
+			
+			if(prota.gettile(game.getactivemap()) == lastPath.getEnd()) {
+				stopPathing();
+			}
 		}
 	}
 	
@@ -1685,5 +1730,10 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 
 	public void exit() {
 		dispose();
+	}
+
+	public void createDirectAccessPoint(int myLayer, int column, int row) {
+		this.getmaplayer(myLayer).createAccessDungeon(column, row, column, row, myLayer + 1);
+		this.getmaplayer(myLayer + 1).createAccessDungeon(column, row, column, row, myLayer);
 	}
 }
