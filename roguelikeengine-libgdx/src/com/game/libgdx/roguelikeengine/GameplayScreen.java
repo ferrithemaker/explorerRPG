@@ -1141,7 +1141,8 @@ public class GameplayScreen extends InputAdapter implements Screen  {
 			
 			if(!lastPath.isCompletePath()) {
 				lastPath = null;
-				// play a sound?
+
+				this.alert("You cannot get there from here!");
 			}
 		} else if(captured) {
 			lastPath = null;
