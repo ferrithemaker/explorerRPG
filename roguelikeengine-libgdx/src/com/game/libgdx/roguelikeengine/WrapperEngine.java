@@ -25,6 +25,8 @@ import java.util.Random;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.game.libgdx.roguelikeengine.rooms.Chapel;
+import com.game.libgdx.roguelikeengine.rooms.CornerRoom;
+import com.game.libgdx.roguelikeengine.rooms.LargeRoom;
 
 
 
@@ -148,6 +150,8 @@ public class WrapperEngine {
         
 
 		System.out.println(new Chapel().tryPlace(maplayers[0], 9, 2));
+		System.out.println(new CornerRoom().tryPlace(maplayers[0], 46, 2));
+		System.out.println(new LargeRoom().tryPlace(maplayers[0], 65, 54));
 
         maplayers[0].createrandommap();
         maplayers[1].createrandomdungeon();
@@ -212,7 +216,9 @@ public class WrapperEngine {
 		int outy = randomGenerator.nextInt(WrapperEngine.TOTAL_Y_TILES);
 		int outlayer = randomGenerator.nextInt(WrapperEngine.NUMBER_OF_MAP_LAYERS);
 		int inlayer = randomGenerator.nextInt(WrapperEngine.NUMBER_OF_MAP_LAYERS);
-		if (!maplayers[inlayer].gettiles()[inx][iny].isbloqued() && !maplayers[outlayer].gettiles()[outx][outy].isbloqued() && inlayer!=outlayer) {
+		if (!maplayers[inlayer].gettiles()[inx][iny].isbloqued() && maplayers[inlayer].gettiles()[inx][iny].canPCG() &&
+				!maplayers[outlayer].gettiles()[outx][outy].isbloqued() && maplayers[outlayer].gettiles()[outx][outy].canPCG() &&
+				inlayer!=outlayer) {
 			// if constraints are right
 			if (maplayers[inlayer].isdungeon()) {
 				maplayers[inlayer].createAccessDungeon(inx,iny,outx,outy,outlayer); // first socket
@@ -229,9 +235,6 @@ public class WrapperEngine {
 		} else {
 			return 0; // socket not created
 		}
-		
-		
-		
 	}
 	
 	
@@ -548,7 +551,21 @@ public class WrapperEngine {
 	public void removeobject(Object obj) {
 		availableobjects.remove_object(obj);
 	}
-	
+	public boolean hasobject(Object obj) {
+		for(Object current : availableobjects.getlist()) {
+			if(current.equals(obj)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	public void addobject(Object obj, int layer, int column, int row) {
+		obj.setabsolutex(column);
+		obj.setabsolutey(row);
+		obj.setlayer(layer);
+		availableobjects.add_object(obj);
+	}
 	public void createkeyobject(int lay, int xpos, int ypos) {
 		availableobjects.add_object(new Object(lay,"key","none",0,0,0,xpos,ypos,"chests/key.png"));
 	}
@@ -652,8 +669,15 @@ public class WrapperEngine {
 	public void removeconsumable(Consumable c) {
 		availableconsumables.remove_consumable(c);
 	}
-	public void addconsumable(Consumable c) {
+	
+	public void addconsumable(Consumable c, int layer, int column, int row) {
+		c.setlayer(layer);
+		c.setabsolutex(column);
+		c.setabsolutey(row);
 		availableconsumables.add_consumable(c);
+	}
+	public void addconsumable(Consumable c) {
+		this.addconsumable(c, c.getlayer(), c.getabsolutex(), c.getabsolutey());
 	}
 	/**
 	 * 
@@ -707,5 +731,22 @@ public class WrapperEngine {
 		// block tile
 		maplayers[layer].blocktile(i, j, buddy);
 		return buddy;
+	}
+	
+	public Buddy createDoor(int layer, int i, int j) {
+		Buddy buddy = null;
+		goodguys.add_buddy((buddy = new Door(layer, i, j)));
+		maplayers[layer].blocktile(i, j, buddy);
+		return buddy;
+	}
+
+	public boolean hasconsumable(Consumable cons) {
+		for(Consumable current : this.availableconsumables.getlist()) {
+			if(current.equals(cons)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }

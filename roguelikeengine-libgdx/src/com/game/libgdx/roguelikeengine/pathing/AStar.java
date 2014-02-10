@@ -14,8 +14,11 @@ import com.game.libgdx.roguelikeengine.Map;
 import com.game.libgdx.roguelikeengine.MovingTileOccupier;
 import com.game.libgdx.roguelikeengine.ObjectTileOccupier;
 import com.game.libgdx.roguelikeengine.Tile;
+import com.game.libgdx.roguelikeengine.WrapperEngine;
 
 public class AStar<T extends MovingTileOccupier> implements Path<T> {
+	protected static final LinkedList<Long> times = new LinkedList<Long>();
+	
 	protected LinkedHashSet<Tile> opened = new LinkedHashSet<Tile>();
 	protected LinkedHashSet<Tile> closed = new LinkedHashSet<Tile>();
 	
@@ -30,6 +33,7 @@ public class AStar<T extends MovingTileOccupier> implements Path<T> {
 	protected Tile end;
 	
 	protected boolean pathFound = false;
+	protected long timeSearchStarted = 0l;
 	
 	public AStar(Map map, Tile start, Tile end) {
 		this.map = map;
@@ -40,11 +44,15 @@ public class AStar<T extends MovingTileOccupier> implements Path<T> {
 	public void search() {
 		parentRecord.clear();
 		
+		result.clear();
 		opened.clear();
 		closed.clear();
 		
 		open(start);
 		Tile current = null;
+		
+		timeSearchStarted = System.currentTimeMillis();
+		long tooLong = Math.max(100L, AStar.getAverageSearchTime() * 2L);
 		
 		List<Tile> neighbors = null;
 		while(opened.size() > 0) {
@@ -71,9 +79,12 @@ public class AStar<T extends MovingTileOccupier> implements Path<T> {
 			}
 			
 			close(current);
+			
+			if(System.currentTimeMillis() - timeSearchStarted > tooLong) {
+				return;
+			}
 		}
 		
-		result.clear();
 		if(current == end) {
 			while(current != null) {
 				result.add(current);
@@ -85,6 +96,7 @@ public class AStar<T extends MovingTileOccupier> implements Path<T> {
 		}
 		
 		if(result.size() > 0) {
+			this.times.add(System.currentTimeMillis() - timeSearchStarted);
 			this.pathFound = true;
 			currentIndex = 0;
 		}
@@ -167,4 +179,12 @@ public class AStar<T extends MovingTileOccupier> implements Path<T> {
 		return pathFound;
 	}
 
+	public static long getAverageSearchTime() {
+		long accum = 0L;
+		for(Long value : times) {
+			accum += value;
+		}
+		
+		return times.size() > 0 ? accum / times.size() : 0L;
+	}
 }

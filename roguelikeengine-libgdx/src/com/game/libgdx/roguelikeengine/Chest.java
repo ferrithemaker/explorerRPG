@@ -13,6 +13,7 @@ public class Chest extends Buddy {
 	
 	protected Sprite openedSprite;
 	
+	protected boolean locked = false;
 	protected boolean opened = false;
 	protected int destroyDelay = 30;	// destroy on a timer to allow open animation + sounds
 	protected int destroyDuration = 0;	// simple timing variables
@@ -27,11 +28,13 @@ public class Chest extends Buddy {
 		opentexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
 		openedSprite = new Sprite(opentexture);
+		
+		this.locked = Math.random() < 0.85f;
 	}
 	
 	public boolean open(Map map, Hero hero) {
 		if(canOpen(map, hero)) {
-			hero.removeKey();	// remove key first
+			if(locked) hero.removeKey();	// remove key first
 			giveItemToPlayer(hero);
 			
 			// play audio here
@@ -69,7 +72,7 @@ public class Chest extends Buddy {
 			cons = new Consumable(getlayer(),"Greater Yellow potion",m*2,m,0,0,0,0,"potionyellow.png");
 		}
 
-		GameplayScreen.instance.givetohero(cons);
+		GameplayScreen.instance.givetohero(cons, this.getlayer(), this.getabsolutex(), this.getabsolutey());
 		GameplayScreen.instance.alert("You got a " + cons.getname() + "!");
 	}
 
@@ -78,14 +81,14 @@ public class Chest extends Buddy {
 		if(obj == null) {
 			GameplayScreen.instance.alert("The chest was empty!");
 		} else {
-			GameplayScreen.instance.givetohero(obj);
+			GameplayScreen.instance.givetohero(obj, this.getlayer(), this.getabsolutex(), this.getabsolutey());
 			GameplayScreen.instance.alert("You got a " + obj.getname());
 		}
 	}
 
 	public boolean canOpen(Map map, TileOccupier to) {
 		if(!opened && to instanceof Hero) {
-			if(((Hero)to).hasKey() && getlayer() == to.getlayer()) {
+			if((!locked || ((Hero)to).hasKey()) && getlayer() == to.getlayer()) {
 				float xDiff = getabsolutecolumn(map) - to.getabsolutecolumn(map);
 				float yDiff = getabsoluterow(map) - to.getabsoluterow(map);
 				
@@ -112,7 +115,7 @@ public class Chest extends Buddy {
 	public String getdescription() {
 		Chest.interacting = this;
 		
-		return opened ? "An opened chest. You already opened this, remember?" : "A treasure_chest!";
+		return opened ? "An opened chest. You already opened this, remember?" : "A " + (locked ? "#ff0000locked " : "") + "treasure_chest!";
 	}
 	
 	@Override
@@ -174,5 +177,9 @@ public class Chest extends Buddy {
 		}
 
 		return null;
+	}
+	
+	public void lock() {
+		this.locked = true;
 	}
 }

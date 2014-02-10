@@ -89,4 +89,13 @@ public class Consumable {
 	public boolean overconsumable(int x,int y) {
 		return (this.absolute_x==x && this.absolute_y==y);
 	}
+	public void setlayer(int layer2) {
+		this.layer = layer2;
+	}
+	public void setabsolutex(int column) {
+		this.absolute_x = column;
+	}
+	public void setabsolutey(int row) {
+		this.absolute_y = row;
+	}
 }
